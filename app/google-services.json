@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "828573370868",
+    "firebase_url": "https://homemade-guardian-beta.firebaseio.com",
+    "project_id": "homemade-guardian-beta",
+    "storage_bucket": "homemade-guardian-beta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828573370868:android:1e5bd51684a095c43f51a1",
+        "android_client_info": {
+          "package_name": "com.example.homemade_guardian_beta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "828573370868-bdc60eiotgqd7i1qsah2vgfm15uk6m3j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDnkkCDEZe-xZSp4lcyYpG_pKlw9B4QwM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "828573370868-bdc60eiotgqd7i1qsah2vgfm15uk6m3j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

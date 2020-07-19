@@ -1,16 +1,23 @@
 package com.example.homemade_guardian_beta;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.homemade_guardian_beta.fragment.ChatroomListFragment;
+import com.example.homemade_guardian_beta.fragment.HomeFragment;
+import com.example.homemade_guardian_beta.fragment.MyInfoFragment;
+import com.example.homemade_guardian_beta.fragment.WritePostFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.kakao.auth.ApiErrorCode;
@@ -30,127 +37,41 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        TextView tvNickname = findViewById(R.id.tvNickname);
-        TextView tvEmail = findViewById(R.id.tvEmail);
-
-        //카카오 로그아웃,탈퇴 로그인
-        Button kakao_btnLogout = findViewById(R.id.kakao_btnLogout);
-        Button kakao_btnSignout = findViewById(R.id.kakao_btnSignout);
-        //구글 로그아웃, 탈퇴 로그인
-        Button google_btnLogout = (Button)findViewById(R.id.google_btnLogout);
-        Button google_btnSignout = (Button)findViewById(R.id.google_btnSignout);
-
-        mAuth = FirebaseAuth.getInstance();
-
-
-        strNickname = currentUser.getDisplayName();
-        strEmail = currentUser.getEmail();
-
-
-        tvNickname.setText(strNickname);
-        tvEmail.setText(strEmail);
-
-
-        kakao_btnLogout.setOnClickListener(new Button.OnClickListener() {
+        HomeFragment homeFragment = new HomeFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, homeFragment)
+                .commit();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);            // part22 : 바텀 네비게이션바  설정 (47'20")
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "정상적으로 로그아웃되었습니다.", Toast.LENGTH_SHORT).show();
-
-                UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
-                    @Override
-                    public void onCompleteLogout() {
-                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    }
-                });
-                FirebaseAuth.getInstance().signOut();
-            }
-        });
-
-        kakao_btnSignout.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(MainActivity.this)
-                        .setMessage("탈퇴하시겠습니까?")
-                        .setPositiveButton("네", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                UserManagement.getInstance().requestUnlink(new UnLinkResponseCallback() {
-                                    @Override
-                                    public void onFailure(ErrorResult errorResult) {
-                                        int result = errorResult.getErrorCode();
-
-                                        if(result == ApiErrorCode.CLIENT_ERROR_CODE) {
-                                            Toast.makeText(getApplicationContext(), "네트워크 연결이 불안정합니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "회원탈퇴에 실패했습니다. 다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onSessionClosed(ErrorResult errorResult) {
-                                        Toast.makeText(getApplicationContext(), "로그인 세션이 닫혔습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-
-                                    @Override
-                                    public void onNotSignedUp() {
-                                        Toast.makeText(getApplicationContext(), "가입되지 않은 계정입니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-
-                                    @Override
-                                    public void onSuccess(Long result) {
-                                        mAuth.getCurrentUser().delete();
-                                        currentUser =null;
-                                        Toast.makeText(getApplicationContext(), "회원탈퇴에 성공했습니다.", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                });
-
-                                dialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
-            }
-        });
-
-        google_btnLogout.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                currentUser =null;
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-
-            }
-        });
-
-        google_btnSignout.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                //mAuth.getCurrentUser().delete();
-                currentUser.delete();
-                currentUser =null;
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finishAffinity();
-
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.home:
+                        HomeFragment homeFragment = new HomeFragment();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, homeFragment)
+                                .commit();
+                        return true;
+                    case R.id.writepost:
+                        WritePostFragment writepostFragment = new WritePostFragment();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, writepostFragment)
+                                .commit();
+                        return true;
+                    case R.id.chatroomlist:
+                        ChatroomListFragment chatroomFragment = new ChatroomListFragment();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, chatroomFragment)
+                                .commit();
+                        return true;
+                    case R.id.myinfo:
+                        MyInfoFragment myinfoFragment = new MyInfoFragment();
+                        getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.container, myinfoFragment)
+                                .commit();
+                        return true;
+                }
+                return false;
             }
         });
     }

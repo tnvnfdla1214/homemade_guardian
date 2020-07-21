@@ -1,6 +1,5 @@
-package com.example.homemade_guardian_beta.fragment;
+package com.example.homemade_guardian_beta.chat.fragment;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,23 +21,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
-
-
-import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.chat.ChatActivity;
-import com.example.homemade_guardian_beta.chat.model.ChatRoomModel;
-import com.example.homemade_guardian_beta.chat.model.Message;
-import com.example.homemade_guardian_beta.chat.model.UserModel;
-
-
-
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -54,22 +41,26 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
-//참고 : adapter란 데이터 테이블을 목록 상태로 보여주기 위해 사용되는것
-//데이터를 다양한 형식의 리스트 형식으로 보여주기 위해서 데이터와 리스트 뷰 사이에 존재하는 객체
-//users - (token,uid:고유번호,user id : "tnvnfdla1214@naver.com", usermsg : "....",userm : "tnvnfdla1214",userphoto : null)
-//지금까지 채팅했던거 보여주는 프레그먼트 액티비티 -(채팅앱 : ChatroomFragment)
-public class ChatroomListFragment extends Fragment {
+import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.chat.ChatActivity;
+import com.example.homemade_guardian_beta.chat.model.ChatRoomModel;
+import com.example.homemade_guardian_beta.chat.model.Message;
+import com.example.homemade_guardian_beta.chat.model.UserModel;
+
+
+
+public class ChatRoomFragment extends Fragment {
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private RecyclerViewAdapter mAdapter;
 
-    public ChatroomListFragment() {
+    public ChatRoomFragment() {
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater,@Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chatroomlist, container, false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_chatroom, container, false);
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(inflater.getContext()));

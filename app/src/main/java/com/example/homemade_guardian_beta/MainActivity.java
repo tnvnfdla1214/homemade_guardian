@@ -20,11 +20,17 @@ import com.example.homemade_guardian_beta.fragment.WritePostFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.kakao.auth.ApiErrorCode;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.UnLinkResponseCallback;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -74,5 +80,17 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        //여기에 들어가는지 확실x
+        sendRegistrationToServer();
     }
+
+    //Firebase 클라우드 메시징
+    void sendRegistrationToServer() {
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", token);
+        FirebaseFirestore.getInstance().collection("users").document(uid).set(map, SetOptions.merge());
+    }
+
 }

@@ -15,12 +15,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.kakao.auth.ApiErrorCode;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
@@ -29,6 +31,9 @@ import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeV2ResponseCallback;
 import com.kakao.usermgmt.response.MeV2Response;
 import com.kakao.util.exception.KakaoException;
+
+import com.example.homemade_guardian_beta.chat.common.Util;
+import com.example.homemade_guardian_beta.chat.model.UserModel;
 
 public class LoginActivity extends AppCompatActivity {
     private SessionCallback sessionCallback;
@@ -43,8 +48,8 @@ public class LoginActivity extends AppCompatActivity {
     private SignInButton signInButton;
     //카카오 로그인
     String kakaopass = "1234567890";
-    String kakaoemail;
     int OK =0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+
 
         //카카오 로그인
         sessionCallback = new SessionCallback(); //세션콜백 초기화
@@ -91,12 +97,14 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    //카카오 로그인
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Session.getCurrentSession().removeCallback(sessionCallback);  //현재 액티비티 제거시 콜백도 같이 제거
     }
 
+    //카카오 로그인
     private class SessionCallback implements ISessionCallback {
         @Override
         public void onSessionOpened() {
@@ -126,39 +134,6 @@ public class LoginActivity extends AppCompatActivity {
                     FirebaseAuthkakaologin(result.getKakaoAccount().getEmail(),kakaopass);
                     FirebaseAuthkakaosignup(result.getKakaoAccount().getEmail(),kakaopass);
 
-
-
-                    //로그인에 성공했을때
-                    /*
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    //intent.putExtra("name", result.getNickname());
-                    //intent.putExtra("profile", result.getProfileImagePath());
-                    //아래 단락이 추가된 부분. 차례대로 이메일, 나잇대, 성별, 생일 정보가 존재하는지 확인하고,
-                    //있으면 받아온다. 없으면 그냥 "none"을 보낸다.
-                    if(result.getKakaoAccount().hasEmail() == OptionalBoolean.TRUE){
-                        //intent.putExtra("email", result.getKakaoAccount().getEmail());
-                    }
-                    else
-                        //intent.putExtra("email", "none");
-
-
-                    if(result.getKakaoAccount().hasAgeRange() == OptionalBoolean.TRUE){
-                        //intent.putExtra("ageRange", result.getKakaoAccount().getAgeRange().getValue());
-                    }
-                    else
-                        //intent.putExtra("ageRange", "none");
-                    if(result.getKakaoAccount().hasGender() == OptionalBoolean.TRUE){
-                        //intent.putExtra("gender", result.getKakaoAccount().getGender().getValue());
-                    }
-                    else
-                        //intent.putExtra("gender", "none");
-                    if(result.getKakaoAccount().hasBirthday() == OptionalBoolean.TRUE){
-                        //intent.putExtra("birthday", result.getKakaoAccount().getBirthday());
-                    }
-                    else{
-                        //intent.putExtra("birthday", "none");
-                    }
-                     */
                 }
             });
         }
@@ -169,43 +144,77 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "로그인 도중 오류가 발생했습니다. 인터넷 연결을 확인해주세요: "+e.toString(), Toast.LENGTH_SHORT).show();
         }
     }
+    //카카오 로그인
     public void FirebaseAuthkakaologin(String email, String password) {
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            //progressDialog.dismiss();
-                            if (task.isSuccessful()) {
-                                currentUser = mAuth.getCurrentUser();
-                                updateUI(currentUser);
-                                finish();
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                            } else {
-                                OK=1;
-                            }
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        //progressDialog.dismiss();
+                        if (task.isSuccessful()) {
+                            currentUser = mAuth.getCurrentUser();
+                            updateUI(currentUser);
+                            finish();
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        } else {
+                            OK=1;
+                            Util.showMessage(getApplicationContext(), task.getException().getMessage());
                         }
-                    });
+                    }
+                });
 
     }
 
     //파이어베이스 카카오 가입 함수
     public void FirebaseAuthkakaosignup(String email, String password){
-       if(OK==1){
+        if(OK==1){
+            final String id = email;
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
                             if(!task.isSuccessful()) {
+                                Util.showMessage(getApplicationContext(), task.getException().getMessage());
                             }else{
+
+                                //추가 - 가입할때 uid,id,userm,usermsg 만들기
+                                currentUser = mAuth.getCurrentUser();
+                                final String uid = mAuth.getInstance().getUid();
+
+                                UserModel userModel = new UserModel();
+                                userModel.setUid(uid);
+                                userModel.setUserid(id);
+                                userModel.setUsernm(extractIDFromEmail(id));
+                                userModel.setUsermsg("...");
+
+                                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                                db.collection("users").document(uid)
+                                        .set(userModel)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                updateUI(currentUser);
+                                            }
+                                        });
+
+
                                 currentUser = mAuth.getCurrentUser();
                                 updateUI(currentUser);
                             }
                         }
                     });
+
+
         }
 
     }
+
+    String extractIDFromEmail(String email){
+        String[] parts = email.split("@");
+        return parts[0];
+    }
+
     //구글 로그인 메인 함수(onCreate안의 함수)
     public void FirebaseAuthgoogle(){
         // Configure Google Sign In
@@ -221,6 +230,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     // 구글 회원가입
     private void googlesignIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -236,15 +246,40 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
+                            //추가 -가입할때 uid,id,userm,usermsg 만들기
+                            currentUser = mAuth.getCurrentUser();
+                            final String id = currentUser.getEmail();
+                            final String uid = mAuth.getInstance().getUid();
+
+                            UserModel userModel = new UserModel();
+                            userModel.setUid(uid);
+                            userModel.setUserid(id);
+                            userModel.setUsernm(extractIDFromEmail(id));
+                            userModel.setUsermsg("...");
+
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            db.collection("users").document(uid)
+                                    .set(userModel)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            updateUI(currentUser);
+                                        }
+                                    });
+
+
                             currentUser = mAuth.getCurrentUser();
                             updateUI(currentUser);
+
                         } else {
                             // If sign in fails, display a message to the user.
                             updateUI(null);
+                            Util.showMessage(getApplicationContext(), task.getException().getMessage());
                         }
                     }
                 });
     }
+    //이동 함수수
     private void updateUI(FirebaseUser user) { //update ui code here
         if (user != null) {
             Intent intent = new Intent(this, MainActivity.class);

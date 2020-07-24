@@ -4,4 +4,5 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <item name="photoView" type="id"/>
     <string name="kakao_app_key">50436037dc6f478788de190b8cf72974</string>
+    <string name="please_grant_permission">권한을 허용해 주세요.</string>
 </resources>

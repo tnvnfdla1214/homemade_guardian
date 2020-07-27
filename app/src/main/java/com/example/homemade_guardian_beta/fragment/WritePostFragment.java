@@ -73,7 +73,7 @@ public class WritePostFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_writepost, container, false);
         ////
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("게시글 작성");
+        //((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("게시글 작성");
 
         parent = view.findViewById(R.id.contentsLayout);             //(20')
         buttonsBackgroundLayout = view.findViewById(R.id.buttonsBackgroundLayout);

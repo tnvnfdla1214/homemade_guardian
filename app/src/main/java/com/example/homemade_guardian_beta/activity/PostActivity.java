@@ -22,10 +22,14 @@ public class PostActivity extends BasicActivity {                               
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("로그","포스트 55555");
         super.onCreate(savedInstanceState);
+        Log.d("로그","포스트 66666");
         setContentView(R.layout.activity_post);
+        Log.d("로그","포스트 77777");
 
         postInfo = (PostInfo) getIntent().getSerializableExtra("postInfo");
+        Log.d("로그","포스트 88888");
         contentsLayout = findViewById(R.id.contentsLayout);
         readContentsView = findViewById(R.id.readContentsView);
 
@@ -81,7 +85,7 @@ public class PostActivity extends BasicActivity {                               
     };
 
     private void uiUpdate(){                                                                             // part19 : 함수로 만들어서 관리(92')
-        setToolbarTitle(postInfo.getTitle());
+        //setToolbarTitle(postInfo.getTitle());
         readContentsView.setPostInfo(postInfo);
     }
 

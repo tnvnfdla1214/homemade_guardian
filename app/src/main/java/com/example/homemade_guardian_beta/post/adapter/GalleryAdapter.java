@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.adapter;
+package com.example.homemade_guardian_beta.post.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,7 +16,7 @@ import com.example.homemade_guardian_beta.R;
 
 import java.util.ArrayList;
 
-import static com.example.homemade_guardian_beta.Util.INTENT_PATH;
+import static com.example.homemade_guardian_beta.post.Util.INTENT_PATH;
 
 public class GalleryAdapter  extends RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder> {
     private ArrayList<String> mDataset;

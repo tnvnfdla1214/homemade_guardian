@@ -54,12 +54,12 @@
             android:layout_marginBottom="5dp"
             android:background="#DDDDDD"/>
 
-        <com.example.homemade_guardian_beta.view.ReadContentsView
+        <com.example.homemade_guardian_beta.post.view.ReadContentsView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/readContentsView">
 
-        </com.example.homemade_guardian_beta.view.ReadContentsView>
+        </com.example.homemade_guardian_beta.post.view.ReadContentsView>
 
     </LinearLayout>
 

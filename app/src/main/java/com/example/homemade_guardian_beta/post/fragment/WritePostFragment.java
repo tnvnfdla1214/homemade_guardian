@@ -1,22 +1,32 @@
-package com.example.homemade_guardian_beta.activity;
+package com.example.homemade_guardian_beta.post.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.homemade_guardian_beta.view.ContentsItemView;
-import com.example.homemade_guardian_beta.PostInfo;
+import com.example.homemade_guardian_beta.MainActivity;
 import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.post.PostInfo;
+import com.example.homemade_guardian_beta.post.activity.GalleryActivity;
+import com.example.homemade_guardian_beta.post.view.ContentsItemView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,16 +45,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.example.homemade_guardian_beta.Util.GALLERY_IMAGE;
-import static com.example.homemade_guardian_beta.Util.INTENT_MEDIA;
-import static com.example.homemade_guardian_beta.Util.INTENT_PATH;
-import static com.example.homemade_guardian_beta.Util.isImageFile;
-import static com.example.homemade_guardian_beta.Util.isStorageUrl;
-import static com.example.homemade_guardian_beta.Util.isVideoFile;
-import static com.example.homemade_guardian_beta.Util.showToast;
-import static com.example.homemade_guardian_beta.Util.storageUrlToName;
+import static com.example.homemade_guardian_beta.post.Util.INTENT_MEDIA;
+import static com.example.homemade_guardian_beta.post.Util.GALLERY_IMAGE;
+import static com.example.homemade_guardian_beta.post.Util.INTENT_PATH;
+import static com.example.homemade_guardian_beta.post.Util.isImageFile;
+import static com.example.homemade_guardian_beta.post.Util.isStorageUrl;
+import static com.example.homemade_guardian_beta.post.Util.isVideoFile;
+import static com.example.homemade_guardian_beta.post.Util.storageUrlToName;
 
-public class WritePostActivity extends BasicActivity {
+public class WritePostFragment extends Fragment {
     private static final String TAG = "WritePostActivity";
     private FirebaseUser user;
     private StorageReference storageRef;
@@ -58,25 +67,37 @@ public class WritePostActivity extends BasicActivity {
     private EditText titleEditText;
     private PostInfo postInfo;
     private int pathCount, successCount;
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_write_post);
-        setToolbarTitle("게시글 작성");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        parent = findViewById(R.id.contentsLayout);             //(20')
-        buttonsBackgroundLayout = findViewById(R.id.buttonsBackgroundLayout);
-        loaderLayout = findViewById(R.id.loaderLyaout);
-        contentsEditText = findViewById(R.id.contentsEditText);
-        titleEditText = findViewById(R.id.titleEditText);
+        View view = inflater.inflate(R.layout.fragment_writepost, container, false);
+        ////
+        //((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("게시글 작성");
+        Toolbar myToolbar = view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(myToolbar);
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setTitle("게시글 작성");
+        }
 
-        findViewById(R.id.check).setOnClickListener(onClickListener);
-        findViewById(R.id.image).setOnClickListener(onClickListener);
-        findViewById(R.id.video).setOnClickListener(onClickListener);
-        findViewById(R.id.imageModify).setOnClickListener(onClickListener);
-        findViewById(R.id.videoModify).setOnClickListener(onClickListener);
-        findViewById(R.id.delete).setOnClickListener(onClickListener);
+
+        parent = view.findViewById(R.id.contentsLayout);             //(20')
+        buttonsBackgroundLayout = view.findViewById(R.id.buttonsBackgroundLayout);
+        loaderLayout = view.findViewById(R.id.loaderLyaout);
+        contentsEditText = view.findViewById(R.id.contentsEditText);
+        titleEditText = view.findViewById(R.id.titleEditText);
+
+        view.findViewById(R.id.check).setOnClickListener(onClickListener);
+        view.findViewById(R.id.image).setOnClickListener(onClickListener);
+        //view.findViewById(R.id.video).setOnClickListener(onClickListener);
+        view.findViewById(R.id.imageModify).setOnClickListener(onClickListener);
+        //view.findViewById(R.id.videoModify).setOnClickListener(onClickListener);
+        view.findViewById(R.id.delete).setOnClickListener(onClickListener);
 
         buttonsBackgroundLayout.setOnClickListener(onClickListener);
         contentsEditText.setOnFocusChangeListener(onFocusChangeListener);
@@ -92,8 +113,24 @@ public class WritePostActivity extends BasicActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
-        postInfo = (PostInfo) getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
+        ////
+        postInfo = (PostInfo) getActivity().getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
         postInit();
+        return view;
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
     }
 
     @Override
@@ -105,7 +142,7 @@ public class WritePostActivity extends BasicActivity {
                     String path = data.getStringExtra(INTENT_PATH);
                     pathList.add(path);                                                                 // part11 : 이미지들의 경로를 저장 (18'40")
 
-                    ContentsItemView contentsItemView = new ContentsItemView(this);             // part11 : edittext랑 imageview를 계속 넣어줄 거임
+                    ContentsItemView contentsItemView = new ContentsItemView(getActivity());             // part11 : edittext랑 imageview를 계속 넣어줄 거임
 
                     if (selectedEditText == null) {
                         parent.addView(contentsItemView);
@@ -150,22 +187,26 @@ public class WritePostActivity extends BasicActivity {
                 case R.id.image:
                     myStartActivity(GalleryActivity.class, GALLERY_IMAGE, 0);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
                     break;
+                    /*
                 case R.id.video:
-                    //myStartActivity(GalleryActivity.class, GALLERY_VIDEO, 0);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
+                    ////myStartActivity(GalleryActivity.class, GALLERY_VIDEO, 0);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
                     break;
+                     */
                 case R.id.buttonsBackgroundLayout:
                     if (buttonsBackgroundLayout.getVisibility() == View.VISIBLE) {
                         buttonsBackgroundLayout.setVisibility(View.GONE);                               // part12 : 실행되고나면 사라지게 설정 (15'19")
                     }
                     break;
                 case R.id.imageModify:
-                    //myStartActivity(GalleryActivity.class, GALLERY_IMAGE, 1);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
+                    myStartActivity(GalleryActivity.class, GALLERY_IMAGE, 1);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
                     buttonsBackgroundLayout.setVisibility(View.GONE);
                     break;
+                    /*
                 case R.id.videoModify:
-                    //myStartActivity(GalleryActivity.class, GALLERY_VIDEO, 1);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
+                    ////myStartActivity(GalleryActivity.class, GALLERY_VIDEO, 1);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
                     buttonsBackgroundLayout.setVisibility(View.GONE);
                     break;
+                     */
                 case R.id.delete:                                                                       // part12 : 작성중인 게시물에서 사진 빼기 (12'30")
                     final View selectedView = (View) selectedImageVIew.getParent();                     // part12 : parents를 먼저 불러옴
                     String path = pathList.get(parent.indexOfChild(selectedView) - 1);                  // part20 : 172,173줄 없으면 사진 택하고 바로 삭제시 에러 : 아직 안 올라갔기 째문
@@ -174,7 +215,7 @@ public class WritePostActivity extends BasicActivity {
                         desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {             // part17 : 스토리지에서 삭제 (56')
-                                showToast(WritePostActivity.this, "파일을 삭제하였습니다.");
+                                ////showToast(WritePostActivity.this, "파일을 삭제하였습니다.");
                                 pathList.remove(parent.indexOfChild(selectedView) - 1);                 // part17 : view 삭제
                                 parent.removeView(selectedView);
                                 buttonsBackgroundLayout.setVisibility(View.GONE);
@@ -182,7 +223,7 @@ public class WritePostActivity extends BasicActivity {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception exception) {
-                                showToast(WritePostActivity.this, "파일을 삭제하는데 실패하였습니다.");
+                                ////showToast(WritePostActivity.this, "파일을 삭제하는데 실패하였습니다.");
                             }
                         });
                     }else{
@@ -205,11 +246,9 @@ public class WritePostActivity extends BasicActivity {
     };
 
     private void storageUpload() {
-        final String title = ((EditText) findViewById(R.id.titleEditText)).getText().toString();
-        Log.d("로그","111234");
+        final String title = ((EditText) getView().findViewById(R.id.titleEditText)).getText().toString();
         if (title.length() > 0) {
             loaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
-            Log.d("로그","11123442424");
             final ArrayList<String> contentsList = new ArrayList<>();                                   // part11 : contentsList에는 컨텐츠 내용이
             final ArrayList<String> formatList = new ArrayList<>();                                     // part11 : formatList에는 제목과 정보가 들어가는 듯 -> part20 사진이냐 동영상이냐를 가리기 위해 나눔 (6')
             user = FirebaseAuth.getInstance().getCurrentUser();
@@ -218,6 +257,7 @@ public class WritePostActivity extends BasicActivity {
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
             final DocumentReference documentReference =  postInfo== null ? firebaseFirestore.collection("posts").document() : firebaseFirestore.collection("posts").document(postInfo.getId());     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
             final Date date = postInfo == null ? new Date() : postInfo.getCreatedAt();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
+            Log.d("로그","111");
             for (int i = 0; i < parent.getChildCount(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
                 LinearLayout linearLayout = (LinearLayout) parent.getChildAt(i);
                 for (int ii = 0; ii < linearLayout.getChildCount(); ii++) {
@@ -259,6 +299,7 @@ public class WritePostActivity extends BasicActivity {
                                             successCount--;                                                 // part11 : SUCCEESSCOUNT 개의 사진 (37')
                                             contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
                                             if (successCount == 0) {
+                                                Log.d("로그","1");
                                                 PostInfo postInfo = new PostInfo(title, contentsList, formatList, user.getUid(), date);
                                                 storeUpload(documentReference, postInfo);
                                             }
@@ -274,14 +315,16 @@ public class WritePostActivity extends BasicActivity {
                 }
             }
             if (successCount == 0) {
+                Log.d("로그","1111");
                 storeUpload(documentReference, new PostInfo(title, contentsList, formatList, user.getUid(), date));
             }
         } else {
-            showToast(WritePostActivity.this, "제목을 입력해주세요.");
+            Toast.makeText(getActivity(), "제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
         }
     }
 
     private void storeUpload(DocumentReference documentReference, final PostInfo postInfo) {
+        Log.d("로그","1234");
         documentReference.set(postInfo.getPostInfo())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -290,14 +333,20 @@ public class WritePostActivity extends BasicActivity {
                         loaderLayout.setVisibility(View.GONE);
                         Intent resultIntent = new Intent();
                         resultIntent.putExtra("postinfo", postInfo);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
-                        setResult(Activity.RESULT_OK, resultIntent);
-                        finish();
+                        Log.d("로그","11");
+                        getActivity().setResult(Activity.RESULT_OK, resultIntent);
+                        Log.d("로그","12");
+                        //**
+                        Intent intentpage = new Intent(getActivity(), MainActivity.class);
+                        startActivity(intentpage);
+                        //getActivity().finish();
+                        Log.d("로그","13");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
+                        Log.w("로그", "Error writing document", e);
                         loaderLayout.setVisibility(View.GONE);                                                  // part20 : (37'30") 보면 로딩 뒤에 있는 이미지 클릭시 이ㅏ벤트가 진행되버리는 현상을 방지
                     }
                 });
@@ -311,7 +360,8 @@ public class WritePostActivity extends BasicActivity {
                 String contents = contentsList.get(i);
                 if (isStorageUrl(contents)) {
                     pathList.add(contents);
-                    ContentsItemView contentsItemView = new ContentsItemView(this);
+                    ////
+                    ContentsItemView contentsItemView = new ContentsItemView(getActivity());
                     parent.addView(contentsItemView);
 
                     contentsItemView.setImage(contents);
@@ -338,8 +388,10 @@ public class WritePostActivity extends BasicActivity {
     }
 
     private void myStartActivity(Class c, int media, int requestCode) {
-        Intent intent = new Intent(this, c);
+        Intent intent = new Intent(getActivity(), c);
         intent.putExtra(INTENT_MEDIA, media);
         startActivityForResult(intent, requestCode);
     }
+
+
 }

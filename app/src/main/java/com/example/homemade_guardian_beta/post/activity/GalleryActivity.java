@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.activity;
+package com.example.homemade_guardian_beta.post.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -15,14 +15,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.adapter.GalleryAdapter;
+import com.example.homemade_guardian_beta.post.adapter.GalleryAdapter;
 
 import java.util.ArrayList;
 
-import static com.example.homemade_guardian_beta.Util.GALLERY_IMAGE;
-import static com.example.homemade_guardian_beta.Util.GALLERY_VIDEO;
-import static com.example.homemade_guardian_beta.Util.INTENT_MEDIA;
-import static com.example.homemade_guardian_beta.Util.showToast;
+import static com.example.homemade_guardian_beta.post.Util.GALLERY_IMAGE;
+import static com.example.homemade_guardian_beta.post.Util.GALLERY_VIDEO;
+import static com.example.homemade_guardian_beta.post.Util.INTENT_MEDIA;
+import static com.example.homemade_guardian_beta.post.Util.showToast;
 
 public class GalleryActivity extends BasicActivity {
 

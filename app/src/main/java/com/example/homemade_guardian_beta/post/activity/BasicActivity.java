@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.activity;
+package com.example.homemade_guardian_beta.post.activity;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;

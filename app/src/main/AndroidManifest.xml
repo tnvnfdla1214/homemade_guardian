@@ -56,15 +56,15 @@
                 android:resource="@xml/provider_paths"/>
         </provider>
 
-        <activity android:name=".activity.PostActivity">
+        <activity android:name=".post.activity.PostActivity">
         </activity>
-        <activity android:name=".activity.WritePostActivity">
+        <activity android:name=".post.activity.ModifyPostActivity">
         </activity>
-        <activity android:name=".activity.BasicActivity">
+        <activity android:name=".post.activity.BasicActivity">
         </activity>
-        <activity android:name=".activity.GalleryActivity">
+        <activity android:name=".post.activity.GalleryActivity">
         </activity>
-        <activity android:name=".activity.MemberInitActivity">
+        <activity android:name=".post.activity.MemberInitActivity">
         </activity>
 
     </application>

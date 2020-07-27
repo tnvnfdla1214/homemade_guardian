@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.activity;
+package com.example.homemade_guardian_beta.post.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,11 +8,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
-import com.example.homemade_guardian_beta.FirebaseHelper;
-import com.example.homemade_guardian_beta.PostInfo;
+import com.example.homemade_guardian_beta.post.FirebaseHelper;
+import com.example.homemade_guardian_beta.MainActivity;
+import com.example.homemade_guardian_beta.post.PostInfo;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.view.ReadContentsView;
-import com.example.homemade_guardian_beta.listener.OnPostListener;
+import com.example.homemade_guardian_beta.post.view.ReadContentsView;
+import com.example.homemade_guardian_beta.post.listener.OnPostListener;
 
 public class PostActivity extends BasicActivity {                                                       // part19 : 메인에서 게시물 클릭해서 넘어온 페이지, ReadContentsVIew는 여기서 이루어지는 실행들 (44')
     private PostInfo postInfo;
@@ -63,9 +64,11 @@ public class PostActivity extends BasicActivity {                               
         switch (item.getItemId()) {
             case R.id.delete:
                 firebaseHelper.storageDelete(postInfo);
+                Intent intentpage = new Intent(PostActivity.this, MainActivity.class);
+                startActivity(intentpage);
                 return true;
             case R.id.modify:
-                myStartActivity(WritePostActivity.class, postInfo);
+                myStartActivity(ModifyPostActivity.class, postInfo);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

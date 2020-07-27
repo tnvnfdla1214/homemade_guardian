@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.activity;
+package com.example.homemade_guardian_beta.post.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -33,8 +33,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Date;
 
-import static com.example.homemade_guardian_beta.Util.INTENT_PATH;
-import static com.example.homemade_guardian_beta.Util.showToast;
+import static com.example.homemade_guardian_beta.post.Util.INTENT_PATH;
+import static com.example.homemade_guardian_beta.post.Util.showToast;
 
 public class MemberInitActivity extends BasicActivity {
     private static final String TAG = "MemberInitActivity";

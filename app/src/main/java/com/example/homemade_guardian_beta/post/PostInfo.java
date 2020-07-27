@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta;
+package com.example.homemade_guardian_beta.post;
 
 import java.io.Serializable;
 import java.util.ArrayList;

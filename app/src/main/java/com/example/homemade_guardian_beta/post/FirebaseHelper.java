@@ -1,9 +1,12 @@
-package com.example.homemade_guardian_beta;
+package com.example.homemade_guardian_beta.post;
 
 import android.app.Activity;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
-import com.example.homemade_guardian_beta.listener.OnPostListener;
+import com.example.homemade_guardian_beta.post.PostInfo;
+import com.example.homemade_guardian_beta.post.listener.OnPostListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -12,9 +15,9 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-import static com.example.homemade_guardian_beta.Util.isStorageUrl;
-import static com.example.homemade_guardian_beta.Util.showToast;
-import static com.example.homemade_guardian_beta.Util.storageUrlToName;
+import static com.example.homemade_guardian_beta.post.Util.isStorageUrl;
+import static com.example.homemade_guardian_beta.post.Util.showToast;
+import static com.example.homemade_guardian_beta.post.Util.storageUrlToName;
 
 public class FirebaseHelper {                                                                           // part19 : Firevasehelper로 이동 (61')
     private Activity activity;
@@ -30,21 +33,26 @@ public class FirebaseHelper {                                                   
     }
 
     public void storageDelete(final PostInfo postInfo){                                                 // part16: 스토리지의 삭제 (13')
+        Log.d("로그","삭제 33333");
         FirebaseStorage storage = FirebaseStorage.getInstance();                                        // part17 : 스토리지 삭제 (문서) (19'50")
         StorageReference storageRef = storage.getReference();
-
+        Log.d("로그","삭제 44444");
         final String id = postInfo.getId();
         ArrayList<String> contentsList = postInfo.getContents();
+        Log.d("로그","삭제 34343434");
         for (int i = 0; i < contentsList.size(); i++) {
             String contents = contentsList.get(i);
             if (isStorageUrl(contents)) {
+                Log.d("로그","삭제 55555");
                 successCount++;                                                                             // part17 : 사진의 개수가 여러개인 게시물의 경우 (23'35")
                 StorageReference desertRef = storageRef.child("posts/" + id + "/" + storageUrlToName(contents));    // part17: (((파이어베이스에서 삭제))) 파이에베이스 스토리지는 폴더가 없다, 하나하나가 객체로서 저장 (13'30")
                 desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        Log.d("로그","삭제 66666");
                         successCount--;
                         storeDelete(id, postInfo);
+                        Log.d("로그","삭제 77777");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -54,17 +62,19 @@ public class FirebaseHelper {                                                   
                 });
             }
         }
-        //storeDelete(id, postInfo); 호,,
+        storeDelete(id, postInfo);
     }
 
     private void storeDelete(final String id, final PostInfo postInfo) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         if (successCount == 0) {
+            Log.d("로그","삭제 88888");
             firebaseFirestore.collection("posts").document(id)
                     .delete()
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
+                            Log.d("로그","삭제 99999");
                             showToast(activity, "게시글을 삭제하였습니다.");
                             onPostListener.onDelete(postInfo);
                             //postsUpdate();

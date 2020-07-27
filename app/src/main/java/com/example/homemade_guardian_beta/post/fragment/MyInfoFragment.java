@@ -1,19 +1,17 @@
-package com.example.homemade_guardian_beta.fragment;
+package com.example.homemade_guardian_beta.post.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,21 +24,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.ChatActivity;
 import com.example.homemade_guardian_beta.chat.common.FirestoreAdapter;
-import com.example.homemade_guardian_beta.chat.common.Util;
 import com.example.homemade_guardian_beta.chat.model.UserModel;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.util.HashMap;
-import java.util.Map;
 
 //지금은 임시로 우리앱에 들어간 유저들의 정보들이 나옴 -> 해당 유저를 누르면 그사람과 채팅 액티비티가 켜짐
 //임시 : (채팅앱 : UserListFragment)
@@ -70,7 +61,12 @@ public class MyInfoFragment extends Fragment {
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater,@Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_myinfo, container, false);
-
+        Toolbar myToolbar = view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(myToolbar);
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setTitle("유저 목록 (내 정보)");
+        }
         firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("users").orderBy("usernm"));
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);

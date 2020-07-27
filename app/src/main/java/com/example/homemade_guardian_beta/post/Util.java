@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta;
+package com.example.homemade_guardian_beta.post;
 
 import android.app.Activity;
 import android.util.Patterns;
@@ -20,7 +20,7 @@ public class Util {                                                             
     }
 
     public static boolean isStorageUrl(String url){                                                             // part17 : 스토리지 주소에 대한 등록 [SHA1코드같은..] (16'45")
-        return Patterns.WEB_URL.matcher(url).matches() && url.contains("https://firebasestorage.googleapis.com/v0/b/sns-project2-97ce3.appspot.com/o/posts");
+        return Patterns.WEB_URL.matcher(url).matches() && url.contains("https://firebasestorage.googleapis.com/v0/b/homemade-guardian-beta.appspot.com/o/posts");
     }
 
     public static String storageUrlToName(String url){

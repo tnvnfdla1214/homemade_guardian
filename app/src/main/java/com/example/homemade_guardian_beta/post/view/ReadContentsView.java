@@ -1,10 +1,9 @@
-package com.example.homemade_guardian_beta.view;
+package com.example.homemade_guardian_beta.post.view;
 
 import android.content.Context;
 
 import androidx.annotation.Nullable;
 
-import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -13,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.homemade_guardian_beta.PostInfo;
+import com.example.homemade_guardian_beta.post.PostInfo;
 import com.example.homemade_guardian_beta.R;
 //import com.google.android.exoplayer2.ExoPlayerFactory;
 //import com.google.android.exoplayer2.SimpleExoPlayer;

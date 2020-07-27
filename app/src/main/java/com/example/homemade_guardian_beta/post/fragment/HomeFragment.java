@@ -1,10 +1,13 @@
-package com.example.homemade_guardian_beta.fragment;
+package com.example.homemade_guardian_beta.post.fragment;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,10 +17,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.homemade_guardian_beta.PostInfo;
+import com.example.homemade_guardian_beta.post.PostInfo;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.adapter.HomeAdapter;
-import com.example.homemade_guardian_beta.listener.OnPostListener;
+import com.example.homemade_guardian_beta.post.adapter.HomeAdapter;
+import com.example.homemade_guardian_beta.post.listener.OnPostListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -52,6 +55,12 @@ public class HomeFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        Toolbar myToolbar = view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(myToolbar);
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setTitle("Home");
+        }
         firebaseFirestore = FirebaseFirestore.getInstance();
         postList = new ArrayList<>();
         homeAdapter = new HomeAdapter(getActivity(), postList);

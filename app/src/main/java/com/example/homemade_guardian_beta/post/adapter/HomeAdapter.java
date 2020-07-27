@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.adapter;
+package com.example.homemade_guardian_beta.post.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,13 +17,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.homemade_guardian_beta.FirebaseHelper;
-import com.example.homemade_guardian_beta.PostInfo;
+import com.example.homemade_guardian_beta.post.FirebaseHelper;
+import com.example.homemade_guardian_beta.post.PostInfo;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.activity.PostActivity;
-import com.example.homemade_guardian_beta.activity.WritePostActivity;
-import com.example.homemade_guardian_beta.listener.OnPostListener;
-import com.example.homemade_guardian_beta.view.ReadContentsView;
+import com.example.homemade_guardian_beta.post.activity.PostActivity;
+import com.example.homemade_guardian_beta.post.activity.ModifyPostActivity;
+import com.example.homemade_guardian_beta.post.listener.OnPostListener;
+import com.example.homemade_guardian_beta.post.view.ReadContentsView;
 
 //import com.google.android.exoplayer2.SimpleExoPlayer;
 
@@ -126,10 +126,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.modify:
-                        myStartActivity(WritePostActivity.class, mDataset.get(position));
+                        myStartActivity(ModifyPostActivity.class, mDataset.get(position));
                         return true;
                     case R.id.delete:
+                        Log.d("로그","삭제 11111");
                         firebaseHelper.storageDelete(mDataset.get(position));
+                        Log.d("로그","삭제 22222");
                         return true;
                     default:
                         return false;

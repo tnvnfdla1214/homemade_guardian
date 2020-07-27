@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.view;
+package com.example.homemade_guardian_beta.post.view;
 
 import android.content.Context;
 import androidx.annotation.Nullable;

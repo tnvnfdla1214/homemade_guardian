@@ -19,12 +19,12 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <com.example.homemade_guardian_beta.view.ReadContentsView
+            <com.example.homemade_guardian_beta.post.view.ReadContentsView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/readContentsView">
 
-            </com.example.homemade_guardian_beta.view.ReadContentsView>
+            </com.example.homemade_guardian_beta.post.view.ReadContentsView>
         </LinearLayout>
     </ScrollView>
 

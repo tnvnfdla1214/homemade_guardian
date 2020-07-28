@@ -183,7 +183,7 @@ public class ChatFragment extends Fragment {
             getUserInfoFromServer(toUid);
             userCount = 2;
         };
-
+//////////////////////////////
         recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v,
@@ -576,7 +576,7 @@ public class ChatFragment extends Fragment {
             messageList.clear();
             notifyDataSetChanged();
         }
-
+//////////////
         @Override
         public int getItemViewType(int position) {
             Message message = messageList.get(position);

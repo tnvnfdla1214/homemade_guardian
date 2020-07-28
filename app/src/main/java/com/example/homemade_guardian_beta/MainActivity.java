@@ -8,10 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.homemade_guardian_beta.post.fragment.ChatroomListFragment;
-import com.example.homemade_guardian_beta.post.fragment.HomeFragment;
-import com.example.homemade_guardian_beta.post.fragment.MyInfoFragment;
-import com.example.homemade_guardian_beta.post.fragment.WritePostFragment;
+import com.example.homemade_guardian_beta.fragment.ChatroomListFragment;
+import com.example.homemade_guardian_beta.fragment.HomeFragment;
+import com.example.homemade_guardian_beta.fragment.MyInfoFragment;
+import com.example.homemade_guardian_beta.fragment.WritePostFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

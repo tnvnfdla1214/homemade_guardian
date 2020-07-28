@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.post.fragment;
+package com.example.homemade_guardian_beta.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;

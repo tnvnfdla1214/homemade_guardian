@@ -10,24 +10,24 @@ public class PostInfo implements Serializable {                                 
     private String title;
     private ArrayList<String> contents;
     private ArrayList<String> formats;
-    private String publisher;
+    private String uid;
     private Date createdAt;
     private String id;
 
-    public PostInfo(String title, ArrayList<String> contents, ArrayList<String> formats, String publisher, Date createdAt, String id){
+    public PostInfo(String title, ArrayList<String> contents, ArrayList<String> formats, String uid, Date createdAt, String id){
         this.title = title;
         this.contents = contents;
         this.formats = formats;
-        this.publisher = publisher;
+        this.uid = uid;
         this.createdAt = createdAt;
         this.id = id;
     }
 
-    public PostInfo(String title, ArrayList<String> contents, ArrayList<String> formats, String publisher, Date createdAt){
+    public PostInfo(String title, ArrayList<String> contents, ArrayList<String> formats, String uid, Date createdAt){
         this.title = title;
         this.contents = contents;
         this.formats = formats;
-        this.publisher = publisher;
+        this.uid = uid;
         this.createdAt = createdAt;
     }
 
@@ -36,7 +36,7 @@ public class PostInfo implements Serializable {                                 
         docData.put("title",title);
         docData.put("contents",contents);
         docData.put("formats",formats);
-        docData.put("publisher",publisher);
+        docData.put("uid",uid);
         docData.put("createdAt",createdAt);
         return  docData;
     }
@@ -59,11 +59,11 @@ public class PostInfo implements Serializable {                                 
     public void setFormats(ArrayList<String> formats){
         this.formats = formats;
     }
-    public String getPublisher(){
-        return this.publisher;
+    public String getuid(){
+        return this.uid;
     }
-    public void setPublisher(String publisher){
-        this.publisher = publisher;
+    public void setuid(String publisher){
+        this.uid = publisher;
     }
     public Date getCreatedAt(){
         return this.createdAt;

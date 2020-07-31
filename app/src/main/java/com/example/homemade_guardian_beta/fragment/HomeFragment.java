@@ -193,7 +193,7 @@ public class HomeFragment extends Fragment {
                                         document.getData().get("title").toString(),
                                         (ArrayList<String>) document.getData().get("contents"),
                                         (ArrayList<String>) document.getData().get("formats"),
-                                        document.getData().get("publisher").toString(),
+                                        document.getData().get("uid").toString(),
                                         new Date(document.getDate("createdAt").getTime()),
                                         document.getId()));
                             }

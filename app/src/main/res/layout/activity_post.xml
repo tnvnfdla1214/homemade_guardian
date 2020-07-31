@@ -25,6 +25,10 @@
                 android:id="@+id/readContentsView">
 
             </com.example.homemade_guardian_beta.post.view.ReadContentsView>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/chattingroom"/>
         </LinearLayout>
     </ScrollView>
 

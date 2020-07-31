@@ -68,11 +68,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {                                                                   // part18 : 게시물 클릭시 게시물페이지로 이동 (36'10")
-                Log.d("로그","포스트 11111");
                 Intent intent = new Intent(activity, PostActivity.class);
-                Log.d("로그","포스트 22222");
+                //postInfo 안에 uid있음
                 intent.putExtra("postInfo", mDataset.get(mainViewHolder.getAdapterPosition()));
-                Log.d("로그","포스트 33333");
                 activity.startActivity(intent);
                 Log.d("로그","포스트 44444");
             }

@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.example.homemade_guardian_beta.chat.ChatActivity;
 import com.example.homemade_guardian_beta.post.FirebaseHelper;
 import com.example.homemade_guardian_beta.MainActivity;
 import com.example.homemade_guardian_beta.post.PostInfo;
@@ -20,23 +23,35 @@ public class PostActivity extends BasicActivity {                               
     private FirebaseHelper firebaseHelper;
     private ReadContentsView readContentsView;
     private LinearLayout contentsLayout;
+    private Button chattingroom;
+    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("로그","포스트 55555");
         super.onCreate(savedInstanceState);
-        Log.d("로그","포스트 66666");
         setContentView(R.layout.activity_post);
-        Log.d("로그","포스트 77777");
-
+        chattingroom = (Button) findViewById(R.id.chattingroom);
         postInfo = (PostInfo) getIntent().getSerializableExtra("postInfo");
-        Log.d("로그","포스트 88888");
+        //들어왔음
+        //Log.d("로그2","상대방 uid : " + postInfo.getuid());
         contentsLayout = findViewById(R.id.contentsLayout);
         readContentsView = findViewById(R.id.readContentsView);
 
         firebaseHelper = new FirebaseHelper(this);
         firebaseHelper.setOnPostListener(onPostListener);
         uiUpdate();
+        //채팅버튼
+        chattingroom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //버튼 눌러짐
+                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                //상대방 uid 넘겨주기
+                intent.putExtra("toUid", postInfo.getuid());
+                startActivity(intent);
+
+            }
+        });
     }
 
     @Override

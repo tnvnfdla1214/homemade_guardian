@@ -60,7 +60,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 	private static String realname;
 	private static ViewPager viewPager;
 	private static ArrayList<Message> imgList = new ArrayList<>();
-    private String rootPath = Util.getRootPath()+"/DirectTalk9/";
+    private String rootPath = Util.getRootPath()+"/homemade_guardian_beta/";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

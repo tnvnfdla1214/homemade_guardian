@@ -512,7 +512,9 @@ public class ChatFragment extends Fragment {
         String beforeDay = null;
         MessageViewHolder beforeViewHolder;
 
+
         RecyclerViewAdapter() {
+            Log.d("로그3","채팅 1");
             File dir = new File(rootPath);
             if (!dir.exists()) {
                 if (!Util.isPermissionGranted(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -521,9 +523,13 @@ public class ChatFragment extends Fragment {
                 dir.mkdirs();
             }
 
+            Log.d("로그3","채팅 11");
             messageList = new ArrayList<Message>();
+            Log.d("로그3","채팅 111");
             setUnread2Read();
+            Log.d("로그3","채팅 1111");
             startListening();
+            Log.d("로그3","채팅 11111");
         }
 
         public void startListening() {
@@ -604,9 +610,11 @@ public class ChatFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            Log.d("로그3","채팅 2");
             final MessageViewHolder messageViewHolder = (MessageViewHolder) holder;
+            Log.d("로그3","채팅 22");
             final Message message = messageList.get(position);
-
+            Log.d("로그3","채팅 222");
             setReadCounter(message, messageViewHolder.read_counter);
 
             if ("0".equals(message.getMsgtype())) {                                      // text message

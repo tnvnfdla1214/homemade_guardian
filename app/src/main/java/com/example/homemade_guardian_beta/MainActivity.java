@@ -12,6 +12,7 @@ import com.example.homemade_guardian_beta.fragment.ChatroomListFragment;
 import com.example.homemade_guardian_beta.fragment.HomeFragment;
 import com.example.homemade_guardian_beta.fragment.MyInfoFragment;
 import com.example.homemade_guardian_beta.fragment.WritePostFragment;
+import com.example.homemade_guardian_beta.post.activity.MemberInitActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,10 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    String strNickname;
-    String strEmail;
-    private FirebaseAuth mAuth ;
-    private FirebaseUser currentUser=FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             //myStartActivity(CameraActivity.class);                                                            // part5 : test
 
-            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("user").document(firebaseUser.getUid());
+            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("users").document(firebaseUser.getUid());
             documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -73,14 +70,14 @@ public class MainActivity extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document != null) {
                             if (document.exists()) {                                                            // part5 : 로그인 되있었어도 정보가 있으면 불러오고
-                                Log.d("로그", "DocumentSnapshot data: " + document.getData());
+                                Log.d("태그1", "DocumentSnapshot data: " + document.getData());
                             } else {                                                                            // part5 : 아니면 입력받는다.   (18')
-                                Log.d("로그", "No such document");
-                                //myStartActivity(MemberInitActivity.class);
+                                Log.d("태그1", "No such document");
+                                myStartActivity(MemberInitActivity.class);
                             }
                         }
                     } else {
-                        Log.d("로그", "get failed with ", task.getException());
+                        Log.d("태그1", "get failed with ", task.getException());
                     }
                 }
             });

@@ -43,7 +43,7 @@ public class MemberInitActivity extends BasicActivity {
     private RelativeLayout loaderLayout;
     private RelativeLayout buttonBackgroundLayout;
     private String profilePath;
-    private FirebaseUser user;
+    private FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,12 +117,16 @@ public class MemberInitActivity extends BasicActivity {
             loaderLayout.setVisibility(View.VISIBLE);
             FirebaseStorage storage = FirebaseStorage.getInstance();
             StorageReference storageRef = storage.getReference();
-            user = FirebaseAuth.getInstance().getCurrentUser();
-            final StorageReference mountainImagesRef = storageRef.child("user/" + user.getUid() + "/profileImage.jpg");
+            currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+            final StorageReference mountainImagesRef = storageRef.child("user/" + currentUser.getUid() + "/profileImage.jpg");
             final Date createdID = new Date();                                                              // + : 사용자 리스트 수정 (현재 날짜 받아오기 [ 사진마다 달라서 그때 그댸 불르기])
 
             if (profilePath == null) {                                                                      // part5 : 데이터 추가 (9'10")
                 UserModel userModel = new UserModel(name, phoneNumber, birthDay, createdID, address);          // + : 사용자 리스트 수정 (가입날짜 추가[사진 없는 버전])
+                userModel.setUid(currentUser.getUid());
+                userModel.setUserid(currentUser.getEmail());
+                userModel.setUsernm(extractIDFromEmail(currentUser.getEmail()));
                 storeUploader(userModel);
             } else {
                 try {
@@ -143,6 +147,9 @@ public class MemberInitActivity extends BasicActivity {
                                 Uri downloadUri = task.getResult();                                         // part7 : 입력한 회원정보를 DB에 저장 (28')
                                 Log.d("LOOG", " " + task.getResult().toString());
                                 UserModel userModel = new UserModel(name, phoneNumber, birthDay, address, createdID, downloadUri.toString());      // + : 사용자 리스트 수정 (가입날짜 추가)
+                                userModel.setUid(currentUser.getUid());
+                                userModel.setUserid(currentUser.getEmail());
+                                userModel.setUsernm(extractIDFromEmail(currentUser.getEmail()));
                                 storeUploader(userModel);
                             } else {
                                 showToast(MemberInitActivity.this, "회원정보를 보내는데 실패하였습니다.");
@@ -160,7 +167,7 @@ public class MemberInitActivity extends BasicActivity {
 
     private void storeUploader(UserModel userModel) {                                                     // part5 : DB에 등록이 됬는지 알려주는 로직
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(user.getUid()).set(userModel)
+        db.collection("users").document(currentUser.getUid()).set(userModel)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -182,5 +189,10 @@ public class MemberInitActivity extends BasicActivity {
     private void myStartActivity(Class c) {
         Intent intent = new Intent(this, c);
         startActivityForResult(intent, 0);
+    }
+
+    String extractIDFromEmail(String email){
+        String[] parts = email.split("@");
+        return parts[0];
     }
 }

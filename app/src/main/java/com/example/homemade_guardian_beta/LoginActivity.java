@@ -36,6 +36,7 @@ import com.example.homemade_guardian_beta.chat.common.Util;
 import com.example.homemade_guardian_beta.chat.model.UserModel;
 
 public class LoginActivity extends AppCompatActivity {
+    //users에 넣는것 : usernm, uid, userid
     private SessionCallback sessionCallback;
 
     //이메일 비밀번호 로그인 모듈 변수
@@ -182,6 +183,7 @@ public class LoginActivity extends AppCompatActivity {
                                 currentUser = mAuth.getCurrentUser();
                                 final String uid = mAuth.getInstance().getUid();
 
+
                                 UserModel userModel = new UserModel();
                                 userModel.setUid(uid);
                                 userModel.setUserid(id);
@@ -251,6 +253,7 @@ public class LoginActivity extends AppCompatActivity {
                             final String id = currentUser.getEmail();
                             final String uid = mAuth.getInstance().getUid();
 
+                            /*
                             UserModel userModel = new UserModel();
                             userModel.setUid(uid);
                             userModel.setUserid(id);
@@ -267,6 +270,7 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     });
 
+                             */
 
                             currentUser = mAuth.getCurrentUser();
                             updateUI(currentUser);

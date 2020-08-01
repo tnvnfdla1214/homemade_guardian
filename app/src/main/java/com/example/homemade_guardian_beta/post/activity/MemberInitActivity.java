@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.UserInfo;
 import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.chat.model.UserModel;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -121,8 +122,8 @@ public class MemberInitActivity extends BasicActivity {
             final Date createdID = new Date();                                                              // + : 사용자 리스트 수정 (현재 날짜 받아오기 [ 사진마다 달라서 그때 그댸 불르기])
 
             if (profilePath == null) {                                                                      // part5 : 데이터 추가 (9'10")
-                UserInfo userInfo = new UserInfo(name, phoneNumber, birthDay, createdID, address);          // + : 사용자 리스트 수정 (가입날짜 추가[사진 없는 버전])
-                storeUploader(userInfo);
+                UserModel userModel = new UserModel(name, phoneNumber, birthDay, createdID, address);          // + : 사용자 리스트 수정 (가입날짜 추가[사진 없는 버전])
+                storeUploader(userModel);
             } else {
                 try {
                     InputStream stream = new FileInputStream(new File(profilePath));                        // part7 : 입력한 회원정보를 스토리지에 저장 (25'20")
@@ -141,8 +142,8 @@ public class MemberInitActivity extends BasicActivity {
                             if (task.isSuccessful()) {
                                 Uri downloadUri = task.getResult();                                         // part7 : 입력한 회원정보를 DB에 저장 (28')
                                 Log.d("LOOG", " " + task.getResult().toString());
-                                UserInfo userInfo = new UserInfo(name, phoneNumber, birthDay, address, createdID, downloadUri.toString());      // + : 사용자 리스트 수정 (가입날짜 추가)
-                                storeUploader(userInfo);
+                                UserModel userModel = new UserModel(name, phoneNumber, birthDay, address, createdID, downloadUri.toString());      // + : 사용자 리스트 수정 (가입날짜 추가)
+                                storeUploader(userModel);
                             } else {
                                 showToast(MemberInitActivity.this, "회원정보를 보내는데 실패하였습니다.");
                             }
@@ -157,9 +158,9 @@ public class MemberInitActivity extends BasicActivity {
         }
     }
 
-    private void storeUploader(UserInfo userInfo) {                                                     // part5 : DB에 등록이 됬는지 알려주는 로직
+    private void storeUploader(UserModel userModel) {                                                     // part5 : DB에 등록이 됬는지 알려주는 로직
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("user").document(user.getUid()).set(userInfo)
+        db.collection("users").document(user.getUid()).set(userModel)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

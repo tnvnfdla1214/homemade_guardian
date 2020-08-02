@@ -70,14 +70,14 @@ public class MainActivity extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document != null) {
                             if (document.exists()) {                                                            // part5 : 로그인 되있었어도 정보가 있으면 불러오고
-                                Log.d("태그1", "DocumentSnapshot data: " + document.getData());
+                                //Log.d("태그", "DocumentSnapshot data: " + document.getData());
                             } else {                                                                            // part5 : 아니면 입력받는다.   (18')
-                                Log.d("태그1", "No such document");
+                                //Log.d("태그", "No such document");
                                 myStartActivity(MemberInitActivity.class);
                             }
                         }
                     } else {
-                        Log.d("태그1", "get failed with ", task.getException());
+                        //Log.d("태그", "get failed with ", task.getException());
                     }
                 }
             });

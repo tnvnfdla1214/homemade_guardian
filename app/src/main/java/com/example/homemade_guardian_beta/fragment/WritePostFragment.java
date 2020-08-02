@@ -45,13 +45,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.example.homemade_guardian_beta.post.Util.INTENT_MEDIA;
-import static com.example.homemade_guardian_beta.post.Util.GALLERY_IMAGE;
-import static com.example.homemade_guardian_beta.post.Util.INTENT_PATH;
-import static com.example.homemade_guardian_beta.post.Util.isImageFile;
-import static com.example.homemade_guardian_beta.post.Util.isStorageUrl;
-import static com.example.homemade_guardian_beta.post.Util.isVideoFile;
-import static com.example.homemade_guardian_beta.post.Util.storageUrlToName;
+import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_MEDIA;
+import static com.example.homemade_guardian_beta.post.PostUtil.GALLERY_IMAGE;
+import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_PATH;
+import static com.example.homemade_guardian_beta.post.PostUtil.isImageFile;
+import static com.example.homemade_guardian_beta.post.PostUtil.isStorageUrl;
+import static com.example.homemade_guardian_beta.post.PostUtil.isVideoFile;
+import static com.example.homemade_guardian_beta.post.PostUtil.storageUrlToName;
 
 public class WritePostFragment extends Fragment {
     private static final String TAG = "WritePostActivity";

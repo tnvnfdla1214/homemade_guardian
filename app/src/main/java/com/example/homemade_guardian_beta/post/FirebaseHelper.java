@@ -5,7 +5,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.homemade_guardian_beta.post.PostInfo;
 import com.example.homemade_guardian_beta.post.listener.OnPostListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -15,9 +14,9 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
-import static com.example.homemade_guardian_beta.post.Util.isStorageUrl;
-import static com.example.homemade_guardian_beta.post.Util.showToast;
-import static com.example.homemade_guardian_beta.post.Util.storageUrlToName;
+import static com.example.homemade_guardian_beta.post.PostUtil.isStorageUrl;
+import static com.example.homemade_guardian_beta.post.PostUtil.showToast;
+import static com.example.homemade_guardian_beta.post.PostUtil.storageUrlToName;
 
 public class FirebaseHelper {                                                                           // part19 : Firevasehelper로 이동 (61')
     private Activity activity;

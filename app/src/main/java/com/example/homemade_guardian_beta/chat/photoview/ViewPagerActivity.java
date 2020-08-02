@@ -49,7 +49,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.chat.common.Util;
+import com.example.homemade_guardian_beta.chat.common.ChatUtil;
 import com.example.homemade_guardian_beta.chat.model.Message;
 
 
@@ -60,7 +60,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 	private static String realname;
 	private static ViewPager viewPager;
 	private static ArrayList<Message> imgList = new ArrayList<>();
-    private String rootPath = Util.getRootPath()+"/homemade_guardian_beta/";
+    private String rootPath = ChatUtil.getRootPath()+"/homemade_guardian_beta/";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -99,7 +99,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 	}
 	Button.OnClickListener downloadBtnClickListener = new View.OnClickListener() {
 		public void onClick(final View view) {
-            if (!Util.isPermissionGranted((Activity) view.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (!ChatUtil.isPermissionGranted((Activity) view.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 return ;
             }
 			Message message = imgList.get(viewPager.getCurrentItem());
@@ -112,7 +112,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 				@Override
 				public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
 					// hideProgressDialog();
-					Util.showMessage(view.getContext(), "Downloaded file");
+					ChatUtil.showMessage(view.getContext(), "Downloaded file");
 					Log.e("DirectTalk9 ","local file created " +localFile.toString());
 				}
 			}).addOnFailureListener(new OnFailureListener() {

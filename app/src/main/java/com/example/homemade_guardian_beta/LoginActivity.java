@@ -15,14 +15,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.kakao.auth.ApiErrorCode;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
@@ -32,8 +30,7 @@ import com.kakao.usermgmt.callback.MeV2ResponseCallback;
 import com.kakao.usermgmt.response.MeV2Response;
 import com.kakao.util.exception.KakaoException;
 
-import com.example.homemade_guardian_beta.chat.common.Util;
-import com.example.homemade_guardian_beta.chat.model.UserModel;
+import com.example.homemade_guardian_beta.chat.common.ChatUtil;
 
 public class LoginActivity extends AppCompatActivity {
     //users에 넣는것 : usernm, uid, userid
@@ -159,7 +156,7 @@ public class LoginActivity extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         } else {
                             OK=1;
-                            Util.showMessage(getApplicationContext(), task.getException().getMessage());
+                            ChatUtil.showMessage(getApplicationContext(), task.getException().getMessage());
                         }
                     }
                 });
@@ -176,9 +173,10 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
                             if(!task.isSuccessful()) {
-                                Util.showMessage(getApplicationContext(), task.getException().getMessage());
+                                ChatUtil.showMessage(getApplicationContext(), task.getException().getMessage());
                             }else{
 
+                                /*
                                 //추가 - 가입할때 uid,id,userm,usermsg 만들기
                                 currentUser = mAuth.getCurrentUser();
                                 final String uid = mAuth.getInstance().getUid();
@@ -199,6 +197,8 @@ public class LoginActivity extends AppCompatActivity {
                                                 updateUI(currentUser);
                                             }
                                         });
+
+                                 */
 
 
                                 currentUser = mAuth.getCurrentUser();
@@ -278,7 +278,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             updateUI(null);
-                            Util.showMessage(getApplicationContext(), task.getException().getMessage());
+                            ChatUtil.showMessage(getApplicationContext(), task.getException().getMessage());
                         }
                     }
                 });

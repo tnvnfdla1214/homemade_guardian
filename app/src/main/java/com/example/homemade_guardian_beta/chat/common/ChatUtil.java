@@ -16,14 +16,14 @@ import androidx.core.app.ActivityCompat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Util {
-    private static final Util ourInstance = new Util();
+public class ChatUtil {
+    private static final ChatUtil ourInstance = new ChatUtil();
 
-    static Util getInstance() {
+    static ChatUtil getInstance() {
         return ourInstance;
     }
 
-    private Util() {
+    private ChatUtil() {
     }
 
     public static void showMessage(Context context, String msg) {

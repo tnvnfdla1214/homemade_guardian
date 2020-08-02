@@ -6,8 +6,8 @@ import android.widget.Toast;
 
 import java.net.URLConnection;
 
-public class Util {                                                                                     // part18 :  중복되는 코드 빼기 (7'30")
-    public Util(){/* */}
+public class PostUtil {                                                                                     // part18 :  중복되는 코드 빼기 (7'30")
+    public PostUtil(){/* */}
 
     public static final String INTENT_PATH = "path";
     public static final String INTENT_MEDIA = "media";

@@ -35,7 +35,7 @@ import java.util.Map;
 
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.common.FirestoreAdapter;
-import com.example.homemade_guardian_beta.chat.common.Util;
+import com.example.homemade_guardian_beta.chat.common.ChatUtil;
 import com.example.homemade_guardian_beta.chat.model.UserModel;
 
 
@@ -81,7 +81,7 @@ public class SelectUserActivity extends AppCompatActivity {
     Button.OnClickListener makeRoomClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             if (selectedUsers.size() <2) {
-                Util.showMessage(getApplicationContext(), "Please select 2 or more user");
+                ChatUtil.showMessage(getApplicationContext(), "Please select 2 or more user");
                 return;
             }
 
@@ -95,7 +95,7 @@ public class SelectUserActivity extends AppCompatActivity {
     Button.OnClickListener addRoomUserClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             if (selectedUsers.size() <1) {
-                Util.showMessage(getApplicationContext(), "Please select 1 or more user");
+                ChatUtil.showMessage(getApplicationContext(), "Please select 1 or more user");
                 return;
             }
             CreateChattingRoom(FirebaseFirestore.getInstance().collection("rooms").document(roomID) );

@@ -19,10 +19,10 @@ import com.example.homemade_guardian_beta.post.adapter.GalleryAdapter;
 
 import java.util.ArrayList;
 
-import static com.example.homemade_guardian_beta.post.Util.GALLERY_IMAGE;
-import static com.example.homemade_guardian_beta.post.Util.GALLERY_VIDEO;
-import static com.example.homemade_guardian_beta.post.Util.INTENT_MEDIA;
-import static com.example.homemade_guardian_beta.post.Util.showToast;
+import static com.example.homemade_guardian_beta.post.PostUtil.GALLERY_IMAGE;
+import static com.example.homemade_guardian_beta.post.PostUtil.GALLERY_VIDEO;
+import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_MEDIA;
+import static com.example.homemade_guardian_beta.post.PostUtil.showToast;
 
 public class GalleryActivity extends BasicActivity {
 

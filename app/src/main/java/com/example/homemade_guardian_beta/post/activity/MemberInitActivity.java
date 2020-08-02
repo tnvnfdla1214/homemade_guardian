@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
-import com.example.homemade_guardian_beta.UserInfo;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.model.UserModel;
 import com.google.android.gms.tasks.Continuation;
@@ -34,8 +33,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Date;
 
-import static com.example.homemade_guardian_beta.post.Util.INTENT_PATH;
-import static com.example.homemade_guardian_beta.post.Util.showToast;
+import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_PATH;
+import static com.example.homemade_guardian_beta.post.PostUtil.showToast;
 
 public class MemberInitActivity extends BasicActivity {
     private static final String TAG = "MemberInitActivity";

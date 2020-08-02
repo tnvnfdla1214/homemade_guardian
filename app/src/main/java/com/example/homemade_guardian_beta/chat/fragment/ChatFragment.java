@@ -74,7 +74,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.chat.common.Util;
+import com.example.homemade_guardian_beta.chat.common.ChatUtil;
 import com.example.homemade_guardian_beta.chat.model.ChatModel;
 import com.example.homemade_guardian_beta.chat.model.Message;
 import com.example.homemade_guardian_beta.chat.model.NotificationModel;
@@ -96,7 +96,7 @@ public class ChatFragment extends Fragment {
     private static final int PICK_FROM_ALBUM = 1;
     private static final int PICK_FROM_FILE = 2;
     //이게 뭘뜻하는건지 모르겠음
-    private static String rootPath = Util.getRootPath()+"/homemade_guardian_beta/";
+    private static String rootPath = ChatUtil.getRootPath()+"/homemade_guardian_beta/";
 
     private Button sendBtn;
     private EditText msg_input;
@@ -149,7 +149,7 @@ public class ChatFragment extends Fragment {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus) {
-                    Util.hideKeyboard(getActivity());
+                    ChatUtil.hideKeyboard(getActivity());
                 }
             }
         });
@@ -430,7 +430,7 @@ public class ChatFragment extends Fragment {
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         if (resultCode!= RESULT_OK) { return;}
         Uri fileUri = data.getData();
-        final String filename = Util.getUniqueValue();
+        final String filename = ChatUtil.getUniqueValue();
 
         showProgressDialog("Uploading selected File.");
         final ChatModel.FileInfo fileinfo  = getFileDetailFromUri(getContext(), fileUri);
@@ -469,7 +469,7 @@ public class ChatFragment extends Fragment {
         if (ContentResolver.SCHEME_FILE.equals(uri.getScheme())) {
             File file = new File(uri.getPath());
             fileDetail.filename = file.getName();
-            fileDetail.filesize = Util.size2String(file.length());
+            fileDetail.filesize = ChatUtil.size2String(file.length());
         }
         // Content Scheme.
         else if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
@@ -479,7 +479,7 @@ public class ChatFragment extends Fragment {
                 int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
                 int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
                 fileDetail.filename = returnCursor.getString(nameIndex);
-                fileDetail.filesize = Util.size2String(returnCursor.getLong(sizeIndex));
+                fileDetail.filesize = ChatUtil.size2String(returnCursor.getLong(sizeIndex));
                 returnCursor.close();
             }
         }
@@ -517,7 +517,7 @@ public class ChatFragment extends Fragment {
             Log.d("로그3","채팅 1");
             File dir = new File(rootPath);
             if (!dir.exists()) {
-                if (!Util.isPermissionGranted(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                if (!ChatUtil.isPermissionGranted(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     return;
                 }
                 dir.mkdirs();
@@ -759,7 +759,7 @@ public class ChatFragment extends Fragment {
                 }
             }
             public void download() {
-                if (!Util.isPermissionGranted(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                if (!ChatUtil.isPermissionGranted(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     return ;
                 }
                 showProgressDialog("Downloading File.");

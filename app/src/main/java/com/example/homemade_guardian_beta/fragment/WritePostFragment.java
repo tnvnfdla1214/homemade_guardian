@@ -55,7 +55,7 @@ import static com.example.homemade_guardian_beta.post.PostUtil.storageUrlToName;
 
 public class WritePostFragment extends Fragment {
     private static final String TAG = "WritePostActivity";
-    private FirebaseUser user;
+    private FirebaseUser currentUser;
     private StorageReference storageRef;
     private ArrayList<String> pathList = new ArrayList<>();                                             // part11 : 이미지들의 경로를 넣을 리스트 생성 (18'20)
     private LinearLayout parent;
@@ -251,7 +251,7 @@ public class WritePostFragment extends Fragment {
             loaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
             final ArrayList<String> contentsList = new ArrayList<>();                                   // part11 : contentsList에는 컨텐츠 내용이
             final ArrayList<String> formatList = new ArrayList<>();                                     // part11 : formatList에는 제목과 정보가 들어가는 듯 -> part20 사진이냐 동영상이냐를 가리기 위해 나눔 (6')
-            user = FirebaseAuth.getInstance().getCurrentUser();
+            currentUser = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseStorage storage = FirebaseStorage.getInstance();                                    // part12 :
             StorageReference storageRef = storage.getReference();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -300,7 +300,7 @@ public class WritePostFragment extends Fragment {
                                             contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
                                             if (successCount == 0) {
                                                 Log.d("로그","1");
-                                                PostInfo postInfo = new PostInfo(title, contentsList, formatList, user.getUid(), date);
+                                                PostInfo postInfo = new PostInfo(title, contentsList, formatList, currentUser.getUid(), date);
                                                 storeUpload(documentReference, postInfo);
                                             }
                                         }
@@ -316,7 +316,7 @@ public class WritePostFragment extends Fragment {
             }
             if (successCount == 0) {
                 Log.d("로그","1111");
-                storeUpload(documentReference, new PostInfo(title, contentsList, formatList, user.getUid(), date));
+                storeUpload(documentReference, new PostInfo(title, contentsList, formatList, currentUser.getUid(), date));
             }
         } else {
             Toast.makeText(getActivity(), "제목을 입력해주세요.",Toast.LENGTH_SHORT).show();

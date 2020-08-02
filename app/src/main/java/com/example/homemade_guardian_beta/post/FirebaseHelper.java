@@ -32,26 +32,20 @@ public class FirebaseHelper {                                                   
     }
 
     public void storageDelete(final PostInfo postInfo){                                                 // part16: 스토리지의 삭제 (13')
-        Log.d("로그","삭제 33333");
         FirebaseStorage storage = FirebaseStorage.getInstance();                                        // part17 : 스토리지 삭제 (문서) (19'50")
         StorageReference storageRef = storage.getReference();
-        Log.d("로그","삭제 44444");
         final String id = postInfo.getId();
         ArrayList<String> contentsList = postInfo.getContents();
-        Log.d("로그","삭제 34343434");
         for (int i = 0; i < contentsList.size(); i++) {
             String contents = contentsList.get(i);
             if (isStorageUrl(contents)) {
-                Log.d("로그","삭제 55555");
                 successCount++;                                                                             // part17 : 사진의 개수가 여러개인 게시물의 경우 (23'35")
                 StorageReference desertRef = storageRef.child("posts/" + id + "/" + storageUrlToName(contents));    // part17: (((파이어베이스에서 삭제))) 파이에베이스 스토리지는 폴더가 없다, 하나하나가 객체로서 저장 (13'30")
                 desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d("로그","삭제 66666");
                         successCount--;
                         storeDelete(id, postInfo);
-                        Log.d("로그","삭제 77777");
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

@@ -71,9 +71,7 @@ public class HomeFragment extends Fragment {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        Log.d("로그","어댑터? 1");
         recyclerView.setAdapter(homeAdapter);
-        Log.d("로그","어댑터? 12");
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {                          // part21 : 스크롤로 새로고침 (29'10")
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {        //part21 : 스크롤 손을 뗏을때(31')
@@ -86,9 +84,7 @@ public class HomeFragment extends Fragment {
                     topScrolled = true;
                 }
                 if(newState == 0 && topScrolled){
-                    Log.d("로그","스크롤 1");
                     postsUpdate(true);
-                    Log.d("로그","스크롤 11");
                     topScrolled = false;
                 }
             }
@@ -104,9 +100,7 @@ public class HomeFragment extends Fragment {
                 int lastVisibleItemPosition = ((LinearLayoutManager)layoutManager).findLastVisibleItemPosition();
 
                 if(totalItemCount - 8 <= lastVisibleItemPosition && !updating){                         // part21 : 아래에서 3번쩨 일때 && 로딩중일 때는 이벤트 작용 안하게 (35'10")
-                    Log.d("로그","스크롤 2");
                     postsUpdate(false);
-                    Log.d("로그","스크롤 22");
                 }
 
                 if(0 < firstVisibleItemPosition){
@@ -114,9 +108,7 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-        Log.d("로그","스크롤 3");
         postsUpdate(false);
-        Log.d("로그","스크롤 33");
 
         return view;
     }
@@ -163,12 +155,12 @@ public class HomeFragment extends Fragment {
             postList.remove(postInfo);
             homeAdapter.notifyDataSetChanged();
 
-            Log.e("로그: ","삭제 성공");
+            Log.e("로그","삭제 성공");
         }
 
         @Override
         public void onModify() {
-            Log.e("로그: ","수정 성공");
+            Log.e("로그","수정 성공");
         }
     };
 
@@ -199,11 +191,10 @@ public class HomeFragment extends Fragment {
                             }
                             homeAdapter.notifyDataSetChanged();
                         } else {
-                            Log.d("로그","실패?");
-                            Log.d(TAG, "Error getting documents: ", task.getException());
+                            //Log.d("로그","실패?");
+                            //Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                         updating = false;
-                        Log.d("로그","스크롤 33333");
                     }
                 });
     }

@@ -24,6 +24,8 @@ import com.example.homemade_guardian_beta.post.activity.PostActivity;
 import com.example.homemade_guardian_beta.post.activity.ModifyPostActivity;
 import com.example.homemade_guardian_beta.post.listener.OnPostListener;
 import com.example.homemade_guardian_beta.post.view.ReadContentsView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 //import com.google.android.exoplayer2.SimpleExoPlayer;
 
@@ -35,6 +37,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
     private FirebaseHelper firebaseHelper;
     //private ArrayList<ArrayList<SimpleExoPlayer>> playerArrayListArrayList = new ArrayList<>();
     private final int MORE_INDEX = 2;
+    private FirebaseUser currentUser= FirebaseAuth.getInstance().getCurrentUser();
 
     static class MainViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
@@ -75,6 +78,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
                 Log.d("로그","포스트 44444");
             }
         });
+
+        //1단계 : 여기에 점세개를 currentuser랑 postinfo의 uid를 비교하고 같으면 활성화하기
+        //2단계 : 그사람만 점세개 뜨기(1 안), 혹은 점세개 눌렀을때 게시물 작성자와 아닌사람을 구별하여
+        //작성자는 수정,삭제 / 이용자는 신고 등등 뜨게 하기(2 안)
 
         cardView.findViewById(R.id.menu).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,7 +145,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
         });
 
         MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.post, popup.getMenu());
+        inflater.inflate(R.menu.post_host, popup.getMenu());
         popup.show();
     }
 

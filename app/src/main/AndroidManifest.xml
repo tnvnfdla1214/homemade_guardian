@@ -70,6 +70,8 @@
         </activity>
         <activity android:name=".post.activity.MemberInitActivity">
         </activity>
+        <activity android:name=".post.activity.Host_infoActivity">
+        </activity>
 
     </application>
 

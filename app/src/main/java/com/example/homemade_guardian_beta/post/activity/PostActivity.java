@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -36,7 +37,8 @@ public class PostActivity extends BasicActivity {                               
     private FirebaseHelper firebaseHelper;
     private ReadContentsView readContentsView;
     private LinearLayout contentsLayout;
-    private Button chattingroom;
+    private Button chattingroom; //채팅하기 버튼
+    private ImageButton hostuserpageimage; //게시물 작성자 버튼
     private Activity activity;
     private FirebaseUser currentUser;
 
@@ -46,6 +48,7 @@ public class PostActivity extends BasicActivity {                               
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
         chattingroom = (Button) findViewById(R.id.chattingroom);
+        hostuserpageimage = (ImageButton) findViewById(R.id.hostuserpageimage);
         postInfo = (PostInfo) getIntent().getSerializableExtra("postInfo");
         contentsLayout = findViewById(R.id.contentsLayout);
         readContentsView = findViewById(R.id.readContentsView);
@@ -55,6 +58,15 @@ public class PostActivity extends BasicActivity {                               
         firebaseHelper.setOnPostListener(onPostListener);
         uiUpdate();
 
+        //게시물 작성자 버튼
+        hostuserpageimage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Host_infoActivity.class);
+                intent.putExtra("toUid", postInfo.getuid());
+                startActivity(intent);
+            }
+        });
 
         //채팅버튼
         chattingroom.setOnClickListener(new View.OnClickListener() {
@@ -115,9 +127,7 @@ public class PostActivity extends BasicActivity {                               
                 return true;
 
             case R.id.chat:
-                //버튼 눌러짐
                 Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-                //상대방 uid 넘겨주기
                 intent.putExtra("toUid", postInfo.getuid());
                 startActivity(intent);
                 return true;

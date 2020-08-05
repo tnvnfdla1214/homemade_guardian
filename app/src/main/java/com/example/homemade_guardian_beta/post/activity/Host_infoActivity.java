@@ -44,6 +44,12 @@ public class Host_infoActivity extends BasicActivity {
     private static final String TAG = "Host_infoActivity";
     private FirebaseFirestore firestore=null;
     private StorageReference storageReference;
+    private UserModel userModel;
+    private TextView adress;
+    private TextView birthDay;
+    private TextView name;
+    private TextView phoneNumber;
+    private TextView usernm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,49 +57,38 @@ public class Host_infoActivity extends BasicActivity {
         setContentView(R.layout.activity_host_info);
         setToolbarTitle("호스트용 회원정보");
 
-        //TextView adress = (TextView)findViewById(R.id.adress);
-        TextView birthDay = (TextView)findViewById(R.id.birthDay);
-        TextView name = (TextView)findViewById(R.id.name);
-        TextView phoneNumber = (TextView)findViewById(R.id.phoneNumber);
-        TextView usernm = (TextView)findViewById(R.id.usernm);
+        adress = (TextView)findViewById(R.id.adress);
+        birthDay = (TextView)findViewById(R.id.birthDay);
+        name = (TextView)findViewById(R.id.name);
+        phoneNumber = (TextView)findViewById(R.id.phoneNumber);
+        usernm = (TextView)findViewById(R.id.usernm);
 
+        //postActivity에서 받아옴
         String toUid = getIntent().getStringExtra("toUid");
 
         firestore = FirebaseFirestore.getInstance();
         storageReference  = FirebaseStorage.getInstance().getReference();
 
-        firestore.collection("users").document(toUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(toUid);
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        //바깥에서 선언된것들은 여기서는 안먹힘 이유는 모르겠음
-                        //이거 만드는게 뭔가 어려웠던게 구글링한것들이 다 코틀린 형식이라 읽을 수 가 없음
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                userModel = documentSnapshot.toObject(UserModel.class);
 
-                        //Log.d("태그", "DocumentSnapshot data: " + document.getData());
-                        //Log.d("태그", "d : " + document.getData().get("address").toString());
-                        TextView adress = (TextView)findViewById(R.id.adress);
-                        adress.setText(document.getData().get("address").toString());
-
-                        TextView birthDay = (TextView)findViewById(R.id.birthDay);
-                        birthDay.setText(document.getData().get("birthDay").toString());
-
-                        TextView name = (TextView)findViewById(R.id.name);
-                        name.setText(document.getData().get("name").toString());
-
-                        TextView phoneNumber = (TextView)findViewById(R.id.phoneNumber);
-                        phoneNumber.setText(document.getData().get("phoneNumber").toString());
-
-                        TextView usernm = (TextView)findViewById(R.id.usernm);
-                        usernm.setText(document.getData().get("usernm").toString());
-
-                    } else {
-                        //Log.d("태그", "No such document");
-                    }
-                } else {
-                    //Log.d("태그", "get failed with ", task.getException());
+                adress.setText(userModel.getAddress());
+                birthDay.setText(userModel.getBirthDay());
+                name.setText(userModel.getName());
+                phoneNumber.setText(userModel.getPhoneNumber());
+                usernm.setText(userModel.getUsernm());
+                /*
+                if (userModel.getUserphoto()!= null && !"".equals(userModel.getUserphoto())) {
+                    Glide.with(getActivity())
+                            .load(FirebaseStorage.getInstance().getReference("userPhoto/"+userModel.getUserphoto()))
+                            .into(user_photo);
                 }
+                 */
+
             }
         });
 

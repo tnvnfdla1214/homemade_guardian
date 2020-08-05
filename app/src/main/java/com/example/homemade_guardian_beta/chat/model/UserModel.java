@@ -122,15 +122,14 @@ public class UserModel {
         this.address = address;
     }
 
-    public String getPhotoUrl(){
+    public String getphotoUrl(){
         return this.photoUrl;
     }
 
-    public void setPhotoUrl(String photoUrl){
+    public void setphotoUrl(String photoUrl){
         this.photoUrl = photoUrl;
     }
-
-
+    
     public Date getCreatedID() { return createdID; }
 
     public void setCreatedID(Date createdID) { this.createdID = createdID; }

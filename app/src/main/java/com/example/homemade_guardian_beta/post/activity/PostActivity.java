@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.chat.ChatActivity;
+import com.example.homemade_guardian_beta.chat.model.UserModel;
 import com.example.homemade_guardian_beta.post.FirebaseHelper;
 import com.example.homemade_guardian_beta.MainActivity;
 import com.example.homemade_guardian_beta.post.PostInfo;
@@ -22,10 +24,13 @@ import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.post.view.ReadContentsView;
 import com.example.homemade_guardian_beta.post.listener.OnPostListener;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -41,6 +46,7 @@ public class PostActivity extends BasicActivity {                               
     private ImageButton hostuserpageimage; //게시물 작성자 버튼
     private Activity activity;
     private FirebaseUser currentUser;
+    private UserModel userModel;
 
 
     @Override
@@ -56,6 +62,25 @@ public class PostActivity extends BasicActivity {                               
 
         firebaseHelper = new FirebaseHelper(this);
         firebaseHelper.setOnPostListener(onPostListener);
+
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(postInfo.getuid());
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                userModel = documentSnapshot.toObject(UserModel.class);
+                Log.d("태그","민규3");
+                if(userModel.getphotoUrl() != null){
+                    Log.d("태그","민규4");
+                    Glide.with(PostActivity.this).load(userModel.getphotoUrl()).centerCrop().override(500).into(hostuserpageimage);
+                    Log.d("태그","민규5");
+
+                }
+                else{
+                    Glide.with(getApplicationContext()).load(R.drawable.user).into(hostuserpageimage);
+                }
+
+            }
+        });
         uiUpdate();
 
         //게시물 작성자 버튼

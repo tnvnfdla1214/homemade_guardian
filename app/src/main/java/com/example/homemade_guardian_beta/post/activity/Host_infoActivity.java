@@ -50,6 +50,7 @@ public class Host_infoActivity extends BasicActivity {
     private TextView name;
     private TextView phoneNumber;
     private TextView usernm;
+    private ImageView profileImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class Host_infoActivity extends BasicActivity {
         name = (TextView)findViewById(R.id.name);
         phoneNumber = (TextView)findViewById(R.id.phoneNumber);
         usernm = (TextView)findViewById(R.id.usernm);
+        profileImageView = (ImageView) findViewById(R.id.profileImageView);
 
         //postActivity에서 받아옴
         String toUid = getIntent().getStringExtra("toUid");
@@ -81,13 +83,12 @@ public class Host_infoActivity extends BasicActivity {
                 name.setText(userModel.getName());
                 phoneNumber.setText(userModel.getPhoneNumber());
                 usernm.setText(userModel.getUsernm());
-                /*
-                if (userModel.getUserphoto()!= null && !"".equals(userModel.getUserphoto())) {
-                    Glide.with(getActivity())
-                            .load(FirebaseStorage.getInstance().getReference("userPhoto/"+userModel.getUserphoto()))
-                            .into(user_photo);
+                if(userModel.getphotoUrl() != null){
+                    Glide.with(Host_infoActivity.this).load(userModel.getphotoUrl()).centerCrop().override(500).into(profileImageView);
                 }
-                 */
+                else{
+                    Glide.with(getApplicationContext()).load(R.drawable.user).into(profileImageView);
+                }
 
             }
         });

@@ -51,6 +51,7 @@ import com.example.homemade_guardian_beta.chat.model.UserModel;
 
 
 //채팅 목록 프래그먼트
+//이거 왕따 아무대도 안받아줌 이거는  ChatRoomFragment임
 public class ChatRoomFragment extends Fragment {
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");

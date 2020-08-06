@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -219,6 +220,7 @@ public class ChatroomListFragment extends Fragment {
             roomViewHolder.last_msg.setText(chatRoomModel.getLastMsg());
             roomViewHolder.last_time.setText(chatRoomModel.getLastDatetime());
 
+            /*
             if (chatRoomModel.getPhoto()==null) {
                 Glide.with(getActivity()).load(R.drawable.user)
                         .apply(requestOptions)
@@ -228,6 +230,16 @@ public class ChatroomListFragment extends Fragment {
                         .apply(requestOptions)
                         .into(roomViewHolder.room_image);
             }
+
+             */
+
+            if(chatRoomModel.getPhoto() !=null){
+                Glide.with(getActivity()).load(chatRoomModel.getPhoto()).centerCrop().override(500).into(roomViewHolder.room_image);
+            }
+            else{
+                Glide.with(getActivity()).load(R.drawable.user).into(roomViewHolder.room_image);
+            }
+
             if (chatRoomModel.getUserCount() > 2) {
                 roomViewHolder.room_count.setText(chatRoomModel.getUserCount().toString());
                 roomViewHolder.room_count.setVisibility(View.VISIBLE);

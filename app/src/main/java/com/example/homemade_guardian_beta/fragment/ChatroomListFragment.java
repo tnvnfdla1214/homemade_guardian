@@ -169,7 +169,8 @@ public class ChatroomListFragment extends Fragment {
                                         if (myUid.equals(key)) continue;
                                         UserModel userModel = userList.get(key);
                                         chatRoomModel.setTitle(userModel.getUsernm());
-                                        chatRoomModel.setPhoto(userModel.getUserphoto());
+                                        //chatRoomModel.setPhoto(userModel.getUserphoto());
+                                        chatRoomModel.setPhoto(userModel.getphotoUrl());
                                     }
                                 } else {                // group chat room
                                     chatRoomModel.setTitle(document.getString("title"));

@@ -12,7 +12,6 @@ public class UserModel {
     private String uid;
     private String usernm;
     private String token;
-    private String userphoto; //<-변경 사항
     private String usermsg;
     //여기부터 UserInfo
     private String name;
@@ -73,14 +72,6 @@ public class UserModel {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public String getUserphoto() {
-        return userphoto;
-    }
-
-    public void setUserphoto(String userphoto) {
-        this.userphoto = userphoto;
     }
 
     public String getUsermsg() {

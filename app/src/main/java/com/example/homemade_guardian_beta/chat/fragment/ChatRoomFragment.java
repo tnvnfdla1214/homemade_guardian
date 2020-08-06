@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.homemade_guardian_beta.post.activity.Host_infoActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,7 +50,7 @@ import com.example.homemade_guardian_beta.chat.model.Message;
 import com.example.homemade_guardian_beta.chat.model.UserModel;
 
 
-
+//채팅 목록 프래그먼트
 public class ChatRoomFragment extends Fragment {
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -154,10 +156,13 @@ public class ChatRoomFragment extends Fragment {
                                         if (myUid.equals(key)) continue;
                                         UserModel userModel = userList.get(key);
                                         chatRoomModel.setTitle(userModel.getUsernm());
-                                        chatRoomModel.setPhoto(userModel.getUserphoto());
+                                        //chatRoomModel.setPhoto(userModel.getUserphoto());
+                                        chatRoomModel.setPhoto(userModel.getphotoUrl());
+                                        Log.d("태그1","chatRoomModel.setPhoto(userModel.getphotoUrl());");
                                     }
                                 } else {                // group chat room
                                     chatRoomModel.setTitle(document.getString("title"));
+                                    Log.d("태그1","반대");
                                 }
                                 if (message.getTimestamp()==null) message.setTimestamp(new Date());
                                 orderedRooms.put(message.getTimestamp(), chatRoomModel);
@@ -203,6 +208,8 @@ public class ChatRoomFragment extends Fragment {
             roomViewHolder.last_msg.setText(chatRoomModel.getLastMsg());
             roomViewHolder.last_time.setText(chatRoomModel.getLastDatetime());
 
+            /*
+            //프로필 사진 변경
             if (chatRoomModel.getPhoto()==null) {
                 Glide.with(getActivity()).load(R.drawable.user)
                         .apply(requestOptions)
@@ -212,6 +219,18 @@ public class ChatRoomFragment extends Fragment {
                         .apply(requestOptions)
                         .into(roomViewHolder.room_image);
             }
+             */
+
+            //이거 왜 아무이상 없음?
+            if(chatRoomModel.getPhoto() !=null){
+                Glide.with(getActivity()).load(chatRoomModel.getPhoto()).centerCrop().override(500).into(roomViewHolder.room_image);
+                Log.d("태그1","민규11");
+            }
+            else{
+                Glide.with(getActivity()).load(R.drawable.user).into(roomViewHolder.room_image);
+                Log.d("태그1","민규22");
+            }
+
             if (chatRoomModel.getUserCount() > 2) {
                 roomViewHolder.room_count.setText(chatRoomModel.getUserCount().toString());
                 roomViewHolder.room_count.setVisibility(View.VISIBLE);

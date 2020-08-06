@@ -106,6 +106,7 @@ public class MyInfoFragment extends Fragment {
             viewHolder.user_name.setText(user.getUsernm());
             viewHolder.user_msg.setText(user.getUsermsg());
 
+            /*
             if (user.getUserphoto()==null) {
                 Glide.with(getActivity()).load(R.drawable.user)
                         .apply(requestOptions)
@@ -115,6 +116,13 @@ public class MyInfoFragment extends Fragment {
                         .load(storageReference.child("userPhoto/"+user.getUserphoto()))
                         .apply(requestOptions)
                         .into(viewHolder.user_photo);
+            }
+             */
+
+            if (user.getphotoUrl()!=null) {
+                Glide.with(getActivity()).load(user.getphotoUrl()).centerCrop().override(500).into(viewHolder.user_photo);
+            } else{
+                Glide.with(getActivity()).load(R.drawable.user).into(viewHolder.user_photo);
             }
 
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {

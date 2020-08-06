@@ -2,6 +2,7 @@ package com.example.homemade_guardian_beta.chat.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,7 @@ import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.SelectUserActivity;
 import com.example.homemade_guardian_beta.chat.model.UserModel;
 
-
+//그룹캐팅 프래그먼트
 public class UserListInRoomFragment extends Fragment {
     private String roomID;
     private List<UserModel> userModels;
@@ -103,6 +104,7 @@ public class UserListInRoomFragment extends Fragment {
             customViewHolder.user_name.setText(user.getUsernm());
             //customViewHolder.user_msg.setText(user.getUsermsg());
 
+            /*
             if (user.getUserphoto()==null) {
                 Glide.with(getActivity()).load(R.drawable.user)
                         .apply(requestOptions)
@@ -113,6 +115,17 @@ public class UserListInRoomFragment extends Fragment {
                         .apply(requestOptions)
                         .into(customViewHolder.user_photo);
             }
+
+             */
+            if (user.getphotoUrl()!=null) {
+                Glide.with(getActivity()).load(user.getphotoUrl()).centerCrop().override(500).into(customViewHolder.user_photo);
+                Log.d("태그1","민규111");
+            } else{
+                Glide.with(getActivity()).load(R.drawable.user).into(customViewHolder.user_photo);
+                Log.d("태그1","민규111");
+            }
+
+
         }
 
         @Override

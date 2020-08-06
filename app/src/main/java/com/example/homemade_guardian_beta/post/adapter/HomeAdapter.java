@@ -79,16 +79,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
             }
         });
 
-        //1단계 : 여기에 점세개를 currentuser랑 postinfo의 uid를 비교하고 같으면 활성화하기
-        //2단계 : 그사람만 점세개 뜨기(1 안), 혹은 점세개 눌렀을때 게시물 작성자와 아닌사람을 구별하여
-        //작성자는 수정,삭제 / 이용자는 신고 등등 뜨게 하기(2 안)
 
+        /*
         cardView.findViewById(R.id.menu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {                                           // part15: 점3개 메뉴(수정, 삭제) (20'30")
                 showPopup(v, mainViewHolder.getAdapterPosition());
             }
         });
+         */
 
         return mainViewHolder;
     }

@@ -16,7 +16,7 @@ import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
 import com.example.homemade_guardian_beta.chat.fragment.UserListInRoomFragment;
 
 
-//채팅방 액티비티
+//채팅방안 액티비티 -chatFragment랑 연결됨
 public class ChatActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ChatFragment chatFragment;

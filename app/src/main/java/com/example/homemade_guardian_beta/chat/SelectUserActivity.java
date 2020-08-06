@@ -2,6 +2,7 @@ package com.example.homemade_guardian_beta.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.homemade_guardian_beta.post.activity.PostActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -39,6 +42,8 @@ import com.example.homemade_guardian_beta.chat.common.ChatUtil;
 import com.example.homemade_guardian_beta.chat.model.UserModel;
 
 
+//그룹채팅에 쓰이는 액티비티
+//그룹 채팅방 할때 쓰는거 지워야함
 public class SelectUserActivity extends AppCompatActivity {
     private String roomID;
     private Map<String, String> selectedUsers = new HashMap<>();
@@ -78,6 +83,7 @@ public class SelectUserActivity extends AppCompatActivity {
         else makeRoomBtn.setOnClickListener(addRoomUserClickListener);
     }
 
+    //룸이 없으면 생성버튼
     Button.OnClickListener makeRoomClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             if (selectedUsers.size() <2) {
@@ -92,6 +98,7 @@ public class SelectUserActivity extends AppCompatActivity {
         }
     };
 
+    //있는 룸 버튼
     Button.OnClickListener addRoomUserClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             if (selectedUsers.size() <1) {
@@ -102,7 +109,10 @@ public class SelectUserActivity extends AppCompatActivity {
         }
     };
 
+    //처음생성 룸 함수
+    //말건사람이 1, 받는사람이 0
     public void CreateChattingRoom(final DocumentReference room) {
+        //내꺼 uid
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Map<String, Integer> users = new HashMap<>();
         String title = "";
@@ -158,8 +168,12 @@ public class SelectUserActivity extends AppCompatActivity {
                 return;
             }
 
+            //닉네임 부분
             viewHolder.user_name.setText(userModel.getUsernm());
 
+
+            /*
+            //프로필 사진 부분
             if (userModel.getUserphoto()==null) {
                 Glide.with(getApplicationContext()).load(R.drawable.user)
                         .apply(requestOptions)
@@ -170,6 +184,16 @@ public class SelectUserActivity extends AppCompatActivity {
                         .apply(requestOptions)
                         .into(viewHolder.user_photo);
             }
+             */
+
+
+            //그룹 채팅 프로필 사진 부분
+            if (userModel.getphotoUrl()!=null) {
+                Glide.with(getApplicationContext()).load(userModel.getphotoUrl()).centerCrop().override(500).into(viewHolder.user_photo);
+            } else{
+                Glide.with(getApplicationContext()).load(R.drawable.user).into(viewHolder.user_photo);
+            }
+
 
             viewHolder.userChk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override

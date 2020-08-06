@@ -39,6 +39,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.homemade_guardian_beta.chat.photoview.ViewPagerActivity;
+import com.example.homemade_guardian_beta.post.activity.Host_infoActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -91,6 +92,7 @@ import okhttp3.Response;
 
 import static android.app.Activity.RESULT_OK;
 
+//채팅룸 안의 액티비티
 public class ChatFragment extends Fragment {
 
     private static final int PICK_FROM_ALBUM = 1;
@@ -642,16 +644,14 @@ public class ChatFragment extends Fragment {
                 UserModel userModel = userList.get(message.getUid());
                 messageViewHolder.msg_name.setText(userModel.getUsernm());
 
-                if (userModel.getUserphoto()==null) {
-                    Glide.with(getContext()).load(R.drawable.user)
-                            .apply(requestOptions)
-                            .into(messageViewHolder.user_photo);
+
+                //상대방 프로필사진으로 바꾸기
+                if (userModel.getphotoUrl() != null) {
+                    Glide.with(getContext()).load(userModel.getphotoUrl()).centerCrop().override(500).into(messageViewHolder.user_photo);
                 } else{
-                    Glide.with(getContext())
-                            .load(storageReference.child("userPhoto/"+userModel.getUserphoto()))
-                            .apply(requestOptions)
-                            .into(messageViewHolder.user_photo);
+                    Glide.with(getContext()).load(R.drawable.user).into(messageViewHolder.user_photo);
                 }
+
             }
             messageViewHolder.divider.setVisibility(View.INVISIBLE);
             messageViewHolder.divider.getLayoutParams().height = 0;

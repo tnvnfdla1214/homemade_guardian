@@ -64,7 +64,7 @@ public class HomeFragment extends Fragment {
         firebaseFirestore = FirebaseFirestore.getInstance();
         postList = new ArrayList<>();
         homeAdapter = new HomeAdapter(getActivity(), postList);
-        homeAdapter.setOnPostListener(onPostListener);
+        //homeAdapter.setOnPostListener(onPostListener);
 
         final RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         //view.findViewById(R.id.floatingActionButton).setOnClickListener(onClickListener);
@@ -149,6 +149,7 @@ public class HomeFragment extends Fragment {
         }
     };
 
+    /*
     OnPostListener onPostListener = new OnPostListener() {
         @Override                                                                                       // part21 : position 대신 postInfo 자체를 가져옴 (56'10")
         public void onDelete(PostInfo postInfo) {                                                       // part17 : DB에서의 삭제 (12'50")
@@ -163,6 +164,8 @@ public class HomeFragment extends Fragment {
             Log.e("로그","수정 성공");
         }
     };
+
+     */
 
     private void postsUpdate(final boolean clear) {
         updating = true;

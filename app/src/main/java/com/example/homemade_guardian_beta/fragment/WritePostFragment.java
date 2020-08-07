@@ -248,6 +248,7 @@ public class WritePostFragment extends Fragment {
     private void storageUpload() {
         final String title = ((EditText) getView().findViewById(R.id.titleEditText)).getText().toString();
         if (title.length() > 0) {
+            String postID = null;
             loaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
             final ArrayList<String> contentsList = new ArrayList<>();                                   // part11 : contentsList에는 컨텐츠 내용이
             final ArrayList<String> formatList = new ArrayList<>();                                     // part11 : formatList에는 제목과 정보가 들어가는 듯 -> part20 사진이냐 동영상이냐를 가리기 위해 나눔 (6')
@@ -255,7 +256,9 @@ public class WritePostFragment extends Fragment {
             FirebaseStorage storage = FirebaseStorage.getInstance();                                    // part12 :
             StorageReference storageRef = storage.getReference();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-            final DocumentReference documentReference =  postInfo== null ? firebaseFirestore.collection("posts").document() : firebaseFirestore.collection("posts").document(postInfo.getId());     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
+            ///
+            postID = firebaseFirestore.collection("posts").document().getId();
+            final DocumentReference documentReference =  postInfo== null ? firebaseFirestore.collection("posts").document(postID) : firebaseFirestore.collection("posts").document(postInfo.getId());     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
             final Date date = postInfo == null ? new Date() : postInfo.getCreatedAt();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             Log.d("로그","111");
             for (int i = 0; i < parent.getChildCount(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
@@ -285,6 +288,8 @@ public class WritePostFragment extends Fragment {
                             InputStream stream = new FileInputStream(new File(pathList.get(pathCount)));            // part11 : 경로 설정 (27'20")
                             StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (contentsList.size() - 1)).build();
                             UploadTask uploadTask = mountainImagesRef.putStream(stream, metadata);
+                            ///
+                            final String newPostID = postID;
                             uploadTask.addOnFailureListener(new OnFailureListener() {                               // part11 :
                                 @Override
                                 public void onFailure(@NonNull Exception exception) {
@@ -300,7 +305,11 @@ public class WritePostFragment extends Fragment {
                                             contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
                                             if (successCount == 0) {
                                                 Log.d("로그","1");
-                                                PostInfo postInfo = new PostInfo(title, contentsList, formatList, currentUser.getUid(), date);
+                                                PostInfo postInfo = new PostInfo(title, contentsList, formatList, date, currentUser.getUid(), newPostID);
+                                                ///
+                                                postInfo.setPostID(newPostID);
+                                                Log.d("로그q","ㄴ");
+
                                                 storeUpload(documentReference, postInfo);
                                             }
                                         }
@@ -315,8 +324,12 @@ public class WritePostFragment extends Fragment {
                 }
             }
             if (successCount == 0) {
-                Log.d("로그","1111");
-                storeUpload(documentReference, new PostInfo(title, contentsList, formatList, currentUser.getUid(), date));
+                Log.d("로그q","시작2");
+                PostInfo postInfo = new PostInfo(title, contentsList, formatList, date, currentUser.getUid(), postID);
+                ///
+                postInfo.setPostID(postID);
+                Log.d("로그q","ㄱr");
+                storeUpload(documentReference,postInfo);
             }
         } else {
             Toast.makeText(getActivity(), "제목을 입력해주세요.",Toast.LENGTH_SHORT).show();

@@ -13,6 +13,7 @@ public class PostInfo implements Serializable {                                 
     private String uid;
     private Date createdAt;
     private String id;
+    private String postID;
 
     public PostInfo(String title, ArrayList<String> contents, ArrayList<String> formats, String uid, Date createdAt, String id){
         this.title = title;
@@ -22,13 +23,21 @@ public class PostInfo implements Serializable {                                 
         this.createdAt = createdAt;
         this.id = id;
     }
-
-    public PostInfo(String title, ArrayList<String> contents, ArrayList<String> formats, String uid, Date createdAt){
+    ///
+    public PostInfo(String title, ArrayList<String> contents, ArrayList<String> formats, Date createdAt, String uid, String postID){
         this.title = title;
         this.contents = contents;
         this.formats = formats;
-        this.uid = uid;
         this.createdAt = createdAt;
+        this.uid = uid;
+        this.postID = postID;
+    }
+    public PostInfo(String title, ArrayList<String> contents, ArrayList<String> formats, Date createdAt, String uid){
+        this.title = title;
+        this.contents = contents;
+        this.formats = formats;
+        this.createdAt = createdAt;
+        this.uid = uid;
     }
 
     public Map<String, Object> getPostInfo(){
@@ -38,6 +47,7 @@ public class PostInfo implements Serializable {                                 
         docData.put("formats",formats);
         docData.put("uid",uid);
         docData.put("createdAt",createdAt);
+        docData.put("postID",postID);
         return  docData;
     }
 
@@ -76,5 +86,12 @@ public class PostInfo implements Serializable {                                 
     }
     public void setId(String id){
         this.id = id;
+    }
+
+    public String getPostID(){
+        return this.postID;
+    }
+    public void setPostID(String title){
+        this.postID = postID;
     }
 }

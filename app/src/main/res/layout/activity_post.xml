@@ -41,11 +41,7 @@
                 android:id="@+id/readContentsView">
 
             </com.example.homemade_guardian_beta.post.view.ReadContentsView>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="채팅하기"
-                android:id="@+id/chattingroom"/>
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -61,8 +57,11 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="horizontal">
-
-
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="채팅하기"
+            android:id="@+id/chattingroom"/>
         <EditText
             android:id="@+id/comment_input"
             android:layout_width="wrap_content"

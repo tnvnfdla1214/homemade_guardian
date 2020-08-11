@@ -81,33 +81,4 @@ public class FirebaseHelper {                                                   
                     });
         }
     }
-
-
-
-
-    public void commentstoreDelete(final Comment comment) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
-        final String commentid = comment.getCommentID();
-        final String postid = comment.getPostID();
-        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-
-        Log.d("로그w","삭제 88888");
-        firebaseFirestore.collection("posts").document(postid).collection("comments").document(commentid)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("로그w","삭제 99999");
-                        showToast(activity, "댓글을 삭제하였습니다.");
-                        onPostListener.oncommentDelete(comment);
-                        //postsUpdate();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        showToast(activity, "게시글을 삭제하지 못하였습니다.");
-                    }
-                });
-
-    }
 }

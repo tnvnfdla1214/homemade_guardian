@@ -2,6 +2,7 @@ package com.example.homemade_guardian_beta.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,6 +104,7 @@ public class MyInfoFragment extends Fragment {
                 viewHolder.itemView.getLayoutParams().height = 0;
                 return;
             }
+            Log.d("태그1","viewHolder.user_name"+user.getUsernm());
             viewHolder.user_name.setText(user.getUsernm());
             viewHolder.user_msg.setText(user.getUsermsg());
 

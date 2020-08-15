@@ -9,7 +9,7 @@ public class CommentModel {
     private String name;
     private String commentID;
     private String postID;
-    private String photoUrl;
+    private String commentphotoUrl;
 
 
     public CommentModel(String comment, String uid, Date timestamp, String name, String commentID, String postID){
@@ -22,26 +22,30 @@ public class CommentModel {
 
     }
 
+    public CommentModel(){
+
+    }
+
 
 
 
     public String getUid() { return uid; }
     public void setUid(String uid) { this.uid = uid; }
     public String getComment() { return comment; }
-    public void setComment(String msg) { this.comment = comment; }
+    public void setComment(String comment) { this.comment = comment; }
     public Date getTimestamp() { return timestamp; }
     public void setTimestamp(Date timestamp) { this.timestamp = timestamp; }
     public String getName() { return name; }
-    public void setName(String uid) { this.name = name; }
+    public void setName(String name) { this.name = name; }
     public String getCommentID() { return commentID; }
     public void setCommentID(String commentID) { this.commentID = commentID; }
     public String getPostID() { return postID; }
     public void setPostID(String postID) { this.postID = postID; }
-    public String getphotoUrl(){
-        return this.photoUrl;
+    public String getcommentphotoUrl(){
+        return this.commentphotoUrl;
     }
-    public void setphotoUrl(String photoUrl){
-        this.photoUrl = photoUrl;
+    public void setcommentphotoUrl(String commentphotoUrl){
+        this.commentphotoUrl = commentphotoUrl;
     }
 
 }

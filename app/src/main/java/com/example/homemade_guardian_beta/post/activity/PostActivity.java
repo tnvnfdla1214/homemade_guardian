@@ -54,8 +54,9 @@ public class PostActivity extends BasicActivity {                               
     private String myUid;
     String writerName = null;
     private FirestoreAdapter firestoreAdapter;
-    final Map<String,Object> CommentModel = new HashMap<>(); //넣는거
-    private CommentModel commentmodel;
+    final Map<String,Object> CommentModel = new HashMap<>();
+    private String commentphotoUrl;
+
 
 
     @Override
@@ -86,6 +87,16 @@ public class PostActivity extends BasicActivity {                               
         writeBtn = findViewById(R.id.writeBtn);
         myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        DocumentReference docRefe2 = FirebaseFirestore.getInstance().collection("users").document(myUid);
+        docRefe2.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                userModel = documentSnapshot.toObject(UserModel.class);
+                writerName = userModel.getName();
+                commentphotoUrl = userModel.getphotoUrl();
+            }
+        });
+
         DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(postInfo.getuid());
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -96,9 +107,6 @@ public class PostActivity extends BasicActivity {                               
                 }
                 else{
                     Glide.with(getApplicationContext()).load(R.drawable.user).into(hostuserpageimage);
-                }
-                if (userModel.getName() != null) {
-                    writerName = userModel.getName();
                 }
 
             }
@@ -132,28 +140,27 @@ public class PostActivity extends BasicActivity {                               
             @Override
             public void onClick(View view) {
                 String comment = comment_input.getText().toString();
-                writecomment(comment);
+                writecomment(comment,writerName,commentphotoUrl);
                 comment_input.setText("");
 
             }
         });
 
         //댓글 목록
-        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("posts").document(postInfo.getId()).collection("comments").orderBy("name"));
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager( new LinearLayoutManager(this));
+        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("posts").document(postInfo.getId()).collection("comments"));
+        final RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(PostActivity.this));
         //recyclerView.setLayoutManager( new LinearLayoutManager((getContext())));
         recyclerView.setAdapter(firestoreAdapter);
 
     }
 
     // 댓글 작성 함수
-    private void writecomment(final String comment) {
+    private void writecomment(final String comment,final String writerName,final String commentphotoUrl) {
         writeBtn.setEnabled(false);
 
         String commentID = null;
         commentID = FirebaseFirestore.getInstance().collection("posts").document(postInfo.getId()).collection("comments").document().getId();
-
 
         CommentModel.put("uid", myUid);
         CommentModel.put("comment", comment);
@@ -161,6 +168,7 @@ public class PostActivity extends BasicActivity {                               
         CommentModel.put("name", writerName);
         CommentModel.put("commentID", commentID);
         CommentModel.put("postID", postInfo.getId());
+        CommentModel.put("commentphotoUrl", commentphotoUrl);
 
 
         final DocumentReference docRefe = FirebaseFirestore.getInstance().collection("posts").document(postInfo.getId());
@@ -203,22 +211,19 @@ public class PostActivity extends BasicActivity {                               
         @Override
         public void onBindViewHolder(CustomViewHolder viewHolder, int position) {
             DocumentSnapshot documentSnapshot = getSnapshot(position);
-            Log.d("태그1","11"+documentSnapshot.toObject(UserModel.class));
-
-            //CommentModel commentmodel = documentSnapshot.toObject(CommentModel.class);
+            CommentModel commentmodel = documentSnapshot.toObject(CommentModel.class);
 
 
-            /*
             viewHolder.user_name.setText(commentmodel.getName());
             viewHolder.user_comment.setText(commentmodel.getComment());
 
-            if (commentmodel.getphotoUrl()!=null) {
-                Glide.with(PostActivity.this).load(commentmodel.getphotoUrl()).centerCrop().override(500).into(viewHolder.user_photo);
+            if (commentmodel.getcommentphotoUrl()!=null) {
+                Glide.with(PostActivity.this).load(commentmodel.getcommentphotoUrl()).centerCrop().override(500).into(viewHolder.user_photo);
             } else{
                 Glide.with(PostActivity.this).load(R.drawable.user).into(viewHolder.user_photo);
             }
 
-             */
+
 
 
         }

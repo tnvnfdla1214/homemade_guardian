@@ -81,4 +81,31 @@ public class FirebaseHelper {                                                   
                     });
         }
     }
+    public void commentDelete(final CommentModel commentModel){                                                 // part16: 스토리지의 삭제 (13')
+        FirebaseStorage storage = FirebaseStorage.getInstance();                                        // part17 : 스토리지 삭제 (문서) (19'50")
+        final String id = commentModel.getCommentID();
+
+        commentstoreDelete(id, commentModel);
+    }
+    private void commentstoreDelete(final String id, final CommentModel commentModel) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+            firebaseFirestore.collection("posts").document(commentModel.getPostID()).collection("comments").document(id)
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("로그","삭제 99999");
+                            showToast(activity, "댓글을 삭제하였습니다.");
+                            onPostListener.oncommentDelete(commentModel);
+                            //postsUpdate();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            showToast(activity, "게시글을 삭제하지 못하였습니다.");
+                        }
+                    });
+
+    }
 }

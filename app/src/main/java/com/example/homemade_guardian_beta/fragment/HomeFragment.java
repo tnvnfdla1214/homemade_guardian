@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 
 import com.example.homemade_guardian_beta.post.PostInfo;
 import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.post.activity.SearchActivity;
 import com.example.homemade_guardian_beta.post.adapter.HomeAdapter;
 import com.example.homemade_guardian_beta.post.listener.OnPostListener;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -68,6 +69,8 @@ public class HomeFragment extends Fragment {
 
         final RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         //view.findViewById(R.id.floatingActionButton).setOnClickListener(onClickListener);
+
+        view.findViewById(R.id.searchbtn).setOnClickListener(onClickListener);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -133,12 +136,12 @@ public class HomeFragment extends Fragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                /*
-                case R.id.logoutButton:
-                    FirebaseAuth.getInstance().signOut();
-                    myStartActivity(SignUpActivity.class);
+
+                case R.id.searchbtn:
+
+                    myStartActivity(SearchActivity.class);
                     break;
-                */
+
                 /*
                 case R.id.floatingActionButton:                                                         // 아마 새로고침..?
                     myStartActivity(WritePostActivity.class);

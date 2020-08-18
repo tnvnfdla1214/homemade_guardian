@@ -72,7 +72,10 @@
         </activity>
         <activity android:name=".post.activity.Host_infoActivity">
         </activity>
-
+        <activity android:name=".post.activity.SearchActivity">
+        </activity>
+        <activity android:name=".post.activity.SearchResultActivity">
+        </activity>
     </application>
 
 </manifest>

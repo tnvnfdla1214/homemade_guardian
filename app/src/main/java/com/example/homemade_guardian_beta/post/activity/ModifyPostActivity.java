@@ -264,7 +264,7 @@ public class ModifyPostActivity extends BasicActivity {
                                             successCount--;                                                 // part11 : SUCCEESSCOUNT 개의 사진 (37')
                                             contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
                                             if (successCount == 0) {
-                                                PostInfo postInfo = new PostInfo(title, contentsList, formatList, date, user.getUid());
+                                                PostInfo postInfo = new PostInfo(title, contentsList,  date, user.getUid());
                                                 storeUpload(documentReference, postInfo);
                                             }
                                         }
@@ -279,7 +279,7 @@ public class ModifyPostActivity extends BasicActivity {
                 }
             }
             if (successCount == 0) {
-                storeUpload(documentReference, new PostInfo(title, contentsList, formatList, date, user.getUid()));
+                storeUpload(documentReference, new PostInfo(title, contentsList, date, user.getUid()));
             }
         } else {
             showToast(ModifyPostActivity.this, "제목을 입력해주세요.");

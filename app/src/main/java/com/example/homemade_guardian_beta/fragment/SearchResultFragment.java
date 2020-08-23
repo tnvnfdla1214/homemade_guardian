@@ -91,7 +91,6 @@ public class SearchResultFragment extends Fragment {
                                     postList.add(new PostInfo(                                                          //postList로 데이터를 넣는다.
                                             document.getData().get("title").toString(),
                                             (ArrayList<String>) document.getData().get("contents"),
-                                            (ArrayList<String>) document.getData().get("formats"),
                                             document.getData().get("uid").toString(),
                                             new Date(document.getDate("createdAt").getTime()),
                                             document.getId()));

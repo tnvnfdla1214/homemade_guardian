@@ -23,6 +23,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.MainActivity;
+import com.example.homemade_guardian_beta.Photo.PhotoPagerActivity;
+import com.example.homemade_guardian_beta.Photo.PhotoPickerActivity;
+import com.example.homemade_guardian_beta.Photo.utils.YPhotoPickerIntent;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.post.PostInfo;
 import com.example.homemade_guardian_beta.post.activity.GalleryActivity;
@@ -44,7 +47,9 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_MEDIA;
 import static com.example.homemade_guardian_beta.post.PostUtil.GALLERY_IMAGE;
 import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_PATH;
@@ -67,9 +72,11 @@ public class WritePostFragment extends Fragment {
     private EditText titleEditText;
     private PostInfo postInfo;
     private int pathCount, successCount;
+    public final static int REQUEST_CODE = 1;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+    public static ArrayList<String> selectedPhotos = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -136,44 +143,69 @@ public class WritePostFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {                        // part12 : parents 안에 ContentsItemView가 있고 ContentsItemView안에 imageView가 있는 구조 (11')
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case 0:
-                if (resultCode == Activity.RESULT_OK) {
-                    String path = data.getStringExtra(INTENT_PATH);
-                    pathList.add(path);                                                                 // part11 : 이미지들의 경로를 저장 (18'40")
+//        switch (requestCode) {
+//            case 0:
+//                if (resultCode == RESULT_OK) {
+//                    String path = data.getStringExtra(INTENT_PATH);
+//                    pathList.add(path);                                                                 // part11 : 이미지들의 경로를 저장 (18'40")
+//
+//                    ContentsItemView contentsItemView = new ContentsItemView(getActivity());             // part11 : edittext랑 imageview를 계속 넣어줄 거임
+//
+//                    if (selectedEditText == null) {
+//                        parent.addView(contentsItemView);
+//                    } else {
+//                        for (int i = 0; i < parent.getChildCount(); i++) {                               // part12 : Focus를 등록 Focus를 기준으로 contentsItemView생성 (17'10")
+//                            if (parent.getChildAt(i) == selectedEditText.getParent()) {
+//                                parent.addView(contentsItemView, i + 1);
+//                                break;
+//                            }
+//                        }
+//                    }
+//
+//                    contentsItemView.setImage(path);
+//                    contentsItemView.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {                                           // part12 : parents 안에 ContentsItemView가 있고 ContentsItemView안에 imageView가 있는 구조 (11')
+//                            buttonsBackgroundLayout.setVisibility(View.VISIBLE);
+//                            selectedImageVIew = (ImageView) v;
+//                        }
+//                    });
+//
+//                    contentsItemView.setOnFocusChangeListener(onFocusChangeListener);                   // part12 : Focus를 등록 Focus를 기준으로 contentsItemView생성 (16'10")
+//                }
+//                break;
+//            case 1:
+//                if (resultCode == RESULT_OK) {
+//                    String path = data.getStringExtra(INTENT_PATH);
+//                    pathList.set(parent.indexOfChild((View) selectedImageVIew.getParent()) - 1, path);
+//                    Glide.with(this).load(path).override(1000).into(selectedImageVIew);
+//                }
+//                break;
+//        }
 
-                    ContentsItemView contentsItemView = new ContentsItemView(getActivity());             // part11 : edittext랑 imageview를 계속 넣어줄 거임
 
-                    if (selectedEditText == null) {
-                        parent.addView(contentsItemView);
-                    } else {
-                        for (int i = 0; i < parent.getChildCount(); i++) {                               // part12 : Focus를 등록 Focus를 기준으로 contentsItemView생성 (17'10")
-                            if (parent.getChildAt(i) == selectedEditText.getParent()) {
-                                parent.addView(contentsItemView, i + 1);
-                                break;
-                            }
-                        }
-                    }
-
-                    contentsItemView.setImage(path);
-                    contentsItemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {                                           // part12 : parents 안에 ContentsItemView가 있고 ContentsItemView안에 imageView가 있는 구조 (11')
-                            buttonsBackgroundLayout.setVisibility(View.VISIBLE);
-                            selectedImageVIew = (ImageView) v;
-                        }
-                    });
-
-                    contentsItemView.setOnFocusChangeListener(onFocusChangeListener);                   // part12 : Focus를 등록 Focus를 기준으로 contentsItemView생성 (16'10")
-                }
-                break;
-            case 1:
-                if (resultCode == Activity.RESULT_OK) {
-                    String path = data.getStringExtra(INTENT_PATH);
-                    pathList.set(parent.indexOfChild((View) selectedImageVIew.getParent()) - 1, path);
-                    Glide.with(this).load(path).override(1000).into(selectedImageVIew);
-                }
-                break;
+        Log.d("태그", "11");
+        List<String> photos = null;
+        Log.d("태그", "111");
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            Log.d("태그", "1111");
+            if (data != null) {
+                Log.d("태그", "11111");
+                photos = data.getStringArrayListExtra(PhotoPickerActivity.KEY_SELECTED_PHOTOS);
+            }
+            if (photos != null) {
+                Log.d("태그", "----111111");
+                selectedPhotos.addAll(photos);
+                Log.d("태그", "----111111"+selectedPhotos);
+            }
+//            Log.d("태그", "1111111");
+//            // start image viewr
+//            Intent startActivity = new Intent(getActivity() , PhotoPagerActivity.class);
+//            Log.d("태그", "11111111");
+//            startActivity.putStringArrayListExtra("photos" , selectedPhotos);
+//            Log.d("태그", "111111111");
+//            startActivity(startActivity);
+//            Log.d("태그", "1111111111");
         }
     }
 
@@ -185,7 +217,22 @@ public class WritePostFragment extends Fragment {
                     storageUpload();
                     break;
                 case R.id.image:
-                    myStartActivity(GalleryActivity.class, GALLERY_IMAGE, 0);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
+                    //myStartActivity(GalleryActivity.class, GALLERY_IMAGE, 0);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
+                    Log.d("태구", "1");
+                    YPhotoPickerIntent intent = new YPhotoPickerIntent(getActivity());
+                    Log.d("태구", "2");
+                    intent.setMaxSelectCount(20);
+                    Log.d("태구", "3");
+                    intent.setShowCamera(true);
+                    Log.d("태구", "4");
+                    intent.setShowGif(true);
+                    Log.d("태구", "5");
+                    intent.setSelectCheckBox(false);
+                    Log.d("태구", "6");
+                    intent.setMaxGrideItemCount(3);
+                    Log.d("태구", "7");
+                    startActivityForResult(intent, REQUEST_CODE);
+                    Log.d("태구", "8");
                     break;
                     /*
                 case R.id.video:
@@ -251,7 +298,6 @@ public class WritePostFragment extends Fragment {
             String postID = null;
             loaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
             final ArrayList<String> contentsList = new ArrayList<>();                                   // part11 : contentsList에는 컨텐츠 내용이
-            final ArrayList<String> formatList = new ArrayList<>();                                     // part11 : formatList에는 제목과 정보가 들어가는 듯 -> part20 사진이냐 동영상이냐를 가리기 위해 나눔 (6')
             currentUser = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseStorage storage = FirebaseStorage.getInstance();                                    // part12 :
             StorageReference storageRef = storage.getReference();
@@ -268,26 +314,23 @@ public class WritePostFragment extends Fragment {
                     if (view instanceof EditText) {                                                         // part11 :
                         String text = ((EditText) view).getText().toString();
                         if (text.length() > 0) {
-                            contentsList.add(text);                                                         // part11 :
-                            formatList.add("text");
+                            contentsList.add(text);
                         }
-                    } else if (!isStorageUrl(pathList.get(pathCount))) {                                    // part11 : EditText가 아닐 때 ---> 이미지 뷰일때는
-                        String path = pathList.get(pathCount);
+                    } else if (!isStorageUrl(selectedPhotos.get(pathCount))) {                                    // part11 : EditText가 아닐 때 ---> 이미지 뷰일때는
+                        String path = selectedPhotos.get(pathCount);
                         successCount++;
                         contentsList.add(path);
-                        if(isImageFile(path)){
-                            formatList.add("image");
-                        }else if (isVideoFile(path)){
-                            formatList.add("video");
-                        }else{
-                            formatList.add("text");     //사진 아래의 텍스트
-                        }
+
                         String[] pathArray = path.split("\\.");                                         // part14 : 이미지의 확장자를 주어진대로 (2'40")
                         final StorageReference mountainImagesRef = storageRef.child("posts/" + documentReference.getId() + "/" + pathCount + "." + pathArray[pathArray.length - 1]);
                         try {
-                            InputStream stream = new FileInputStream(new File(pathList.get(pathCount)));            // part11 : 경로 설정 (27'20")
-                            StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (contentsList.size() - 1)).build();
+                            Log.d("태그",""+pathCount);
+                            InputStream stream = new FileInputStream(new File(selectedPhotos.get(pathCount)));            // part11 : 경로 설정 (27'20")
+                            Log.d("태그","1"+selectedPhotos.get(pathCount));
+                            StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (selectedPhotos.size() - 1)).build();
+                            Log.d("태그","1"+metadata);
                             UploadTask uploadTask = mountainImagesRef.putStream(stream, metadata);
+                            Log.d("태그","1");
                             ///
                             final String newPostID = postID;
                             uploadTask.addOnFailureListener(new OnFailureListener() {                               // part11 :
@@ -302,10 +345,10 @@ public class WritePostFragment extends Fragment {
                                         @Override
                                         public void onSuccess(Uri uri) {
                                             successCount--;                                                 // part11 : SUCCEESSCOUNT 개의 사진 (37')
-                                            contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
+                                            selectedPhotos.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
                                             if (successCount == 0) {
                                                 Log.d("로그","1");
-                                                PostInfo postInfo = new PostInfo(title, contentsList, formatList, date, currentUser.getUid(), newPostID);
+                                                PostInfo postInfo = new PostInfo(title, selectedPhotos,  date, currentUser.getUid(), newPostID);
                                                 ///
                                                 postInfo.setPostID(newPostID);
                                                 Log.d("로그q","ㄴ");
@@ -325,7 +368,7 @@ public class WritePostFragment extends Fragment {
             }
             if (successCount == 0) {
                 Log.d("로그q","시작2");
-                PostInfo postInfo = new PostInfo(title, contentsList, formatList, date, currentUser.getUid(), postID);
+                PostInfo postInfo = new PostInfo(title, selectedPhotos,  date, currentUser.getUid(), postID);
                 ///
                 postInfo.setPostID(postID);
                 Log.d("로그q","ㄱr");
@@ -347,7 +390,7 @@ public class WritePostFragment extends Fragment {
                         Intent resultIntent = new Intent();
                         resultIntent.putExtra("postinfo", postInfo);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                         Log.d("로그","11");
-                        getActivity().setResult(Activity.RESULT_OK, resultIntent);
+                        getActivity().setResult(RESULT_OK, resultIntent);
                         Log.d("로그","12");
                         //**
                         Intent intentpage = new Intent(getActivity(), MainActivity.class);
@@ -406,5 +449,33 @@ public class WritePostFragment extends Fragment {
         startActivityForResult(intent, requestCode);
     }
 
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        Log.d("태그", "11");
+//        List<String> photos = null;
+//        Log.d("태그", "111");
+//        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+//            Log.d("태그", "1111");
+//            if (data != null) {
+//                Log.d("태그", "11111");
+//                photos = data.getStringArrayListExtra(PhotoPickerActivity.KEY_SELECTED_PHOTOS);
+//            }
+//            if (photos != null) {
+//                Log.d("태그", "111111");
+//                selectedPhotos.addAll(photos);
+//            }
+//
+//            Log.d("태그", "1111111");
+//            // start image viewr
+//            Intent startActivity = new Intent(getActivity() , PhotoPagerActivity.class);
+//            Log.d("태그", "11111111");
+//            startActivity.putStringArrayListExtra("photos" , selectedPhotos);
+//            Log.d("태그", "111111111");
+//            startActivity(startActivity);
+//            Log.d("태그", "1111111111");
+//        }
+//    }
 
 }

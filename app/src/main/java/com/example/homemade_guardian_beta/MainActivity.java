@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 init();
                 break;
         }
+
     }
 
     private void init() {

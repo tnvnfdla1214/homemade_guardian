@@ -108,8 +108,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
             contentsLayout.setTag(postInfo);
             contentsLayout.removeAllViews();                                                                // part14: 다 지웠다가 다시 생성
 
-            readContentsView.setMoreIndex(MORE_INDEX);                                                      // part19 : 위에서 두개 까지만 표시
+            Log.d("로그ㅡ","ㄴ");
+            readContentsView.setMoreIndex(MORE_INDEX);
+            Log.d("로그ㅡ","ㄴ");// part19 : 위에서 두개 까지만 표시
             readContentsView.setPostInfo(postInfo);
+            Log.d("로그ㅡ","ㄴ");
 
 //            ArrayList<SimpleExoPlayer> playerArrayList = readContentsVIew.getPlayerArrayList();             // part21 : 폰이 꺼지거나 하면 동영상 멈추게 하기 (9')
 //            if(playerArrayList != null){

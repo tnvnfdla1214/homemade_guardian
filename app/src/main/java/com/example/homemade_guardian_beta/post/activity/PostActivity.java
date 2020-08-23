@@ -2,6 +2,7 @@ package com.example.homemade_guardian_beta.post.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -38,6 +40,7 @@ import com.example.homemade_guardian_beta.post.PostInfo;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.post.listener.OnPostListener;
 import com.example.homemade_guardian_beta.post.view.ReadContentsView;
+import com.example.homemade_guardian_beta.post.view.ViewPagerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -53,6 +56,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -79,6 +83,14 @@ public class PostActivity extends BasicActivity {                               
     private TextView title;
     private TextView user_name;
     private String username;
+    private ArrayList<String> Contents;
+
+    //사진 viewpager
+    private ArrayList<String> imageList = new ArrayList<String>();
+    private static final int DP = 24;
+    ViewPager viewPager;
+    //constant
+    final int PICTURE_REQUEST_CODE = 100;
 
 
 
@@ -156,7 +168,8 @@ public class PostActivity extends BasicActivity {                               
                 startActivity(intent);
             }
         });
-        uiUpdate();
+        //게시물 보여주는 함수
+        //uiUpdate();
 
         //채팅버튼
         chattingroom.setOnClickListener(new View.OnClickListener() {
@@ -182,12 +195,22 @@ public class PostActivity extends BasicActivity {                               
             }
         });
 
+        //뷰페이져
+        viewPager = findViewById(R.id.viewPager);
+
+        Log.d("민규","민규2");
+        Contents=postInfo.getContents();
+        imageList.addAll(Contents);
+        viewPager.setAdapter(new ViewPagerAdapter(this, imageList));
+
+
         //댓글 목록
         firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("posts").document(postInfo.getId()).collection("comments"));
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(PostActivity.this));
         //recyclerView.setLayoutManager( new LinearLayoutManager((getContext())));
         recyclerView.setAdapter(firestoreAdapter);
+
 
     }
 
@@ -201,7 +224,11 @@ public class PostActivity extends BasicActivity {                               
                 if (resultCode == Activity.RESULT_OK) {
                     postInfo = (PostInfo)data.getSerializableExtra("postinfo");
                     contentsLayout.removeAllViews();
-                    uiUpdate();
+                    //uiUpdate();
+                    Log.d("민규","민규2");
+                    Contents=postInfo.getContents();
+                    imageList.addAll(Contents);
+                    viewPager.setAdapter(new ViewPagerAdapter(this, imageList));
                 }
                 break;
         }
@@ -317,6 +344,7 @@ public class PostActivity extends BasicActivity {                               
         });
     }
 
+    //댓글용
     class RecyclerViewAdapter extends FirestoreAdapter<CustomViewHolder> {
         final private RequestOptions requestOptions = new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(90));
         private StorageReference storageReference;

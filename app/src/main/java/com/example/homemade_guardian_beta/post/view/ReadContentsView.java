@@ -3,7 +3,9 @@ package com.example.homemade_guardian_beta.post.view;
 import android.content.Context;
 
 import androidx.annotation.Nullable;
+import androidx.viewpager.widget.ViewPager;
 
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+//게시물 보여주는 함수
 public class ReadContentsView extends LinearLayout {
     private Context context;
     private LayoutInflater layoutInflater;
@@ -60,43 +63,25 @@ public class ReadContentsView extends LinearLayout {
     }
 
     public void setPostInfo(PostInfo postInfo){
-        Log.d("로그ㅡ","1");// part19 : setPostInfo 작성 (34'20")
+                // part19 : setPostInfo 작성 (34'20")
         TextView createdAtTextView = findViewById(R.id.createAtTextView);
-        Log.d("로그ㅡ","2");
         createdAtTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(postInfo.getCreatedAt()));
-        Log.d("로그ㅡ","3");
-
         LinearLayout contentsLayout = findViewById(R.id.contentsLayout);
-        Log.d("로그ㅡ","4");
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        Log.d("로그ㅡ","5");
         ArrayList<String> contentsList = postInfo.getContents();
-        Log.d("로그ㅡ","6"+contentsList);
-        Log.d("로그ㅡ","7");
         for (int i = 0; i < contentsList.size(); i++) {                                                 // part17 : 더보기기능 추가
-            Log.d("로그ㅡ","8");
             if (i == moreIndex) {
-                Log.d("로그ㅡ","9");
                 TextView textView = new TextView(context);
-                Log.d("로그ㅡ","10");
                 textView.setLayoutParams(layoutParams);
-                Log.d("로그ㅡ","11");
                 textView.setText("더보기...");
-                Log.d("로그ㅡ","12");
                 contentsLayout.addView(textView);
-                Log.d("로그ㅡ","13");
                 break;
             }
-            Log.d("로그ㅡ","14");
             String contents = contentsList.get(i);
-            Log.d("로그ㅡ","15"+contents);
 //            if(formats.equals("image")){                                                                            // part20 : 컨텐츠의 정보에 따라 다르게 만듦 (12')
             ImageView imageView = (ImageView)layoutInflater.inflate(R.layout.view_contents_image, this, false);
-            Log.d("로그ㅡ","155"+contents);
             contentsLayout.addView(imageView);
-            Log.d("로그ㅡ","1555"+contents);
             Glide.with(this).load(contents).override(1000).thumbnail(0.1f).into(imageView);         // 흐릿하게 로딩하기
-            Log.d("로그ㅡ","16");
 //            }
 //
 //        else{

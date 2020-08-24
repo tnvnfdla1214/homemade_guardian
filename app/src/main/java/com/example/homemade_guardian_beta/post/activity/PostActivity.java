@@ -173,7 +173,7 @@ public class PostActivity extends BasicActivity {                               
         //게시물 보여주는 함수
         //uiUpdate();
 
-        //채팅버튼
+        //
         chattingroom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

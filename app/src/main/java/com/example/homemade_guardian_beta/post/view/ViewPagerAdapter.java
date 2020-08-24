@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 
 import java.util.ArrayList;
@@ -34,7 +35,8 @@ public class ViewPagerAdapter extends PagerAdapter {
 
         ImageView imageView = view.findViewById(R.id.imageView);
         //imageView.setImageURI(imageList.get(position));
-        imageList.get(position);
+        //imageList.get(position);
+        Glide.with(view).load(imageList.get(position)).into(imageView);
 
         container.addView(view);
 

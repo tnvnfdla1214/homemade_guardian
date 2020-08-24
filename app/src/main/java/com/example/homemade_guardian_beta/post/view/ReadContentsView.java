@@ -91,6 +91,7 @@ public class ReadContentsView extends LinearLayout {
 //            }
         }
 
+        //이게 아마 사진으로 하는거
     } public void setPostPageInfo(PostInfo postInfo){                                                                                     // part19 : setPostInfo 작성 (34'20")
 
 

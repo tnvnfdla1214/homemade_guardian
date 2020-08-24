@@ -92,6 +92,9 @@ public class PostActivity extends BasicActivity {                               
     //constant
     final int PICTURE_REQUEST_CODE = 100;
 
+    //test
+    ImageView test;
+
 
 
     @Override
@@ -129,7 +132,6 @@ public class PostActivity extends BasicActivity {                               
         firebaseHelper.setOnPostListener(onPostListener);
         TextView createdAtTextView = findViewById(R.id.createAtTextView);
         createdAtTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(postInfo.getCreatedAt()));
-
 
         DocumentReference docRefe2 = FirebaseFirestore.getInstance().collection("users").document(myUid);
         docRefe2.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -207,7 +209,6 @@ public class PostActivity extends BasicActivity {                               
         imageList.addAll(Contents);
         Log.d("민규","민규imageList2"+imageList);
         viewPager.setAdapter(new ViewPagerAdapter(this, imageList));
-
 
         //댓글 목록
         firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("posts").document(postInfo.getId()).collection("comments"));
@@ -296,14 +297,14 @@ public class PostActivity extends BasicActivity {                               
         }
     };
 
+    /*
     private void uiUpdate(){                                                                             // part19 : 함수로 만들어서 관리(92')
         //setToolbarTitle(postInfo.getTitle());
         readContentsView.setPostPageInfo(postInfo);
         title = findViewById(R.id.title);
         title.setText(postInfo.getTitle());
-
-
     }
+     */
 
     private void myStartActivity(Class c, PostInfo postInfo) {                                          // part : 여기서는 수정 버튼을 눌렀을 때 게시물의 정보도 같이 넘겨준다.
         Intent intent = new Intent(this, c);

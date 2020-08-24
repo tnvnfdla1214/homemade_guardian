@@ -1,6 +1,8 @@
 package com.example.homemade_guardian_beta.Photo.entity;
 
 
+import android.net.Uri;
+
 public class Photo {
 
   private int id;
@@ -27,7 +29,7 @@ public class Photo {
     return id;
   }
 
-  public String getPath() {
+  public String  getPath() {
     return path;
   }
 

@@ -307,30 +307,26 @@ public class WritePostFragment extends Fragment {
             final DocumentReference documentReference =  postInfo== null ? firebaseFirestore.collection("posts").document(postID) : firebaseFirestore.collection("posts").document(postInfo.getId());     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
             final Date date = postInfo == null ? new Date() : postInfo.getCreatedAt();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             Log.d("로그","111");
-            for (int i = 0; i < parent.getChildCount(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
-                LinearLayout linearLayout = (LinearLayout) parent.getChildAt(i);
-                for (int ii = 0; ii < linearLayout.getChildCount(); ii++) {
-                    View view = linearLayout.getChildAt(ii);                                                // part11 : 자식뷰 저장
-                    if (view instanceof EditText) {                                                         // part11 :
-                        String text = ((EditText) view).getText().toString();
-                        if (text.length() > 0) {
-                            contentsList.add(text);
-                        }
-                    } else if (!isStorageUrl(selectedPhotos.get(pathCount))) {                                    // part11 : EditText가 아닐 때 ---> 이미지 뷰일때는
+            for (int i = 0; i < selectedPhotos.size(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
+
+                                                            // part11 : 자식뷰 저장
+                                                    // part11 : EditText가 아닐 때 ---> 이미지 뷰일때는
                         String path = selectedPhotos.get(pathCount);
+                Log.d("태그3","size = "+selectedPhotos.size());
+                Log.d("태그3","path = "+path);
                         successCount++;
                         contentsList.add(path);
 
                         String[] pathArray = path.split("\\.");                                         // part14 : 이미지의 확장자를 주어진대로 (2'40")
                         final StorageReference mountainImagesRef = storageRef.child("posts/" + documentReference.getId() + "/" + pathCount + "." + pathArray[pathArray.length - 1]);
                         try {
-                            Log.d("태그",""+pathCount);
+                            Log.d("태그3","pathCount = "+pathCount);
                             InputStream stream = new FileInputStream(new File(selectedPhotos.get(pathCount)));            // part11 : 경로 설정 (27'20")
-                            Log.d("태그","1"+selectedPhotos.get(pathCount));
-                            StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (selectedPhotos.size() - 1)).build();
-                            Log.d("태그","1"+metadata);
+                            Log.d("태그3","selectedPhotos.get(pathCount) = "+selectedPhotos.get(pathCount));
+                            StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (contentsList.size() - 1)).build();
+                            Log.d("태그3","metadata = "+metadata);
                             UploadTask uploadTask = mountainImagesRef.putStream(stream, metadata);
-                            Log.d("태그","1");
+                            Log.d("태그3","uploadTask = "+uploadTask);
                             ///
                             final String newPostID = postID;
                             uploadTask.addOnFailureListener(new OnFailureListener() {                               // part11 :
@@ -345,13 +341,15 @@ public class WritePostFragment extends Fragment {
                                         @Override
                                         public void onSuccess(Uri uri) {
                                             successCount--;                                                 // part11 : SUCCEESSCOUNT 개의 사진 (37')
-                                            selectedPhotos.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
+                                            contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
+                                            Log.d("태그3","1"+uri.toString());
+                                            Log.d("태그3","1"+uri);
                                             if (successCount == 0) {
-                                                Log.d("로그","1");
-                                                PostInfo postInfo = new PostInfo(title, selectedPhotos,  date, currentUser.getUid(), newPostID);
+                                                Log.d("태그3","1");
+                                                PostInfo postInfo = new PostInfo(title, contentsList,  date, currentUser.getUid(), newPostID);
                                                 ///
                                                 postInfo.setPostID(newPostID);
-                                                Log.d("로그q","ㄴ");
+                                                Log.d("태그3","ㄴ");
 
                                                 storeUpload(documentReference, postInfo);
                                             }
@@ -363,15 +361,15 @@ public class WritePostFragment extends Fragment {
                             Log.e("로그", "에러: " + e.toString());
                         }
                         pathCount++;
-                    }
-                }
+
+
             }
             if (successCount == 0) {
-                Log.d("로그q","시작2");
-                PostInfo postInfo = new PostInfo(title, selectedPhotos,  date, currentUser.getUid(), postID);
+                Log.d("태그3","시작2");
+                PostInfo postInfo = new PostInfo(title, contentsList,  date, currentUser.getUid(), postID);
                 ///
                 postInfo.setPostID(postID);
-                Log.d("로그q","ㄱr");
+                Log.d("태그3","ㄱr");
                 storeUpload(documentReference,postInfo);
             }
         } else {

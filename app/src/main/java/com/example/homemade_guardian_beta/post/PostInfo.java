@@ -35,6 +35,7 @@ public class PostInfo implements Serializable {                                 
         this.uid = uid;
         this.postID = postID;
     }
+
     public PostInfo(String title, ArrayList<String> contents,  Date createdAt, String uid){
         this.title = title;
         this.contents = contents;

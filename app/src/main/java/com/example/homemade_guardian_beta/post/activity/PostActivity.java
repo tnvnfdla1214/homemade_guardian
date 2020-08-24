@@ -198,9 +198,14 @@ public class PostActivity extends BasicActivity {                               
         //뷰페이져
         viewPager = findViewById(R.id.viewPager);
 
+        int i=0;
         Log.d("민규","민규2");
         Contents=postInfo.getContents();
+        ArrayList<String> contentsList = postInfo.getContents();
+        
+        Log.d("민규","민규Contents2"+Contents);
         imageList.addAll(Contents);
+        Log.d("민규","민규imageList2"+imageList);
         viewPager.setAdapter(new ViewPagerAdapter(this, imageList));
 
 

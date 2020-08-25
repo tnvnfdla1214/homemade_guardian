@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.model.UserModel;
@@ -26,23 +24,25 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Date;
-
 import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_PATH;
 import static com.example.homemade_guardian_beta.post.PostUtil.showToast;
 
+//앱이 실행되고나면 로그인 후에 가장 먼저 보게 되는 액티비티로서, 사용자의 정보를 입력 받는다.
+//      Ex) 메인프레그먼트에서는 이 MemberInitActivity가 실행되지 않으면, 계속 MemberInitActivity를 실행하게 된다.
+
 public class MemberInitActivity extends BasicActivity {
-    private static final String TAG = "MemberInitActivity";
-    private ImageView profileImageVIew;
-    private RelativeLayout loaderLayout;
-    private RelativeLayout buttonBackgroundLayout;
-    private String profilePath;
-    private FirebaseUser currentUser;
+    private String SelectedImagePath;                       //프로필 이미지로선택한 이미지
+    
+    private ImageView ProfileImageView;                     //xml에서 선택한 이미지를 넣은 ImageView
+    private RelativeLayout LoaderLayout; //로딩중을 나타내는 layout 선언
+    private RelativeLayout ButtonBackgroundLayout;          //사진을 넣을 때 앨범으로 가기 위한 버튼을 생성해주는 layout
+    
+    private FirebaseUser CurrentUser;                       //파이어베이스 데이터 상의 현재 사용자
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +50,12 @@ public class MemberInitActivity extends BasicActivity {
         setContentView(R.layout.activity_user_init);
         setToolbarTitle("회원정보");
 
-        loaderLayout = findViewById(R.id.loaderLyaout);
-        profileImageVIew = findViewById(R.id.profileImageView);
-        buttonBackgroundLayout = findViewById(R.id.buttonsBackgroundLayout);
+        LoaderLayout = findViewById(R.id.loaderLyaout);
+        ProfileImageView = findViewById(R.id.profileImageView);
+        ButtonBackgroundLayout = findViewById(R.id.buttonsBackgroundLayout);
 
-        buttonBackgroundLayout.setOnClickListener(onClickListener);
-        profileImageVIew.setOnClickListener(onClickListener);
+        ButtonBackgroundLayout.setOnClickListener(onClickListener);
+        ProfileImageView.setOnClickListener(onClickListener);
 
         findViewById(R.id.checkButton).setOnClickListener(onClickListener);
         findViewById(R.id.picture).setOnClickListener(onClickListener);
@@ -74,9 +74,9 @@ public class MemberInitActivity extends BasicActivity {
         switch (requestCode) {
             case 0: {
                 if (resultCode == Activity.RESULT_OK) {
-                    profilePath = data.getStringExtra(INTENT_PATH);
-                    Glide.with(this).load(profilePath).centerCrop().override(500).into(profileImageVIew);
-                    buttonBackgroundLayout.setVisibility(View.GONE);
+                    SelectedImagePath = data.getStringExtra(INTENT_PATH);
+                    Glide.with(this).load(SelectedImagePath).centerCrop().override(500).into(ProfileImageView);
+                    ButtonBackgroundLayout.setVisibility(View.GONE);
                 }
                 break;
             }
@@ -91,10 +91,10 @@ public class MemberInitActivity extends BasicActivity {
                     storageUploader();
                     break;
                 case R.id.profileImageView:
-                    buttonBackgroundLayout.setVisibility(View.VISIBLE);                                 // part8 : 처음에는 안보이다가 이미지그림 누르면 나타나게함 (11'30")
+                    ButtonBackgroundLayout.setVisibility(View.VISIBLE);                                 // part8 : 처음에는 안보이다가 이미지그림 누르면 나타나게함 (11'30")
                     break;
                 case R.id.buttonsBackgroundLayout:                                                      // part20 : 다른데 누르면 buttonBackgroundLayout 사라지게 해줌 (48')
-                    buttonBackgroundLayout.setVisibility(View.GONE);
+                    ButtonBackgroundLayout.setVisibility(View.GONE);
                     break;
                 case R.id.picture:                                                                      // part7 : 프로필 사진 등록시 카메라 기능으로 사진을 찍을 시
                     //myStartActivity(CameraActivity.class);
@@ -107,48 +107,47 @@ public class MemberInitActivity extends BasicActivity {
     };
 
     private void storageUploader() {                                                                            // part5 : 회원정보 업로드 로직 (3')
-        final String name = ((EditText) findViewById(R.id.nameEditText)).getText().toString();
-        final String phoneNumber = ((EditText) findViewById(R.id.phoneNumberEditText)).getText().toString();
-        final String birthDay = ((EditText) findViewById(R.id.birthDayEditText)).getText().toString();
-        final String address = ((EditText) findViewById(R.id.addressEditText)).getText().toString();
+        final String Name = ((EditText) findViewById(R.id.nameEditText)).getText().toString();
+        final String PhoneNumber = ((EditText) findViewById(R.id.phoneNumberEditText)).getText().toString();
+        final String BirthDay = ((EditText) findViewById(R.id.birthDayEditText)).getText().toString();
+        final String Address = ((EditText) findViewById(R.id.addressEditText)).getText().toString();
 
-        if (name.length() > 0 && phoneNumber.length() > 9 && birthDay.length() > 5 && address.length() > 0) {
-            loaderLayout.setVisibility(View.VISIBLE);
-            FirebaseStorage storage = FirebaseStorage.getInstance();
-            StorageReference storageRef = storage.getReference();
-            currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (Name.length() > 0 && PhoneNumber.length() > 9 && BirthDay.length() > 5 && Address.length() > 0) {
+            LoaderLayout.setVisibility(View.VISIBLE);
+            FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();
+            StorageReference Storagereference = Firebasestorage.getReference();
+            CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-            final StorageReference mountainImagesRef = storageRef.child("user/" + currentUser.getUid() + "/profileImage.jpg");
-            final Date createdID = new Date();                                                              // + : 사용자 리스트 수정 (현재 날짜 받아오기 [ 사진마다 달라서 그때 그댸 불르기])
+            final StorageReference ImageRef_USERS_Uid = Storagereference.child("user/" + CurrentUser.getUid() + "/profileImage.jpg");
+            final Date DateOfManufacture = new Date();                                                              // + : 사용자 리스트 수정 (현재 날짜 받아오기 [ 사진마다 달라서 그때 그댸 불르기])
 
-            if (profilePath == null) {                                                                      // part5 : 데이터 추가 (9'10")
-                UserModel userModel = new UserModel(name, phoneNumber, birthDay, createdID, address);          // + : 사용자 리스트 수정 (가입날짜 추가[사진 없는 버전])
-                userModel.setUid(currentUser.getUid());
-                userModel.setUserid(currentUser.getEmail());
-                userModel.setUsernm(extractIDFromEmail(currentUser.getEmail()));
+            if (SelectedImagePath == null) {                                                                      // part5 : 데이터 추가 (9'10")
+                UserModel userModel = new UserModel(Name, PhoneNumber, BirthDay, DateOfManufacture, Address);          // + : 사용자 리스트 수정 (가입날짜 추가[사진 없는 버전])
+                userModel.setUid(CurrentUser.getUid());
+                userModel.setUserid(CurrentUser.getEmail());
+                userModel.setUsernm(extractIDFromEmail(CurrentUser.getEmail()));
                 storeUploader(userModel);
             } else {
                 try {
-                    InputStream stream = new FileInputStream(new File(profilePath));                        // part7 : 입력한 회원정보를 스토리지에 저장 (25'20")
-                    UploadTask uploadTask = mountainImagesRef.putStream(stream);
+                    InputStream stream = new FileInputStream(new File(SelectedImagePath));                        // part7 : 입력한 회원정보를 스토리지에 저장 (25'20")
+                    UploadTask uploadTask = ImageRef_USERS_Uid.putStream(stream);
                     uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                         @Override
                         public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                             if (!task.isSuccessful()) {
                                 throw task.getException();
                             }
-                            return mountainImagesRef.getDownloadUrl();                                  // part7 : mountainImagesRef.getDownloadUrl()를 아래 task.getResult();에서 받아오는 것이 아닐까?
+                            return ImageRef_USERS_Uid.getDownloadUrl();                                  // part7 : ImageRef_USERS_Uid.getDownloadUrl()를 아래 task.getResult();에서 받아오는 것이 아닐까?
                         }
                     }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                         @Override
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
                                 Uri downloadUri = task.getResult();                                         // part7 : 입력한 회원정보를 DB에 저장 (28')
-                                Log.d("LOOG", " " + task.getResult().toString());
-                                UserModel userModel = new UserModel(name, phoneNumber, birthDay, address, createdID, downloadUri.toString());      // + : 사용자 리스트 수정 (가입날짜 추가)
-                                userModel.setUid(currentUser.getUid());
-                                userModel.setUserid(currentUser.getEmail());
-                                userModel.setUsernm(extractIDFromEmail(currentUser.getEmail()));
+                                UserModel userModel = new UserModel(Name, PhoneNumber, BirthDay, Address, DateOfManufacture, downloadUri.toString());      // + : 사용자 리스트 수정 (가입날짜 추가)
+                                userModel.setUid(CurrentUser.getUid());
+                                userModel.setUserid(CurrentUser.getEmail());
+                                userModel.setUsernm(extractIDFromEmail(CurrentUser.getEmail()));
                                 storeUploader(userModel);
                             } else {
                                 showToast(MemberInitActivity.this, "회원정보를 보내는데 실패하였습니다.");
@@ -165,13 +164,13 @@ public class MemberInitActivity extends BasicActivity {
     }
 
     private void storeUploader(UserModel userModel) {                                                     // part5 : DB에 등록이 됬는지 알려주는 로직
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(currentUser.getUid()).set(userModel)
+        FirebaseFirestore docSet_USERS_Uid = FirebaseFirestore.getInstance();
+        docSet_USERS_Uid.collection("users").document(CurrentUser.getUid()).set(userModel)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         showToast(MemberInitActivity.this, "회원정보 등록을 성공하였습니다.");
-                        loaderLayout.setVisibility(View.GONE);
+                        LoaderLayout.setVisibility(View.GONE);
                         finish();                                                                       // part5 : 정보 입력시 창이 나가지게 된다.
                     }
                 })
@@ -179,8 +178,7 @@ public class MemberInitActivity extends BasicActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         showToast(MemberInitActivity.this, "회원정보 등록에 실패하였습니다.");
-                        loaderLayout.setVisibility(View.GONE);
-                        Log.w(TAG, "Error writing document", e);
+                        LoaderLayout.setVisibility(View.GONE);
                     }
                 });
     }

@@ -1,6 +1,5 @@
 package com.example.homemade_guardian_beta.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,13 +20,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.MainActivity;
-import com.example.homemade_guardian_beta.Photo.PhotoPagerActivity;
 import com.example.homemade_guardian_beta.Photo.PhotoPickerActivity;
 import com.example.homemade_guardian_beta.Photo.utils.YPhotoPickerIntent;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.post.PostInfo;
+import com.example.homemade_guardian_beta.post.PostModel;
 import com.example.homemade_guardian_beta.post.activity.GalleryActivity;
 import com.example.homemade_guardian_beta.post.view.ContentsItemView;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -52,10 +49,7 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_MEDIA;
 import static com.example.homemade_guardian_beta.post.PostUtil.GALLERY_IMAGE;
-import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_PATH;
-import static com.example.homemade_guardian_beta.post.PostUtil.isImageFile;
 import static com.example.homemade_guardian_beta.post.PostUtil.isStorageUrl;
-import static com.example.homemade_guardian_beta.post.PostUtil.isVideoFile;
 import static com.example.homemade_guardian_beta.post.PostUtil.storageUrlToName;
 
 public class WritePostFragment extends Fragment {
@@ -70,7 +64,7 @@ public class WritePostFragment extends Fragment {
     private EditText selectedEditText;
     private EditText contentsEditText;
     private EditText titleEditText;
-    private PostInfo postInfo;
+    private PostModel postModel;
     private int pathCount, successCount;
     public final static int REQUEST_CODE = 1;
     public void onCreate(Bundle savedInstanceState) {
@@ -93,10 +87,8 @@ public class WritePostFragment extends Fragment {
         }
 
 
-        parent = view.findViewById(R.id.contentsLayout);             //(20')
         buttonsBackgroundLayout = view.findViewById(R.id.buttonsBackgroundLayout);
         loaderLayout = view.findViewById(R.id.loaderLyaout);
-        contentsEditText = view.findViewById(R.id.contentsEditText);
         titleEditText = view.findViewById(R.id.titleEditText);
 
         view.findViewById(R.id.check).setOnClickListener(onClickListener);
@@ -107,7 +99,6 @@ public class WritePostFragment extends Fragment {
         view.findViewById(R.id.delete).setOnClickListener(onClickListener);
 
         buttonsBackgroundLayout.setOnClickListener(onClickListener);
-        contentsEditText.setOnFocusChangeListener(onFocusChangeListener);
         titleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -121,8 +112,8 @@ public class WritePostFragment extends Fragment {
         storageRef = storage.getReference();
 
         ////
-        postInfo = (PostInfo) getActivity().getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
-        postInit();
+        postModel = (PostModel) getActivity().getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
+        //postInit();
         return view;
     }
     @Override
@@ -198,14 +189,6 @@ public class WritePostFragment extends Fragment {
                 selectedPhotos.addAll(photos);
                 Log.d("태그", "----111111"+selectedPhotos);
             }
-//            Log.d("태그", "1111111");
-//            // start image viewr
-//            Intent startActivity = new Intent(getActivity() , PhotoPagerActivity.class);
-//            Log.d("태그", "11111111");
-//            startActivity.putStringArrayListExtra("photos" , selectedPhotos);
-//            Log.d("태그", "111111111");
-//            startActivity(startActivity);
-//            Log.d("태그", "1111111111");
         }
     }
 
@@ -255,29 +238,7 @@ public class WritePostFragment extends Fragment {
                     break;
                      */
                 case R.id.delete:                                                                       // part12 : 작성중인 게시물에서 사진 빼기 (12'30")
-                    final View selectedView = (View) selectedImageVIew.getParent();                     // part12 : parents를 먼저 불러옴
-                    String path = pathList.get(parent.indexOfChild(selectedView) - 1);                  // part20 : 172,173줄 없으면 사진 택하고 바로 삭제시 에러 : 아직 안 올라갔기 째문
-                    if(isStorageUrl(path)){                                                                         // 해당하는 조건문
-                        StorageReference desertRef = storageRef.child("posts/" + postInfo.getId() + "/" + storageUrlToName(path));
-                        desertRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {             // part17 : 스토리지에서 삭제 (56')
-                                ////showToast(WritePostActivity.this, "파일을 삭제하였습니다.");
-                                pathList.remove(parent.indexOfChild(selectedView) - 1);                 // part17 : view 삭제
-                                parent.removeView(selectedView);
-                                buttonsBackgroundLayout.setVisibility(View.GONE);
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                ////showToast(WritePostActivity.this, "파일을 삭제하는데 실패하였습니다.");
-                            }
-                        });
-                    }else{
-                        pathList.remove(parent.indexOfChild(selectedView) - 1);
-                        parent.removeView(selectedView);
-                        buttonsBackgroundLayout.setVisibility(View.GONE);
-                    }
+
                     break;
             }
         }
@@ -304,8 +265,8 @@ public class WritePostFragment extends Fragment {
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
             ///
             postID = firebaseFirestore.collection("posts").document().getId();
-            final DocumentReference documentReference =  postInfo== null ? firebaseFirestore.collection("posts").document(postID) : firebaseFirestore.collection("posts").document(postInfo.getId());     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
-            final Date date = postInfo == null ? new Date() : postInfo.getCreatedAt();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
+            final DocumentReference documentReference =  postModel == null ? firebaseFirestore.collection("posts").document(postID) : firebaseFirestore.collection("posts").document(postModel.getPostModel_Post_Uid());     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
+            final Date date = postModel == null ? new Date() : postModel.getPostModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             Log.d("로그","111");
             for (int i = 0; i < selectedPhotos.size(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
 
@@ -314,7 +275,6 @@ public class WritePostFragment extends Fragment {
                         String path = selectedPhotos.get(pathCount);
                 Log.d("태그3","size = "+selectedPhotos.size());
                 Log.d("태그3","path = "+path);
-                        successCount++;
                         contentsList.add(path);
 
                         String[] pathArray = path.split("\\.");                                         // part14 : 이미지의 확장자를 주어진대로 (2'40")
@@ -340,19 +300,17 @@ public class WritePostFragment extends Fragment {
                                     mountainImagesRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                         @Override
                                         public void onSuccess(Uri uri) {
-                                            successCount--;                                                 // part11 : SUCCEESSCOUNT 개의 사진 (37')
+                                                                                         // part11 : SUCCEESSCOUNT 개의 사진 (37')
                                             contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                            Log.d("태그3","1"+uri.toString());
-                                            Log.d("태그3","1"+uri);
-                                            if (successCount == 0) {
+
                                                 Log.d("태그3","1");
-                                                PostInfo postInfo = new PostInfo(title, contentsList,  date, currentUser.getUid(), newPostID);
+                                                PostModel postModel = new PostModel(title, contentsList,  date, currentUser.getUid(), newPostID);
                                                 ///
-                                                postInfo.setPostID(newPostID);
+                                                postModel.setPostModel_Post_Uid(newPostID);
                                                 Log.d("태그3","ㄴ");
 
-                                                storeUpload(documentReference, postInfo);
-                                            }
+                                                storeUpload(documentReference, postModel);
+
                                         }
                                     });
                                 }
@@ -364,29 +322,22 @@ public class WritePostFragment extends Fragment {
 
 
             }
-            if (successCount == 0) {
-                Log.d("태그3","시작2");
-                PostInfo postInfo = new PostInfo(title, contentsList,  date, currentUser.getUid(), postID);
-                ///
-                postInfo.setPostID(postID);
-                Log.d("태그3","ㄱr");
-                storeUpload(documentReference,postInfo);
-            }
         } else {
             Toast.makeText(getActivity(), "제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void storeUpload(DocumentReference documentReference, final PostInfo postInfo) {
+    private void storeUpload(DocumentReference documentReference, final PostModel postModel) {
         Log.d("로그","1234");
-        documentReference.set(postInfo.getPostInfo())
+
+        documentReference.set(postModel.getPostInfo())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully written!");
                         loaderLayout.setVisibility(View.GONE);
                         Intent resultIntent = new Intent();
-                        resultIntent.putExtra("postinfo", postInfo);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
+                        resultIntent.putExtra("postinfo", postModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                         Log.d("로그","11");
                         getActivity().setResult(RESULT_OK, resultIntent);
                         Log.d("로그","12");
@@ -406,40 +357,40 @@ public class WritePostFragment extends Fragment {
                 });
     }
 
-    private void postInit() {                                                                               // part17 : (33')
-        if (postInfo != null) {                                                                             //수정 버튼을 눌러서 들어왔을 때 null이 아니면 == 나 수정 하러 왔음 >> 화면에는 수정하고자하는 게시물의 정보들이 띄워져있음
-            titleEditText.setText(postInfo.getTitle());
-            ArrayList<String> contentsList = postInfo.getContents();
-            for (int i = 0; i < contentsList.size(); i++) {
-                String contents = contentsList.get(i);
-                if (isStorageUrl(contents)) {
-                    pathList.add(contents);
-                    ////
-                    ContentsItemView contentsItemView = new ContentsItemView(getActivity());
-                    parent.addView(contentsItemView);
-
-                    contentsItemView.setImage(contents);
-                    contentsItemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            buttonsBackgroundLayout.setVisibility(View.VISIBLE);
-                            selectedImageVIew = (ImageView) v;
-                        }
-                    });
-
-                    contentsItemView.setOnFocusChangeListener(onFocusChangeListener);
-                    if (i < contentsList.size() - 1) {
-                        String nextContents = contentsList.get(i + 1);
-                        if (!isStorageUrl(nextContents)) {
-                            contentsItemView.setText(nextContents);
-                        }
-                    }
-                } else if (i == 0) {
-                    contentsEditText.setText(contents);
-                }
-            }
-        }
-    }
+//    private void postInit() {                                                                               // part17 : (33')
+//        if (postModel != null) {                                                                             //수정 버튼을 눌러서 들어왔을 때 null이 아니면 == 나 수정 하러 왔음 >> 화면에는 수정하고자하는 게시물의 정보들이 띄워져있음
+//            titleEditText.setText(postModel.getPostModel_Title());
+//            ArrayList<String> contentsList = postModel.getPostModel_ImageList();
+//            for (int i = 0; i < contentsList.size(); i++) {
+//                String contents = contentsList.get(i);
+//                if (isStorageUrl(contents)) {
+//                    pathList.add(contents);
+//                    ////
+//                    ContentsItemView contentsItemView = new ContentsItemView(getActivity());
+//                    parent.addView(contentsItemView);
+//
+//                    contentsItemView.setImage(contents);
+//                    contentsItemView.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            buttonsBackgroundLayout.setVisibility(View.VISIBLE);
+//                            selectedImageVIew = (ImageView) v;
+//                        }
+//                    });
+//
+//                    contentsItemView.setOnFocusChangeListener(onFocusChangeListener);
+//                    if (i < contentsList.size() - 1) {
+//                        String nextContents = contentsList.get(i + 1);
+//                        if (!isStorageUrl(nextContents)) {
+//                            contentsItemView.setText(nextContents);
+//                        }
+//                    }
+//                } else if (i == 0) {
+//                    contentsEditText.setText(contents);
+//                }
+//            }
+//        }
+//    }
 
     private void myStartActivity(Class c, int media, int requestCode) {
         Intent intent = new Intent(getActivity(), c);

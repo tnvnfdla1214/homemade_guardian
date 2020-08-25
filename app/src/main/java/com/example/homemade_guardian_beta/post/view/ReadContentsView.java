@@ -3,11 +3,8 @@ package com.example.homemade_guardian_beta.post.view;
 import android.content.Context;
 
 import androidx.annotation.Nullable;
-import androidx.viewpager.widget.ViewPager;
 
-import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.homemade_guardian_beta.post.PostInfo;
+import com.example.homemade_guardian_beta.post.PostModel;
 import com.example.homemade_guardian_beta.R;
 //import com.google.android.exoplayer2.ExoPlayerFactory;
 //import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -62,13 +59,13 @@ public class ReadContentsView extends LinearLayout {
         this.moreIndex = moreIndex;                                                                                 // part19 : 어댑터에서도 쓸 수 있게 (46'50")
     }
 
-    public void setPostInfo(PostInfo postInfo){
+    public void setPostInfo(PostModel postModel){
                 // part19 : setPostInfo 작성 (34'20")
         TextView createdAtTextView = findViewById(R.id.createAtTextView);
-        createdAtTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(postInfo.getCreatedAt()));
+        createdAtTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(postModel.getPostModel_DateOfManufacture()));
         LinearLayout contentsLayout = findViewById(R.id.contentsLayout);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        ArrayList<String> contentsList = postInfo.getContents();
+        ArrayList<String> contentsList = postModel.getPostModel_ImageList();
         for (int i = 0; i < contentsList.size(); i++) {                                                 // part17 : 더보기기능 추가
             if (i == moreIndex) {
                 TextView textView = new TextView(context);
@@ -92,12 +89,12 @@ public class ReadContentsView extends LinearLayout {
         }
 
         //이게 아마 사진으로 하는거
-    } public void setPostPageInfo(PostInfo postInfo){                                                                                     // part19 : setPostInfo 작성 (34'20")
+    } public void setPostPageInfo(PostModel postModel){                                                                                     // part19 : setPostInfo 작성 (34'20")
 
 
         LinearLayout contentsLayout = findViewById(R.id.contentsLayout);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        ArrayList<String> contentsList = postInfo.getContents();
+        ArrayList<String> contentsList = postModel.getPostModel_ImageList();
 
         for (int i = 0; i < contentsList.size(); i++) {                                                 // part17 : 더보기기능 추가
             if (i == moreIndex) {

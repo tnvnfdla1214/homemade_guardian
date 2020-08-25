@@ -2,39 +2,38 @@ package com.example.homemade_guardian_beta.post.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.homemade_guardian_beta.R;
 
+// 검색을 실행하려 하고 검색하고자 하는 단어를 입력 받는 액티비티이다.
+//      Ex) 메인프레그먼트에서 검색버튼을 눌러 넘어온다.
+//      Ex) 단어를 입력한 후 버튼을 누르면 SearchResultActivity로 넘어가게 된다.
+
 public class SearchActivity extends BasicActivity {
-    private EditText searchPost;
-    private Button searchbutton;
+    private EditText SearchPost;    //검색하고자 하는 단어 입력 받는 EditText
+    private Button SearchButton;    //검색을 실행하는 버튼
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         setToolbarTitle("검색");
 
-        searchPost = findViewById(R.id.searchPost);
+        SearchPost = findViewById(R.id.searchPost);
 
-        searchbutton = findViewById(R.id.searchbutton);
-        searchbutton.setOnClickListener(onClickListener);
+        SearchButton = findViewById(R.id.searchbutton);
+        SearchButton.setOnClickListener(onClickListener);
     }
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-
                 case R.id.searchbutton:
-                    Log.d ("로그w","1");
-                    String search = searchPost.getText().toString();
-                    Log.d ("로그w",search);
+                    String search = SearchPost.getText().toString();
                     myStartActivity(SearchResultActivity.class,search);
-                    Log.d ("로그w",search);
                     break;
-
             }
         }
     };

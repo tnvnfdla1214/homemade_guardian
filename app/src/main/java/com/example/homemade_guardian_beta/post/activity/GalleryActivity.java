@@ -13,16 +13,16 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.post.adapter.GalleryAdapter;
-
 import java.util.ArrayList;
-
 import static com.example.homemade_guardian_beta.post.PostUtil.GALLERY_IMAGE;
 import static com.example.homemade_guardian_beta.post.PostUtil.GALLERY_VIDEO;
 import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_MEDIA;
 import static com.example.homemade_guardian_beta.post.PostUtil.showToast;
+
+//이미지 리스트에 넣을 때와는 달리 이미지의 다중 선택을 불허하고, 사용자의 프로필 사진의 선택을 할 때에 실행되는 액티비티이다.
+//      Ex) MemberInitActivity에서 사진을 고를 때에 사용된다. <-> GalleryAdapter와 연결된다.
 
 public class GalleryActivity extends BasicActivity {
 
@@ -32,30 +32,20 @@ public class GalleryActivity extends BasicActivity {
         setContentView(R.layout.activity_gallery);
         setToolbarTitle("갤러리");
 
-        if (ContextCompat.checkSelfPermission(GalleryActivity.this,                             // part8 : (A) 갤러리 권한 받기 (30')
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(GalleryActivity.this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    1);                                                                     // part8 : (B) 권한을 줘서 requestCode가 1이 되면
-            if (ActivityCompat.shouldShowRequestPermissionRationale(GalleryActivity.this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-
-            } else {
-                showToast(GalleryActivity.this, getResources().getString(R.string.please_grant_permission));    // part18 : strings에 메시지 관리하기
-            }
-        } else {
-            recyclerInit();
+        if (ContextCompat.checkSelfPermission(GalleryActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)  != PackageManager.PERMISSION_GRANTED) {   // part8 : (A) 갤러리 권한 받기 (30')
+            ActivityCompat.requestPermissions(GalleryActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);              // part8 : (B) 권한을 줘서 requestCode가 1이 되면
+            if (ActivityCompat.shouldShowRequestPermissionRationale(GalleryActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) { }
+            else { showToast(GalleryActivity.this, getResources().getString(R.string.please_grant_permission));}   // part18 : strings에 메시지 관리하기
         }
+        else { recyclerInit(); }
     }
 
     @Override                                                                                           // part8 : (C) 그 requestCode를 받아서 onRequestPermissionsResult
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {   //(33')
         switch (requestCode) {
             case 1: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    recyclerInit();                                                                     // part8 : (D) recyclerInit()가 실행되는데
-                } else {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) { recyclerInit();}
+                else {
                     finish();
                     showToast(GalleryActivity.this, getResources().getString(R.string.please_grant_permission));
                 }
@@ -65,7 +55,6 @@ public class GalleryActivity extends BasicActivity {
 
     private void recyclerInit(){
         final int numberOfColumns = 3;                                                                  // part9 : (E) recyclerInit()는 사진을 3개씩 나열 (2')
-
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
@@ -75,15 +64,15 @@ public class GalleryActivity extends BasicActivity {
     }
     // part10 : 아이콘 이미지 생성 (9'50)
     public ArrayList<String> getImagesPath(Activity activity) {
-        Uri uri;
-        ArrayList<String> listOfAllImages = new ArrayList<String>();
-        Cursor cursor;
+        Uri uri;                                                        //선택한 이미지의 Uri
+        ArrayList<String> listOfImage = new ArrayList<String>();        //PathOfImage의 값을 넣어서 전달하는 ArrayList<String>
+        Cursor CursorEvent;                                             //이미지를 선택했다는 이벤트의 값
         int column_index_data;
-        String PathOfImage = null;
+        String PathOfImage = null;                                      //커서로 선택한 이미지의 Uri를 String의 값으로 받으려는 변수
         String[] projection;
-
         Intent intent = getIntent();
         final int media = intent.getIntExtra(INTENT_MEDIA, GALLERY_IMAGE);                              // part11 : 비디오면 비디오 / 이미지면 이미지 리스트 반환
+
         if(media == GALLERY_VIDEO){
             uri = android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
             projection = new String[] { MediaStore.MediaColumns.DATA, MediaStore.Video.Media.BUCKET_DISPLAY_NAME };
@@ -91,15 +80,12 @@ public class GalleryActivity extends BasicActivity {
             uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             projection = new String[] { MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME };
         }
-
-        cursor = activity.getContentResolver().query(uri, projection, null, null, null);
-        column_index_data = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
-
-        while (cursor.moveToNext()) {
-            PathOfImage = cursor.getString(column_index_data);
-
-            listOfAllImages.add(PathOfImage);
+        CursorEvent = activity.getContentResolver().query(uri, projection, null, null, null);
+        column_index_data = CursorEvent.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+        while (CursorEvent.moveToNext()) {
+            PathOfImage = CursorEvent.getString(column_index_data);
+            listOfImage.add(PathOfImage);
         }
-        return listOfAllImages;
+        return listOfImage;
     }
 }

@@ -17,11 +17,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.homemade_guardian_beta.post.PostInfo;
+import com.example.homemade_guardian_beta.post.PostModel;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.post.activity.SearchActivity;
 import com.example.homemade_guardian_beta.post.adapter.HomeAdapter;
-import com.example.homemade_guardian_beta.post.listener.OnPostListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -37,7 +36,7 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private FirebaseFirestore firebaseFirestore;
     private HomeAdapter homeAdapter;
-    private ArrayList<PostInfo> postList;
+    private ArrayList<PostModel> postList;
     private boolean updating;
     private boolean topScrolled;
 
@@ -172,10 +171,10 @@ public class HomeFragment extends Fragment {
 
     private void postsUpdate(final boolean clear) {
         updating = true;
-        Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getCreatedAt();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getPostModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("posts");                // 파이어베이스의 posts에서
         Log.d("로그","스크롤 333");
-        collectionReference.orderBy("createdAt", Query.Direction.DESCENDING).whereLessThan("createdAt", date).limit(10).get()       // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개
+        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).limit(10).get()       // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -187,11 +186,11 @@ public class HomeFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 Log.d("로그","스크롤 3333");
-                                postList.add(new PostInfo(                                                          //postList로 데이터를 넣는다.
-                                        document.getData().get("title").toString(),
-                                        (ArrayList<String>) document.getData().get("contents"),
-                                        document.getData().get("uid").toString(),
-                                        new Date(document.getDate("createdAt").getTime()),
+                                postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
+                                        document.getData().get("PostModel_Title").toString(),
+                                        (ArrayList<String>) document.getData().get("PostModel_ImageList"),
+                                        new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
+                                        document.getData().get("PostModel_Host_Uid").toString(),
                                         document.getId()));
                             }
                             homeAdapter.notifyDataSetChanged();

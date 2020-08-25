@@ -71,7 +71,7 @@
         </activity>
         <activity android:name=".post.activity.MemberInitActivity">
         </activity>
-        <activity android:name=".post.activity.Host_infoActivity">
+        <activity android:name=".post.activity.HostModelActivity">
         </activity>
         <activity android:name=".post.activity.SearchActivity">
         </activity>

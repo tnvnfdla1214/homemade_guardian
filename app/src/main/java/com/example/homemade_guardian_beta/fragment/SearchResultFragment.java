@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.post.PostInfo;
+import com.example.homemade_guardian_beta.post.PostModel;
 import com.example.homemade_guardian_beta.post.adapter.SearchResultAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,7 +27,7 @@ import java.util.Date;
 
 public class SearchResultFragment extends Fragment {
     private String search;
-    private ArrayList<PostInfo> postList;
+    private ArrayList<PostModel> postList;
     private FirebaseFirestore firebaseFirestore;
     private static final String TAG = "SearchResultFragment";
     private SearchResultAdapter searchResultAdapter;
@@ -69,7 +69,7 @@ public class SearchResultFragment extends Fragment {
     private void postsUpdate(final boolean clear) {
         //updating = true;
 
-        Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getCreatedAt();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getPostModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("posts");                // 파이어베이스의 posts에서
         Log.d("로그w","스크롤 333"+search);
         collectionReference.orderBy("createdAt", Query.Direction.DESCENDING).whereLessThan("createdAt", date).limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
@@ -88,11 +88,11 @@ public class SearchResultFragment extends Fragment {
                                 title = document.getData().get("title").toString();
                                 Log.d("로그qwe","스크롤 3333"+title);
                                 if(title.toLowerCase().contains(search.toLowerCase())) {
-                                    postList.add(new PostInfo(                                                          //postList로 데이터를 넣는다.
+                                    postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
                                             document.getData().get("title").toString(),
                                             (ArrayList<String>) document.getData().get("contents"),
-                                            document.getData().get("uid").toString(),
                                             new Date(document.getDate("createdAt").getTime()),
+                                            document.getData().get("uid").toString(),
                                             document.getId()));
                                 }
                                 title = null;

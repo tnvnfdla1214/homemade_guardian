@@ -31,11 +31,11 @@ public class FirebaseHelper {                                                   
         this.onPostListener = onPostListener;
     }
 
-    public void storageDelete(final PostInfo postInfo){                                                 // part16: 스토리지의 삭제 (13')
+    public void storageDelete(final PostModel postModel){                                                 // part16: 스토리지의 삭제 (13')
         FirebaseStorage storage = FirebaseStorage.getInstance();                                        // part17 : 스토리지 삭제 (문서) (19'50")
         StorageReference storageRef = storage.getReference();
-        final String id = postInfo.getId();
-        ArrayList<String> contentsList = postInfo.getContents();
+        final String id = postModel.getPostModel_Post_Uid();
+        ArrayList<String> contentsList = postModel.getPostModel_ImageList();
         for (int i = 0; i < contentsList.size(); i++) {
             String contents = contentsList.get(i);
             if (isStorageUrl(contents)) {
@@ -45,7 +45,7 @@ public class FirebaseHelper {                                                   
                     @Override
                     public void onSuccess(Void aVoid) {
                         successCount--;
-                        storeDelete(id, postInfo);
+                        storeDelete(id, postModel);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -55,10 +55,10 @@ public class FirebaseHelper {                                                   
                 });
             }
         }
-        storeDelete(id, postInfo);
+        storeDelete(id, postModel);
     }
 
-    private void storeDelete(final String id, final PostInfo postInfo) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
+    private void storeDelete(final String id, final PostModel postModel) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         if (successCount == 0) {
             Log.d("로그","삭제 88888");
@@ -69,7 +69,7 @@ public class FirebaseHelper {                                                   
                         public void onSuccess(Void aVoid) {
                             Log.d("로그","삭제 99999");
                             showToast(activity, "게시글을 삭제하였습니다.");
-                            onPostListener.onDelete(postInfo);
+                            onPostListener.onDelete(postModel);
                             //postsUpdate();
                         }
                     })
@@ -83,13 +83,13 @@ public class FirebaseHelper {                                                   
     }
     public void commentDelete(final CommentModel commentModel){                                                 // part16: 스토리지의 삭제 (13')
         FirebaseStorage storage = FirebaseStorage.getInstance();                                        // part17 : 스토리지 삭제 (문서) (19'50")
-        final String id = commentModel.getCommentID();
+        final String id = commentModel.getCommentModel_Comment_Uid();
 
         commentstoreDelete(id, commentModel);
     }
     private void commentstoreDelete(final String id, final CommentModel commentModel) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-            firebaseFirestore.collection("posts").document(commentModel.getPostID()).collection("comments").document(id)
+            firebaseFirestore.collection("posts").document(commentModel.getCommentModel_Post_Uid()).collection("comments").document(id)
                     .delete()
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

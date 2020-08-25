@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.post.FirebaseHelper;
-import com.example.homemade_guardian_beta.post.PostInfo;
+import com.example.homemade_guardian_beta.post.PostModel;
 import com.example.homemade_guardian_beta.post.activity.ModifyPostActivity;
 import com.example.homemade_guardian_beta.post.activity.PostActivity;
 import com.example.homemade_guardian_beta.post.listener.OnPostListener;
@@ -29,7 +29,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.MainViewHolder> {
-    private ArrayList<PostInfo> mDataset;
+    private ArrayList<PostModel> mDataset;
     private Activity activity;
     private FirebaseHelper firebaseHelper;
     //private ArrayList<ArrayList<SimpleExoPlayer>> playerArrayListArrayList = new ArrayList<>();
@@ -44,7 +44,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         }
     }
 
-    public SearchResultAdapter(Activity activity, ArrayList<PostInfo> myDataset) {
+    public SearchResultAdapter(Activity activity, ArrayList<PostModel> myDataset) {
         this.mDataset = myDataset;
         this.activity = activity;
 
@@ -95,18 +95,18 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         CardView cardView = holder.cardView;
         TextView titleTextView = cardView.findViewById(R.id.titleTextView);
         Log.d("로그","로딩 22222");
-        PostInfo postInfo = mDataset.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
-        titleTextView.setText(postInfo.getTitle());
+        PostModel postModel = mDataset.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
+        titleTextView.setText(postModel.getPostModel_Title());
 
         ReadContentsView readContentsView = cardView.findViewById(R.id.readContentsView);                   //contentsLayout에다가 날짜포함
         LinearLayout contentsLayout = cardView.findViewById(R.id.contentsLayout);
 
-        if (contentsLayout.getTag() == null || !contentsLayout.getTag().equals(postInfo)) {                 // part16 : 게시물 개수에 변화가 있을 때만 실행..? (26'40")
-            contentsLayout.setTag(postInfo);
+        if (contentsLayout.getTag() == null || !contentsLayout.getTag().equals(postModel)) {                 // part16 : 게시물 개수에 변화가 있을 때만 실행..? (26'40")
+            contentsLayout.setTag(postModel);
             contentsLayout.removeAllViews();                                                                // part14: 다 지웠다가 다시 생성
 
             readContentsView.setMoreIndex(MORE_INDEX);                                                      // part19 : 위에서 두개 까지만 표시
-            readContentsView.setPostInfo(postInfo);
+            readContentsView.setPostInfo(postModel);
 
 //            ArrayList<SimpleExoPlayer> playerArrayList = readContentsVIew.getPlayerArrayList();             // part21 : 폰이 꺼지거나 하면 동영상 멈추게 하기 (9')
 //            if(playerArrayList != null){
@@ -145,9 +145,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         popup.show();
     }
 
-    private void myStartActivity(Class c, PostInfo postInfo) {                                          // part : 여기서는 수정 버튼을 눌렀을 때 게시물의 정보도 같이 넘겨준다.
+    private void myStartActivity(Class c, PostModel postModel) {                                          // part : 여기서는 수정 버튼을 눌렀을 때 게시물의 정보도 같이 넘겨준다.
         Intent intent = new Intent(activity, c);
-        intent.putExtra("postInfo", postInfo);
+        intent.putExtra("postInfo", postModel);
         activity.startActivity(intent);
     }
 

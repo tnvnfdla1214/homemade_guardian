@@ -1,41 +1,29 @@
 package com.example.homemade_guardian_beta.post.activity;
 
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
-
-
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.fragment.SearchResultFragment;
 
+//SearchActivity에서 버튼을 눌러 넘어 온 액티비티이다.
+//      Ex) SearchResultFragment에서 Fragment를 이용하여 결과물을 출력한다. <-> SearchResultAdapter와 연결된다.
 
-//채팅방안 액티비티 -chatFragment랑 연결됨
 public class SearchResultActivity extends BasicActivity {
-    private DrawerLayout drawerLayout;
-    private SearchResultFragment searchResultFragment;
+    private SearchResultFragment SearchResultFragment;  //SearchResultFragment를 통해 Fragment를 씀
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchresult);
         setToolbarTitle("검색 결과");
-
-
         String search = getIntent().getStringExtra("search");
 
-        Log.d ("로그w","1");
-
         // chatting area
-        searchResultFragment = SearchResultFragment.getInstance(search);
+        SearchResultFragment = SearchResultFragment.getInstance(search);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.mainFragment, searchResultFragment )
+                .replace(R.id.mainFragment, SearchResultFragment)
                 .commit();
-        Log.d ("로그w","2");
     }
 
     @Override
@@ -48,11 +36,5 @@ public class SearchResultActivity extends BasicActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-//    @Override
-//    public void onBackPressed() {
-//        chatFragment.backPressed();
-//        finish();
-//    }
 
 }

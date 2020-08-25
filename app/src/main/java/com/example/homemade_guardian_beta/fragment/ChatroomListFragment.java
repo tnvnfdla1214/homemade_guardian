@@ -112,7 +112,7 @@ public class ChatroomListFragment extends Fragment {
             myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
             // all users information
-            listenerUsers = firestore.collection("users")
+            listenerUsers = firestore.collection("USERS")
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot value,
@@ -130,7 +130,7 @@ public class ChatroomListFragment extends Fragment {
         Integer unreadTotal = 0;
         public void getRoomInfo() {
             // my chatting room information
-            listenerRegistration = firestore.collection("rooms").whereGreaterThanOrEqualTo("users."+myUid, 0)
+            listenerRegistration = firestore.collection("rooms").whereGreaterThanOrEqualTo("USERS."+myUid, 0)
 //                    a.orderBy("timestamp", Query.Direction.DESCENDING)
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
@@ -155,7 +155,7 @@ public class ChatroomListFragment extends Fragment {
                                         default:  chatRoomModel.setLastMsg(message.getMsg());
                                     }
                                 }
-                                Map<String, Long> users = (Map<String, Long>) document.get("users");
+                                Map<String, Long> users = (Map<String, Long>) document.get("USERS");
                                 chatRoomModel.setUserCount(users.size());
                                 for( String key : users.keySet() ){
                                     if (myUid.equals(key)) {

@@ -48,7 +48,7 @@ public class HostModelActivity extends BasicActivity {
         Firebasefirestore = FirebaseFirestore.getInstance();
         Storagereference = FirebaseStorage.getInstance().getReference();
 
-        DocumentReference docRef_USERS_CurrentUid = FirebaseFirestore.getInstance().collection("users").document(CurrentUid);
+        DocumentReference docRef_USERS_CurrentUid = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
         docRef_USERS_CurrentUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {

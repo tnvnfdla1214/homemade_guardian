@@ -12,15 +12,17 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 
+//이제는... 안쓰는듯..?
+
 public class ContentsItemView extends LinearLayout {
     private ImageView imageView;
     private EditText editText;
 
     public ContentsItemView(Context context) {
         super(context);
-        initView();
+        //initView();
     }
-
+/*
     public ContentsItemView(Context context, @Nullable AttributeSet attributeSet) {
         super(context, attributeSet);
         initView();
@@ -52,4 +54,6 @@ public class ContentsItemView extends LinearLayout {
     public void setOnFocusChangeListener(OnFocusChangeListener onFocusChangeListener){
         editText.setOnFocusChangeListener(onFocusChangeListener);
     }
+
+ */
 }

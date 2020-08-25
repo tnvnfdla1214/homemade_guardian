@@ -70,9 +70,9 @@ public class SearchResultFragment extends Fragment {
         //updating = true;
 
         Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getPostModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("posts");                // 파이어베이스의 posts에서
+        CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
         Log.d("로그w","스크롤 333"+search);
-        collectionReference.orderBy("createdAt", Query.Direction.DESCENDING).whereLessThan("createdAt", date).limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -85,14 +85,14 @@ public class SearchResultFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 Log.d("로그","스크롤 3333");
-                                title = document.getData().get("title").toString();
+                                title = document.getData().get("PostModel_Title").toString();
                                 Log.d("로그qwe","스크롤 3333"+title);
                                 if(title.toLowerCase().contains(search.toLowerCase())) {
                                     postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
-                                            document.getData().get("title").toString(),
-                                            (ArrayList<String>) document.getData().get("contents"),
-                                            new Date(document.getDate("createdAt").getTime()),
-                                            document.getData().get("uid").toString(),
+                                            document.getData().get("PostModel_Title").toString(),
+                                            (ArrayList<String>) document.getData().get("PostModel_ImageList"),
+                                            new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
+                                            document.getData().get("PostModel_Host_Uid").toString(),
                                             document.getId()));
                                 }
                                 title = null;

@@ -220,7 +220,7 @@ public class ChatFragment extends Fragment {
 
     // get a user info
     void getUserInfoFromServer(String id){
-        firestore.collection("users").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        firestore.collection("USERS").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 UserModel userModel = documentSnapshot.toObject(UserModel.class);
@@ -235,14 +235,14 @@ public class ChatFragment extends Fragment {
 
     // Returns the room ID after locating the chatting room with the user ID.
     void findChatRoom(final String toUid){
-        firestore.collection("rooms").whereGreaterThanOrEqualTo("users."+myUid, 0).get()
+        firestore.collection("rooms").whereGreaterThanOrEqualTo("USERS."+myUid, 0).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (!task.isSuccessful()) {return;}
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            Map<String, Long> users = (Map<String, Long>) document.get("users");
+                            Map<String, Long> users = (Map<String, Long>) document.get("USERS");
                             if (users.size()==2 & users.get(toUid)!=null){
                                 setChatRoom(document.getId());
                                 break;
@@ -260,7 +260,7 @@ public class ChatFragment extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (!task.isSuccessful()) {return;}
                 DocumentSnapshot document = task.getResult();
-                Map<String, Long> users = (Map<String, Long>) document.get("users");
+                Map<String, Long> users = (Map<String, Long>) document.get("USERS");
 
                 for( String key : users.keySet() ){
                     getUserInfoFromServer(key);
@@ -280,10 +280,10 @@ public class ChatFragment extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (!task.isSuccessful()) {return;}
                 DocumentSnapshot document = task.getResult();
-                Map<String, Long> users = (Map<String, Long>) document.get("users");
+                Map<String, Long> users = (Map<String, Long>) document.get("USERS");
 
                 users.put(myUid, (long) 0);
-                document.getReference().update("users", users);
+                document.getReference().update("USERS", users);
             }
         });
     }
@@ -296,7 +296,7 @@ public class ChatFragment extends Fragment {
         }
         Map<String, Object> data = new HashMap<>();
         data.put("title", null);
-        data.put("users", users);
+        data.put("USERS", users);
 
         room.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -357,12 +357,12 @@ public class ChatFragment extends Fragment {
 
                 // inc unread message count
                 DocumentSnapshot document = task.getResult();
-                Map<String, Long> users = (Map<String, Long>) document.get("users");
+                Map<String, Long> users = (Map<String, Long>) document.get("USERS");
 
                 for( String key : users.keySet() ){
                     if (!myUid.equals(key)) users.put(key, users.get(key)+1);
                 }
-                document.getReference().update("users", users);
+                document.getReference().update("USERS", users);
 
                 batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

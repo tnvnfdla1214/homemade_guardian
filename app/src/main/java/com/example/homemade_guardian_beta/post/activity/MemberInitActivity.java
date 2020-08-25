@@ -118,7 +118,7 @@ public class MemberInitActivity extends BasicActivity {
             StorageReference Storagereference = Firebasestorage.getReference();
             CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-            final StorageReference ImageRef_USERS_Uid = Storagereference.child("user/" + CurrentUser.getUid() + "/profileImage.jpg");
+            final StorageReference ImageRef_USERS_Uid = Storagereference.child("USERS/" + CurrentUser.getUid() + "/USERSImage.jpg");
             final Date DateOfManufacture = new Date();                                                              // + : 사용자 리스트 수정 (현재 날짜 받아오기 [ 사진마다 달라서 그때 그댸 불르기])
 
             if (SelectedImagePath == null) {                                                                      // part5 : 데이터 추가 (9'10")
@@ -165,7 +165,7 @@ public class MemberInitActivity extends BasicActivity {
 
     private void storeUploader(UserModel userModel) {                                                     // part5 : DB에 등록이 됬는지 알려주는 로직
         FirebaseFirestore docSet_USERS_Uid = FirebaseFirestore.getInstance();
-        docSet_USERS_Uid.collection("users").document(CurrentUser.getUid()).set(userModel)
+        docSet_USERS_Uid.collection("USERS").document(CurrentUser.getUid()).set(userModel)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

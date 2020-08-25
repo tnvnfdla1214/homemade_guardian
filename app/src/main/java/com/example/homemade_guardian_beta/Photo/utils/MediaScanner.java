@@ -11,12 +11,12 @@ public class MediaScanner implements MediaScannerConnection.MediaScannerConnecti
     private MediaScannerConnection _msc;
     private File _file;
 
-    public MediaScanner(Context context, File f) {
-        _file = f;
-        _msc = new MediaScannerConnection(context, this);
-        _msc.connect();
-
-    }
+//    public MediaScanner(Context context, File f) {
+//        _file = f;
+//        _msc = new MediaScannerConnection(context, this);
+//        _msc.connect();
+//
+//    }
 
     @Override
     public void onMediaScannerConnected() {

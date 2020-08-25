@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             //myStartActivity(CameraActivity.class);                                                            // part5 : test
 
-            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("users").document(firebaseUser.getUid());
+            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(firebaseUser.getUid());
             documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {

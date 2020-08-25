@@ -61,8 +61,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.util_activity_photo_picker);
-
-    Log.d("태그", "1");
     checkExternalStoragePermission();
   }
 
@@ -127,7 +125,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
     maxGrideItemCount = getIntent().getIntExtra(EXTRA_MAX_GRIDE_ITEM_COUNT , DEFAULT_MAX_GRIDE_ITEM_COUNT);
 
     setShowGif(showGif);
-    Log.d("태그", "2");
     Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
     mToolbar.setTitle(R.string.y_photopicker_image_select_title);
     setSupportActionBar(mToolbar);
@@ -140,10 +137,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       actionBar.setElevation(25);
     }
-
-    Log.d("태그", "3");
     maxCount = getIntent().getIntExtra(EXTRA_MAX_COUNT, DEFAULT_MAX_COUNT);
-
     setPickerFragment();
   }
 
@@ -152,7 +146,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
     if(pickerFragment == null){
       pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentById(R.id.photoPickerFragment);
 
-      Log.d("태그", "4");
       pickerFragment.getPhotoGridAdapter().setShowCamera(showCamera);
       pickerFragment.getPhotoGridAdapter().setOnItemCheckListener(new OnItemCheckListener() {
         @Override public boolean OnItemCheck(int position, Photo photo, final boolean isCheck, int selectedItemCount) {
@@ -182,7 +175,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
     }else{
       pickerFragment.getPhotoGridAdapter().notifyDataSetChanged();
     }
-    Log.d("태그", "5");
   }
 
   /**
@@ -206,13 +198,11 @@ public class PhotoPickerActivity extends AppCompatActivity {
    // 앨범 화면에서 사진을 클릭하여 크게 볼때
   public void addImagePagerFragment(ImagePagerFragment imagePagerFragment) {
     this.imagePagerFragment = imagePagerFragment;
-    Log.d("태그", "6");
     getSupportFragmentManager()
         .beginTransaction()
         .replace(R.id.container, this.imagePagerFragment)
         .addToBackStack(null)
         .commit();
-    Log.d("태그", "7");
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -221,21 +211,17 @@ public class PhotoPickerActivity extends AppCompatActivity {
       menuDoneItem = menu.findItem(R.id.done);
       menuDoneItem.setEnabled(false);
       menuIsInflated = true;
-
       return true;
     }
     return false;
   }
 
-
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
-    Log.d("태그", "8");
     if (item.getItemId() == android.R.id.home) {
       super.onBackPressed();
       return true;
     }
-    Log.d("태그", "9");
     if (item.getItemId() == R.id.done) {
       Intent intent = new Intent();
       ArrayList<String> selectedPhotos = pickerFragment.getPhotoGridAdapter().getSelectedPhotoPaths();
@@ -244,8 +230,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
       finish();
       return true;
     }
-    Log.d("태그", "10");
-
     return super.onOptionsItemSelected(item);
   }
 

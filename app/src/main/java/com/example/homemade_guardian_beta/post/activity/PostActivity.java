@@ -117,7 +117,7 @@ public class PostActivity extends BasicActivity {                               
         TextView createdAtTextView = findViewById(R.id.createAtTextView);
         createdAtTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(postModel.getPostModel_DateOfManufacture()));
 
-        DocumentReference docRefe2 = FirebaseFirestore.getInstance().collection("users").document(CurrentUid);
+        DocumentReference docRefe2 = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
         docRefe2.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -127,7 +127,7 @@ public class PostActivity extends BasicActivity {                               
             }
         });
 
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("users").document(postModel.getPostModel_Host_Uid());
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection("USERS").document(postModel.getPostModel_Host_Uid());
         docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -149,7 +149,7 @@ public class PostActivity extends BasicActivity {                               
         viewPager.setAdapter(new ViewPagerAdapter(this, ImageList));
 
         //댓글 목록
-        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("posts").document(postModel.getPostModel_Post_Uid()).collection("comments"));
+        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("POSTS").document(postModel.getPostModel_Post_Uid()).collection("COMMENT"));
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(PostActivity.this));
         recyclerView.setAdapter(firestoreAdapter);
@@ -186,10 +186,9 @@ public class PostActivity extends BasicActivity {                               
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.delete:
-                firebaseHelper.storageDelete(postModel);
+                firebaseHelper.Post_storageDelete(postModel);
                 Intent intentpage = new Intent(PostActivity.this, MainActivity.class);
                 startActivity(intentpage);
-                Toast.makeText(getApplicationContext(), "삭제 성공", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.modify:
                 myStartActivity(ModifyPostActivity.class, postModel);
@@ -210,6 +209,7 @@ public class PostActivity extends BasicActivity {                               
                 return super.onOptionsItemSelected(item);
         }
     }
+
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -259,18 +259,18 @@ public class PostActivity extends BasicActivity {                               
     private void writecomment(final String Comment,final String Host_Name,final String Comment_Host_Image) {
         WriteButton.setEnabled(false);
         String Comment_Uid = null;
-        Comment_Uid = FirebaseFirestore.getInstance().collection("posts").document(postModel.getPostModel_Post_Uid()).collection("comments").document().getId();
+        Comment_Uid = FirebaseFirestore.getInstance().collection("POSTS").document(postModel.getPostModel_Post_Uid()).collection("COMMENT").document().getId();
 
         Date DateOfManufacture = new Date();
         commentModel = new CommentModel(CurrentUid, Comment,  DateOfManufacture, Host_Name, Comment_Uid, postModel.getPostModel_Post_Uid(),Comment_Host_Image);
 
-        final DocumentReference docRef_POSTS_PostUid = FirebaseFirestore.getInstance().collection("posts").document(postModel.getPostModel_Post_Uid());
+        final DocumentReference docRef_POSTS_PostUid = FirebaseFirestore.getInstance().collection("POSTS").document(postModel.getPostModel_Post_Uid());
         final String CommentID = Comment_Uid;
         docRef_POSTS_PostUid.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 WriteBatch batch = FirebaseFirestore.getInstance().batch();
-                batch.set(docRef_POSTS_PostUid.collection("comments").document(CommentID), commentModel);
+                batch.set(docRef_POSTS_PostUid.collection("COMMENT").document(CommentID), commentModel);
                 batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -325,7 +325,7 @@ public class PostActivity extends BasicActivity {                               
                             switch (menuItem.getItemId()) {
 
                                 case R.id.delete:
-                                    firebaseHelper.commentDelete(commentmodel);
+                                    firebaseHelper.Comment_storageDelete(commentmodel);
                                     return true;
                                 case R.id.report:
                                     Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
@@ -372,7 +372,4 @@ public class PostActivity extends BasicActivity {                               
             Menu_Button = view.findViewById(R.id.menu);
         }
     }
-
-
-
 }

@@ -98,7 +98,7 @@ public class ChatRoomFragment extends Fragment {
             myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
             // all users information
-            listenerUsers = firestore.collection("users")
+            listenerUsers = firestore.collection("USERS")
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot value,
@@ -116,7 +116,7 @@ public class ChatRoomFragment extends Fragment {
         Integer unreadTotal = 0;
         public void getRoomInfo() {
             // my chatting room information
-            listenerRegistration = firestore.collection("rooms").whereGreaterThanOrEqualTo("users."+myUid, 0)
+            listenerRegistration = firestore.collection("rooms").whereGreaterThanOrEqualTo("USERS."+myUid, 0)
 //                    a.orderBy("timestamp", Query.Direction.DESCENDING)
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override

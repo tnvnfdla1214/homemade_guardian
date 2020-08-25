@@ -7,18 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
-
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
-
 import java.util.ArrayList;
 
+//뷰페이져에서 이미지리스트의 string으로 저장된 이미지들을 imageList에 넣어서 PostActivity에서 슬라이드하여 이미지들을 볼 수 있게 해준다.
+//      Ex) 22번째 줄 ViewPagerAdapter가 PostActivity와 연결된다.
 public class ViewPagerAdapter extends PagerAdapter {
+    private ArrayList<String> imageList = new ArrayList<String>();      //받아온 이미지리스트
     private Context mContext;
-    private ArrayList<String> imageList = new ArrayList<String>();
 
     public ViewPagerAdapter(Context context, ArrayList<String> imageList)
     {
@@ -29,17 +28,11 @@ public class ViewPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        Log.d("민규","민규1");
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.post_silder, null);
-
         ImageView imageView = view.findViewById(R.id.imageView);
-        //imageView.setImageURI(imageList.get(position));
-        //imageList.get(position);
         Glide.with(view).load(imageList.get(position)).into(imageView);
-
         container.addView(view);
-
         return view;
     }
 
@@ -49,12 +42,8 @@ public class ViewPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((View)object);
-    }
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) { container.removeView((View)object); }
 
     @Override
-    public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
-        return (view == (View)o);
-    }
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object o) { return (view == (View)o); }
 }

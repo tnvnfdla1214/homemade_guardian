@@ -142,7 +142,7 @@ public class ModifyPostActivity extends BasicActivity {
             FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();                                    // part12 :
             Storagereference = Firebasestorage.getReference();
             FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
-            final DocumentReference docRef_POSTS_PostUid = Firebasefirestore.collection("posts").document(postModel.getPostModel_Post_Uid());     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
+            final DocumentReference docRef_POSTS_PostUid = Firebasefirestore.collection("POSTS").document(postModel.getPostModel_Post_Uid());     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
             final Date DateOfManufacture = postModel.getPostModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             for (int i = 0; i < SelectedPhotos.size(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
 
@@ -151,7 +151,7 @@ public class ModifyPostActivity extends BasicActivity {
                 String path = SelectedPhotos.get(PathCount);
                 ImageList.add(path);
                 String[] pathArray = path.split("\\.");                                         // part14 : 이미지의 확장자를 주어진대로 (2'40")
-                final StorageReference ImagesRef_POSTS_Uid_PathCount = Storagereference.child("posts/" + docRef_POSTS_PostUid.getId() + "/" + PathCount + "." + pathArray[pathArray.length - 1]);
+                final StorageReference ImagesRef_POSTS_Uid_PathCount = Storagereference.child("POSTS/" + docRef_POSTS_PostUid.getId() + "/" + PathCount + "." + pathArray[pathArray.length - 1]);
                 try {
                     InputStream stream = new FileInputStream(new File(SelectedPhotos.get(PathCount)));            // part11 : 경로 설정 (27'20")
                     StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (ImageList.size() - 1)).build();

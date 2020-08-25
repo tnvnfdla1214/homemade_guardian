@@ -20,6 +20,7 @@ public class CommentModel {
         this.CommentModel_Post_Uid = CommentModel_Post_Uid;
         this.CommentModel_Host_Image = CommentModel_Host_Image;
     }
+
     public CommentModel(){ }
     public String getCommentModel_Host_Uid() { return CommentModel_Host_Uid; }
     public void setCommentModel_Host_Uid(String CommentModel_Host_Uid) { this.CommentModel_Host_Uid = CommentModel_Host_Uid; }

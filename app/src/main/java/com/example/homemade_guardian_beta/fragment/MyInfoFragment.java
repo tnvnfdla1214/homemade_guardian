@@ -68,7 +68,7 @@ public class MyInfoFragment extends Fragment {
         if(actionBar != null){
             actionBar.setTitle("유저 목록 (내 정보)");
         }
-        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("users").orderBy("usernm"));
+        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("USERS").orderBy("usernm"));
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager( new LinearLayoutManager((inflater.getContext())));

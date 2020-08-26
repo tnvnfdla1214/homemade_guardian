@@ -219,12 +219,12 @@ public class ChatFragment extends Fragment {
     }
 
     // get a user info
-    void getUserInfoFromServer(String id){
-        firestore.collection("USERS").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    void getUserInfoFromServer(String UserModel_ID){
+        firestore.collection("USERS").document(UserModel_ID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 UserModel userModel = documentSnapshot.toObject(UserModel.class);
-                userList.put(userModel.getUid(), userModel);
+                userList.put(userModel.getUserModel_Uid(), userModel);
                 if (roomID != null & userCount == userList.size()) {
                     mAdapter = new RecyclerViewAdapter();
                     recyclerView.setAdapter(mAdapter);
@@ -381,14 +381,13 @@ public class ChatFragment extends Fragment {
     void sendGCM(){
         Gson gson = new Gson();
         NotificationModel notificationModel = new NotificationModel();
-        notificationModel.notification.title = userList.get(myUid).getUsernm();
+        notificationModel.notification.title = userList.get(myUid).getUserModel_NickName();
         notificationModel.notification.body = msg_input.getText().toString();
-        notificationModel.data.title = userList.get(myUid).getUsernm();
+        notificationModel.data.title = userList.get(myUid).getUserModel_NickName();
         notificationModel.data.body = msg_input.getText().toString();
 
         for ( Map.Entry<String, UserModel> elem : userList.entrySet() ){
-            if (myUid.equals(elem.getValue().getUid())) continue;
-            notificationModel.to = elem.getValue().getToken();
+            if (myUid.equals(elem.getValue().getUserModel_Uid())) continue;
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf8"), gson.toJson(notificationModel));
             Request request = new Request.Builder()
                     .header("Content-Type", "application/json")
@@ -641,7 +640,7 @@ public class ChatFragment extends Fragment {
 
             if (! myUid.equals(message.getUid())) {
                 UserModel userModel = userList.get(message.getUid());
-                messageViewHolder.msg_name.setText(userModel.getUsernm());
+                messageViewHolder.msg_name.setText(userModel.getUserModel_NickName());
 
 
                 //상대방 프로필사진으로 바꾸기
@@ -675,26 +674,6 @@ public class ChatFragment extends Fragment {
                     messageViewHolder.divider.getLayoutParams().height = 60;
                 }
             }
-            /*messageViewHolder.timestamp.setText("");
-            if (message.getTimestamp()==null) {return;}
-
-            String day = dateFormatDay.format( message.getTimestamp());
-            String timestamp = dateFormatHour.format( message.getTimestamp());
-
-            messageViewHolder.timestamp.setText(timestamp);
-
-            if (position==0) {
-                messageViewHolder.divider_date.setText(day);
-                messageViewHolder.divider.setVisibility(View.VISIBLE);
-                messageViewHolder.divider.getLayoutParams().height = 60;
-            };
-            if (!day.equals(beforeDay) && beforeDay!=null) {
-                beforeViewHolder.divider_date.setText(beforeDay);
-                beforeViewHolder.divider.setVisibility(View.VISIBLE);
-                beforeViewHolder.divider.getLayoutParams().height = 60;
-            }
-            beforeViewHolder = messageViewHolder;
-            beforeDay = day;*/
         }
 
         void setReadCounter (Message message, final TextView textView) {

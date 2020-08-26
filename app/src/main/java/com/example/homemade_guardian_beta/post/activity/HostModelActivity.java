@@ -53,11 +53,11 @@ public class HostModelActivity extends BasicActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 userModel = documentSnapshot.toObject(UserModel.class);
-                Adress.setText(userModel.getAddress());
-                BirthDay.setText(userModel.getBirthDay());
-                Name.setText(userModel.getName());
-                PhoneNumber.setText(userModel.getPhoneNumber());
-                Usernm.setText(userModel.getUsernm());
+                Adress.setText(userModel.getUserModel_Address());
+                BirthDay.setText(userModel.getUserModel_BirthDay());
+                Name.setText(userModel.getUserModel_Name());
+                PhoneNumber.setText(userModel.getUserModel_PhoneNumber());
+                Usernm.setText(userModel.getUserModel_NickName());
                 if(userModel.getphotoUrl() != null){
                     Glide.with(HostModelActivity.this).load(userModel.getphotoUrl()).centerCrop().override(500).into(ProfileImageView);
                 }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -169,7 +168,7 @@ public class ChatroomListFragment extends Fragment {
                                     for( String key : users.keySet() ){
                                         if (myUid.equals(key)) continue;
                                         UserModel userModel = userList.get(key);
-                                        chatRoomModel.setTitle(userModel.getUsernm());
+                                        chatRoomModel.setTitle(userModel.getUserModel_NickName());
                                         //chatRoomModel.setPhoto(userModel.getUserphoto());
                                         chatRoomModel.setPhoto(userModel.getphotoUrl());
                                     }

@@ -123,9 +123,9 @@ public class MemberInitActivity extends BasicActivity {
 
             if (SelectedImagePath == null) {                                                                      // part5 : 데이터 추가 (9'10")
                 UserModel userModel = new UserModel(Name, PhoneNumber, BirthDay, DateOfManufacture, Address);          // + : 사용자 리스트 수정 (가입날짜 추가[사진 없는 버전])
-                userModel.setUid(CurrentUser.getUid());
-                userModel.setUserid(CurrentUser.getEmail());
-                userModel.setUsernm(extractIDFromEmail(CurrentUser.getEmail()));
+                userModel.setUserModel_Uid(CurrentUser.getUid());
+                userModel.setUserModel_ID(CurrentUser.getEmail());
+                userModel.setUserModel_NickName(extractIDFromEmail(CurrentUser.getEmail()));
                 storeUploader(userModel);
             } else {
                 try {
@@ -145,9 +145,9 @@ public class MemberInitActivity extends BasicActivity {
                             if (task.isSuccessful()) {
                                 Uri downloadUri = task.getResult();                                         // part7 : 입력한 회원정보를 DB에 저장 (28')
                                 UserModel userModel = new UserModel(Name, PhoneNumber, BirthDay, Address, DateOfManufacture, downloadUri.toString());      // + : 사용자 리스트 수정 (가입날짜 추가)
-                                userModel.setUid(CurrentUser.getUid());
-                                userModel.setUserid(CurrentUser.getEmail());
-                                userModel.setUsernm(extractIDFromEmail(CurrentUser.getEmail()));
+                                userModel.setUserModel_Uid(CurrentUser.getUid());
+                                userModel.setUserModel_ID(CurrentUser.getEmail());
+                                userModel.setUserModel_NickName(extractIDFromEmail(CurrentUser.getEmail()));
                                 storeUploader(userModel);
                             } else {
                                 showToast(MemberInitActivity.this, "회원정보를 보내는데 실패하였습니다.");

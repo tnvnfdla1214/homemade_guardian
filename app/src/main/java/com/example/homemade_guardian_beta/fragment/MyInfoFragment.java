@@ -68,7 +68,7 @@ public class MyInfoFragment extends Fragment {
         if(actionBar != null){
             actionBar.setTitle("유저 목록 (내 정보)");
         }
-        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("USERS").orderBy("usernm"));
+        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("USERS").orderBy("userModel_NickName"));
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager( new LinearLayoutManager((inflater.getContext())));
@@ -99,27 +99,14 @@ public class MyInfoFragment extends Fragment {
             DocumentSnapshot documentSnapshot = getSnapshot(position);
             final UserModel user = documentSnapshot.toObject(UserModel.class);
 
-            if (myUid.equals(user.getUid())) {
+            if (myUid.equals(user.getUserModel_Uid())) {
                 viewHolder.itemView.setVisibility(View.INVISIBLE);
                 viewHolder.itemView.getLayoutParams().height = 0;
                 return;
             }
-            Log.d("태그1","viewHolder.user_name"+user.getUsernm());
-            viewHolder.user_name.setText(user.getUsernm());
-            viewHolder.user_msg.setText(user.getUsermsg());
-
-            /*
-            if (user.getUserphoto()==null) {
-                Glide.with(getActivity()).load(R.drawable.user)
-                        .apply(requestOptions)
-                        .into(viewHolder.user_photo);
-            } else{
-                Glide.with(getActivity())
-                        .load(storageReference.child("userPhoto/"+user.getUserphoto()))
-                        .apply(requestOptions)
-                        .into(viewHolder.user_photo);
-            }
-             */
+            Log.d("태그1","viewHolder.user_name"+user.getUserModel_NickName());
+            viewHolder.user_name.setText(user.getUserModel_NickName());
+            viewHolder.user_msg.setText(user.getUserModel_StateMassage());
 
             if (user.getphotoUrl()!=null) {
                 Glide.with(getActivity()).load(user.getphotoUrl()).centerCrop().override(500).into(viewHolder.user_photo);
@@ -132,7 +119,7 @@ public class MyInfoFragment extends Fragment {
                 public void onClick(View v) {
                     //chatactivity는 해당 고유uid를 가진 사람을 찾아 그사람과의 채팅방을 들어감
                     Intent intent = new Intent(getView().getContext(), ChatActivity.class);
-                    intent.putExtra("toUid", user.getUid());
+                    intent.putExtra("toUid", user.getUserModel_Uid());
                     startActivity(intent);
                 }
             });

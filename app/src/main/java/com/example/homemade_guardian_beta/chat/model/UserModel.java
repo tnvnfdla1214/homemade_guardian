@@ -8,122 +8,112 @@ package com.example.homemade_guardian_beta.chat.model;
 import java.util.Date;
 
 public class UserModel {
-    private String userid;
-    private String uid;
-    private String usernm;
-    private String token;
-    private String usermsg;
-    //여기부터 UserInfo
-    private String name;
-    private String phoneNumber;
-    private String birthDay;
-    private String address;
-    private String photoUrl;
-    private Date createdID;
+    private String UserModel_ID; //아이디
+    private String UserModel_Uid; //uid
+    private String userModel_NickName; //지금은 tnvnfdla1214 -> 번듯한 오크 바뀌어야함
+    private String UserModel_StateMassage; //상태메세지
+    private String UserModel_Name; //이름
+    private String UserModel_PhoneNumber; //전화번호
+    private String UserModel_BirthDay; //생일
+    private String UserModel_Address; //주소
+    private String UserModel_ProfileImage; //프로필 사진
+    private Date UserModel_DateOfManufacture; //생성일자
 
-    public UserModel(String name, String phoneNumber, String birthDay, String address, Date createdID, String photoUrl){     // part5 : 생성자 초기화 (7')
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.birthDay = birthDay;
-        this.address = address;
-        this.createdID = createdID;                                                                         // + : 사용자 리스트 수정 (날짜 정보 추가)
-        this.photoUrl = photoUrl;
+    public UserModel(String UserModel_Name, String UserModel_PhoneNumber, String UserModel_BirthDay, String UserModel_Address, Date UserModel_DateOfManufacture, String UserModel_ProfileImage){     // part5 : 생성자 초기화 (7')
+        this.UserModel_Name = UserModel_Name;
+        this.UserModel_PhoneNumber = UserModel_PhoneNumber;
+        this.UserModel_BirthDay = UserModel_BirthDay;
+        this.UserModel_Address = UserModel_Address;
+        this.UserModel_DateOfManufacture = UserModel_DateOfManufacture;                                                                         // + : 사용자 리스트 수정 (날짜 정보 추가)
+        this.UserModel_ProfileImage = UserModel_ProfileImage;
     }
 
-    public UserModel(String name, String phoneNumber, String birthDay, Date createdID, String address){      // + : 사용자 리스트 수정(날짜 정보 추가)
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.birthDay = birthDay;
-        this.address = address;
-        this.createdID = createdID;
+    public UserModel(String UserModel_Name, String UserModel_PhoneNumber, String UserModel_BirthDay, Date UserModel_DateOfManufacture, String UserModel_Address){      // + : 사용자 리스트 수정(날짜 정보 추가)
+        this.UserModel_Name = UserModel_Name;
+        this.UserModel_PhoneNumber = UserModel_PhoneNumber;
+        this.UserModel_BirthDay = UserModel_BirthDay;
+        this.UserModel_Address = UserModel_Address;
+        this.UserModel_DateOfManufacture = UserModel_DateOfManufacture;
     }
 
     public UserModel(){
 
     }
 
-    public String getUserid() {
-        return userid;
+    public String getUserModel_ID() {
+        return UserModel_ID;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setUserModel_ID(String userModel_ID) {
+        this.UserModel_ID = userModel_ID;
     }
 
-    public String getUid() {
-        return uid;
+    public String getUserModel_Uid() {
+        return UserModel_Uid;
     }
 
-    public void setUid(String uid) {
-        this.uid = uid;
+    public void setUserModel_Uid(String userModel_Uid) {
+        this.UserModel_Uid = userModel_Uid;
     }
 
-    public String getUsernm() {
-        return usernm;
+    public String getUserModel_NickName() {
+        return userModel_NickName;
     }
 
-    public void setUsernm(String usernm) {
-        this.usernm = usernm;
+    public void setUserModel_NickName(String userModel_NickName) {
+        this.userModel_NickName = userModel_NickName;
     }
 
-    public String getToken() {
-        return token;
+    public String getUserModel_StateMassage() {
+        return UserModel_StateMassage;
     }
 
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getUsermsg() {
-        return usermsg;
-    }
-
-    public void setUsermsg(String usermsg) {
-        this.usermsg = usermsg;
+    public void setUserModel_StateMassage(String userModel_StateMassage) {
+        this.UserModel_StateMassage = userModel_StateMassage;
     }
 
     //추가
-    public String getName(){
-        return this.name;
+    public String getUserModel_Name(){
+        return this.UserModel_Name;
     }
 
-    public void setName(String name){
-        this.name = name;
+    public void setUserModel_Name(String userModel_Name){
+        this.UserModel_Name = userModel_Name;
     }
 
-    public String getPhoneNumber(){
-        return this.phoneNumber;
+    public String getUserModel_PhoneNumber(){
+        return this.UserModel_PhoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber){
-        this.phoneNumber = phoneNumber;
+    public void setUserModel_PhoneNumber(String userModel_PhoneNumber){
+        this.UserModel_PhoneNumber = userModel_PhoneNumber;
     }
 
-    public String getBirthDay(){
-        return this.birthDay;
+    public String getUserModel_BirthDay(){
+        return this.UserModel_BirthDay;
     }
 
-    public void setBirthDay(String birthDay){
-        this.birthDay = birthDay;
+    public void setUserModel_BirthDay(String userModel_BirthDay){
+        this.UserModel_BirthDay = userModel_BirthDay;
     }
 
-    public String getAddress(){
-        return this.address;
+    public String getUserModel_Address(){
+        return this.UserModel_Address;
     }
 
-    public void setAddress(String address){
-        this.address = address;
+    public void setUserModel_Address(String userModel_Address){
+        this.UserModel_Address = userModel_Address;
     }
 
     public String getphotoUrl(){
-        return this.photoUrl;
+        return this.UserModel_ProfileImage;
     }
 
     public void setphotoUrl(String photoUrl){
-        this.photoUrl = photoUrl;
+        this.UserModel_ProfileImage = photoUrl;
     }
     
-    public Date getCreatedID() { return createdID; }
+    public Date getUserModel_DateOfManufacture() { return UserModel_DateOfManufacture; }
 
-    public void setCreatedID(Date createdID) { this.createdID = createdID; }
+    public void setUserModel_DateOfManufacture(Date userModel_DateOfManufacture) { this.UserModel_DateOfManufacture = userModel_DateOfManufacture; }
 }

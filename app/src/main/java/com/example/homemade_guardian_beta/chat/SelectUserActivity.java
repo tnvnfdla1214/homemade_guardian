@@ -2,7 +2,6 @@ package com.example.homemade_guardian_beta.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.homemade_guardian_beta.post.activity.PostActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -72,7 +69,7 @@ public class SelectUserActivity extends AppCompatActivity {
 
         roomID = getIntent().getStringExtra("roomID");
 
-        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("users").orderBy("usernm"));
+        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("users").orderBy("userModel_NickName"));
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager( new LinearLayoutManager((this)));
         recyclerView.setAdapter(firestoreAdapter);
@@ -162,30 +159,14 @@ public class SelectUserActivity extends AppCompatActivity {
             DocumentSnapshot documentSnapshot = getSnapshot(position);
             final UserModel userModel = documentSnapshot.toObject(UserModel.class);
 
-            if (myUid.equals(userModel.getUid())) {
+            if (myUid.equals(userModel.getUserModel_Uid())) {
                 viewHolder.itemView.setVisibility(View.INVISIBLE);
                 viewHolder.itemView.getLayoutParams().height = 0;
                 return;
             }
 
             //닉네임 부분
-            viewHolder.user_name.setText(userModel.getUsernm());
-
-
-            /*
-            //프로필 사진 부분
-            if (userModel.getUserphoto()==null) {
-                Glide.with(getApplicationContext()).load(R.drawable.user)
-                        .apply(requestOptions)
-                        .into(viewHolder.user_photo);
-            } else{
-                Glide.with(getApplicationContext())
-                        .load(storageReference.child("userPhoto/"+userModel.getUserphoto()))
-                        .apply(requestOptions)
-                        .into(viewHolder.user_photo);
-            }
-             */
-
+            viewHolder.user_name.setText(userModel.getUserModel_NickName());
 
             //그룹 채팅 프로필 사진 부분
             if (userModel.getphotoUrl()!=null) {
@@ -199,9 +180,9 @@ public class SelectUserActivity extends AppCompatActivity {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        selectedUsers.put(userModel.getUid(), userModel.getUsernm());
+                        selectedUsers.put(userModel.getUserModel_Uid(), userModel.getUserModel_NickName());
                     } else {
-                        selectedUsers.remove(userModel.getUid());
+                        selectedUsers.remove(userModel.getUserModel_Uid());
                     }
                 }
             });

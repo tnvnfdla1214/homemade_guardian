@@ -155,7 +155,7 @@ public class ChatRoomFragment extends Fragment {
                                     for( String key : users.keySet() ){
                                         if (myUid.equals(key)) continue;
                                         UserModel userModel = userList.get(key);
-                                        chatRoomModel.setTitle(userModel.getUsernm());
+                                        chatRoomModel.setTitle(userModel.getUserModel_NickName());
                                         //chatRoomModel.setPhoto(userModel.getUserphoto());
                                         chatRoomModel.setPhoto(userModel.getphotoUrl());
                                         Log.d("태그1","chatRoomModel.setPhoto(userModel.getphotoUrl());");
@@ -208,18 +208,6 @@ public class ChatRoomFragment extends Fragment {
             roomViewHolder.last_msg.setText(chatRoomModel.getLastMsg());
             roomViewHolder.last_time.setText(chatRoomModel.getLastDatetime());
 
-            /*
-            //프로필 사진 변경
-            if (chatRoomModel.getPhoto()==null) {
-                Glide.with(getActivity()).load(R.drawable.user)
-                        .apply(requestOptions)
-                        .into(roomViewHolder.room_image);
-            } else{
-                Glide.with(getActivity()).load(storageReference.child("userPhoto/"+chatRoomModel.getPhoto()))
-                        .apply(requestOptions)
-                        .into(roomViewHolder.room_image);
-            }
-             */
 
             //이거 왜 아무이상 없음?
             if(chatRoomModel.getPhoto() !=null){

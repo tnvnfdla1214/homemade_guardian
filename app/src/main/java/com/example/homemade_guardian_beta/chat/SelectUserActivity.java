@@ -39,6 +39,7 @@ import com.example.homemade_guardian_beta.chat.common.ChatUtil;
 import com.example.homemade_guardian_beta.chat.model.UserModel;
 
 
+
 //그룹채팅에 쓰이는 액티비티
 //그룹 채팅방 할때 쓰는거 지워야함
 public class SelectUserActivity extends AppCompatActivity {

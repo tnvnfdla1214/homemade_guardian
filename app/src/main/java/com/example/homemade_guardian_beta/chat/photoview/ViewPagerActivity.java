@@ -50,7 +50,7 @@ import java.util.ArrayList;
 
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.common.ChatUtil;
-import com.example.homemade_guardian_beta.chat.model.Message;
+import com.example.homemade_guardian_beta.chat.model.MessageModel;
 
 
 
@@ -59,7 +59,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 	private static String roomID;
 	private static String realname;
 	private static ViewPager viewPager;
-	private static ArrayList<Message> imgList = new ArrayList<>();
+	private static ArrayList<MessageModel> imgList = new ArrayList<>();
     private String rootPath = ChatUtil.getRootPath()+"/homemade_guardian_beta/";
 
 	@Override
@@ -102,13 +102,13 @@ public class ViewPagerActivity extends AppCompatActivity {
             if (!ChatUtil.isPermissionGranted((Activity) view.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 return ;
             }
-			Message message = imgList.get(viewPager.getCurrentItem());
+			MessageModel messageModel = imgList.get(viewPager.getCurrentItem());
             /// showProgressDialog("Downloading File.");
 
-			final File localFile = new File(rootPath, message.getFilename());
+			final File localFile = new File(rootPath, messageModel.getFilename());
 
 			// realname == message.msg
-			FirebaseStorage.getInstance().getReference().child("files/"+message.getMsg()).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+			FirebaseStorage.getInstance().getReference().child("files/"+ messageModel.getMsg()).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
 				@Override
 				public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
 					// hideProgressDialog();
@@ -147,9 +147,9 @@ public class ViewPagerActivity extends AppCompatActivity {
 							if (!task.isSuccessful()) { return;}
 
 							for (QueryDocumentSnapshot document : task.getResult()) {
-								Message message = document.toObject(Message.class);
-								imgList.add(message);
-								if (realname.equals(message.getMsg())) {inx = imgList.size()-1; }
+								MessageModel messageModel = document.toObject(MessageModel.class);
+								imgList.add(messageModel);
+								if (realname.equals(messageModel.getMsg())) {inx = imgList.size()-1; }
 							}
 							notifyDataSetChanged();
 							if (inx>-1) {

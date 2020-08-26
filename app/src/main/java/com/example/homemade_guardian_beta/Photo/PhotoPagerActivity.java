@@ -28,6 +28,7 @@ import com.example.homemade_guardian_beta.Photo.fragment.ImagePagerFragment;
 import java.io.File;
 import java.util.List;
 
+// 안 쓰는듯
 public class PhotoPagerActivity extends AppCompatActivity {
 
   private ImagePagerFragment pagerFragment;

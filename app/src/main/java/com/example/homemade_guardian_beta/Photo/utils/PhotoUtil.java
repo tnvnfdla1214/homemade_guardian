@@ -7,6 +7,8 @@ import android.os.Parcelable;
 
 import com.example.homemade_guardian_beta.Photo.PhotoPickerActivity;
 
+// 형태는 조금 다르나 다른 package에서 쓰이는 Utill과 기능이 같다.
+
 public class PhotoUtil extends Intent implements Parcelable {
 
   private PhotoUtil() { }

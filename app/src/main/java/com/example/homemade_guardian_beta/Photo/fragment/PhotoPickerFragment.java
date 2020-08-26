@@ -42,8 +42,9 @@ import static android.app.Activity.RESULT_OK;
 import static com.example.homemade_guardian_beta.Photo.PhotoPickerActivity.EXTRA_SHOW_GIF;
 import static com.example.homemade_guardian_beta.Photo.utils.MediaStoreHelper.INDEX_ALL_PHOTOS;
 
-//사진을 다중 선택하는 이벤트의 최초로 도달하는 액티비티이다.
-// 주된 기능은 앨범, 카메라,스토리지에 대한 접근 및 카메라 실행 / 사진 각 장마다의 setOnClickListener (ImagePagerFragment) / 접근한 경로의 이미지들을 배열하는 것 (PhotoPickerFragment) 이렇게 3가지이다.
+// PhotoPickerActivity와 연결된 Fragment로 앨범의 이미지들을 나열하는 기능을한다.
+//    (PhotoPickerActivity) -> PhotoPickerFragment -> (PhotoGridAdapter)
+//                        ↘ (ImagePagerFragment)  -> (PhotoPagerAdapter)
 
 public class PhotoPickerFragment extends Fragment {
 
@@ -86,14 +87,12 @@ public class PhotoPickerFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         setRetainInstance(true);
         final View rootView = inflater.inflate(R.layout.util_fragment_photo_picker, container, false);
         photoGridAdapter = new PhotoGridAdapter(getActivity(), directories , ((PhotoPickerActivity)getActivity()).isCheckBoxOnly);
         listAdapter = new PopupDirectoryListAdapter(getActivity(), directories);
-
 
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_photos);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(((PhotoPickerActivity)getActivity()).maxGrideItemCount, OrientationHelper.VERTICAL);
@@ -194,18 +193,15 @@ public class PhotoPickerFragment extends Fragment {
         }
     }
 
-
     public PhotoGridAdapter getPhotoGridAdapter() {
         return photoGridAdapter;
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         captureManager.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
-
 
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {

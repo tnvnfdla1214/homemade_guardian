@@ -117,8 +117,8 @@ public class PostActivity extends BasicActivity {                               
         TextView createdAtTextView = findViewById(R.id.createAtTextView);
         createdAtTextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(postModel.getPostModel_DateOfManufacture()));
 
-        DocumentReference docRefe2 = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
-        docRefe2.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        DocumentReference docRefe_USERS_CurrentUid = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
+        docRefe_USERS_CurrentUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 userModel = documentSnapshot.toObject(UserModel.class);
@@ -127,8 +127,8 @@ public class PostActivity extends BasicActivity {                               
             }
         });
 
-        DocumentReference docRef = FirebaseFirestore.getInstance().collection("USERS").document(postModel.getPostModel_Host_Uid());
-        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        DocumentReference docRef_USERS_HostUid = FirebaseFirestore.getInstance().collection("USERS").document(postModel.getPostModel_Host_Uid());
+        docRef_USERS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 userModel = documentSnapshot.toObject(UserModel.class);

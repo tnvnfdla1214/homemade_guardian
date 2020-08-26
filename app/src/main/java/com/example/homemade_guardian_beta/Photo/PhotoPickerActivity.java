@@ -28,6 +28,11 @@ import java.util.List;
 
 import static android.widget.Toast.LENGTH_LONG;
 
+//사진을 다중 선택하는 이벤트의 최초로 도달하는 액티비티이다.
+// 주된 기능은 앨범, 카메라,스토리지에 대한 접근 및 카메라 실행 / 사진 각 장마다의 setOnClickListener (ImagePagerFragment) / 접근한 경로의 이미지들을 배열하는 것 (PhotoPickerFragment) 이렇게 3가지이다.
+//    PhotoPickerActivity -> (PhotoPickerFragment) -> (PhotoGridAdapter)
+//                        ↘ (ImagePagerFragment)  -> (PhotoPagerAdapter)
+
 public class PhotoPickerActivity extends AppCompatActivity {
 
   private final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 7;
@@ -145,7 +150,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
     if(pickerFragment == null){
       pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentById(R.id.photoPickerFragment);
-
       pickerFragment.getPhotoGridAdapter().setShowCamera(showCamera);
       pickerFragment.getPhotoGridAdapter().setOnItemCheckListener(new OnItemCheckListener() {
         @Override public boolean OnItemCheck(int position, Photo photo, final boolean isCheck, int selectedItemCount) {

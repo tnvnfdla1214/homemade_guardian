@@ -6,6 +6,8 @@ import android.net.Uri;
 
 import java.io.File;
 
+// 안쓰는듯?
+
 public class MediaScanner implements MediaScannerConnection.MediaScannerConnectionClient {
 
     private MediaScannerConnection _msc;

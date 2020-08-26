@@ -17,6 +17,8 @@ import com.example.homemade_guardian_beta.Photo.entity.PhotoDirectory;
 import java.util.ArrayList;
 import java.util.List;
 
+// PhotoPickerFragment에서 나타낸 하단부에 이미지들의 디렉토리를 고를 수 있다. 다른 경로의 이미지들을 선택할 수 있게 해준다.
+
 public class PopupDirectoryListAdapter extends BaseAdapter {
 
   private Context context;
@@ -33,21 +35,17 @@ public class PopupDirectoryListAdapter extends BaseAdapter {
     mLayoutInflater = LayoutInflater.from(context);
   }
 
-
   @Override public int getCount() {
     return directories.size();
   }
-
 
   @Override public PhotoDirectory getItem(int position) {
     return directories.get(position);
   }
 
-
   @Override public long getItemId(int position) {
     return directories.get(position).hashCode();
   }
-
 
   @Override public View getView(int position, View convertView, ViewGroup parent) {
     ViewHolder holder;
@@ -58,12 +56,10 @@ public class PopupDirectoryListAdapter extends BaseAdapter {
     } else {
       holder = (ViewHolder) convertView.getTag();
     }
-
     holder.bindData(directories.get(position));
 
     return convertView;
   }
-
 
   private class ViewHolder {
 

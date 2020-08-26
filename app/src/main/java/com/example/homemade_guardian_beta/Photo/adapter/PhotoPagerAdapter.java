@@ -20,6 +20,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+// ImagePagerFragment와 연결되어 있고, 이미지를 크게 보기 위한 데에 필요한 Adapter이다.
+//    (PhotoPickerActivity) -> (PhotoPickerFragment) -> (PhotoGridAdapter)
+//                        ↘ (ImagePagerFragment)  -> PhotoPagerAdapter
+
 public class PhotoPagerAdapter extends PagerAdapter {
 
   private List<String> paths = new ArrayList<>();

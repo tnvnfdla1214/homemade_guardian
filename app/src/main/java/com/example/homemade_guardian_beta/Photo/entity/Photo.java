@@ -1,7 +1,6 @@
 package com.example.homemade_guardian_beta.Photo.entity;
 
-
-import android.net.Uri;
+// 사진의 모델이다.
 
 public class Photo {
 
@@ -13,15 +12,12 @@ public class Photo {
     this.path = path;
   }
 
-  public Photo() {
-  }
+  public Photo() { }
 
   @Override public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof Photo)) return false;
-
     Photo photo = (Photo) o;
-
     return id == photo.id;
   }
 
@@ -32,15 +28,12 @@ public class Photo {
   public String  getPath() {
     return path;
   }
-
   public void setPath(String path) {
     this.path = path;
   }
-
   public int getId() {
     return id;
   }
-
   public void setId(int id) {
     this.id = id;
   }

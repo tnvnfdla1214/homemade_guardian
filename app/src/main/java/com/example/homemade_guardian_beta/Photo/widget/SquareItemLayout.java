@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
+// PhotoGridAdapter를 이용하여 이미지들을 나열 할 때에 이미지의 규격을 설정한 것이다.
+
 public class SquareItemLayout extends RelativeLayout {
   public SquareItemLayout(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);

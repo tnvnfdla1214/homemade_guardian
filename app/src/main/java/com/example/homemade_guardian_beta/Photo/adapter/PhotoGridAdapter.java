@@ -23,6 +23,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+// PhotoPickerFragment와 연결되어 제일 첫번째에는 카메라 기능을 연결할 버튼을 배치하고 그 다음부터는 이미지들을 나열한다.
+//    (PhotoPickerActivity) -> (PhotoPickerFragment) -> PhotoGridAdapter
+//                        ↘ (ImagePagerFragment)  -> (PhotoPagerAdapter)
+
 public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoViewHolder> {
 
   private LayoutInflater inflater;
@@ -147,7 +151,6 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
     return photosCount;
   }
 
-
   public static class PhotoViewHolder extends RecyclerView.ViewHolder {
     private ImageView ivPhoto;
     private View vSelected;
@@ -159,21 +162,17 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
     }
   }
 
-
   public void setOnItemCheckListener(OnItemCheckListener onItemCheckListener) {
     this.onItemCheckListener = onItemCheckListener;
   }
-
 
   public void setOnPhotoClickListener(OnPhotoClickListener onPhotoClickListener) {
     this.onPhotoClickListener = onPhotoClickListener;
   }
 
-
   public void setOnCameraClickListener(View.OnClickListener onCameraClickListener) {
     this.onCameraClickListener = onCameraClickListener;
   }
-
 
   public ArrayList<String> getSelectedPhotoPaths() {
     ArrayList<String> selectedPhotoPaths = new ArrayList<>(getSelectedItemCount());
@@ -185,13 +184,10 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
     return selectedPhotoPaths;
   }
 
-
   public void setShowCamera(boolean hasCamera) {
     this.hasCamera = hasCamera;
   }
 
 
-  public boolean showCamera() {
-    return (hasCamera && currentDirectoryIndex == MediaStoreHelper.INDEX_ALL_PHOTOS);
-  }
+  public boolean showCamera() { return (hasCamera && currentDirectoryIndex == MediaStoreHelper.INDEX_ALL_PHOTOS); }
 }

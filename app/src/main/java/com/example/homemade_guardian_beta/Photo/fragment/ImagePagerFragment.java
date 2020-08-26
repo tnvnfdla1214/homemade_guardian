@@ -25,6 +25,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// PhotoPickerFragment,PhotoGridAdapter로 나열한 이미지들 중에 이미지 하나를 클릭하였을 때 확대 보기를 하기위한 Fragment이다.
+// ImagePagerFragment 역시 PhotoPickerActivity 와 연결되어 있지만, 사진이 클릭하는 이벤트가 발생했을 때 Intne 된다.
+//    (PhotoPickerActivity) -> (PhotoPickerFragment) -> (PhotoGridAdapter)
+//                        ↘ ImagePagerFragment  -> (PhotoPagerAdapter)
+
 public class ImagePagerFragment extends Fragment {
 
   public final static String ARG_PATH = "PATHS";

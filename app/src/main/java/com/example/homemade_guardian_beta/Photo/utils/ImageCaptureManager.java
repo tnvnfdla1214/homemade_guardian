@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+//  PhotoPickerFragment에 나열되어 있는 이미지, 카메라 버튼 중에 카메라 버튼을 누르면 실행되는 이벤트이다.
+//    (PhotoPickerFragment) -> ImageCaptureManager
+
 public class ImageCaptureManager {
 
   private final static String CAPTURED_PHOTO_PATH_KEY = "mCurrentPhotoPath";

@@ -9,6 +9,8 @@ import com.example.homemade_guardian_beta.Photo.event.Selectable;
 import java.util.ArrayList;
 import java.util.List;
 
+//RecyclerView에 Utill처럼 Photo package에서만 사용 할 기능을 추가하여 쓰기 위해 만든 추상 클래스이다.
+
 public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder>
     extends RecyclerView.Adapter<VH> implements Selectable {
 

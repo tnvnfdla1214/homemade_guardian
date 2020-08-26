@@ -38,6 +38,8 @@ import android.widget.Scroller;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
+// PhotoPagerAdapter에서 나타낸 이미지 한장을 나타내는 화면에서 여러가지 기능들을 구현 할 수 있도록 만들어 놓은 것이다.
+// 더블탭으로 이미지 확대 축소헤서 보기, 이미지 화면의 폭에 맞추기, 이미지의 높이가 더 크면 스크롤로 볼 수 있게 하기,
 public class TouchImageView extends AppCompatImageView {
 	
 	private static final String DEBUG = "DEBUG";

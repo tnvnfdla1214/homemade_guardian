@@ -141,7 +141,7 @@ public class ChatRoomFragment extends Fragment {
                                         default:  chatRoomModel.setLastMsg(messageModel.getMsg());
                                     }
                                 }
-                                Map<String, Long> users = (Map<String, Long>) document.get("users");
+                                Map<String, Long> users = (Map<String, Long>) document.get("USERS");
                                 chatRoomModel.setUserCount(users.size());
                                 for( String key : users.keySet() ){
                                     if (myUid.equals(key)) {

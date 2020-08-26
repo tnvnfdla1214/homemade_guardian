@@ -69,7 +69,7 @@ public class SelectUserActivity extends AppCompatActivity {
 
         roomID = getIntent().getStringExtra("roomID");
 
-        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("users").orderBy("userModel_NickName"));
+        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("USERS").orderBy("userModel_NickName"));
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager( new LinearLayoutManager((this)));
         recyclerView.setAdapter(firestoreAdapter);

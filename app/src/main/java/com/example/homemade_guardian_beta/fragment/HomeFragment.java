@@ -140,34 +140,9 @@ public class HomeFragment extends Fragment {
 
                     myStartActivity(SearchActivity.class);
                     break;
-
-                /*
-                case R.id.floatingActionButton:                                                         // 아마 새로고침..?
-                    myStartActivity(WritePostActivity.class);
-                    break;
-
-                 */
             }
         }
     };
-
-    /*
-    OnPostListener onPostListener = new OnPostListener() {
-        @Override                                                                                       // part21 : position 대신 postInfo 자체를 가져옴 (56'10")
-        public void onDelete(PostInfo postInfo) {                                                       // part17 : DB에서의 삭제 (12'50")
-            postList.remove(postInfo);
-            homeAdapter.notifyDataSetChanged();
-
-            Log.e("로그","삭제 성공");
-        }
-
-        @Override
-        public void onModify() {
-            Log.e("로그","수정 성공");
-        }
-    };
-
-     */
 
     private void postsUpdate(final boolean clear) {
         updating = true;

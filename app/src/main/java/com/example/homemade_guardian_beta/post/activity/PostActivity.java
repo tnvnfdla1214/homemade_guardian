@@ -122,7 +122,7 @@ public class PostActivity extends BasicActivity {                               
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 userModel = documentSnapshot.toObject(UserModel.class);
-                Host_Name = userModel.getName();
+                Host_Name = userModel.getUserModel_Name();
                 Comment_Host_Image = userModel.getphotoUrl();
             }
         });
@@ -135,7 +135,7 @@ public class PostActivity extends BasicActivity {                               
                 if(userModel.getphotoUrl() != null){
                     Glide.with(PostActivity.this).load(userModel.getphotoUrl()).centerCrop().override(500).into(Post_Host_ImageButton);
                     Post_Host_Name = findViewById(R.id.user_name);
-                    Post_Host_Name.setText(userModel.getName());
+                    Post_Host_Name.setText(userModel.getUserModel_Name());
                 }
                 else{
                     Glide.with(getApplicationContext()).load(R.drawable.user).into(Post_Host_ImageButton);

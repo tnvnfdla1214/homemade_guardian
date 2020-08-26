@@ -101,7 +101,7 @@ public class UserListInRoomFragment extends Fragment {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             final UserModel user = userModels.get(position);
             CustomViewHolder customViewHolder = (CustomViewHolder) holder;
-            customViewHolder.user_name.setText(user.getUsernm());
+            customViewHolder.user_name.setText(user.getUserModel_NickName());
             //customViewHolder.user_msg.setText(user.getUsermsg());
 
             /*

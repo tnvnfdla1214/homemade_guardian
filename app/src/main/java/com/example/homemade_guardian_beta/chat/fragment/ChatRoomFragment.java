@@ -45,7 +45,7 @@ import java.util.TreeMap;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.ChatActivity;
 import com.example.homemade_guardian_beta.chat.model.ChatRoomModel;
-import com.example.homemade_guardian_beta.chat.model.Message;
+import com.example.homemade_guardian_beta.chat.model.MessageModel;
 import com.example.homemade_guardian_beta.chat.model.UserModel;
 
 
@@ -127,18 +127,18 @@ public class ChatRoomFragment extends Fragment {
                             TreeMap<Date, ChatRoomModel> orderedRooms = new TreeMap<Date, ChatRoomModel>(Collections.reverseOrder());
 
                             for (final QueryDocumentSnapshot document : value) {
-                                Message message = document.toObject(Message.class);
-                                if (message.getMsg() !=null & message.getTimestamp() == null) {continue;} // FieldValue.serverTimestamp is so late
+                                MessageModel messageModel = document.toObject(MessageModel.class);
+                                if (messageModel.getMsg() !=null & messageModel.getTimestamp() == null) {continue;} // FieldValue.serverTimestamp is so late
 
                                 ChatRoomModel chatRoomModel = new ChatRoomModel();
                                 chatRoomModel.setRoomID(document.getId());
 
-                                if (message.getMsg() !=null) { // there are no last message
-                                    chatRoomModel.setLastDatetime(simpleDateFormat.format(message.getTimestamp()));
-                                    switch(message.getMsgtype()){
+                                if (messageModel.getMsg() !=null) { // there are no last message
+                                    chatRoomModel.setLastDatetime(simpleDateFormat.format(messageModel.getTimestamp()));
+                                    switch(messageModel.getMsgtype()){
                                         case "1": chatRoomModel.setLastMsg("Image"); break;
                                         case "2": chatRoomModel.setLastMsg("File"); break;
-                                        default:  chatRoomModel.setLastMsg(message.getMsg());
+                                        default:  chatRoomModel.setLastMsg(messageModel.getMsg());
                                     }
                                 }
                                 Map<String, Long> users = (Map<String, Long>) document.get("users");
@@ -155,7 +155,7 @@ public class ChatRoomFragment extends Fragment {
                                     for( String key : users.keySet() ){
                                         if (myUid.equals(key)) continue;
                                         UserModel userModel = userList.get(key);
-                                        chatRoomModel.setTitle(userModel.getUsernm());
+                                        chatRoomModel.setTitle(userModel.getUserModel_NickName());
                                         //chatRoomModel.setPhoto(userModel.getUserphoto());
                                         chatRoomModel.setPhoto(userModel.getphotoUrl());
                                         Log.d("태그1","chatRoomModel.setPhoto(userModel.getphotoUrl());");
@@ -164,8 +164,8 @@ public class ChatRoomFragment extends Fragment {
                                     chatRoomModel.setTitle(document.getString("title"));
                                     Log.d("태그1","반대");
                                 }
-                                if (message.getTimestamp()==null) message.setTimestamp(new Date());
-                                orderedRooms.put(message.getTimestamp(), chatRoomModel);
+                                if (messageModel.getTimestamp()==null) messageModel.setTimestamp(new Date());
+                                orderedRooms.put(messageModel.getTimestamp(), chatRoomModel);
                             }
                             roomList.clear();
                             for(Map.Entry<Date,ChatRoomModel> entry : orderedRooms.entrySet()) {
@@ -208,18 +208,6 @@ public class ChatRoomFragment extends Fragment {
             roomViewHolder.last_msg.setText(chatRoomModel.getLastMsg());
             roomViewHolder.last_time.setText(chatRoomModel.getLastDatetime());
 
-            /*
-            //프로필 사진 변경
-            if (chatRoomModel.getPhoto()==null) {
-                Glide.with(getActivity()).load(R.drawable.user)
-                        .apply(requestOptions)
-                        .into(roomViewHolder.room_image);
-            } else{
-                Glide.with(getActivity()).load(storageReference.child("userPhoto/"+chatRoomModel.getPhoto()))
-                        .apply(requestOptions)
-                        .into(roomViewHolder.room_image);
-            }
-             */
 
             //이거 왜 아무이상 없음?
             if(chatRoomModel.getPhoto() !=null){

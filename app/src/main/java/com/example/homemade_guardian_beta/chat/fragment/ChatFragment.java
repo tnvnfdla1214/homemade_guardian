@@ -76,7 +76,7 @@ import java.util.TimeZone;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.common.ChatUtil;
 import com.example.homemade_guardian_beta.chat.model.ChatModel;
-import com.example.homemade_guardian_beta.chat.model.Message;
+import com.example.homemade_guardian_beta.chat.model.MessageModel;
 import com.example.homemade_guardian_beta.chat.model.NotificationModel;
 import com.example.homemade_guardian_beta.chat.model.UserModel;
 
@@ -219,12 +219,12 @@ public class ChatFragment extends Fragment {
     }
 
     // get a user info
-    void getUserInfoFromServer(String id){
-        firestore.collection("USERS").document(id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    void getUserInfoFromServer(String UserModel_ID){
+        firestore.collection("USERS").document(UserModel_ID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 UserModel userModel = documentSnapshot.toObject(UserModel.class);
-                userList.put(userModel.getUid(), userModel);
+                userList.put(userModel.getUserModel_Uid(), userModel);
                 if (roomID != null & userCount == userList.size()) {
                     mAdapter = new RecyclerViewAdapter();
                     recyclerView.setAdapter(mAdapter);
@@ -381,14 +381,13 @@ public class ChatFragment extends Fragment {
     void sendGCM(){
         Gson gson = new Gson();
         NotificationModel notificationModel = new NotificationModel();
-        notificationModel.notification.title = userList.get(myUid).getUsernm();
+        notificationModel.notification.title = userList.get(myUid).getUserModel_NickName();
         notificationModel.notification.body = msg_input.getText().toString();
-        notificationModel.data.title = userList.get(myUid).getUsernm();
+        notificationModel.data.title = userList.get(myUid).getUserModel_NickName();
         notificationModel.data.body = msg_input.getText().toString();
 
         for ( Map.Entry<String, UserModel> elem : userList.entrySet() ){
-            if (myUid.equals(elem.getValue().getUid())) continue;
-            notificationModel.to = elem.getValue().getToken();
+            if (myUid.equals(elem.getValue().getUserModel_Uid())) continue;
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf8"), gson.toJson(notificationModel));
             Request request = new Request.Builder()
                     .header("Content-Type", "application/json")
@@ -509,7 +508,7 @@ public class ChatFragment extends Fragment {
     class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         final private RequestOptions requestOptions = new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(90));
 
-        List<Message> messageList;
+        List<MessageModel> messageModelList;
         String beforeDay = null;
         MessageViewHolder beforeViewHolder;
 
@@ -525,7 +524,7 @@ public class ChatFragment extends Fragment {
             }
 
             Log.d("로그3","채팅 11");
-            messageList = new ArrayList<Message>();
+            messageModelList = new ArrayList<MessageModel>();
             Log.d("로그3","채팅 111");
             setUnread2Read();
             Log.d("로그3","채팅 1111");
@@ -535,7 +534,7 @@ public class ChatFragment extends Fragment {
 
         public void startListening() {
             beforeDay = null;
-            messageList.clear();
+            messageModelList.clear();
 
             CollectionReference roomRef = firestore.collection("rooms").document(roomID).collection("messages");
             // my chatting room information
@@ -544,32 +543,32 @@ public class ChatFragment extends Fragment {
                 public void onEvent(@Nullable QuerySnapshot documentSnapshots, @Nullable FirebaseFirestoreException e) {
                     if (e != null) {return;}
 
-                    Message message;
+                    MessageModel messageModel;
                     for (DocumentChange change : documentSnapshots.getDocumentChanges()) {
                         switch (change.getType()) {
                             case ADDED:
-                                message = change.getDocument().toObject(Message.class);
+                                messageModel = change.getDocument().toObject(MessageModel.class);
                                 //if (message.msg !=null & message.timestamp == null) {continue;} // FieldValue.serverTimestamp is so late
 
-                                if (message.getReadUsers().indexOf(myUid) == -1) {
-                                    message.getReadUsers().add(myUid);
-                                    change.getDocument().getReference().update("readUsers", message.getReadUsers());
+                                if (messageModel.getReadUsers().indexOf(myUid) == -1) {
+                                    messageModel.getReadUsers().add(myUid);
+                                    change.getDocument().getReference().update("readUsers", messageModel.getReadUsers());
                                 }
-                                messageList.add(message);
+                                messageModelList.add(messageModel);
                                 notifyItemInserted(change.getNewIndex());
                                 break;
                             case MODIFIED:
-                                message = change.getDocument().toObject(Message.class);
-                                messageList.set(change.getOldIndex(), message);
+                                messageModel = change.getDocument().toObject(MessageModel.class);
+                                messageModelList.set(change.getOldIndex(), messageModel);
                                 notifyItemChanged(change.getOldIndex());
                                 break;
                             case REMOVED:
-                                messageList.remove(change.getOldIndex());
+                                messageModelList.remove(change.getOldIndex());
                                 notifyItemRemoved(change.getOldIndex());
                                 break;
                         }
                     }
-                    recyclerView.scrollToPosition(messageList.size() - 1);
+                    recyclerView.scrollToPosition(messageModelList.size() - 1);
                 }
             });
         }
@@ -580,21 +579,21 @@ public class ChatFragment extends Fragment {
                 listenerRegistration = null;
             }
 
-            messageList.clear();
+            messageModelList.clear();
             notifyDataSetChanged();
         }
 //////////////
         @Override
         public int getItemViewType(int position) {
-            Message message = messageList.get(position);
-            if (myUid.equals(message.getUid()) ) {
-                switch(message.getMsgtype()){
+            MessageModel messageModel = messageModelList.get(position);
+            if (myUid.equals(messageModel.getUid()) ) {
+                switch(messageModel.getMsgtype()){
                     case "1": return R.layout.item_chatimage_right;
                     case "2": return R.layout.item_chatfile_right;
                     default:  return R.layout.item_chatmsg_right;
                 }
             } else {
-                switch(message.getMsgtype()){
+                switch(messageModel.getMsgtype()){
                     case "1": return R.layout.item_chatimage_left;
                     case "2": return R.layout.item_chatfile_left;
                     default:  return R.layout.item_chatmsg_left;
@@ -614,34 +613,34 @@ public class ChatFragment extends Fragment {
             Log.d("로그3","채팅 2");
             final MessageViewHolder messageViewHolder = (MessageViewHolder) holder;
             Log.d("로그3","채팅 22");
-            final Message message = messageList.get(position);
+            final MessageModel messageModel = messageModelList.get(position);
             Log.d("로그3","채팅 222");
-            setReadCounter(message, messageViewHolder.read_counter);
+            setReadCounter(messageModel, messageViewHolder.read_counter);
 
-            if ("0".equals(message.getMsgtype())) {                                      // text message
-                messageViewHolder.msg_item.setText(message.getMsg());
+            if ("0".equals(messageModel.getMsgtype())) {                                      // text message
+                messageViewHolder.msg_item.setText(messageModel.getMsg());
             } else
-            if ("2".equals(message.getMsgtype())) {                                      // file transfer
-                messageViewHolder.msg_item.setText(message.getFilename() + "\n" + message.getFilesize());
-                messageViewHolder.filename = message.getFilename();
-                messageViewHolder.realname = message.getMsg();
-                File file = new File(rootPath + message.getFilename());
+            if ("2".equals(messageModel.getMsgtype())) {                                      // file transfer
+                messageViewHolder.msg_item.setText(messageModel.getFilename() + "\n" + messageModel.getFilesize());
+                messageViewHolder.filename = messageModel.getFilename();
+                messageViewHolder.realname = messageModel.getMsg();
+                File file = new File(rootPath + messageModel.getFilename());
                 if(file.exists()) {
                     messageViewHolder.button_item.setText("Open File");
                 } else {
                     messageViewHolder.button_item.setText("Download");
                 }
             } else {                                                                // image transfer
-                messageViewHolder.realname = message.getMsg();
+                messageViewHolder.realname = messageModel.getMsg();
                 Glide.with(getContext())
-                        .load(storageReference.child("filesmall/"+message.getMsg()))
+                        .load(storageReference.child("filesmall/"+ messageModel.getMsg()))
                         .apply(new RequestOptions().override(1000, 1000))
                         .into(messageViewHolder.img_item);
             }
 
-            if (! myUid.equals(message.getUid())) {
-                UserModel userModel = userList.get(message.getUid());
-                messageViewHolder.msg_name.setText(userModel.getUsernm());
+            if (! myUid.equals(messageModel.getUid())) {
+                UserModel userModel = userList.get(messageModel.getUid());
+                messageViewHolder.msg_name.setText(userModel.getUserModel_NickName());
 
 
                 //상대방 프로필사진으로 바꾸기
@@ -655,10 +654,10 @@ public class ChatFragment extends Fragment {
             messageViewHolder.divider.setVisibility(View.INVISIBLE);
             messageViewHolder.divider.getLayoutParams().height = 0;
             messageViewHolder.timestamp.setText("");
-            if (message.getTimestamp()==null) {return;}
+            if (messageModel.getTimestamp()==null) {return;}
 
-            String day = dateFormatDay.format( message.getTimestamp());
-            String timestamp = dateFormatHour.format( message.getTimestamp());
+            String day = dateFormatDay.format( messageModel.getTimestamp());
+            String timestamp = dateFormatHour.format( messageModel.getTimestamp());
             messageViewHolder.timestamp.setText(timestamp);
 
             if (position==0) {
@@ -666,7 +665,7 @@ public class ChatFragment extends Fragment {
                 messageViewHolder.divider.setVisibility(View.VISIBLE);
                 messageViewHolder.divider.getLayoutParams().height = 60;
             } else {
-                Message beforeMsg = messageList.get(position - 1);
+                MessageModel beforeMsg = messageModelList.get(position - 1);
                 String beforeDay = dateFormatDay.format( beforeMsg.getTimestamp() );
 
                 if (!day.equals(beforeDay) && beforeDay != null) {
@@ -675,30 +674,10 @@ public class ChatFragment extends Fragment {
                     messageViewHolder.divider.getLayoutParams().height = 60;
                 }
             }
-            /*messageViewHolder.timestamp.setText("");
-            if (message.getTimestamp()==null) {return;}
-
-            String day = dateFormatDay.format( message.getTimestamp());
-            String timestamp = dateFormatHour.format( message.getTimestamp());
-
-            messageViewHolder.timestamp.setText(timestamp);
-
-            if (position==0) {
-                messageViewHolder.divider_date.setText(day);
-                messageViewHolder.divider.setVisibility(View.VISIBLE);
-                messageViewHolder.divider.getLayoutParams().height = 60;
-            };
-            if (!day.equals(beforeDay) && beforeDay!=null) {
-                beforeViewHolder.divider_date.setText(beforeDay);
-                beforeViewHolder.divider.setVisibility(View.VISIBLE);
-                beforeViewHolder.divider.getLayoutParams().height = 60;
-            }
-            beforeViewHolder = messageViewHolder;
-            beforeDay = day;*/
         }
 
-        void setReadCounter (Message message, final TextView textView) {
-            int cnt = userCount - message.getReadUsers().size();
+        void setReadCounter (MessageModel messageModel, final TextView textView) {
+            int cnt = userCount - messageModel.getReadUsers().size();
             if (cnt > 0) {
                 textView.setVisibility(View.VISIBLE);
                 textView.setText(String.valueOf(cnt));
@@ -709,7 +688,7 @@ public class ChatFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return messageList.size();
+            return messageModelList.size();
         }
 
 

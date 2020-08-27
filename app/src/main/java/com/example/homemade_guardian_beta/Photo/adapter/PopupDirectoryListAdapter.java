@@ -2,18 +2,15 @@ package com.example.homemade_guardian_beta.Photo.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.Photo.entity.PhotoDirectory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,69 +18,66 @@ import java.util.List;
 
 public class PopupDirectoryListAdapter extends BaseAdapter {
 
-  private Context context;
+  private Context MContext;
+  private List<PhotoDirectory> Photodirectory_List = new ArrayList<>();
+  private LayoutInflater LayoutInflater;
 
-  private List<PhotoDirectory> directories = new ArrayList<>();
-
-  private LayoutInflater mLayoutInflater;
-
-
-  public PopupDirectoryListAdapter(Context context, List<PhotoDirectory> directories) {
-    this.context = context;
-    this.directories = directories;
-
-    mLayoutInflater = LayoutInflater.from(context);
+  public PopupDirectoryListAdapter(Context MContext, List<PhotoDirectory> Photodirectory_List) {
+    this.MContext = MContext;
+    this.Photodirectory_List = Photodirectory_List;
+    LayoutInflater = LayoutInflater.from(MContext);
   }
 
-  @Override public int getCount() {
-    return directories.size();
+  @Override
+  public int getCount() {
+    return Photodirectory_List.size();
   }
 
-  @Override public PhotoDirectory getItem(int position) {
-    return directories.get(position);
+  @Override
+  public PhotoDirectory getItem(int position) {
+    return Photodirectory_List.get(position);
   }
 
-  @Override public long getItemId(int position) {
-    return directories.get(position).hashCode();
+  @Override
+  public long getItemId(int position) {
+    return Photodirectory_List.get(position).hashCode();
   }
 
-  @Override public View getView(int position, View convertView, ViewGroup parent) {
-    ViewHolder holder;
-    if (convertView == null) {
-      convertView = mLayoutInflater.inflate(R.layout.util_item_directory, parent, false);
-      holder = new ViewHolder(convertView);
-      convertView.setTag(holder);
+  @Override
+  public View getView(int position, View Convertview, ViewGroup Parent) {
+    ViewHolder Holder;
+    if (Convertview == null) {
+      Convertview = LayoutInflater.inflate(R.layout.util_item_directory, Parent, false);
+      Holder = new ViewHolder(Convertview);
+      Convertview.setTag(Holder);
     } else {
-      holder = (ViewHolder) convertView.getTag();
+      Holder = (ViewHolder) Convertview.getTag();
     }
-    holder.bindData(directories.get(position));
+    Holder.bindData(Photodirectory_List.get(position));
 
-    return convertView;
+    return Convertview;
   }
 
   private class ViewHolder {
+    public ImageView IvCover;
+    public TextView TvName;
+    public TextView TvCount;
 
-    public ImageView ivCover;
-    public TextView tvName;
-    public TextView tvCount;
-
-    public ViewHolder(View rootView) {
-      ivCover = (ImageView) rootView.findViewById(R.id.iv_dir_cover);
-      tvName  = (TextView)  rootView.findViewById(R.id.tv_dir_name);
-      tvCount = (TextView)  rootView.findViewById(R.id.tv_dir_count);
+    public ViewHolder(View Rootview) {
+      IvCover = (ImageView) Rootview.findViewById(R.id.iv_dir_cover);
+      TvName = (TextView)  Rootview.findViewById(R.id.tv_dir_name);
+      TvCount = (TextView)  Rootview.findViewById(R.id.tv_dir_count);
     }
 
-    public void bindData(PhotoDirectory directory) {
-      if (context instanceof Activity && ((Activity) context).isFinishing()) {
-        return;
-      }
-      Glide.with(context)
-          .load(directory.getCoverPath())
+    //디렉토리의 정보 (커버사진,이름,이미지개수 등)를 set
+    public void bindData(PhotoDirectory Directory) {
+      if (MContext instanceof Activity && ((Activity) MContext).isFinishing()) { return; }
+      Glide.with(MContext)
+          .load(Directory.getPhotoDirectory_CoverPath())
           .thumbnail(0.1f)
-          .into(ivCover);
-      tvName.setText(directory.getName());
-      Log.d("태그", "5"+directory.getName());
-      tvCount.setText(context.getString(R.string.y_photopicker_image_count, directory.getPhotos().size()));
+          .into(IvCover);
+      TvName.setText(Directory.getPhotoDirectory_Name());
+      TvCount.setText(MContext.getString(R.string.y_photopicker_image_count, Directory.getPhotoList().size()));
     }
   }
 }

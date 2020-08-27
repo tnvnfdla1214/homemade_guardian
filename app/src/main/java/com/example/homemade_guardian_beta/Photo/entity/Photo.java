@@ -1,40 +1,41 @@
 package com.example.homemade_guardian_beta.Photo.entity;
 
-// 사진의 모델이다.
+// 이미지의 모델이다.
 
 public class Photo {
 
-  private int id;
-  private String path;
+  private int Photo_Id;
+  private String Photo_Path;
 
-  public Photo(int id, String path) {
-    this.id = id;
-    this.path = path;
+  public Photo(int Photo_Id, String Photo_Path) {
+    this.Photo_Id = Photo_Id;
+    this.Photo_Path = Photo_Path;
   }
 
   public Photo() { }
 
+  //선택된 이미지와 이벤트를 실행하려는 이미지의 일치 여부를 확인하는 함수
   @Override public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof Photo)) return false;
     Photo photo = (Photo) o;
-    return id == photo.id;
+    return Photo_Id == photo.Photo_Id;
   }
 
   @Override public int hashCode() {
-    return id;
+    return Photo_Id;
   }
 
-  public String  getPath() {
-    return path;
+  public String getPhoto_Path() {
+    return Photo_Path;
   }
-  public void setPath(String path) {
-    this.path = path;
+  public void setPhoto_Path(String photo_Path) {
+    this.Photo_Path = photo_Path;
   }
-  public int getId() {
-    return id;
+  public int getPhoto_Id() {
+    return Photo_Id;
   }
-  public void setId(int id) {
-    this.id = id;
+  public void setPhoto_Id(int photo_Id) {
+    this.Photo_Id = photo_Id;
   }
 }

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -150,8 +149,8 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
     if(pickerFragment == null){
       pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentById(R.id.photoPickerFragment);
-      pickerFragment.getPhotoGridAdapter().setShowCamera(showCamera);
-      pickerFragment.getPhotoGridAdapter().setOnItemCheckListener(new OnItemCheckListener() {
+      pickerFragment.getPhotogridAdapter().setShowCamera(showCamera);
+      pickerFragment.getPhotogridAdapter().setOnItemCheckListener(new OnItemCheckListener() {
         @Override public boolean OnItemCheck(int position, Photo photo, final boolean isCheck, int selectedItemCount) {
 
           int total = selectedItemCount + (isCheck ? -1 : 1);
@@ -159,10 +158,10 @@ public class PhotoPickerActivity extends AppCompatActivity {
           menuDoneItem.setEnabled(total > 0);
 
           if (maxCount <= 1) {
-            List<Photo> photos = pickerFragment.getPhotoGridAdapter().getSelectedPhotos();
+            List<Photo> photos = pickerFragment.getPhotogridAdapter().getSelectedPhoto_List();
             if (!photos.contains(photo)) {
               photos.clear();
-              pickerFragment.getPhotoGridAdapter().notifyDataSetChanged();
+              pickerFragment.getPhotogridAdapter().notifyDataSetChanged();
             }
             return true;
           }
@@ -177,7 +176,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
         }
       });
     }else{
-      pickerFragment.getPhotoGridAdapter().notifyDataSetChanged();
+      pickerFragment.getPhotogridAdapter().notifyDataSetChanged();
     }
   }
 
@@ -228,7 +227,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
     }
     if (item.getItemId() == R.id.done) {
       Intent intent = new Intent();
-      ArrayList<String> selectedPhotos = pickerFragment.getPhotoGridAdapter().getSelectedPhotoPaths();
+      ArrayList<String> selectedPhotos = pickerFragment.getPhotogridAdapter().getSelectedPhotoPaths();
       intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, selectedPhotos);
       setResult(RESULT_OK, intent);
       finish();

@@ -19,15 +19,17 @@ public class BasicActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 
+    // 툴바 설정
     @Override
     public void setContentView(@LayoutRes int layoutResID) {                                            // part19 : tollbar(상단바) 설정 함수
         super.setContentView(layoutResID);
-        Toolbar myToolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
+        Toolbar Mytoolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(Mytoolbar);
     }
 
+    // 툴바 이름 설정
     public void setToolbarTitle(String title){                                                          // part19 : 상단바 제목 지정(28'30")
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null){ actionBar.setTitle(title); }
+        ActionBar Actionbar = getSupportActionBar();
+        if(Actionbar != null){ Actionbar.setTitle(title); }
     }
 }

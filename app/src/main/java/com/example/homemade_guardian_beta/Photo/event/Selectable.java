@@ -37,6 +37,5 @@ public interface Selectable {
    *
    * @return List of selected photos
    */
-  List<Photo> getSelectedPhotos();
-
+  List<Photo> getSelectedPhoto_List();
 }

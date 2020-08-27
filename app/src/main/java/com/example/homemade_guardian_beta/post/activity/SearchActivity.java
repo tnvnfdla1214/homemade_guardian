@@ -14,7 +14,7 @@ import com.example.homemade_guardian_beta.R;
 
 public class SearchActivity extends BasicActivity {
     private EditText SearchPost;    //검색하고자 하는 단어 입력 받는 EditText
-    private Button SearchButton;    //검색을 실행하는 버튼
+    private Button Title_Search_Button;    //검색을 실행하는 버튼
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,24 +22,27 @@ public class SearchActivity extends BasicActivity {
         setToolbarTitle("검색");
 
         SearchPost = findViewById(R.id.searchPost);
-
-        SearchButton = findViewById(R.id.searchbutton);
-        SearchButton.setOnClickListener(onClickListener);
+        Title_Search_Button = findViewById(R.id.searchbutton);
+        Title_Search_Button.setOnClickListener(onClickListener);
     }
+
+    //검색버튼의 OnClickListener
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.searchbutton:
-                    String search = SearchPost.getText().toString();
-                    myStartActivity(SearchResultActivity.class,search);
+                    String Search = SearchPost.getText().toString();
+                    myStartActivity(SearchResultActivity.class,Search);
                     break;
             }
         }
     };
+
+    //여기 SearchActivity에서 받은 search 값을 전달해준다.
     private void myStartActivity(Class c, String search) {                                          // part : 여기서는 수정 버튼을 눌렀을 때 게시물의 정보도 같이 넘겨준다.
-        Intent intent = new Intent(SearchActivity.this, c);
-        intent.putExtra("search", search);
-        startActivityForResult(intent, 0);
+        Intent Intent_Search_Words = new Intent(SearchActivity.this, c);
+        Intent_Search_Words.putExtra("search", search);
+        startActivityForResult(Intent_Search_Words, 0);
     }
 }

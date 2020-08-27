@@ -186,7 +186,6 @@ public class ImagePagerFragment extends Fragment {
    * @param endAction This action gets run after the animation completes (this is
    * when we actually switch activities)
    */
-
   // 이미지를 한번 더 눌러서 Backpressed이벤트의 함수
   public void runExitAnimation(final Runnable endAction) {
     if (!getArguments().getBoolean(ARG_HAS_ANIM, false) || !hasAnim) {

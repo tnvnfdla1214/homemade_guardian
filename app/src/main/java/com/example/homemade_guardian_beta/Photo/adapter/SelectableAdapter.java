@@ -1,11 +1,9 @@
 package com.example.homemade_guardian_beta.Photo.adapter;
 
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.homemade_guardian_beta.Photo.entity.Photo;
 import com.example.homemade_guardian_beta.Photo.entity.PhotoDirectory;
 import com.example.homemade_guardian_beta.Photo.event.Selectable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,27 +14,21 @@ public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder>
 
   private static final String TAG = SelectableAdapter.class.getSimpleName();
 
-  protected List<PhotoDirectory> photoDirectories;
-  protected List<Photo> selectedPhotos;
-  public int currentDirectoryIndex = 0;
-
+  protected List<PhotoDirectory> PhotoDirectory_List;
+  protected List<Photo> SelectedPhoto_List;
+  public int CurrentDirectoryIndex = 0;
 
   public SelectableAdapter() {
-    photoDirectories = new ArrayList<>();
-    selectedPhotos = new ArrayList<>();
+    PhotoDirectory_List = new ArrayList<>();
+    SelectedPhoto_List = new ArrayList<>();
   }
-
 
   /**
    * Indicates if the item at position position is selected
-   *
    * @param photo Photo of the item to check
    * @return true if the item is selected, false otherwise
    */
-  @Override public boolean isSelected(Photo photo) {
-    return getSelectedPhotos().contains(photo);
-  }
-
+  @Override public boolean isSelected(Photo photo) { return getSelectedPhoto_List().contains(photo); }
 
   /**
    * Toggle the selection status of the item at a given position
@@ -44,19 +36,18 @@ public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder>
    * @param photo Photo of the item to toggle the selection status for
    */
   @Override public void toggleSelection(Photo photo) {
-    if (selectedPhotos.contains(photo)) {
-      selectedPhotos.remove(photo);
+    if (SelectedPhoto_List.contains(photo)) {
+      SelectedPhoto_List.remove(photo);
     } else {
-      selectedPhotos.add(photo);
+      SelectedPhoto_List.add(photo);
     }
   }
-
 
   /**
    * Clear the selection status for all items
    */
   @Override public void clearSelection() {
-    selectedPhotos.clear();
+    SelectedPhoto_List.clear();
   }
 
 
@@ -66,31 +57,22 @@ public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder>
    * @return Selected items count
    */
   @Override public int getSelectedItemCount() {
-    return selectedPhotos.size();
+    return SelectedPhoto_List.size();
   }
 
+  public void setCurrentDirectoryIndex(int currentDirectoryIndex) { this.CurrentDirectoryIndex = currentDirectoryIndex; }
 
-  public void setCurrentDirectoryIndex(int currentDirectoryIndex) {
-    this.currentDirectoryIndex = currentDirectoryIndex;
-  }
-
-
-  public List<Photo> getCurrentPhotos() {
-    return photoDirectories.get(currentDirectoryIndex).getPhotos();
-  }
-
+  public List<Photo> getCurrentPhotos() { return PhotoDirectory_List.get(CurrentDirectoryIndex).getPhotoList(); }
 
   public List<String> getCurrentPhotoPaths() {
     List<String> currentPhotoPaths = new ArrayList<>(getCurrentPhotos().size());
     for (Photo photo : getCurrentPhotos()) {
-      currentPhotoPaths.add(photo.getPath());
+      currentPhotoPaths.add(photo.getPhoto_Path());
     }
     return currentPhotoPaths;
   }
 
-
-  @Override public List<Photo> getSelectedPhotos() {
-    return selectedPhotos;
+  @Override public List<Photo> getSelectedPhoto_List() {
+    return SelectedPhoto_List;
   }
-
 }

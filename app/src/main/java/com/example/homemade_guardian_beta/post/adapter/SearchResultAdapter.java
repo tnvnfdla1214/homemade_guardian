@@ -26,49 +26,50 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     private final int MORE_INDEX = 1;                   //게시물에서 미리 표현할 사진의 개수
 
     static class MainViewHolder extends RecyclerView.ViewHolder {
-        CardView cardView;
+        CardView Cardview;
         MainViewHolder(CardView v) {
             super(v);
-            cardView = v;
+            Cardview = v;
         }
     }
 
-    public SearchResultAdapter(Activity activity, ArrayList<PostModel> myDataset) {
-        this.ArrayList_PostModel = myDataset;
+    public SearchResultAdapter(Activity activity, ArrayList<PostModel> ArrayList_Postmodel) {
+        this.ArrayList_PostModel = ArrayList_Postmodel;
         this.activity = activity;
     }
 
+    //검색한 결과를 POSTS에서 불러온 게시물 내용으로 화면에 나타내는 Holder
     @NonNull
     @Override
     public SearchResultAdapter.MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {             // part : 게시물을 눌렀을 떄
-        CardView cardView = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
-        final MainViewHolder mainViewHolder = new MainViewHolder(cardView);
-        cardView.setOnClickListener(new View.OnClickListener() {
+        CardView Cardview = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
+        final MainViewHolder Mainviewholder = new MainViewHolder(Cardview);
+        Cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {                                                                   // part18 : 게시물 클릭시 게시물페이지로 이동 (36'10")
-                Intent intent = new Intent(activity, PostActivity.class);
+                Intent Intent_PostActivity = new Intent(activity, PostActivity.class);
                 //postInfo 안에 uid있음
-                intent.putExtra("postInfo", ArrayList_PostModel.get(mainViewHolder.getAdapterPosition()));
-                activity.startActivity(intent);
+                Intent_PostActivity.putExtra("postInfo", ArrayList_PostModel.get(Mainviewholder.getAdapterPosition()));
+                activity.startActivity(Intent_PostActivity);
             }
         });
-        return mainViewHolder;
+        return Mainviewholder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MainViewHolder holder, int position) {                      // part : 게시물을 나열
-        CardView cardView = holder.cardView;
-        TextView titleTextView = cardView.findViewById(R.id.titleTextView);
-        PostModel postModel = ArrayList_PostModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
-        titleTextView.setText(postModel.getPostModel_Title());
-        ThumbnailImageView thumbnailImageView = cardView.findViewById(R.id.readContentsView);                   //contentsLayout에다가 날짜포함
-        LinearLayout contentsLayout = cardView.findViewById(R.id.contentsLayout);
+        CardView Cardview = holder.Cardview;
+        TextView Title_TextView = Cardview.findViewById(R.id.titleTextView);
+        PostModel Postmodel = ArrayList_PostModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
+        Title_TextView.setText(Postmodel.getPostModel_Title());
+        ThumbnailImageView Thumbnail_ImageView = Cardview.findViewById(R.id.readContentsView);                   //contentsLayout에다가 날짜포함
+        LinearLayout Contentslayout = Cardview.findViewById(R.id.contentsLayout);
 
-        if (contentsLayout.getTag() == null || !contentsLayout.getTag().equals(postModel)) {                 // part16 : 게시물 개수에 변화가 있을 때만 실행..? (26'40")
-            contentsLayout.setTag(postModel);
-            contentsLayout.removeAllViews();                                                                // part14: 다 지웠다가 다시 생성
-            thumbnailImageView.setMoreIndex(MORE_INDEX);                                                      // part19 : 위에서 두개 까지만 표시
-            thumbnailImageView.Set_Post_Thumbnail(postModel);
+        if (Contentslayout.getTag() == null || !Contentslayout.getTag().equals(Postmodel)) {                 // part16 : 게시물 개수에 변화가 있을 때만 실행..? (26'40")
+            Contentslayout.setTag(Postmodel);
+            Contentslayout.removeAllViews();                                                                // part14: 다 지웠다가 다시 생성
+            Thumbnail_ImageView.setMoreIndex(MORE_INDEX);                                                      // part19 : 위에서 두개 까지만 표시
+            Thumbnail_ImageView.Set_Post_Thumbnail(Postmodel);
         }
     }
 

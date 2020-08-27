@@ -53,39 +53,43 @@ public class GalleryActivity extends BasicActivity {
         }
     }
 
+    // 이미지들을 담을 RecyclerView 설정
     private void recyclerInit(){
         final int numberOfColumns = 3;                                                                  // part9 : (E) recyclerInit()는 사진을 3개씩 나열 (2')
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
 
-        RecyclerView.Adapter mAdapter = new GalleryAdapter(this, getImagesPath(this));
+        RecyclerView.Adapter mAdapter = new GalleryAdapter(this, GetImagePath(this));
         recyclerView.setAdapter(mAdapter);
     }
-    // part10 : 아이콘 이미지 생성 (9'50)
-    public ArrayList<String> getImagesPath(Activity activity) {
-        Uri uri;                                                        //선택한 이미지의 Uri
-        ArrayList<String> listOfImage = new ArrayList<String>();        //PathOfImage의 값을 넣어서 전달하는 ArrayList<String>
-        Cursor CursorEvent;                                             //이미지를 선택했다는 이벤트의 값
-        int column_index_data;
-        String PathOfImage = null;                                      //커서로 선택한 이미지의 Uri를 String의 값으로 받으려는 변수
-        String[] projection;
-        Intent intent = getIntent();
-        final int media = intent.getIntExtra(INTENT_MEDIA, GALLERY_IMAGE);                              // part11 : 비디오면 비디오 / 이미지면 이미지 리스트 반환
 
-        if(media == GALLERY_VIDEO){
-            uri = android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+    // 아이콘 이미지 생성
+    public ArrayList<String> GetImagePath(Activity activity) {
+
+        ArrayList<String> ListOfImage = new ArrayList<String>();            //PathOfImage의 값을 넣어서 전달하는 ArrayList<String>
+        String PathOfImage = null;                                      //커서로 선택한 이미지의 Uri를 String의 값으로 받으려는 변수
+        Cursor CursorEvent;                                             //이미지를 선택했다는 이벤트의 값
+
+        Uri URI;                                                        //선택한 이미지의 Uri
+        String[] projection;
+        int Column_Index_Data;
+        Intent ImageIntent = getIntent();
+        final int Media = ImageIntent.getIntExtra(INTENT_MEDIA, GALLERY_IMAGE);                              // part11 : 비디오면 비디오 / 이미지면 이미지 리스트 반환
+
+        if(Media == GALLERY_VIDEO){
+            URI = android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
             projection = new String[] { MediaStore.MediaColumns.DATA, MediaStore.Video.Media.BUCKET_DISPLAY_NAME };
         }else{
-            uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            URI = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
             projection = new String[] { MediaStore.MediaColumns.DATA, MediaStore.Images.Media.BUCKET_DISPLAY_NAME };
         }
-        CursorEvent = activity.getContentResolver().query(uri, projection, null, null, null);
-        column_index_data = CursorEvent.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+        CursorEvent = activity.getContentResolver().query(URI, projection, null, null, null);
+        Column_Index_Data = CursorEvent.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
         while (CursorEvent.moveToNext()) {
-            PathOfImage = CursorEvent.getString(column_index_data);
-            listOfImage.add(PathOfImage);
+            PathOfImage = CursorEvent.getString(Column_Index_Data);
+            ListOfImage.add(PathOfImage);
         }
-        return listOfImage;
+        return ListOfImage;
     }
 }

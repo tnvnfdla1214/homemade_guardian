@@ -40,36 +40,37 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
         this.activity = activity;
     }
 
+    //POSTS에서 불러온 게시물 내용을 화면에 나타내는 Holder
     @NonNull
     @Override
     public HomeAdapter.MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {             // part : 게시물을 눌렀을 떄
-        CardView cardView = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
-        final MainViewHolder mainViewHolder = new MainViewHolder(cardView);
-        cardView.setOnClickListener(new View.OnClickListener() {
+        CardView Cardview = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
+        final MainViewHolder Mainviewholder = new MainViewHolder(Cardview);
+        Cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {                                                                   // part18 : 게시물 클릭시 게시물페이지로 이동 (36'10")
-                Intent intent = new Intent(activity, PostActivity.class);
-                intent.putExtra("postInfo", ArrayList_PostModel.get(mainViewHolder.getAdapterPosition()));
-                activity.startActivity(intent);
+                Intent Intent_PostActivity = new Intent(activity, PostActivity.class);
+                Intent_PostActivity.putExtra("postInfo", ArrayList_PostModel.get(Mainviewholder.getAdapterPosition()));
+                activity.startActivity(Intent_PostActivity);
             }
         });
-        return mainViewHolder;
+        return Mainviewholder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull final MainViewHolder holder, int position) {                      // part : 게시물을 나열
         CardView Contents_CardView = holder.cardView;
-        TextView Title = Contents_CardView.findViewById(R.id.titleTextView);
-        PostModel postModel = ArrayList_PostModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
-        Title.setText(postModel.getPostModel_Title());
-        ThumbnailImageView thumbnailImageView = Contents_CardView.findViewById(R.id.readContentsView);                   //contentsLayout에다가 날짜포함
-        LinearLayout contentsLayout = Contents_CardView.findViewById(R.id.contentsLayout);
+        TextView Title_TextView = Contents_CardView.findViewById(R.id.titleTextView);
+        PostModel Postmodel = ArrayList_PostModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
+        Title_TextView.setText(Postmodel.getPostModel_Title());
+        ThumbnailImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.readContentsView);                   //contentsLayout에다가 날짜포함
+        LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);
 
-        if (contentsLayout.getTag() == null || !contentsLayout.getTag().equals(postModel)) {                 // part16 : 게시물 개수에 변화가 있을 때만 실행..? (26'40")
-            contentsLayout.setTag(postModel);
-            contentsLayout.removeAllViews();                                                                // part14: 다 지웠다가 다시 생성
-            thumbnailImageView.setMoreIndex(MORE_INDEX);
-            thumbnailImageView.Set_Post_Thumbnail(postModel);
+        if (Contentslayout.getTag() == null || !Contentslayout.getTag().equals(Postmodel)) {                 // part16 : 게시물 개수에 변화가 있을 때만 실행..? (26'40")
+            Contentslayout.setTag(Postmodel);
+            Contentslayout.removeAllViews();                                                                // part14: 다 지웠다가 다시 생성
+            Thumbnail_ImageView.setMoreIndex(MORE_INDEX);
+            Thumbnail_ImageView.Set_Post_Thumbnail(Postmodel);
         }
     }
 

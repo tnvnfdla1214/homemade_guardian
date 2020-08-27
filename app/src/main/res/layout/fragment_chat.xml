@@ -18,26 +18,26 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/imageBtn"
+            android:id="@+id/Chat_Image_Send_Button"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:background="@android:drawable/ic_menu_gallery" />
 
         <Button
-            android:id="@+id/fileBtn"
+            android:id="@+id/Chat_File_Send_Button"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:background="@android:drawable/ic_menu_save" />
 
         <EditText
-            android:id="@+id/msg_input"
+            android:id="@+id/Chat_Message_Input_EditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             />
 
         <Button
-            android:id="@+id/sendBtn"
+            android:id="@+id/Chat_Send_Button"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:background="@android:drawable/ic_menu_send"/>

@@ -91,44 +91,46 @@ import okhttp3.Response;
 
 import static android.app.Activity.RESULT_OK;
 
-//채팅룸 안의 액티비티
+//채팅룸 안의 프레그먼트
+//채팅에서 어떻게 배열되는지 설정되는 기능(Chat_RecyclerView_Adapter 함수)
+//처음 채팅 시작할때 한번 튕기는거 고쳐야 함
 public class ChatFragment extends Fragment {
 
-    private static final int PICK_FROM_ALBUM = 1;
-    private static final int PICK_FROM_FILE = 2;
-    //이게 뭘뜻하는건지 모르겠음
-    private static String rootPath = ChatUtil.getRootPath()+"/homemade_guardian_beta/";
+    private ListenerRegistration listenerRegistration;                                            //생성일자인터페이스(찾고 싶을때 사용하는듯)
+    private LinearLayoutManager linearLayoutManager;                                              //리니얼레이아웃 매니져
+    private RecyclerViewAdapter Chat_RecyclerView_Adapter;                                        //채팅 리사이클러뷰 어텝터 함수
 
-    private Button sendBtn;
-    private EditText msg_input;
-    private RecyclerView recyclerView;
-    private RecyclerViewAdapter mAdapter;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    private SimpleDateFormat dateFormatDay = new SimpleDateFormat("yyyy-MM-dd");
-    private SimpleDateFormat dateFormatHour = new SimpleDateFormat("aa hh:mm");
-    private String roomID;
-    private String myUid;
-    private String toUid;
-    private Map<String, UserModel> userList = new HashMap<>();
+    private Button Chat_Send_Button;                                                              //채팅 보내기 버튼
+    private EditText Chat_Message_Input_EditText;                                                 //채팅 edittext
+    private RecyclerView Chat_RecyclerView;                                                       //채팅 리사이클러뷰
 
-    private ListenerRegistration listenerRegistration;
-    private FirebaseFirestore firestore=null;
+    private String roomID;                                                                        //룸의 uid (확실 x) -> 맞다면 roommodel에 하나 만들어줘서 저장하기
+    private String myUid;                                                                         //나의 uid
+    private String toUid;                                                                         //상대방의 uid
+    private Map<String, UserModel> userList = new HashMap<>();                                    //유저 리스트
+    private ProgressDialog progressDialog = null;                                                 //진행 표시(Loding창)
+    private Integer In_User_Count = 0;                                                            //현 채팅방의 들어와 있는 유저
+
+    private FirebaseFirestore Firestore =null;
     private StorageReference storageReference;
-    private LinearLayoutManager linearLayoutManager;
 
-    private ProgressDialog progressDialog = null;
-    private Integer userCount = 0;
+    private SimpleDateFormat dateFormatDay = new SimpleDateFormat("yyyy-MM-dd");           //년/월일/ 변수
+    private SimpleDateFormat dateFormatHour = new SimpleDateFormat("aa hh:mm");            //시/분/초 변수
+    private static final int PICK_FROM_ALBUM = 1;                                                  //앨범 선택
+    private static final int PICK_FROM_FILE = 2;                                                   //이미지 선택
+    private static String rootPath = ChatUtil.getRootPath()+"/homemade_guardian_beta/";            //경로 설정
+
 
     public ChatFragment() {
     }
 
     public static final ChatFragment getInstance(String toUid, String roomID) {
-        ChatFragment f = new ChatFragment();
-        Bundle bdl = new Bundle();
-        bdl.putString("toUid", toUid);
-        bdl.putString("roomID", roomID);
-        f.setArguments(bdl);
-        return f;
+        ChatFragment chatFragment = new ChatFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("toUid", toUid);
+        bundle.putString("roomID", roomID);
+        chatFragment.setArguments(bundle);
+        return chatFragment;
     }
 
     @Nullable
@@ -136,17 +138,16 @@ public class ChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
-        recyclerView = view.findViewById(R.id.recyclerView);
+        Chat_RecyclerView = view.findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
+        Chat_RecyclerView.setLayoutManager(linearLayoutManager);
 
-        msg_input = view.findViewById(R.id.msg_input);
-        sendBtn = view.findViewById(R.id.sendBtn);
-        sendBtn.setOnClickListener(sendBtnClickListener);
+        Chat_Message_Input_EditText = view.findViewById(R.id.Chat_Message_Input_EditText);
 
-        view.findViewById(R.id.imageBtn).setOnClickListener(imageBtnClickListener);
-        view.findViewById(R.id.fileBtn).setOnClickListener(fileBtnClickListener);
-        view.findViewById(R.id.msg_input).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        view.findViewById(R.id.Chat_Send_Button).setOnClickListener(Chat_Send_Button_ClickListener);
+        view.findViewById(R.id.Chat_Image_Send_Button).setOnClickListener(Chat_Image_Send_Button_ClickListener);
+        view.findViewById(R.id.Chat_File_Send_Button).setOnClickListener(Chat_File_Send_Button_ClickListener);
+        view.findViewById(R.id.Chat_Message_Input_EditText).setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus) {
@@ -155,44 +156,28 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        if (getArguments() != null) {
-            roomID = getArguments().getString("roomID");
-            toUid = getArguments().getString("toUid");
-        }
+        Chat_User_Check();                    //유저의 uid와 room의 uid 체크 함수
 
-        firestore = FirebaseFirestore.getInstance();
+        Firestore = FirebaseFirestore.getInstance();
         storageReference  = FirebaseStorage.getInstance().getReference();
-
-        dateFormatDay.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
-        dateFormatHour.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
-
         myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        /*
-         two user: roomid or uid talking
-         multi user: roomid
-         */
-        if (!"".equals(toUid) && toUid!=null) {                     // find existing room for two user
-            findChatRoom(toUid);
-        } else
-        if (!"".equals(roomID) && roomID!=null) { // existing room (multi user)
-            setChatRoom(roomID);
-        };
+        KroreaTime();                         //한국 시간 가져오기 함수
+        Chat_RecyclerView_Arrangement();      // Chat_RecyclerView의 배열 정리에 관한 함수
 
-        if (roomID==null) {                                                     // new room for two user
-            getUserInfoFromServer(myUid);
-            getUserInfoFromServer(toUid);
-            userCount = 2;
-        };
-//////////////////////////////
-        recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+        return view;
+    }
+
+    // Chat_RecyclerView의 배열 정리에 관한 함수
+    public void Chat_RecyclerView_Arrangement(){
+        Chat_RecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v,
                                        int left, int top, int right, int bottom,
                                        int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                if (mAdapter!=null & bottom < oldBottom) {
-                    final int lastAdapterItem = mAdapter.getItemCount() - 1;
-                    recyclerView.post(new Runnable() {
+                if (Chat_RecyclerView_Adapter !=null & bottom < oldBottom) {
+                    final int lastAdapterItem = Chat_RecyclerView_Adapter.getItemCount() - 1;
+                    Chat_RecyclerView.post(new Runnable() {
                         @Override
                         public void run() {
                             int recyclerViewPositionOffset = -1000000;
@@ -206,36 +191,63 @@ public class ChatFragment extends Fragment {
                 }
             }
         });
-
-        return view;
     }
 
+    //한국 시간 가져오기 함수수
+   public void KroreaTime(){
+        dateFormatDay.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+        dateFormatHour.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+    }
+
+    //유저의 uid와 room의 uid 체크 함수
+    public void Chat_User_Check(){
+
+        if (getArguments() != null) {
+            roomID = getArguments().getString("roomID");
+            toUid = getArguments().getString("toUid");
+        }
+        if (!"".equals(toUid) && toUid!=null) {                     // find existing room for two user
+            findChatRoom(toUid);
+        } else
+        if (!"".equals(roomID) && roomID!=null) {                   // existing room (multi user)
+            setChatRoom(roomID);
+        };
+
+        if (roomID==null) {                                         // new room for two user
+            getUserInfoFromServer(myUid);
+            getUserInfoFromServer(toUid);
+            In_User_Count = 2;
+        };
+    }
+
+
+    // 프래그먼트 객체 자체는 사라지지 않고 메모리에 남아있는 함수
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mAdapter != null) {
-            mAdapter.stopListening();
+        if (Chat_RecyclerView_Adapter != null) {
+            Chat_RecyclerView_Adapter.stopListening();
         }
     }
 
-    // get a user info
-    void getUserInfoFromServer(String UserModel_ID){
-        firestore.collection("USERS").document(UserModel_ID).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    // chat에 들어와있는 user의 uid로 정보를 가져와 userlist에 담는 함수
+    void getUserInfoFromServer(String UserModel_Uid){
+        Firestore.collection("USERS").document(UserModel_Uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 UserModel userModel = documentSnapshot.toObject(UserModel.class);
                 userList.put(userModel.getUserModel_Uid(), userModel);
-                if (roomID != null & userCount == userList.size()) {
-                    mAdapter = new RecyclerViewAdapter();
-                    recyclerView.setAdapter(mAdapter);
+                if (roomID != null & In_User_Count == userList.size()) {
+                    Chat_RecyclerView_Adapter = new RecyclerViewAdapter();
+                    Chat_RecyclerView.setAdapter(Chat_RecyclerView_Adapter);
                 }
             }
         });
     }
 
-    // Returns the room ID after locating the chatting room with the user ID.
+    // 사용자 ID로 채팅방을 찾은 후 룸 ID를 반환하는 함수
     void findChatRoom(final String toUid){
-        firestore.collection("rooms").whereGreaterThanOrEqualTo("USERS."+myUid, 0).get()
+        Firestore.collection("rooms").whereGreaterThanOrEqualTo("USERS."+myUid, 0).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -252,10 +264,10 @@ public class ChatFragment extends Fragment {
                 });
     }
 
-    // get user list in a chatting room
+    // 채팅방에서 사용자 목록을 가져오는 함수
     void setChatRoom(String rid) {
         roomID = rid;
-        firestore.collection("rooms").document(roomID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        Firestore.collection("rooms").document(roomID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (!task.isSuccessful()) {return;}
@@ -265,17 +277,15 @@ public class ChatFragment extends Fragment {
                 for( String key : users.keySet() ){
                     getUserInfoFromServer(key);
                 }
-                userCount = users.size();
-                //users.put(myUid, (long) 0);
-                //document.getReference().update("users", users);
+                In_User_Count = users.size();
             }
         });
     }
 
+    //읽은 채팅창인지 아닌지 확인하는 함수 -> 이거 조금 문제 있기에 나중에 수정해야함(이름도 좀 이상함)
     void setUnread2Read() {
         if (roomID==null) return;
-
-        firestore.collection("rooms").document(roomID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        Firestore.collection("rooms").document(roomID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (!task.isSuccessful()) {return;}
@@ -288,6 +298,7 @@ public class ChatFragment extends Fragment {
         });
     }
 
+    //채팅룸 만들기 함수
     public void CreateChattingRoom(final DocumentReference room) {
         Map<String, Integer> users = new HashMap<>();
         String title = "";
@@ -302,30 +313,53 @@ public class ChatFragment extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    mAdapter = new RecyclerViewAdapter();
-                    recyclerView.setAdapter(mAdapter);
+                    Chat_RecyclerView_Adapter = new RecyclerViewAdapter();
+                    Chat_RecyclerView.setAdapter(Chat_RecyclerView_Adapter);
                 }
             }
         });
     }
+
+    //유저의 리스트를 가져오는 함수
     public Map<String, UserModel> getUserList() {
         return userList;
     }
 
-    Button.OnClickListener sendBtnClickListener = new View.OnClickListener() {
+    //채팅 보내기 버튼 함수
+    Button.OnClickListener Chat_Send_Button_ClickListener = new View.OnClickListener() {
         public void onClick(View view) {
-            String msg = msg_input.getText().toString();
+            String msg = Chat_Message_Input_EditText.getText().toString();
             sendMessage(msg, "0", null);
-            msg_input.setText("");
+            Chat_Message_Input_EditText.setText("");
         }
     };
 
+    // 이미지 보내기 버튼 함수
+    Button.OnClickListener Chat_Image_Send_Button_ClickListener = new View.OnClickListener() {
+        public void onClick(final View view) {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+            startActivityForResult(intent, PICK_FROM_ALBUM);
+        }
+    };
+
+    // 파일 보내기 버튼 함수
+    Button.OnClickListener Chat_File_Send_Button_ClickListener = new View.OnClickListener() {
+        public void onClick(final View view) {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("*/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select File"), PICK_FROM_FILE);
+        }
+    };
+
+    //메세지 보내기 함수
     private void sendMessage(final String msg, String msgtype, final ChatModel.FileInfo fileinfo) {
-        sendBtn.setEnabled(false);
+        Chat_Send_Button.setEnabled(false);
 
         if (roomID==null) {             // create chatting room for two user
-            roomID = firestore.collection("rooms").document().getId();
-            CreateChattingRoom( firestore.collection("rooms").document(roomID) );
+            roomID = Firestore.collection("rooms").document().getId();
+            CreateChattingRoom( Firestore.collection("rooms").document(roomID) );
         }
 
         final Map<String,Object> messages = new HashMap<>();
@@ -338,13 +372,13 @@ public class ChatFragment extends Fragment {
             messages.put("filesize", fileinfo.filesize);
         }
 
-        final DocumentReference docRef = firestore.collection("rooms").document(roomID);
+        final DocumentReference docRef = Firestore.collection("rooms").document(roomID);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (!task.isSuccessful()) {return;}
 
-                WriteBatch batch = firestore.batch();
+                WriteBatch batch = Firestore.batch();
 
                 // save last message
                 batch.set(docRef, messages, SetOptions.merge());
@@ -369,7 +403,7 @@ public class ChatFragment extends Fragment {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             //sendGCM();
-                            sendBtn.setEnabled(true);
+                            Chat_Send_Button.setEnabled(true);
                         }
                     }
                 });
@@ -378,13 +412,14 @@ public class ChatFragment extends Fragment {
         });
     };
 
+    //사용안하는 듯
     void sendGCM(){
         Gson gson = new Gson();
         NotificationModel notificationModel = new NotificationModel();
         notificationModel.notification.title = userList.get(myUid).getUserModel_NickName();
-        notificationModel.notification.body = msg_input.getText().toString();
+        notificationModel.notification.body = Chat_Message_Input_EditText.getText().toString();
         notificationModel.data.title = userList.get(myUid).getUserModel_NickName();
-        notificationModel.data.body = msg_input.getText().toString();
+        notificationModel.data.body = Chat_Message_Input_EditText.getText().toString();
 
         for ( Map.Entry<String, UserModel> elem : userList.entrySet() ){
             if (myUid.equals(elem.getValue().getUserModel_Uid())) continue;
@@ -406,26 +441,7 @@ public class ChatFragment extends Fragment {
         }
     }
 
-    // choose image
-    Button.OnClickListener imageBtnClickListener = new View.OnClickListener() {
-        public void onClick(final View view) {
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-            startActivityForResult(intent, PICK_FROM_ALBUM);
-        }
-    };
-
-    // choose file
-    Button.OnClickListener fileBtnClickListener = new View.OnClickListener() {
-        public void onClick(final View view) {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            intent.setType("*/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Select File"), PICK_FROM_FILE);
-        }
-    };
-
-    // uploading image / file
+    // 이미지나 파일을 로딩하는 결과 함수
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         if (resultCode!= RESULT_OK) { return;}
@@ -460,7 +476,7 @@ public class ChatFragment extends Fragment {
                 });
     }
 
-    // get file name and size from Uri
+    // Uri에서 파일 이름 및 크기 가져오기 함수
     public static ChatModel.FileInfo getFileDetailFromUri(final Context context, final Uri uri) {
         if (uri == null) { return null; }
 
@@ -487,6 +503,7 @@ public class ChatFragment extends Fragment {
         return fileDetail;
     }
 
+    //잠시 기다리라고 창띄우는 함수
     public void showProgressDialog(String title ) {
         if (progressDialog==null) {
             progressDialog = new ProgressDialog(getContext());
@@ -497,24 +514,28 @@ public class ChatFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.show();
     }
+
+    //안쓰는듯
     public void setProgressDialog(int value) {
         progressDialog.setProgress(value);
     }
+    //로딩창 지우는 함수
     public void hideProgressDialog() {
         progressDialog.dismiss();
     }
-    // =======================================================================================
 
+
+    //채팅 RecyclerViewAdapter
     class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         final private RequestOptions requestOptions = new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(90));
 
-        List<MessageModel> messageModelList;
-        String beforeDay = null;
-        MessageViewHolder beforeViewHolder;
+        List<MessageModel> MessageModel_List= new ArrayList<MessageModel>(); //메세지 리스트
+        String beforeDay = null; //이거 안쓰는듯
+        MessageViewHolder beforeViewHolder; //이거 안쓰는듯
 
 
+        //파일 경로 설정
         RecyclerViewAdapter() {
-            Log.d("로그3","채팅 1");
             File dir = new File(rootPath);
             if (!dir.exists()) {
                 if (!ChatUtil.isPermissionGranted(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -523,20 +544,16 @@ public class ChatFragment extends Fragment {
                 dir.mkdirs();
             }
 
-            Log.d("로그3","채팅 11");
-            messageModelList = new ArrayList<MessageModel>();
-            Log.d("로그3","채팅 111");
             setUnread2Read();
-            Log.d("로그3","채팅 1111");
             startListening();
-            Log.d("로그3","채팅 11111");
         }
 
+        //시작 세팅 함수
         public void startListening() {
             beforeDay = null;
-            messageModelList.clear();
+            MessageModel_List.clear();
 
-            CollectionReference roomRef = firestore.collection("rooms").document(roomID).collection("messages");
+            CollectionReference roomRef = Firestore.collection("rooms").document(roomID).collection("messages");
             // my chatting room information
             listenerRegistration = roomRef.orderBy("timestamp").addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
@@ -554,21 +571,21 @@ public class ChatFragment extends Fragment {
                                     messageModel.getReadUsers().add(myUid);
                                     change.getDocument().getReference().update("readUsers", messageModel.getReadUsers());
                                 }
-                                messageModelList.add(messageModel);
+                                MessageModel_List.add(messageModel);
                                 notifyItemInserted(change.getNewIndex());
                                 break;
                             case MODIFIED:
                                 messageModel = change.getDocument().toObject(MessageModel.class);
-                                messageModelList.set(change.getOldIndex(), messageModel);
+                                MessageModel_List.set(change.getOldIndex(), messageModel);
                                 notifyItemChanged(change.getOldIndex());
                                 break;
                             case REMOVED:
-                                messageModelList.remove(change.getOldIndex());
+                                MessageModel_List.remove(change.getOldIndex());
                                 notifyItemRemoved(change.getOldIndex());
                                 break;
                         }
                     }
-                    recyclerView.scrollToPosition(messageModelList.size() - 1);
+                    Chat_RecyclerView.scrollToPosition(MessageModel_List.size() - 1);
                 }
             });
         }
@@ -579,13 +596,14 @@ public class ChatFragment extends Fragment {
                 listenerRegistration = null;
             }
 
-            messageModelList.clear();
+            MessageModel_List.clear();
             notifyDataSetChanged();
         }
-//////////////
+
+        //케이스에 따른 이미지 띄우기 함수
         @Override
         public int getItemViewType(int position) {
-            MessageModel messageModel = messageModelList.get(position);
+            MessageModel messageModel = MessageModel_List.get(position);
             if (myUid.equals(messageModel.getUid()) ) {
                 switch(messageModel.getMsgtype()){
                     case "1": return R.layout.item_chatimage_right;
@@ -610,18 +628,15 @@ public class ChatFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            Log.d("로그3","채팅 2");
             final MessageViewHolder messageViewHolder = (MessageViewHolder) holder;
-            Log.d("로그3","채팅 22");
-            final MessageModel messageModel = messageModelList.get(position);
-            Log.d("로그3","채팅 222");
-            setReadCounter(messageModel, messageViewHolder.read_counter);
+            final MessageModel messageModel = MessageModel_List.get(position);
+            setReadCounter(messageModel, messageViewHolder.Read_Check);
 
             if ("0".equals(messageModel.getMsgtype())) {                                      // text message
-                messageViewHolder.msg_item.setText(messageModel.getMsg());
+                messageViewHolder.Message_TextView.setText(messageModel.getMsg());
             } else
             if ("2".equals(messageModel.getMsgtype())) {                                      // file transfer
-                messageViewHolder.msg_item.setText(messageModel.getFilename() + "\n" + messageModel.getFilesize());
+                messageViewHolder.Message_TextView.setText(messageModel.getFilename() + "\n" + messageModel.getFilesize());
                 messageViewHolder.filename = messageModel.getFilename();
                 messageViewHolder.realname = messageModel.getMsg();
                 File file = new File(rootPath + messageModel.getFilename());
@@ -635,49 +650,49 @@ public class ChatFragment extends Fragment {
                 Glide.with(getContext())
                         .load(storageReference.child("filesmall/"+ messageModel.getMsg()))
                         .apply(new RequestOptions().override(1000, 1000))
-                        .into(messageViewHolder.img_item);
+                        .into(messageViewHolder.Message_Image_ImageView);
             }
 
             if (! myUid.equals(messageModel.getUid())) {
                 UserModel userModel = userList.get(messageModel.getUid());
-                messageViewHolder.msg_name.setText(userModel.getUserModel_NickName());
+                messageViewHolder.Message_NickName.setText(userModel.getUserModel_NickName());
 
 
                 //상대방 프로필사진으로 바꾸기
                 if (userModel.getphotoUrl() != null) {
-                    Glide.with(getContext()).load(userModel.getphotoUrl()).centerCrop().override(500).into(messageViewHolder.user_photo);
+                    Glide.with(getContext()).load(userModel.getphotoUrl()).centerCrop().override(500).into(messageViewHolder.User_Profile_Imalge);
                 } else{
-                    Glide.with(getContext()).load(R.drawable.user).into(messageViewHolder.user_photo);
+                    Glide.with(getContext()).load(R.drawable.user).into(messageViewHolder.User_Profile_Imalge);
                 }
 
             }
-            messageViewHolder.divider.setVisibility(View.INVISIBLE);
-            messageViewHolder.divider.getLayoutParams().height = 0;
-            messageViewHolder.timestamp.setText("");
+            messageViewHolder.Message_Divider.setVisibility(View.INVISIBLE);
+            messageViewHolder.Message_Divider.getLayoutParams().height = 0;
+            messageViewHolder.Message_DateOfManufacture.setText("");
             if (messageModel.getTimestamp()==null) {return;}
 
             String day = dateFormatDay.format( messageModel.getTimestamp());
             String timestamp = dateFormatHour.format( messageModel.getTimestamp());
-            messageViewHolder.timestamp.setText(timestamp);
+            messageViewHolder.Message_DateOfManufacture.setText(timestamp);
 
             if (position==0) {
-                messageViewHolder.divider_date.setText(day);
-                messageViewHolder.divider.setVisibility(View.VISIBLE);
-                messageViewHolder.divider.getLayoutParams().height = 60;
+                messageViewHolder.Message_Divider_Date.setText(day);
+                messageViewHolder.Message_Divider.setVisibility(View.VISIBLE);
+                messageViewHolder.Message_Divider.getLayoutParams().height = 60;
             } else {
-                MessageModel beforeMsg = messageModelList.get(position - 1);
+                MessageModel beforeMsg = MessageModel_List.get(position - 1);
                 String beforeDay = dateFormatDay.format( beforeMsg.getTimestamp() );
 
                 if (!day.equals(beforeDay) && beforeDay != null) {
-                    messageViewHolder.divider_date.setText(day);
-                    messageViewHolder.divider.setVisibility(View.VISIBLE);
-                    messageViewHolder.divider.getLayoutParams().height = 60;
+                    messageViewHolder.Message_Divider_Date.setText(day);
+                    messageViewHolder.Message_Divider.setVisibility(View.VISIBLE);
+                    messageViewHolder.Message_Divider.getLayoutParams().height = 60;
                 }
             }
         }
 
         void setReadCounter (MessageModel messageModel, final TextView textView) {
-            int cnt = userCount - messageModel.getReadUsers().size();
+            int cnt = In_User_Count - messageModel.getReadUsers().size();
             if (cnt > 0) {
                 textView.setVisibility(View.VISIBLE);
                 textView.setText(String.valueOf(cnt));
@@ -688,46 +703,48 @@ public class ChatFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return messageModelList.size();
+            return MessageModel_List.size();
         }
 
 
     }
 
+    //메세지보낼때 프로필 사진, 뭐라고 보냈는지, 언제 보냈는지 등을 묶어주는 함수
+    //파일도 없앨거임
     private class MessageViewHolder extends RecyclerView.ViewHolder {
-        public ImageView user_photo;
-        public TextView msg_item;
-        public ImageView img_item;          // only item_chatimage_
-        public TextView msg_name;
-        public TextView timestamp;
-        public TextView read_counter;
-        public LinearLayout divider;
-        public TextView divider_date;
-        public TextView button_item;            // only item_chatfile_
-        public LinearLayout msgLine_item;       // only item_chatfile_
+        public ImageView User_Profile_Imalge;  //프로필 사진
+        public TextView Message_TextView;//채팅 메세지 텍스트
+        public ImageView Message_Image_ImageView;          //채팅 메세지 이미지
+        public TextView Message_NickName; //채팅 메세지 이름
+        public TextView Message_DateOfManufacture; //메세지 보낸 시간
+        public TextView Read_Check; //읽었는지 확인
+        public LinearLayout Message_Divider; //메세지 전체 틀
+        public TextView Message_Divider_Date; //메세지 보낸 날짜
+        public TextView button_item;            // only item_chatfile_<-이거 뭔지 정확히 체크
+        public LinearLayout msgLine_item;       // only item_chatfile_ <-이거 뭔지 정확히 체크
         public String filename;
         public String realname;
 
         public MessageViewHolder(View view) {
             super(view);
-            user_photo = view.findViewById(R.id.user_photo);
-            msg_item = view.findViewById(R.id.msg_item);
-            img_item = view.findViewById(R.id.img_item);
-            timestamp = view.findViewById(R.id.timestamp);
-            msg_name = view.findViewById(R.id.msg_name);
-            read_counter = view.findViewById(R.id.read_counter);
-            divider = view.findViewById(R.id.divider);
-            divider_date = view.findViewById(R.id.divider_date);
+            User_Profile_Imalge = view.findViewById(R.id.User_Profile_Imalge);
+            Message_TextView = view.findViewById(R.id.Message_TextView);
+            Message_Image_ImageView = view.findViewById(R.id.Message_Image_ImageView);
+            Message_DateOfManufacture = view.findViewById(R.id.Message_DateOfManufacture);
+            Message_NickName = view.findViewById(R.id.Message_NickName);
+            Read_Check = view.findViewById(R.id.Read_Check);
+            Message_Divider = view.findViewById(R.id.Message_Divider);
+            Message_Divider_Date = view.findViewById(R.id.Message_Divider_Date);
             button_item = view.findViewById(R.id.button_item);
             msgLine_item = view.findViewById(R.id.msgLine_item);        // for file
             if (msgLine_item!=null) {
                 msgLine_item.setOnClickListener(downloadClickListener);
             }
-            if (img_item!=null) {                                       // for image
-                img_item.setOnClickListener(imageClickListener);
+            if (Message_Image_ImageView !=null) {                                       // for image
+                Message_Image_ImageView.setOnClickListener(imageClickListener);
             }
         }
-        // file download and open
+        // 파일 다운로드및 열기 버튼 함수
         Button.OnClickListener downloadClickListener = new View.OnClickListener() {
             public void onClick(View view) {
                 if ("Download".equals(button_item.getText())) {
@@ -788,7 +805,7 @@ public class ChatFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), ViewPagerActivity.class);
                 intent.putExtra("roomID", roomID);
-                intent.putExtra("realname", realname);
+                intent.putExtra("realname", realname); //<- 이게 뭔지 정확히 모르겠음
                 startActivity(intent);
             }
         };

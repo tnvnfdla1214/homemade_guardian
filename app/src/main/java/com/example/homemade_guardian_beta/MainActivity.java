@@ -23,8 +23,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MainActivity";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
                 init();
                 break;
         }
-
     }
 
     private void init() {
@@ -62,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
             myStartActivity(LoginActivity.class);                                                              // part5 : 로그인 정보 없으면 회원가입 화면으로
         } else {
             //myStartActivity(CameraActivity.class);                                                            // part5 : test
-
             DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(firebaseUser.getUid());
             documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -71,9 +67,7 @@ public class MainActivity extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document != null) {
                             if (document.exists()) {                                                            // part5 : 로그인 되있었어도 정보가 있으면 불러오고
-                                //Log.d("태그", "DocumentSnapshot data: " + document.getData());
                             } else {                                                                            // part5 : 아니면 입력받는다.   (18')
-                                //Log.d("태그", "No such document");
                                 myStartActivity(MemberInitActivity.class);
                             }
                         }
@@ -123,15 +117,6 @@ public class MainActivity extends AppCompatActivity {
         //여기에 들어가는지 확실x
         //sendRegistrationToServer();
     }
-
-    //Firebase 클라우드 메시징
-//    void sendRegistrationToServer() {
-//        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        String token = FirebaseInstanceId.getInstance().getToken();
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("token", token);
-//        FirebaseFirestore.getInstance().collection("user").document(uid).set(map, SetOptions.merge());
-//    }
 
     private void myStartActivity(Class c) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
         Intent intent = new Intent(this, c);

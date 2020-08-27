@@ -11,6 +11,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.InputStream;
 
+//지금 사용하지 않는 Activity
 @GlideModule
 public class MyAppGlideModule extends AppGlideModule {
 

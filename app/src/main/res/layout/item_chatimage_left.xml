@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/divider"
+        android:id="@+id/Message_Divider"
         android:layout_width="match_parent"
         android:layout_height="16dp"
         android:gravity="center"
@@ -20,7 +20,7 @@
             android:visibility="visible">
         </View>
         <TextView
-            android:id="@+id/divider_date"
+            android:id="@+id/Message_Divider_Date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -46,7 +46,7 @@
             app:cardCornerRadius="20dp">
 
             <ImageView
-                android:id="@+id/user_photo"
+                android:id="@+id/User_Profile_Imalge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/user" />
@@ -57,14 +57,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <TextView
-                android:id="@+id/msg_name"
+                android:id="@+id/Message_NickName"
                 android:layout_marginLeft="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="name" />
 
             <ImageView
-                android:id="@+id/img_item"
+                android:id="@+id/Message_Image_ImageView"
                 android:background="@drawable/border"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="3dp"
@@ -78,7 +78,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/read_counter"
+                android:id="@+id/Read_Check"
                 android:layout_gravity="top"
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="15dp"
@@ -88,7 +88,7 @@
                 android:text="0"/>
 
             <TextView
-                android:id="@+id/timestamp"
+                android:id="@+id/Message_DateOfManufacture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"

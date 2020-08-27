@@ -54,12 +54,14 @@ import com.example.homemade_guardian_beta.chat.model.MessageModel;
 
 
 
+//chatfragment에서 roomID와 realname이거 줌
 public class ViewPagerActivity extends AppCompatActivity {
 
-	private static String roomID;
-	private static String realname;
-	private static ViewPager viewPager;
-	private static ArrayList<MessageModel> imgList = new ArrayList<>();
+	private static String roomID; //룸 uid
+	private static String realname; //뭔지 모르겟음
+	private static ViewPager viewPager; //뷰페이저
+	private static ArrayList<MessageModel> Message_Image_List = new ArrayList<>();
+
     private String rootPath = ChatUtil.getRootPath()+"/homemade_guardian_beta/";
 
 	@Override
@@ -76,10 +78,8 @@ public class ViewPagerActivity extends AppCompatActivity {
 		viewPager.setAdapter(new SamplePagerAdapter());
 
         findViewById(R.id.downloadBtn).setOnClickListener(downloadBtnClickListener);
-		//findViewById(R.id.rotateBtn).setOnClickListener(rotateBtnClickListener);
 
         ActionBar actionBar = getSupportActionBar();
-        //actionBar.setIcon(R.drawable.back);
         actionBar.setTitle("PhotoView");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
@@ -97,12 +97,13 @@ public class ViewPagerActivity extends AppCompatActivity {
 				return super.onOptionsItemSelected(item);
 		}
 	}
+	//다운로드 버튼 함수
 	Button.OnClickListener downloadBtnClickListener = new View.OnClickListener() {
 		public void onClick(final View view) {
             if (!ChatUtil.isPermissionGranted((Activity) view.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 return ;
             }
-			MessageModel messageModel = imgList.get(viewPager.getCurrentItem());
+			MessageModel messageModel = Message_Image_List.get(viewPager.getCurrentItem());
             /// showProgressDialog("Downloading File.");
 
 			final File localFile = new File(rootPath, messageModel.getFilename());
@@ -124,14 +125,6 @@ public class ViewPagerActivity extends AppCompatActivity {
 		}
 	};
 
-    Button.OnClickListener rotateBtnClickListener = new View.OnClickListener() {
-        public void onClick(View view) {
-            View child = viewPager.getChildAt(viewPager.getCurrentItem());
-            PhotoView photoView = child.findViewById(R.id.photoView);
-            photoView.setRotation(photoView.getRotation()+90);
-        }
-    };
-
 	static class SamplePagerAdapter extends PagerAdapter {
 		private StorageReference storageReference;
 		private int inx = -1;
@@ -148,8 +141,8 @@ public class ViewPagerActivity extends AppCompatActivity {
 
 							for (QueryDocumentSnapshot document : task.getResult()) {
 								MessageModel messageModel = document.toObject(MessageModel.class);
-								imgList.add(messageModel);
-								if (realname.equals(messageModel.getMsg())) {inx = imgList.size()-1; }
+								Message_Image_List.add(messageModel);
+								if (realname.equals(messageModel.getMsg())) {inx = Message_Image_List.size()-1; }
 							}
 							notifyDataSetChanged();
 							if (inx>-1) {
@@ -161,7 +154,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 
 		@Override
 		public int getCount() {
-			return imgList.size();
+			return Message_Image_List.size();
 		}
 
 		@Override
@@ -170,7 +163,7 @@ public class ViewPagerActivity extends AppCompatActivity {
             photoView.setId(R.id.photoView);
 
 			Glide.with(container.getContext())
-					.load(storageReference.child("filesmall/"+imgList.get(position).getMsg()))
+					.load(storageReference.child("filesmall/"+ Message_Image_List.get(position).getMsg()))
 					.into(photoView);
 
 			container.addView(photoView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);

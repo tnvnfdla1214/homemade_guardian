@@ -87,6 +87,7 @@ public class ChatroomListFragment extends Fragment {
         return view;
     }
 
+    // 프래그먼트 객체 자체는 사라지지 않고 메모리에 남아있는 함수
     @Override
     public void onDestroyView() {
         super.onDestroyView();

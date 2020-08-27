@@ -2,10 +2,10 @@ package com.example.homemade_guardian_beta.chat.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,56 +30,62 @@ import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.SelectUserActivity;
 import com.example.homemade_guardian_beta.chat.model.UserModel;
 
-//그룹캐팅 프래그먼트
-public class UserListInRoomFragment extends Fragment {
-    private String roomID;
-    private List<UserModel> userModels;
-    private RecyclerView recyclerView;
+//그룹채팅 프래그먼트
+//우리 그룹채팅 안할거니까 빼야할 프래그먼트
+public class GroupUserFragment extends Fragment {
+    private String roomID;  //room의 Uid
+    private List<UserModel> Userlist; //유저모델 리스트
+    private RecyclerView recyclerView; //리사클러뷰
 
-    public UserListInRoomFragment() {
+    public GroupUserFragment() {
     }
 
-    public static final UserListInRoomFragment getInstance(String roomID, Map<String, UserModel> userModels) {
-        List<UserModel> users = new ArrayList();
+    public static final GroupUserFragment getInstance(String roomID, Map<String, UserModel> userModels) {
+        List<UserModel> UserModellist = new ArrayList();
         for( Map.Entry<String, UserModel> elem : userModels.entrySet() ){
-            users.add(elem.getValue());
+            UserModellist.add(elem.getValue());
         }
 
-        UserListInRoomFragment f = new UserListInRoomFragment();
-        f.setUserList(users);
+        GroupUserFragment groupUserFragment = new GroupUserFragment();
+        groupUserFragment.setUserList(UserModellist);
         Bundle bdl = new Bundle();
         bdl.putString("roomID", roomID);
-        f.setArguments(bdl);
+        groupUserFragment.setArguments(bdl);
 
-        return f;
+        return groupUserFragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_userlistinroom, container, false);
-        if (getArguments() != null) {
-            roomID = getArguments().getString("roomID");
-        }
 
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager( new LinearLayoutManager((inflater.getContext())));
         recyclerView.setAdapter(new UserFragmentRecyclerViewAdapter());
 
-        view.findViewById(R.id.addContactBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                Intent intent = new Intent(getActivity(), SelectUserActivity.class);
-                intent.putExtra("roomID", roomID);
-                startActivity(intent);
-            }
-        });
+        view.findViewById(R.id.Group_Chat_Add_Button).setOnClickListener(Group_Chat_Add_Button_ClickListener);
 
+
+        if (getArguments() != null) {
+            roomID = getArguments().getString("roomID");
+        }
         return view;
     }
 
+    //유저 추가 버튼 함수
+    Button.OnClickListener Group_Chat_Add_Button_ClickListener = new View.OnClickListener() {
+        public void onClick(View view) {
+            Intent intent = new Intent(getActivity(), SelectUserActivity.class);
+            intent.putExtra("roomID", roomID);
+            startActivity(intent);
+        }
+    };
+
+
+
     public void setUserList(List<UserModel> users) {
-        userModels = users;
+        Userlist = users;
     }
 
     class UserFragmentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -99,30 +105,13 @@ public class UserListInRoomFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            final UserModel user = userModels.get(position);
+            final UserModel user = Userlist.get(position);
             CustomViewHolder customViewHolder = (CustomViewHolder) holder;
             customViewHolder.user_name.setText(user.getUserModel_NickName());
-            //customViewHolder.user_msg.setText(user.getUsermsg());
-
-            /*
-            if (user.getUserphoto()==null) {
-                Glide.with(getActivity()).load(R.drawable.user)
-                        .apply(requestOptions)
-                        .into(customViewHolder.user_photo);
-            } else{
-                Glide.with(getActivity())
-                        .load(storageReference.child("userPhoto/"+user.getUserphoto()))
-                        .apply(requestOptions)
-                        .into(customViewHolder.user_photo);
-            }
-
-             */
             if (user.getphotoUrl()!=null) {
                 Glide.with(getActivity()).load(user.getphotoUrl()).centerCrop().override(500).into(customViewHolder.user_photo);
-                Log.d("태그1","민규111");
             } else{
                 Glide.with(getActivity()).load(R.drawable.user).into(customViewHolder.user_photo);
-                Log.d("태그1","민규111");
             }
 
 
@@ -130,7 +119,7 @@ public class UserListInRoomFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return userModels.size();
+            return Userlist.size();
         }
     }
 

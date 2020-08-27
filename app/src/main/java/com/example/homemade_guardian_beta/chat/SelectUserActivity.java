@@ -85,6 +85,7 @@ public class SelectUserActivity extends AppCompatActivity {
     Button.OnClickListener makeRoomClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             if (selectedUsers.size() <2) {
+                //이거 단톡만들때 쓰는듯
                 ChatUtil.showMessage(getApplicationContext(), "Please select 2 or more user");
                 return;
             }

@@ -13,14 +13,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
-import com.example.homemade_guardian_beta.chat.fragment.UserListInRoomFragment;
+import com.example.homemade_guardian_beta.chat.fragment.GroupUserFragment;
 
 
 //채팅방안 액티비티 -chatFragment랑 연결됨
 public class ChatActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ChatFragment chatFragment;
-    private UserListInRoomFragment userListInRoomFragment = null;
+    private GroupUserFragment groupUserFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +48,11 @@ public class ChatActivity extends AppCompatActivity {
                 if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
                     drawerLayout.closeDrawer(Gravity.RIGHT);
                 } else {
-                    if (userListInRoomFragment==null) {
-                        userListInRoomFragment = UserListInRoomFragment.getInstance(roomID, chatFragment.getUserList());
+                    if (groupUserFragment ==null) {
+                        groupUserFragment = GroupUserFragment.getInstance(roomID, chatFragment.getUserList());
                         getSupportFragmentManager()
                                 .beginTransaction()
-                                .replace(R.id.drawerFragment, userListInRoomFragment)
+                                .replace(R.id.drawerFragment, groupUserFragment)
                                 .commit();
                     }
                     drawerLayout.openDrawer(Gravity.RIGHT);

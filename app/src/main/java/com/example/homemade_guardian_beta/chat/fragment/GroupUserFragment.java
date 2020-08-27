@@ -130,7 +130,7 @@ public class GroupUserFragment extends Fragment {
 
         public CustomViewHolder(View view) {
             super(view);
-            user_photo = view.findViewById(R.id.user_photo);
+            user_photo = view.findViewById(R.id.User_Profile_Imalge);
             user_name = view.findViewById(R.id.user_name);
             user_msg = view.findViewById(R.id.user_msg);
             user_msg.setVisibility(View.GONE);

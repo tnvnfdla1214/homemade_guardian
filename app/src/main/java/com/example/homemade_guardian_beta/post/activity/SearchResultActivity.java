@@ -16,10 +16,10 @@ public class SearchResultActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchresult);
         setToolbarTitle("검색 결과");
-        String search = getIntent().getStringExtra("search");
+        String Search = getIntent().getStringExtra("search");
 
         // chatting area
-        SearchResultFragment = SearchResultFragment.getInstance(search);
+        SearchResultFragment = SearchResultFragment.getInstance(Search);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.mainFragment, SearchResultFragment)
@@ -36,5 +36,4 @@ public class SearchResultActivity extends BasicActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }

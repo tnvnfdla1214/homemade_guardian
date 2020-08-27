@@ -6,10 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.homemade_guardian_beta.R;
@@ -18,7 +16,6 @@ import com.example.homemade_guardian_beta.Photo.entity.PhotoDirectory;
 import com.example.homemade_guardian_beta.Photo.event.OnItemCheckListener;
 import com.example.homemade_guardian_beta.Photo.event.OnPhotoClickListener;
 import com.example.homemade_guardian_beta.Photo.utils.MediaStoreHelper;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,40 +26,33 @@ import java.util.List;
 
 public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoViewHolder> {
 
-  private LayoutInflater inflater;
+  private LayoutInflater Inflater;
+  private Context MContext;
 
-  private Context mContext;
-
-  private OnItemCheckListener onItemCheckListener    = null;
-  private OnPhotoClickListener onPhotoClickListener  = null;
-  private View.OnClickListener onCameraClickListener = null;
+  private OnItemCheckListener onItemCheckListener    = null;  //이미지의 체크박스가 체크되었는지
+  private OnPhotoClickListener onPhotoClickListener  = null;  //이미지가 클릭되었는지
+  private View.OnClickListener onCameraClickListener = null;  //카메라를 이용하는 버튼이 클릭 되었는지
 
   public final static int ITEM_TYPE_CAMERA = 100;
   public final static int ITEM_TYPE_PHOTO  = 101;
+  private boolean HasCamera = true;
+  private boolean IsCheckBoxOnly = false;
 
-  private boolean hasCamera = true;
-  private boolean mIsCheckBoxOnly = false;
-
-  public PhotoGridAdapter(Context mContext, List<PhotoDirectory> photoDirectories , boolean isCheckBoxOnly) {
-    this.photoDirectories = photoDirectories;
-    this.mContext = mContext;
-    this.mIsCheckBoxOnly = isCheckBoxOnly;
-    inflater = LayoutInflater.from(mContext);
+  public PhotoGridAdapter(Context MContext, List<PhotoDirectory> PhotoDirectories , boolean IsCheckBoxOnly) {
+    this.PhotoDirectory_List = PhotoDirectories;
+    this.MContext = MContext;
+    this.IsCheckBoxOnly = IsCheckBoxOnly;
+    Inflater = LayoutInflater.from(MContext);
   }
 
-
-  @Override public int getItemViewType(int position) {
-    return (showCamera() && position == 0) ? ITEM_TYPE_CAMERA : ITEM_TYPE_PHOTO;
-  }
-
-
-  @Override public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View itemView = inflater.inflate(R.layout.util_item_photo, parent, false);
+  @Override
+  public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    View itemView = Inflater.inflate(R.layout.util_item_photo, parent, false);
     PhotoViewHolder holder = new PhotoViewHolder(itemView);
     if (viewType == ITEM_TYPE_CAMERA) {
-      holder.vSelected.setVisibility(View.GONE);
-      holder.ivPhoto.setScaleType(ImageView.ScaleType.CENTER);
-      holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
+      holder.Selectedview.setVisibility(View.GONE);
+      holder.IvPhoto.setScaleType(ImageView.ScaleType.CENTER);
+      holder.IvPhoto.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
           if (onCameraClickListener != null) {
             onCameraClickListener.onClick(view);
@@ -73,121 +63,102 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
     return holder;
   }
 
-  @Override public void onBindViewHolder(final PhotoViewHolder holder, int position) {
-
-    if (getItemViewType(position) == ITEM_TYPE_PHOTO) {
-
-      List<Photo> photos = getCurrentPhotos();
-      final Photo photo;
-
+  //이미지들을 받는 Holder
+  @Override public void onBindViewHolder(final PhotoViewHolder Holder, int Position) {
+    if (getItemViewType(Position) == ITEM_TYPE_PHOTO) {
+      List<Photo> PhotoList = getCurrentPhotos();
+      final Photo Photo;
       if (showCamera()) {
-        photo = photos.get(position - 1);
+        Photo = PhotoList.get(Position - 1);
       } else {
-        photo = photos.get(position);
+        Photo = PhotoList.get(Position);
       }
-
-      Uri uri = FileProvider.getUriForFile(mContext, "com.example.homemade_guardian_beta.provider", new File(photo.getPath()));
-      Glide.with(mContext)
-              .load(uri)
+            Uri URI = FileProvider.getUriForFile(MContext, "com.example.homemade_guardian_beta.provider", new File(Photo.getPhoto_Path()));
+      Glide.with(MContext)
+              .load(URI)
               .apply(new RequestOptions()
                       .placeholder(R.color.img_loding_placeholder)
                       .error(R.color.image_loading_error_color)
                       .centerCrop())
-              .into(holder.ivPhoto);
+              .into(Holder.IvPhoto);
 
-
-      final boolean isChecked = isSelected(photo);
-
-      holder.vSelected.setSelected(isChecked);
-      holder.ivPhoto.setSelected(isChecked);
-
-      holder.ivPhoto.setOnClickListener(new View.OnClickListener() {
+      final boolean IsChecked = isSelected(Photo);
+      Holder.Selectedview.setSelected(IsChecked);
+      Holder.IvPhoto.setSelected(IsChecked);
+      Holder.IvPhoto.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
-
-          if(mIsCheckBoxOnly){
-            boolean isEnable = true;
+          if(IsCheckBoxOnly){
+            boolean IsEnable = true;
             if (onItemCheckListener != null) {
-              isEnable = onItemCheckListener.OnItemCheck(holder.getAdapterPosition(), photo, isChecked, getSelectedPhotos().size());
+              IsEnable = onItemCheckListener.OnItemCheck(Holder.getAdapterPosition(), Photo, IsChecked, getSelectedPhoto_List().size());
             }
-            if (isEnable) {
-              toggleSelection(photo);
-              notifyItemChanged(holder.getAdapterPosition());
+            if (IsEnable) {
+              toggleSelection(Photo);
+              notifyItemChanged(Holder.getAdapterPosition());
             }
           }else{
             if (onPhotoClickListener != null) {
-              onPhotoClickListener.onClick(view, holder.getAdapterPosition(), showCamera());
+              onPhotoClickListener.onClick(view, Holder.getAdapterPosition(), showCamera());
             }
           }
         }
       });
 
-      holder.vSelected.setOnClickListener(new View.OnClickListener() {
+      Holder.Selectedview.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
 
           boolean isEnable = true;
 
           if (onItemCheckListener != null) {
-            isEnable = onItemCheckListener.OnItemCheck(holder.getAdapterPosition(), photo, isChecked, getSelectedPhotos().size());
+            isEnable = onItemCheckListener.OnItemCheck(Holder.getAdapterPosition(), Photo, IsChecked, getSelectedPhoto_List().size());
           }
           if (isEnable) {
-            toggleSelection(photo);
-            notifyItemChanged(holder.getAdapterPosition());
+            toggleSelection(Photo);
+            notifyItemChanged(Holder.getAdapterPosition());
           }
         }
       });
-
     } else {
-      holder.ivPhoto.setImageResource(R.drawable.camera);
+      Holder.IvPhoto.setImageResource(R.drawable.camera);
     }
   }
 
-
+  //디렉토리의 이미지 개수
   @Override public int getItemCount() {
-    int photosCount =
-        photoDirectories.size() == 0 ? 0 : getCurrentPhotos().size();
-    if (showCamera()) {
-      return photosCount + 1;
-    }
+    int photosCount = PhotoDirectory_List.size() == 0 ? 0 : getCurrentPhotos().size();
+    if (showCamera()) { return photosCount + 1; }
     return photosCount;
   }
 
   public static class PhotoViewHolder extends RecyclerView.ViewHolder {
-    private ImageView ivPhoto;
-    private View vSelected;
+    private ImageView IvPhoto;
+    private View Selectedview;
 
     public PhotoViewHolder(View itemView) {
       super(itemView);
-      ivPhoto   = (ImageView) itemView.findViewById(R.id.iv_photo);
-      vSelected = itemView.findViewById(R.id.v_selected);
+      IvPhoto = (ImageView) itemView.findViewById(R.id.iv_photo);
+      Selectedview = itemView.findViewById(R.id.v_selected);
     }
   }
 
-  public void setOnItemCheckListener(OnItemCheckListener onItemCheckListener) {
-    this.onItemCheckListener = onItemCheckListener;
-  }
+  @Override
+  public int getItemViewType(int position) { return (showCamera() && position == 0) ? ITEM_TYPE_CAMERA : ITEM_TYPE_PHOTO; }
 
-  public void setOnPhotoClickListener(OnPhotoClickListener onPhotoClickListener) {
-    this.onPhotoClickListener = onPhotoClickListener;
-  }
+  public void setOnItemCheckListener(OnItemCheckListener onItemCheckListener) { this.onItemCheckListener = onItemCheckListener; }
 
-  public void setOnCameraClickListener(View.OnClickListener onCameraClickListener) {
-    this.onCameraClickListener = onCameraClickListener;
-  }
+  public void setOnPhotoClickListener(OnPhotoClickListener onPhotoClickListener) { this.onPhotoClickListener = onPhotoClickListener; }
+
+  public void setOnCameraClickListener(View.OnClickListener onCameraClickListener) { this.onCameraClickListener = onCameraClickListener; }
 
   public ArrayList<String> getSelectedPhotoPaths() {
     ArrayList<String> selectedPhotoPaths = new ArrayList<>(getSelectedItemCount());
-
-    for (Photo photo : selectedPhotos) {
-      selectedPhotoPaths.add(photo.getPath());
-    }
-
+    for (Photo photo : SelectedPhoto_List) { selectedPhotoPaths.add(photo.getPhoto_Path()); }
     return selectedPhotoPaths;
   }
 
   public void setShowCamera(boolean hasCamera) {
-    this.hasCamera = hasCamera;
+    this.HasCamera = hasCamera;
   }
 
-
-  public boolean showCamera() { return (hasCamera && currentDirectoryIndex == MediaStoreHelper.INDEX_ALL_PHOTOS); }
+  public boolean showCamera() { return (HasCamera && CurrentDirectoryIndex == MediaStoreHelper.INDEX_ALL_PHOTOS); }
 }

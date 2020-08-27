@@ -38,15 +38,15 @@ import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_MEDIA;
 // +++수정을 추가해야함, 추가한 사진이 보이게 해주는 기능 추가해야함
 
 public class ModifyPostActivity extends BasicActivity {
-    private PostModel postModel;                                        //UserModel 참조 선언
+    private PostModel Postmodel;                                        //UserModel 참조 선언
 
     private int PathCount;                                              //이미지 리스트 중 몇번째인지 나타내는 변수
-    public  ArrayList<String> SelectedPhotos = new ArrayList<>();       //선택한 이미지들이 담기는 리스트
+    public  ArrayList<String> ArrayList_SelectedPhotos = new ArrayList<>();       //선택한 이미지들이 담기는 리스트
 
     private RelativeLayout ButtonsBackgroundLayout;                     ////결과적으로는 안쓸 버튼
     private RelativeLayout LoaderLayout;                                //로딩중을 나타내는 layout 선언
-    private EditText SelectedEditText;                                  ////뭔지 모르겠음
-    private EditText TitleEditText;                                     //수정하려는 게시물의 제목
+    private EditText Selected_EditText;                                  ////뭔지 모르겠음
+    private EditText Title_EditText;                                     //수정하려는 게시물의 제목
 
     private FirebaseUser CurrentUser;                                   //파이어베이스 데이터 상의 현재 사용자
     private StorageReference Storagereference;                                //파이어스토리지에 접근하기 위한 선언
@@ -62,7 +62,7 @@ public class ModifyPostActivity extends BasicActivity {
 
         ButtonsBackgroundLayout = findViewById(R.id.buttonsBackgroundLayout);
         LoaderLayout = findViewById(R.id.loaderLyaout);
-        TitleEditText = findViewById(R.id.titleEditText);
+        Title_EditText = findViewById(R.id.titleEditText);
 
         findViewById(R.id.check).setOnClickListener(onClickListener);
         findViewById(R.id.image).setOnClickListener(onClickListener);
@@ -70,18 +70,18 @@ public class ModifyPostActivity extends BasicActivity {
         findViewById(R.id.delete).setOnClickListener(onClickListener);
 
         ButtonsBackgroundLayout.setOnClickListener(onClickListener);
-        TitleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        Title_EditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    SelectedEditText = null;
+                    Selected_EditText = null;
                 }
             }
         });
 
         FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();
         Storagereference = Firebasestorage.getReference();
-        postModel = (PostModel) getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
+        Postmodel = (PostModel) getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
     }
 
     @Override
@@ -93,17 +93,18 @@ public class ModifyPostActivity extends BasicActivity {
                 photos = data.getStringArrayListExtra(PhotoPickerActivity.KEY_SELECTED_PHOTOS);
             }
             if (photos != null) {
-                SelectedPhotos.addAll(photos);
+                ArrayList_SelectedPhotos.addAll(photos);
             }
         }
     }
 
+    //Activity에서 사용하는 버튼들의 OnClickListener
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.check:
-                    storageUpload();
+                    Modify_Storage_Upload();
                     break;
                 case R.id.image:
                     myStartActivity(GalleryActivity.class, GALLERY_IMAGE, 0);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
@@ -123,18 +124,20 @@ public class ModifyPostActivity extends BasicActivity {
         }
     };
 
+    //////아마 안 쓸듯
     View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {               // part12 : 설정 (16'10")
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
             if (hasFocus) {
-                SelectedEditText = (EditText) v;
+                Selected_EditText = (EditText) v;
             }
         }
     };
 
-    private void storageUpload() {
+    //WritePostFragment와 비슷한 형태로 차이점이 있다면, docRef_POSTS_PostUid에 새로운 Uid를 생성 받는 것이 아니라 수정하고자하는 게시물의 Uid를 받아서 쓴다.
+    private void Modify_Storage_Upload() {
         final String Title = ((EditText) findViewById(R.id.titleEditText)).getText().toString();
-        final String Post_Uid = postModel.getPostModel_Post_Uid();
+        final String Post_Uid = Postmodel.getPostModel_Post_Uid();
         if (Title.length() > 0) {
             LoaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
             final ArrayList<String> ImageList = new ArrayList<>();                                   // part11 : contentsList에는 컨텐츠 내용이
@@ -142,22 +145,22 @@ public class ModifyPostActivity extends BasicActivity {
             FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();                                    // part12 :
             Storagereference = Firebasestorage.getReference();
             FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
-            final DocumentReference docRef_POSTS_PostUid = Firebasefirestore.collection("POSTS").document(postModel.getPostModel_Post_Uid());     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
-            final Date DateOfManufacture = postModel.getPostModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
-            for (int i = 0; i < SelectedPhotos.size(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
+            final DocumentReference docRef_POSTS_PostUid = Firebasefirestore.collection("POSTS").document(Postmodel.getPostModel_Post_Uid());     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
+            final Date DateOfManufacture = Postmodel.getPostModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
+            for (int i = 0; i < ArrayList_SelectedPhotos.size(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
 
                 // part11 : 자식뷰 저장
                 // part11 : EditText가 아닐 때 ---> 이미지 뷰일때는
-                String path = SelectedPhotos.get(PathCount);
+                String path = ArrayList_SelectedPhotos.get(PathCount);
                 ImageList.add(path);
                 String[] pathArray = path.split("\\.");                                         // part14 : 이미지의 확장자를 주어진대로 (2'40")
                 final StorageReference ImagesRef_POSTS_Uid_PathCount = Storagereference.child("POSTS/" + docRef_POSTS_PostUid.getId() + "/" + PathCount + "." + pathArray[pathArray.length - 1]);
                 try {
-                    InputStream stream = new FileInputStream(new File(SelectedPhotos.get(PathCount)));            // part11 : 경로 설정 (27'20")
-                    StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (ImageList.size() - 1)).build();
-                    UploadTask uploadTask = ImagesRef_POSTS_Uid_PathCount.putStream(stream, metadata);
+                    InputStream Stream = new FileInputStream(new File(ArrayList_SelectedPhotos.get(PathCount)));            // part11 : 경로 설정 (27'20")
+                    StorageMetadata Metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (ImageList.size() - 1)).build();
+                    UploadTask Uploadtask = ImagesRef_POSTS_Uid_PathCount.putStream(Stream, Metadata);
                     ///
-                    uploadTask.addOnFailureListener(new OnFailureListener() {                               // part11 :
+                    Uploadtask.addOnFailureListener(new OnFailureListener() {                               // part11 :
                         @Override
                         public void onFailure(@NonNull Exception exception) {
                         }
@@ -169,9 +172,9 @@ public class ModifyPostActivity extends BasicActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {                                             // part11 : SUCCEESSCOUNT 개의 사진 (37')
                                     ImageList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                        PostModel postModel = new PostModel(Title, ImageList,  DateOfManufacture, CurrentUser.getUid(), Post_Uid);
-                                        postModel.setPostModel_Post_Uid(Post_Uid);
-                                        storeUpload(docRef_POSTS_PostUid, postModel);
+                                        PostModel Postmodel = new PostModel(Title, ImageList,  DateOfManufacture, CurrentUser.getUid(), Post_Uid);
+                                        Postmodel.setPostModel_Post_Uid(Post_Uid);
+                                        Modify_Store_Upload(docRef_POSTS_PostUid, Postmodel);
                                 }
                             });
                         }
@@ -186,15 +189,16 @@ public class ModifyPostActivity extends BasicActivity {
         }
     }
 
-    private void storeUpload(DocumentReference docRef_POSTS_PostUid, final PostModel postModel) {
-        docRef_POSTS_PostUid.set(postModel.getPostInfo())
+    // 파이어스토어에 바뀐 정보들을 POSTS에 넣는다. WritePostFragment에 있는 것과는 차이가 없다.
+    private void Modify_Store_Upload(DocumentReference docRef_POSTS_PostUid, final PostModel Postmodel) {
+        docRef_POSTS_PostUid.set(Postmodel.getPostInfo())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         LoaderLayout.setVisibility(View.GONE);
-                        Intent resultIntent = new Intent();
-                        resultIntent.putExtra("postinfo", postModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
-                        setResult(Activity.RESULT_OK, resultIntent);
+                        Intent Resultintent = new Intent();
+                        Resultintent.putExtra("postinfo", Postmodel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
+                        setResult(Activity.RESULT_OK, Resultintent);
                         finish();
                     }
                 })

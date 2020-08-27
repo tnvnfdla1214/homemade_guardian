@@ -14,5 +14,4 @@ public interface OnItemCheckListener {
    * @return enable check
    */
   boolean OnItemCheck(int position, Photo path, boolean isCheck, int selectedItemCount);
-
 }

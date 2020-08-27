@@ -48,8 +48,8 @@ public class MediaStoreHelper {
             if (data == null) return;
             List<PhotoDirectory> directories = new ArrayList<>();
             PhotoDirectory photoDirectoryAll = new PhotoDirectory();
-            photoDirectoryAll.setName(context.getString(R.string.y_photopicker_all_image));
-            photoDirectoryAll.setId("ALL");
+            photoDirectoryAll.setPhotoDirectory_Name(context.getString(R.string.y_photopicker_all_image));
+            photoDirectoryAll.setPhotoDirectory_Id("ALL");
 
             while (data.moveToNext()) {
 
@@ -59,13 +59,13 @@ public class MediaStoreHelper {
                 String path = data.getString(data.getColumnIndexOrThrow(DATA));
 
                 PhotoDirectory photoDirectory = new PhotoDirectory();
-                photoDirectory.setId(bucketId);
-                photoDirectory.setName(name);
+                photoDirectory.setPhotoDirectory_Id(bucketId);
+                photoDirectory.setPhotoDirectory_Name(name);
 
                 if (!directories.contains(photoDirectory)) {
-                    photoDirectory.setCoverPath(path);
+                    photoDirectory.setPhotoDirectory_CoverPath(path);
                     photoDirectory.addPhoto(imageId, path);
-                    photoDirectory.setDateAdded(data.getLong(data.getColumnIndexOrThrow(DATE_ADDED)));
+                    photoDirectory.setPhotoDirectory_Dateadded(data.getLong(data.getColumnIndexOrThrow(DATE_ADDED)));
                     directories.add(photoDirectory);
                 } else {
                     directories.get(directories.indexOf(photoDirectory)).addPhoto(imageId, path);
@@ -74,7 +74,7 @@ public class MediaStoreHelper {
                 photoDirectoryAll.addPhoto(imageId, path);
             }
             if (photoDirectoryAll.getPhotoPaths().size() > 0) {
-                photoDirectoryAll.setCoverPath(photoDirectoryAll.getPhotoPaths().get(0));
+                photoDirectoryAll.setPhotoDirectory_CoverPath(photoDirectoryAll.getPhotoPaths().get(0));
             }
             directories.add(INDEX_ALL_PHOTOS, photoDirectoryAll);
             if (resultCallback != null) {

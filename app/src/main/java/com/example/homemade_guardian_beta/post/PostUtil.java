@@ -16,11 +16,11 @@ public class PostUtil {                                                         
     public static final int GALLERY_IMAGE = 0;
     public static final int GALLERY_VIDEO = 1;
 
-    public static void showToast(Activity activity, String msg){ Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show(); }
+    public static void showToast(Activity activity, String Msg){ Toast.makeText(activity, Msg, Toast.LENGTH_SHORT).show(); }
 
-    public static boolean isStorageUrl(String url){ return Patterns.WEB_URL.matcher(url).matches() && url.contains("https://firebasestorage.googleapis.com/v0/b/homemade-guardian-beta.appspot.com/o/POSTS"); }
+    public static boolean isStorageUrl(String URL){ return Patterns.WEB_URL.matcher(URL).matches() && URL.contains("https://firebasestorage.googleapis.com/v0/b/homemade-guardian-beta.appspot.com/o/POSTS"); }
     // part17 : 스토리지 주소에 대한 등록 [SHA1코드같은..] (16'45")
 
-    public static String storageUrlToName(String url){ return url.split("\\?")[0].split("%2F")[url.split("\\?")[0].split("%2F").length - 1]; }
+    public static String storageUrlToName(String URL){ return URL.split("\\?")[0].split("%2F")[URL.split("\\?")[0].split("%2F").length - 1]; }
 }
 

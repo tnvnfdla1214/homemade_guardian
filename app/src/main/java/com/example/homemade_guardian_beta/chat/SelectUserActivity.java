@@ -198,7 +198,7 @@ public class SelectUserActivity extends AppCompatActivity {
 
         CustomViewHolder(View view) {
             super(view);
-            user_photo = view.findViewById(R.id.user_photo);
+            user_photo = view.findViewById(R.id.User_Profile_Imalge);
             user_name = view.findViewById(R.id.user_name);
             userChk = view.findViewById(R.id.userChk);
         }

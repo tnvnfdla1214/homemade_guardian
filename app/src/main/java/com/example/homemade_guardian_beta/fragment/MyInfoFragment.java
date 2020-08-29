@@ -134,7 +134,7 @@ public class MyInfoFragment extends Fragment {
 
         CustomViewHolder(View view) {
             super(view);
-            user_photo = view.findViewById(R.id.user_photo);
+            user_photo = view.findViewById(R.id.User_Profile_Imalge);
             user_name = view.findViewById(R.id.user_name);
             user_msg = view.findViewById(R.id.user_msg);
         }

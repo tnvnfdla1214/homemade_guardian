@@ -379,7 +379,7 @@ public class PostActivity extends BasicActivity {                               
 
         CustomViewHolder(View view) {
             super(view);
-            Comment_Host_ImageView = view.findViewById(R.id.user_photo);
+            Comment_Host_ImageView = view.findViewById(R.id.User_Profile_Imalge);
             Comment_Host_Name_TextView = view.findViewById(R.id.user_name);
             Comment_TextView = view.findViewById(R.id.user_comment);
             Menu_Button_CardView = view.findViewById(R.id.menu);

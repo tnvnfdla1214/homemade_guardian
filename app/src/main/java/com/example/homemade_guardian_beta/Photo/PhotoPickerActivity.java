@@ -69,10 +69,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
   }
 
   @Override
-  protected void onResume() {
-    super.onResume();
-
-  }
+  protected void onResume() { super.onResume(); }
 
   private void checkExternalStoragePermission(){
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -146,17 +143,13 @@ public class PhotoPickerActivity extends AppCompatActivity {
   }
 
   private void setPickerFragment(){
-
     if(pickerFragment == null){
       pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentById(R.id.photoPickerFragment);
       pickerFragment.getPhotogridAdapter().setShowCamera(showCamera);
       pickerFragment.getPhotogridAdapter().setOnItemCheckListener(new OnItemCheckListener() {
         @Override public boolean OnItemCheck(int position, Photo photo, final boolean isCheck, int selectedItemCount) {
-
           int total = selectedItemCount + (isCheck ? -1 : 1);
-
           menuDoneItem.setEnabled(total > 0);
-
           if (maxCount <= 1) {
             List<Photo> photos = pickerFragment.getPhotogridAdapter().getSelectedPhoto_List();
             if (!photos.contains(photo)) {
@@ -165,7 +158,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
             }
             return true;
           }
-
           if (total > maxCount) {
             Toast.makeText(getActivity(), getString(R.string.y_photopicker_over_max_count_tips, maxCount),
                     LENGTH_LONG).show();

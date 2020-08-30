@@ -36,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 
 //지금은 임시로 우리앱에 들어간 유저들의 정보들이 나옴 -> 해당 유저를 누르면 그사람과 채팅 액티비티가 켜짐
 //임시 : (채팅앱 : UserListFragment)
+//MyInfoFragment -> ChatActivity -> ChatFragment ->
 public class MyInfoFragment extends Fragment {
     private FirestoreAdapter firestoreAdapter;
 
@@ -81,7 +82,7 @@ public class MyInfoFragment extends Fragment {
         final private RequestOptions requestOptions = new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(90));
         private StorageReference storageReference;
         //현재 들어와 있는 유저 uid 가져오기
-        private String myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        private String UserModel_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         RecyclerViewAdapter(Query query) {
             super(query);
@@ -99,7 +100,7 @@ public class MyInfoFragment extends Fragment {
             DocumentSnapshot documentSnapshot = getSnapshot(position);
             final UserModel user = documentSnapshot.toObject(UserModel.class);
 
-            if (myUid.equals(user.getUserModel_Uid())) {
+            if (UserModel_Uid.equals(user.getUserModel_Uid())) {
                 viewHolder.itemView.setVisibility(View.INVISIBLE);
                 viewHolder.itemView.getLayoutParams().height = 0;
                 return;
@@ -108,8 +109,8 @@ public class MyInfoFragment extends Fragment {
             viewHolder.user_name.setText(user.getUserModel_NickName());
             viewHolder.user_msg.setText(user.getUserModel_StateMassage());
 
-            if (user.getphotoUrl()!=null) {
-                Glide.with(getActivity()).load(user.getphotoUrl()).centerCrop().override(500).into(viewHolder.user_photo);
+            if (user.getUserModel_ProfileImage()!=null) {
+                Glide.with(getActivity()).load(user.getUserModel_ProfileImage()).centerCrop().override(500).into(viewHolder.user_photo);
             } else{
                 Glide.with(getActivity()).load(R.drawable.user).into(viewHolder.user_photo);
             }
@@ -119,7 +120,8 @@ public class MyInfoFragment extends Fragment {
                 public void onClick(View v) {
                     //chatactivity는 해당 고유uid를 가진 사람을 찾아 그사람과의 채팅방을 들어감
                     Intent intent = new Intent(getView().getContext(), ChatActivity.class);
-                    intent.putExtra("toUid", user.getUserModel_Uid());
+                    intent.putExtra("To_User_Uid", user.getUserModel_Uid());
+                    Log.d("태그","MyInfoFragment");
                     startActivity(intent);
                 }
             });
@@ -134,7 +136,7 @@ public class MyInfoFragment extends Fragment {
 
         CustomViewHolder(View view) {
             super(view);
-            user_photo = view.findViewById(R.id.user_photo);
+            user_photo = view.findViewById(R.id.User_Profile_Imalge);
             user_name = view.findViewById(R.id.user_name);
             user_msg = view.findViewById(R.id.user_msg);
         }

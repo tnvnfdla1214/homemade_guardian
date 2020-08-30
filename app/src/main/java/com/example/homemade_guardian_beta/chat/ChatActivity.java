@@ -33,11 +33,11 @@ public class ChatActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
-        String toUid = getIntent().getStringExtra("toUid");
-        final String roomID = getIntent().getStringExtra("roomID");
-        String roomTitle = getIntent().getStringExtra("roomTitle");
-        if (roomTitle!=null) {
-            actionBar.setTitle(roomTitle);
+        String To_User_Uid = getIntent().getStringExtra("To_User_Uid"); //MyInfoFragment에서 받아옴 ,
+        final String ChatRoomListModel_RoomUid = getIntent().getStringExtra("ChatRoomListModel_RoomUid"); //ChatRoomListFragment에서 받아옴
+        String ChatRoomListModel_Title = getIntent().getStringExtra("ChatRoomListModel_Title"); //ChatRoomListFragment에서 받아옴
+        if (ChatRoomListModel_Title!=null) {
+            actionBar.setTitle(ChatRoomListModel_Title);
         }
 
         // left drawer
@@ -49,7 +49,7 @@ public class ChatActivity extends AppCompatActivity {
                     drawerLayout.closeDrawer(Gravity.RIGHT);
                 } else {
                     if (groupUserFragment ==null) {
-                        groupUserFragment = GroupUserFragment.getInstance(roomID, chatFragment.getUserList());
+                        groupUserFragment = GroupUserFragment.getInstance(ChatRoomListModel_RoomUid, chatFragment.getUserModel_UserList());
                         getSupportFragmentManager()
                                 .beginTransaction()
                                 .replace(R.id.drawerFragment, groupUserFragment)
@@ -60,7 +60,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
         // chatting area
-        chatFragment = ChatFragment.getInstance(toUid, roomID);
+        chatFragment = ChatFragment.getInstance(To_User_Uid, ChatRoomListModel_RoomUid);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.mainFragment, chatFragment )

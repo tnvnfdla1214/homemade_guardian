@@ -26,8 +26,6 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH>
         implements EventListener<QuerySnapshot> {
 
-    private static final String TAG = "FirestoreAdapter";
-
     private Query mQuery;
     private ListenerRegistration mRegistration;
 

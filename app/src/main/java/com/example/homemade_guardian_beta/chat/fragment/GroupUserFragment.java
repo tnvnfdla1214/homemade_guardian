@@ -33,7 +33,7 @@ import com.example.homemade_guardian_beta.chat.model.UserModel;
 //그룹채팅 프래그먼트
 //우리 그룹채팅 안할거니까 빼야할 프래그먼트
 public class GroupUserFragment extends Fragment {
-    private String roomID;  //room의 Uid
+    private String ChatRoomListModel_RoomUid;  //room의 Uid
     private List<UserModel> Userlist; //유저모델 리스트
     private RecyclerView recyclerView; //리사클러뷰
 
@@ -68,7 +68,7 @@ public class GroupUserFragment extends Fragment {
 
 
         if (getArguments() != null) {
-            roomID = getArguments().getString("roomID");
+            ChatRoomListModel_RoomUid = getArguments().getString("ChatRoomListModel_RoomUid");
         }
         return view;
     }
@@ -77,7 +77,7 @@ public class GroupUserFragment extends Fragment {
     Button.OnClickListener Group_Chat_Add_Button_ClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             Intent intent = new Intent(getActivity(), SelectUserActivity.class);
-            intent.putExtra("roomID", roomID);
+            intent.putExtra("ChatRoomListModel_RoomUid", ChatRoomListModel_RoomUid);
             startActivity(intent);
         }
     };
@@ -108,8 +108,8 @@ public class GroupUserFragment extends Fragment {
             final UserModel user = Userlist.get(position);
             CustomViewHolder customViewHolder = (CustomViewHolder) holder;
             customViewHolder.user_name.setText(user.getUserModel_NickName());
-            if (user.getphotoUrl()!=null) {
-                Glide.with(getActivity()).load(user.getphotoUrl()).centerCrop().override(500).into(customViewHolder.user_photo);
+            if (user.getUserModel_ProfileImage()!=null) {
+                Glide.with(getActivity()).load(user.getUserModel_ProfileImage()).centerCrop().override(500).into(customViewHolder.user_photo);
             } else{
                 Glide.with(getActivity()).load(R.drawable.user).into(customViewHolder.user_photo);
             }

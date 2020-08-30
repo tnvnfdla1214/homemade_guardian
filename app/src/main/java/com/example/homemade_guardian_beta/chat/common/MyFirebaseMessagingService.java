@@ -24,6 +24,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         if (remoteMessage.getData().size() > 0) {
+            //이건 안바꿔야 하는듯
             String title = remoteMessage.getData().get("title").toString();
             String body = remoteMessage.getData().get("body").toString();
             sendNotification(body);

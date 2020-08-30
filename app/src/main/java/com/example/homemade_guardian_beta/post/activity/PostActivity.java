@@ -157,7 +157,7 @@ public class PostActivity extends BasicActivity {                               
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Usermodel = documentSnapshot.toObject(UserModel.class);
                 Host_Name = Usermodel.getUserModel_Name();
-                Comment_Host_Image = Usermodel.getphotoUrl();
+                Comment_Host_Image = Usermodel.getUserModel_ProfileImage();
             }
         });
     }
@@ -169,8 +169,8 @@ public class PostActivity extends BasicActivity {                               
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Usermodel = documentSnapshot.toObject(UserModel.class);
-                if(Usermodel.getphotoUrl() != null){
-                    Glide.with(PostActivity.this).load(Usermodel.getphotoUrl()).centerCrop().override(500).into(Post_Host_ImageButton);
+                if(Usermodel.getUserModel_ProfileImage() != null){
+                    Glide.with(PostActivity.this).load(Usermodel.getUserModel_ProfileImage()).centerCrop().override(500).into(Post_Host_ImageButton);
                     Post_Host_Name_TextView = findViewById(R.id.user_name);
                     Post_Host_Name_TextView.setText(Usermodel.getUserModel_Name());
                 }
@@ -379,7 +379,7 @@ public class PostActivity extends BasicActivity {                               
 
         CustomViewHolder(View view) {
             super(view);
-            Comment_Host_ImageView = view.findViewById(R.id.user_photo);
+            Comment_Host_ImageView = view.findViewById(R.id.User_Profile_Imalge);
             Comment_Host_Name_TextView = view.findViewById(R.id.user_name);
             Comment_TextView = view.findViewById(R.id.user_comment);
             Menu_Button_CardView = view.findViewById(R.id.menu);

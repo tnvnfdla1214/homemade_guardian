@@ -63,8 +63,8 @@ public class HostModelActivity extends BasicActivity {
                 Name_TextView.setText(Usermodel.getUserModel_Name());
                 PhoneNumber_TextView.setText(Usermodel.getUserModel_PhoneNumber());
                 Usernm_TextView.setText(Usermodel.getUserModel_NickName());
-                if(Usermodel.getphotoUrl() != null){
-                    Glide.with(HostModelActivity.this).load(Usermodel.getphotoUrl()).centerCrop().override(500).into(ProfileImageView_ImageView);
+                if(Usermodel.getUserModel_ProfileImage() != null){
+                    Glide.with(HostModelActivity.this).load(Usermodel.getUserModel_ProfileImage()).centerCrop().override(500).into(ProfileImageView_ImageView);
                 }
                 else{
                     Glide.with(getApplicationContext()).load(R.drawable.user).into(ProfileImageView_ImageView);

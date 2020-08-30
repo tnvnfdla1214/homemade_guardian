@@ -13,6 +13,8 @@ public class MessageModel {
     private String MessageModel_FileName; //메세지 파일 이름 <- 뺴야할듯
     private String MessageModel_FileSize; //메세지 파일 사이즈 <- 빼야할듯
 
+    public MessageModel(){}
+
     public MessageModel(String MessageModel_UserUid, String MessageModel_Message, String Message_MessageType, Date MessageModel_DateOfManufacture){
         this.MessageModel_UserUid = MessageModel_UserUid;
         this.MessageModel_Message = MessageModel_Message;

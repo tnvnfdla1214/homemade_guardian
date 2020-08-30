@@ -141,7 +141,7 @@ public class ChatFragment extends Fragment {
         Chat_RecyclerView = view.findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(getContext());
         Chat_RecyclerView.setLayoutManager(linearLayoutManager);
-
+        Chat_Send_Button = view.findViewById(R.id.Chat_Send_Button);
         Chat_Message_Input_EditText = view.findViewById(R.id.Chat_Message_Input_EditText);
 
         view.findViewById(R.id.Chat_Send_Button).setOnClickListener(Chat_Send_Button_ClickListener);
@@ -161,6 +161,7 @@ public class ChatFragment extends Fragment {
         Firestore = FirebaseFirestore.getInstance();
         StorageReference = FirebaseStorage.getInstance().getReference();
         MyUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
         KroreaTime();                         //한국 시간 가져오기 함수
         Chat_RecyclerView_Arrangement();      // Chat_RecyclerView의 배열 정리에 관한 함수
@@ -203,8 +204,8 @@ public class ChatFragment extends Fragment {
     public void Chat_User_Check(){
 
         if (getArguments() != null) {
-            ChatRoomListModel_RoomUid = getArguments().getString("ChatRoomListModel_RoomUid");
-            ToUid = getArguments().getString("toUid");
+            ChatRoomListModel_RoomUid = getArguments().getString("RoomUiD");
+            ToUid = getArguments().getString("To_User_Uid");
         }
         if (!"".equals(ToUid) && ToUid !=null) {                     // find existing room for two user
             findChatRoom(ToUid);
@@ -214,6 +215,10 @@ public class ChatFragment extends Fragment {
         };
 
         if (ChatRoomListModel_RoomUid ==null) {                                         // new room for two user
+            MyUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            ToUid = getArguments().getString("To_User_Uid");
+            Log.d("태그3","MyUid"+MyUid);
+            Log.d("태그3","ToUid"+ToUid);
             getUserInfoFromServer(MyUid);
             getUserInfoFromServer(ToUid);
             NumberOfUser = 2;
@@ -232,6 +237,7 @@ public class ChatFragment extends Fragment {
 
     // chat에 들어와있는 user의 uid로 정보를 가져와 userlist에 담는 함수
     void getUserInfoFromServer(String UserModel_Uid){
+        Firestore = FirebaseFirestore.getInstance();
         Firestore.collection("USERS").document(UserModel_Uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -247,6 +253,7 @@ public class ChatFragment extends Fragment {
 
     // 사용자 ID로 채팅방을 찾은 후 룸 ID를 반환하는 함수
     void findChatRoom(final String toUid){
+        Firestore = FirebaseFirestore.getInstance();
         Firestore.collection("ROOMS").whereGreaterThanOrEqualTo("USERS."+ MyUid, 0).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -267,6 +274,7 @@ public class ChatFragment extends Fragment {
     // 채팅방에서 사용자 목록을 가져오는 함수
     void setChatRoom(String rid) {
         ChatRoomListModel_RoomUid = rid;
+        Firestore = FirebaseFirestore.getInstance();
         Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -285,6 +293,7 @@ public class ChatFragment extends Fragment {
     //읽은 채팅창인지 아닌지 확인하는 함수 -> 이거 조금 문제 있기에 나중에 수정해야함(이름도 좀 이상함)
     void setUnread2Read() {
         if (ChatRoomListModel_RoomUid ==null) return;
+        Firestore = FirebaseFirestore.getInstance();
         Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -804,7 +813,7 @@ public class ChatFragment extends Fragment {
         Button.OnClickListener imageClickListener = new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), ViewPagerActivity.class);
-                intent.putExtra("ChatRoomListModel_RoomUid", ChatRoomListModel_RoomUid);
+                intent.putExtra("RoomUiD", ChatRoomListModel_RoomUid);
                 intent.putExtra("realname", realname); //<- 이게 뭔지 정확히 모르겠음
                 startActivity(intent);
             }

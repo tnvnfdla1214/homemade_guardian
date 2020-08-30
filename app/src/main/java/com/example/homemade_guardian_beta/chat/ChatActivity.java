@@ -34,7 +34,7 @@ public class ChatActivity extends AppCompatActivity {
         actionBar.setHomeButtonEnabled(true);
 
         String To_User_Uid = getIntent().getStringExtra("To_User_Uid"); //MyInfoFragment에서 받아옴 ,
-        final String ChatRoomListModel_RoomUid = getIntent().getStringExtra("ChatRoomListModel_RoomUid"); //ChatRoomListFragment에서 받아옴
+        final String ChatRoomListModel_RoomUid = getIntent().getStringExtra("RoomUiD"); //ChatRoomListFragment에서 받아옴
         String ChatRoomListModel_Title = getIntent().getStringExtra("ChatRoomListModel_Title"); //ChatRoomListFragment에서 받아옴
         if (ChatRoomListModel_Title!=null) {
             actionBar.setTitle(ChatRoomListModel_Title);

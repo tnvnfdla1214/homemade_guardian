@@ -27,7 +27,7 @@ import java.util.List;
 public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoViewHolder> {
 
   private LayoutInflater Inflater;
-  private Context MContext;
+  private Context Context;
 
   private OnItemCheckListener onItemCheckListener    = null;  //이미지의 체크박스가 체크되었는지
   private OnPhotoClickListener onPhotoClickListener  = null;  //이미지가 클릭되었는지
@@ -38,11 +38,11 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
   private boolean HasCamera = true;
   private boolean IsCheckBoxOnly = false;
 
-  public PhotoGridAdapter(Context MContext, List<PhotoDirectory> PhotoDirectories , boolean IsCheckBoxOnly) {
+  public PhotoGridAdapter(Context Context, List<PhotoDirectory> PhotoDirectories , boolean IsCheckBoxOnly) {
     this.PhotoDirectory_List = PhotoDirectories;
-    this.MContext = MContext;
+    this.Context = Context;
     this.IsCheckBoxOnly = IsCheckBoxOnly;
-    Inflater = LayoutInflater.from(MContext);
+    Inflater = LayoutInflater.from(Context);
   }
 
   @Override
@@ -73,8 +73,8 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
       } else {
         Photo = PhotoList.get(Position);
       }
-            Uri URI = FileProvider.getUriForFile(MContext, "com.example.homemade_guardian_beta.provider", new File(Photo.getPhoto_Path()));
-      Glide.with(MContext)
+            Uri URI = FileProvider.getUriForFile(Context, "com.example.homemade_guardian_beta.provider", new File(Photo.getPhoto_Path()));
+      Glide.with(Context)
               .load(URI)
               .apply(new RequestOptions()
                       .placeholder(R.color.img_loding_placeholder)
@@ -136,8 +136,8 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
 
     public PhotoViewHolder(View itemView) {
       super(itemView);
-      IvPhoto = (ImageView) itemView.findViewById(R.id.iv_photo);
-      Selectedview = itemView.findViewById(R.id.v_selected);
+      IvPhoto = (ImageView) itemView.findViewById(R.id.Arrange_Image);
+      Selectedview = itemView.findViewById(R.id.Check_Selected);
     }
   }
 

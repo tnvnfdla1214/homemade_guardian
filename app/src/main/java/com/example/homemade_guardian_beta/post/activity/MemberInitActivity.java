@@ -50,16 +50,16 @@ public class MemberInitActivity extends BasicActivity {
         setContentView(R.layout.activity_user_init);
         setToolbarTitle("회원정보");
 
-        LoaderLayout = findViewById(R.id.loaderLyaout);
-        Profile_ImageView = findViewById(R.id.profileImageView);
-        ButtonBackgroundLayout = findViewById(R.id.buttonsBackgroundLayout);
+        LoaderLayout = findViewById(R.id.Loader_Lyaout);
+        Profile_ImageView = findViewById(R.id.Users_Profile_ImageView);
+        ButtonBackgroundLayout = findViewById(R.id.ButtonsBackground_Layout);
 
         ButtonBackgroundLayout.setOnClickListener(onClickListener);
         Profile_ImageView.setOnClickListener(onClickListener);
 
-        findViewById(R.id.checkButton).setOnClickListener(onClickListener);
+        findViewById(R.id.Users_Info_Send_Button).setOnClickListener(onClickListener);
         findViewById(R.id.picture).setOnClickListener(onClickListener);
-        findViewById(R.id.gallery).setOnClickListener(onClickListener);
+        findViewById(R.id.Photo_Directory_Button).setOnClickListener(onClickListener);
     }
 
     // 뒤로가기 이벤트
@@ -89,19 +89,19 @@ public class MemberInitActivity extends BasicActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.checkButton:
+                case R.id.Users_Info_Send_Button:
                     MemberInit_Storage_Uploader();
                     break;
-                case R.id.profileImageView:
+                case R.id.Users_Profile_ImageView:
                     ButtonBackgroundLayout.setVisibility(View.VISIBLE);                                 // part8 : 처음에는 안보이다가 이미지그림 누르면 나타나게함 (11'30")
                     break;
-                case R.id.buttonsBackgroundLayout:                                                      // part20 : 다른데 누르면 buttonBackgroundLayout 사라지게 해줌 (48')
+                case R.id.ButtonsBackground_Layout:                                                      // part20 : 다른데 누르면 buttonBackgroundLayout 사라지게 해줌 (48')
                     ButtonBackgroundLayout.setVisibility(View.GONE);
                     break;
                 case R.id.picture:                                                                      // part7 : 프로필 사진 등록시 카메라 기능으로 사진을 찍을 시
                     //myStartActivity(CameraActivity.class);
                     break;
-                case R.id.gallery:                                                                      // part7 : 프로필 사진 등록시 앨범에서 고를 시
+                case R.id.Photo_Directory_Button:                                                                      // part7 : 프로필 사진 등록시 앨범에서 고를 시
                     myStartActivity(GalleryActivity.class);
                     break;
             }
@@ -110,12 +110,12 @@ public class MemberInitActivity extends BasicActivity {
 
     //스토리지에 사진을 먼저 담는 함수
     private void MemberInit_Storage_Uploader() {                                                                            // part5 : 회원정보 업로드 로직 (3')
-        final String Name = ((EditText) findViewById(R.id.nameEditText)).getText().toString();
-        final String PhoneNumber = ((EditText) findViewById(R.id.phoneNumberEditText)).getText().toString();
-        final String BirthDay = ((EditText) findViewById(R.id.birthDayEditText)).getText().toString();
-        final String Address = ((EditText) findViewById(R.id.addressEditText)).getText().toString();
+        final String My_Name_EditText = ((EditText) findViewById(R.id.My_Name)).getText().toString();
+        final String My_PhoneNumber_EditText = ((EditText) findViewById(R.id.My_PhoneNumber)).getText().toString();
+        final String My_BirthDay_EditText = ((EditText) findViewById(R.id.My_BirthDay)).getText().toString();
+        final String My_Address_EditText = ((EditText) findViewById(R.id.My_Address)).getText().toString();
 
-        if (Name.length() > 0 && PhoneNumber.length() > 9 && BirthDay.length() > 5 && Address.length() > 0) {
+        if (My_Name_EditText.length() > 0 && My_PhoneNumber_EditText.length() > 9 && My_BirthDay_EditText.length() > 5 && My_Address_EditText.length() > 0) {
             LoaderLayout.setVisibility(View.VISIBLE);
             FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();
             StorageReference Storagereference = Firebasestorage.getReference();
@@ -126,7 +126,7 @@ public class MemberInitActivity extends BasicActivity {
             final Date DateOfManufacture = new Date();                                                              // + : 사용자 리스트 수정 (현재 날짜 받아오기 [ 사진마다 달라서 그때 그댸 불르기])
 
             if (SelectedImagePath == null) {                                                                      // part5 : 데이터 추가 (9'10")
-                UserModel userModel = new UserModel(Name, PhoneNumber, BirthDay, DateOfManufacture, Address);          // + : 사용자 리스트 수정 (가입날짜 추가[사진 없는 버전])
+                UserModel userModel = new UserModel(My_Name_EditText, My_PhoneNumber_EditText, My_BirthDay_EditText, DateOfManufacture, My_Address_EditText);          // + : 사용자 리스트 수정 (가입날짜 추가[사진 없는 버전])
                 userModel.setUserModel_Uid(CurrentUser.getUid());
                 userModel.setUserModel_ID(CurrentUser.getEmail());
                 userModel.setUserModel_NickName(extractIDFromEmail(CurrentUser.getEmail()));
@@ -148,7 +148,7 @@ public class MemberInitActivity extends BasicActivity {
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
                                 Uri DownloadUri = task.getResult();                                         // part7 : 입력한 회원정보를 DB에 저장 (28')
-                                UserModel Usermodel = new UserModel(Name, PhoneNumber, BirthDay, Address, DateOfManufacture, DownloadUri.toString());      // + : 사용자 리스트 수정 (가입날짜 추가)
+                                UserModel Usermodel = new UserModel(My_Name_EditText, My_PhoneNumber_EditText, My_BirthDay_EditText, My_Address_EditText, DateOfManufacture, DownloadUri.toString());      // + : 사용자 리스트 수정 (가입날짜 추가)
                                 Usermodel.setUserModel_Uid(CurrentUser.getUid());
                                 Usermodel.setUserModel_ID(CurrentUser.getEmail());
                                 Usermodel.setUserModel_NickName(extractIDFromEmail(CurrentUser.getEmail()));

@@ -21,8 +21,8 @@ public class SearchActivity extends BasicActivity {
         setContentView(R.layout.activity_search);
         setToolbarTitle("검색");
 
-        SearchPost = findViewById(R.id.searchPost);
-        Title_Search_Button = findViewById(R.id.searchbutton);
+        SearchPost = findViewById(R.id.Search_PostTitle);
+        Title_Search_Button = findViewById(R.id.Search_PostTitle_Button);
         Title_Search_Button.setOnClickListener(onClickListener);
     }
 
@@ -31,7 +31,7 @@ public class SearchActivity extends BasicActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.searchbutton:
+                case R.id.Search_PostTitle_Button:
                     String Search = SearchPost.getText().toString();
                     myStartActivity(SearchResultActivity.class,Search);
                     break;

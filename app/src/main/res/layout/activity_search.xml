@@ -17,7 +17,7 @@
         android:id="@+id/Linearlayout">
 
     <EditText
-        android:id="@+id/searchPost"
+        android:id="@+id/Search_PostTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -31,13 +31,10 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
     <Button
-        android:id="@+id/searchbutton"
+        android:id="@+id/Search_PostTitle_Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="검색" />
     </LinearLayout>
-
-
-
 
 </LinearLayout>

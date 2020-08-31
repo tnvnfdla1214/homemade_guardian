@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <com.example.homemade_guardian_beta.Photo.widget.TouchImageView
-        android:id="@+id/iv_pager"
+        android:id="@+id/Enlarge_Pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

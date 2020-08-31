@@ -18,7 +18,7 @@ import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_PATH;
 
 public class GalleryAdapter  extends RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder> {
     private ArrayList<String> ArrayList_ImageList;     //GalleryActivity의 ArrayList<String> getImagesPath에서 return 한 listOfImage를 받는 ArrayList<String>이다.
-    private Activity activity;
+    private Activity Activity;
 
     static class GalleryViewHolder extends RecyclerView.ViewHolder {
         CardView Cardview;
@@ -30,7 +30,7 @@ public class GalleryAdapter  extends RecyclerView.Adapter<GalleryAdapter.Gallery
 
     public GalleryAdapter(Activity activity, ArrayList<String> myDataset) {
         ArrayList_ImageList = myDataset;
-        this.activity = activity;                                                                       // part9 : 60줄에서 쓸 activity 생성 (11')
+        this.Activity = activity;                                                                       // part9 : 60줄에서 쓸 activity 생성 (11')
     }
 
     //앨범에서 불러온 사진을 화면에 나타내는 Holder
@@ -45,8 +45,8 @@ public class GalleryAdapter  extends RecyclerView.Adapter<GalleryAdapter.Gallery
             public void onClick(View v) {
                 Intent Resultintent = new Intent();
                 Resultintent.putExtra(INTENT_PATH, ArrayList_ImageList.get(Galleryviewholder.getAdapterPosition()));
-                activity.setResult(Activity.RESULT_OK, Resultintent);
-                activity.finish();
+                Activity.setResult(Activity.RESULT_OK, Resultintent);
+                Activity.finish();
             }
         });
 
@@ -56,8 +56,8 @@ public class GalleryAdapter  extends RecyclerView.Adapter<GalleryAdapter.Gallery
     @Override
     public void onBindViewHolder(@NonNull final GalleryViewHolder holder, int position) {
         CardView Cardview = holder.Cardview;
-        ImageView Imageview = Cardview.findViewById(R.id.imageView);
-        Glide.with(activity).load(ArrayList_ImageList.get(position)).centerCrop().override(500).into(Imageview);   // part9 :  오픈소스 (10'30") override : 추가적인 resizeing (13') centercrop() : 가운데 정렬 (14')
+        ImageView Imageview = Cardview.findViewById(R.id.Directory_Image);
+        Glide.with(Activity).load(ArrayList_ImageList.get(position)).centerCrop().override(500).into(Imageview);   // part9 :  오픈소스 (10'30") override : 추가적인 resizeing (13') centercrop() : 가운데 정렬 (14')
     }
 
     @Override

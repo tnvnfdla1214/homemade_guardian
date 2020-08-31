@@ -72,13 +72,13 @@ public class WritePostFragment extends Fragment {
             actionBar.setTitle("게시글 작성");
         }
 
-        buttonsBackgroundLayout = view.findViewById(R.id.buttonsBackgroundLayout);
-        loaderLayout = view.findViewById(R.id.loaderLyaout);
-        titleEditText = view.findViewById(R.id.titleEditText);
-        view.findViewById(R.id.check).setOnClickListener(onClickListener);
-        view.findViewById(R.id.image).setOnClickListener(onClickListener);
+        buttonsBackgroundLayout = view.findViewById(R.id.ButtonsBackground_Layout);
+        loaderLayout = view.findViewById(R.id.Loader_Lyaout);
+        titleEditText = view.findViewById(R.id.Post_Title_EditText);
+        view.findViewById(R.id.Post_Write_Button).setOnClickListener(onClickListener);
+        view.findViewById(R.id.Select_Post_Image_Button).setOnClickListener(onClickListener);
         view.findViewById(R.id.imageModify).setOnClickListener(onClickListener);
-        view.findViewById(R.id.delete).setOnClickListener(onClickListener);
+        view.findViewById(R.id.Comment_Delete_Button).setOnClickListener(onClickListener);
 
         buttonsBackgroundLayout.setOnClickListener(onClickListener);
         titleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -128,10 +128,10 @@ public class WritePostFragment extends Fragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.check:
+                case R.id.Post_Write_Button:
                     storageUpload();
                     break;
-                case R.id.image:
+                case R.id.Select_Post_Image_Button:
                     PhotoUtil intent = new PhotoUtil(getActivity());
                     intent.setMaxSelectCount(20);
                     intent.setShowCamera(true);
@@ -140,7 +140,7 @@ public class WritePostFragment extends Fragment {
                     intent.setMaxGrideItemCount(3);
                     startActivityForResult(intent, REQUEST_CODE);
                     break;
-                case R.id.buttonsBackgroundLayout:
+                case R.id.ButtonsBackground_Layout:
                     if (buttonsBackgroundLayout.getVisibility() == View.VISIBLE) {
                         buttonsBackgroundLayout.setVisibility(View.GONE);                               // part12 : 실행되고나면 사라지게 설정 (15'19")
                     }
@@ -149,7 +149,7 @@ public class WritePostFragment extends Fragment {
                     myStartActivity(GalleryActivity.class, GALLERY_IMAGE, 1);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
                     buttonsBackgroundLayout.setVisibility(View.GONE);
                     break;
-                case R.id.delete:                                                                       // part12 : 작성중인 게시물에서 사진 빼기 (12'30")
+                case R.id.Comment_Delete_Button:                                                                       // part12 : 작성중인 게시물에서 사진 빼기 (12'30")
                     break;
             }
         }
@@ -165,7 +165,7 @@ public class WritePostFragment extends Fragment {
     };
 
     private void storageUpload() {
-        final String title = ((EditText) getView().findViewById(R.id.titleEditText)).getText().toString();
+        final String title = ((EditText) getView().findViewById(R.id.Post_Title_EditText)).getText().toString();
         if (title.length() > 0) {
             String postID = null;
             loaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')

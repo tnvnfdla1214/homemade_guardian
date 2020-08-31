@@ -70,11 +70,11 @@ public class PostActivity extends BasicActivity {                               
     private ArrayList<String> ImageList;            //게시물의 이미지 리스트
 
     private ViewPager Viewpager;                    //이미지들을 보여주기 위한 ViewPager 선언
-    private Button Chat_Button;                     //채팅하기 버튼
+    private Button Chat_With_PostHost_Button;                     //채팅하기 버튼
     private Button Comment_Write_Button;            //댓글 작성 버튼
     private TextView Post_Host_Name_TextView;       //게시물 작성자의 이름
-    private ImageButton Post_Host_ImageButton;      //게시물 작성자의 이미지 버튼
-    private EditText Comment_EditText;              //댓글 내용
+    private ImageButton Host_UserPage_ImageButton;      //게시물 작성자의 이미지 버튼
+    private EditText Comment_Input_EditText;              //댓글 내용
     private TextView Title_TextView;                //게시물의 제목
 
 
@@ -101,14 +101,14 @@ public class PostActivity extends BasicActivity {                               
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
-        Chat_Button = (Button) findViewById(R.id.chattingroom);
-        Chat_Button.setOnClickListener(onClickListener);
-        Post_Host_ImageButton = (ImageButton) findViewById(R.id.hostuserpageimage);
-        Post_Host_ImageButton.setOnClickListener(onClickListener);
-        Comment_EditText = findViewById(R.id.comment_input);
-        Comment_Write_Button = findViewById(R.id.writeBtn);
-        TextView Post_DateOfManufacture = findViewById(R.id.createAtTextView);
-        findViewById(R.id.writeBtn).setOnClickListener(onClickListener);
+        Chat_With_PostHost_Button = (Button) findViewById(R.id.Chat_With_PostHost_Button);
+        Chat_With_PostHost_Button.setOnClickListener(onClickListener);
+        Host_UserPage_ImageButton = (ImageButton) findViewById(R.id.Host_UserPage_ImageButton);
+        Host_UserPage_ImageButton.setOnClickListener(onClickListener);
+        Comment_Input_EditText = findViewById(R.id.Comment_Input_EditText);
+        Comment_Write_Button = findViewById(R.id.Comment_Write_Button);
+        TextView Post_DateOfManufacture = findViewById(R.id.Post_DateOfManufacture);
+        findViewById(R.id.Comment_Write_Button).setOnClickListener(onClickListener);
 
         Postmodel = (PostModel) getIntent().getSerializableExtra("postInfo");
         CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -123,7 +123,7 @@ public class PostActivity extends BasicActivity {                               
         DocRef_USERS_HostUid();     //게시물의 작성자의 정보를 받는 함수
 
         //뷰페이져
-        Viewpager = findViewById(R.id.viewPager);
+        Viewpager = findViewById(R.id.ViewPager);
         ImageList = Postmodel.getPostModel_ImageList();
         Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList));
 
@@ -170,12 +170,12 @@ public class PostActivity extends BasicActivity {                               
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Usermodel = documentSnapshot.toObject(UserModel.class);
                 if(Usermodel.getphotoUrl() != null){
-                    Glide.with(PostActivity.this).load(Usermodel.getphotoUrl()).centerCrop().override(500).into(Post_Host_ImageButton);
-                    Post_Host_Name_TextView = findViewById(R.id.user_name);
+                    Glide.with(PostActivity.this).load(Usermodel.getphotoUrl()).centerCrop().override(500).into(Host_UserPage_ImageButton);
+                    Post_Host_Name_TextView = findViewById(R.id.Post_Host_Name);
                     Post_Host_Name_TextView.setText(Usermodel.getUserModel_Name());
                 }
                 else{
-                    Glide.with(getApplicationContext()).load(R.drawable.user).into(Post_Host_ImageButton);
+                    Glide.with(getApplicationContext()).load(R.drawable.user).into(Host_UserPage_ImageButton);
                 }
             }
         });
@@ -196,20 +196,20 @@ public class PostActivity extends BasicActivity {                               
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.delete:
+            case R.id.Post_Delete_Button:
                 Firebasehelper.Post_Storagedelete(Postmodel);
                 Intent Intent_MainActivity = new Intent(PostActivity.this, MainActivity.class);
                 startActivity(Intent_MainActivity);
                 return true;
-            case R.id.modify:
+            case R.id.Post_Modify_Button:
                 myStartActivity(ModifyPostActivity.class, Postmodel);
                 Toast.makeText(getApplicationContext(), "수정 성공", Toast.LENGTH_SHORT).show();
                 return true;
 
-            case R.id.report:
+            case R.id.Post_Report_Button:
                 Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.chat:
+            case R.id.Chat_With_PostHost_Button:
                 //버튼 눌러짐
                 Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                 //상대방 uid 넘겨주기
@@ -226,22 +226,22 @@ public class PostActivity extends BasicActivity {                               
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.hostuserpageimage:
+                case R.id.Host_UserPage_ImageButton:
                     Intent Intent_HostModelActivity = new Intent(getApplicationContext(), HostModelActivity.class);
                     Intent_HostModelActivity.putExtra("toUid", Postmodel.getPostModel_Host_Uid());
                     startActivity(Intent_HostModelActivity);
                     break;
-                case R.id.chattingroom:
+                case R.id.Chat_With_PostHost_Button:
                     //버튼 눌러짐
                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                     //상대방 uid 넘겨주기
                     Intent_ChatActivity.putExtra("toUid", Postmodel.getPostModel_Host_Uid());
                     startActivity(Intent_ChatActivity);
                     break;
-                case R.id.writeBtn:
-                    String Comment = PostActivity.this.Comment_EditText.getText().toString();
+                case R.id.Comment_Write_Button:
+                    String Comment = PostActivity.this.Comment_Input_EditText.getText().toString();
                     Write_Comment(Comment, Host_Name, Comment_Host_Image);
-                    PostActivity.this.Comment_EditText.setText("");
+                    PostActivity.this.Comment_Input_EditText.setText("");
                     break;
             }
         }
@@ -318,16 +318,16 @@ public class PostActivity extends BasicActivity {                               
             DocumentSnapshot DocumentSnapshot = getSnapshot(position);
             final CommentModel Commentmodel = DocumentSnapshot.toObject(CommentModel.class);
 
-            viewHolder.Comment_Host_Name_TextView.setText(Commentmodel.getCommentModel_Host_Name());
-            viewHolder.Comment_TextView.setText(Commentmodel.getCommentModel_Comment());
+            viewHolder.Comment_UserName_TextView.setText(Commentmodel.getCommentModel_Host_Name());
+            viewHolder.Comment_UserComment_TextView.setText(Commentmodel.getCommentModel_Comment());
 
             if (Commentmodel.getCommentModel_Host_Image()!=null) {
-                Glide.with(PostActivity.this).load(Commentmodel.getCommentModel_Host_Image()).centerCrop().override(500).into(viewHolder.Comment_Host_ImageView);
+                Glide.with(PostActivity.this).load(Commentmodel.getCommentModel_Host_Image()).centerCrop().override(500).into(viewHolder.Comment_UserProfile_ImageView);
             } else{
-                Glide.with(PostActivity.this).load(R.drawable.user).into(viewHolder.Comment_Host_ImageView);
+                Glide.with(PostActivity.this).load(R.drawable.user).into(viewHolder.Comment_UserProfile_ImageView);
             }
 
-            viewHolder.Menu_Button_CardView.setOnClickListener(new View.OnClickListener() {
+            viewHolder.Comment_Menu_CardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     PopupMenu Menu_Popup = new PopupMenu(PostActivity.this, view);
@@ -336,14 +336,14 @@ public class PostActivity extends BasicActivity {                               
                         public boolean onMenuItemClick(MenuItem menuItem) {
                             switch (menuItem.getItemId()) {
 
-                                case R.id.delete:
+                                case R.id.Comment_Delete_Button:
                                     Firebasehelper.Comment_Storedelete(Commentmodel);
                                     return true;
-                                case R.id.report:
+                                case R.id.Comment_Report_Button:
                                     Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
                                     return true;
 
-                                case R.id.chat:
+                                case R.id.Chat_With_CommentHost_Button:
                                     //버튼 눌러짐
                                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                                     //상대방 uid 넘겨주기
@@ -361,7 +361,7 @@ public class PostActivity extends BasicActivity {                               
                         Menu_Inflater.inflate(R.menu.comment_host, Menu_Popup.getMenu());
                     }
                     else{
-                        Menu_Inflater.inflate(R.menu.post_guest, Menu_Popup.getMenu());
+                        Menu_Inflater.inflate(R.menu.comment_guest, Menu_Popup.getMenu());
                     }
                     Menu_Popup.show();}
                 }
@@ -372,17 +372,17 @@ public class PostActivity extends BasicActivity {                               
 
     // 댓글의 Data
     private class CustomViewHolder extends RecyclerView.ViewHolder {
-        public ImageView Comment_Host_ImageView;
-        public TextView Comment_Host_Name_TextView;
-        public TextView Comment_TextView;
-        public CardView Menu_Button_CardView;
+        public ImageView Comment_UserProfile_ImageView;
+        public TextView Comment_UserName_TextView;
+        public TextView Comment_UserComment_TextView;
+        public CardView Comment_Menu_CardView;
 
         CustomViewHolder(View view) {
             super(view);
-            Comment_Host_ImageView = view.findViewById(R.id.User_Profile_Imalge);
-            Comment_Host_Name_TextView = view.findViewById(R.id.user_name);
-            Comment_TextView = view.findViewById(R.id.user_comment);
-            Menu_Button_CardView = view.findViewById(R.id.menu);
+            Comment_UserProfile_ImageView = view.findViewById(R.id.Comment_UserProfile);
+            Comment_UserName_TextView = view.findViewById(R.id.Comment_UserName);
+            Comment_UserComment_TextView = view.findViewById(R.id.Comment_UserComment);
+            Comment_Menu_CardView = view.findViewById(R.id.Comment_Menu);
         }
     }
 }

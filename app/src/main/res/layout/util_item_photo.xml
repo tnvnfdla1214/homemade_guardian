@@ -6,7 +6,7 @@
   <ImageView
       android:padding="1dip"
       android:layout_gravity="center"
-      android:id="@+id/iv_photo"
+      android:id="@+id/Arrange_Image"
       android:scaleType="centerCrop"
       android:layout_width="match_parent"
       android:background="@drawable/photo_bg"
@@ -19,7 +19,7 @@
       android:layout_alignParentRight="true"
       android:clickable="true"
       android:padding="5dip"
-      android:id="@+id/v_selected"
+      android:id="@+id/Check_Selected"
       android:src="@drawable/photo_checkbox_bg"
       android:layout_width="30dp"
       android:layout_height="30dp" />

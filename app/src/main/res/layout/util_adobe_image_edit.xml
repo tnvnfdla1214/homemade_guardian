@@ -37,7 +37,7 @@
         android:layout_above="@+id/rl_foot_layout">
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/Select_Post_Image_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#ffffff"

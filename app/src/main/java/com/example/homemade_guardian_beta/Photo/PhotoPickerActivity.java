@@ -37,8 +37,8 @@ public class PhotoPickerActivity extends AppCompatActivity {
   private final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 7;
   private final int MY_PERMISSIONS_REQUEST_CAMERA = 8;
 
-  private PhotoPickerFragment pickerFragment;
-  private ImagePagerFragment imagePagerFragment;
+  private PhotoPickerFragment PickerFragment;
+  private ImagePagerFragment ImagePagerFragment;
 
   public final static String EXTRA_MAX_COUNT     = "MAX_COUNT";
   public final static String EXTRA_SHOW_CAMERA   = "SHOW_CAMERA";
@@ -46,21 +46,20 @@ public class PhotoPickerActivity extends AppCompatActivity {
   public final static String EXTRA_CHECK_BOX_ONLY       = "CHECK_BOX_ONLY";
   public final static String KEY_SELECTED_PHOTOS        = "SELECTED_PHOTOS";
   public final static String EXTRA_MAX_GRIDE_ITEM_COUNT = "MAX_GRIDE_IMAGE_COUNT";
-  private boolean showCamera = true;
+  private boolean ShowCamera = true;
 
 
-  private MenuItem menuDoneItem;
-
+  private MenuItem MenuDoneItem;
   public final static int DEFAULT_MAX_COUNT = 9;
   public final static int DEFAULT_MAX_GRIDE_ITEM_COUNT = 3;
 
-  private int maxCount = DEFAULT_MAX_COUNT;
-  public int maxGrideItemCount = DEFAULT_MAX_GRIDE_ITEM_COUNT;
-  public boolean isCheckBoxOnly = false;
+  private int MaxCount = DEFAULT_MAX_COUNT;
+  public int MaxGrideItemCount = DEFAULT_MAX_GRIDE_ITEM_COUNT;
+  public boolean IsCheckBoxOnly = false;
 
   /** to prevent multiple calls to inflate menu */
-  private boolean menuIsInflated = false;
-  private boolean showGif = false;
+  private boolean MenuIsInflated = false;
+  private boolean ShowGif = false;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -71,6 +70,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
   @Override
   protected void onResume() { super.onResume(); }
 
+  //저장결오의 접근권한 요청
   private void checkExternalStoragePermission(){
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
       if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -83,6 +83,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
     }
   }
 
+  //카메라의 접근권한 요청
   private void checkCameraPermission(){
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
       if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
@@ -95,6 +96,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
     }
   }
 
+  //접근권한의 결과처리
   @Override
   public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
     switch (requestCode) {
@@ -119,56 +121,58 @@ public class PhotoPickerActivity extends AppCompatActivity {
     }
   }
 
+  //접근권한 요청 후 화면 구성
   private void init(){
-    showCamera = getIntent().getBooleanExtra(EXTRA_SHOW_CAMERA, true);
-    showGif    = getIntent().getBooleanExtra(EXTRA_SHOW_GIF, false);
-    isCheckBoxOnly = getIntent().getBooleanExtra(EXTRA_CHECK_BOX_ONLY, false);
-    maxGrideItemCount = getIntent().getIntExtra(EXTRA_MAX_GRIDE_ITEM_COUNT , DEFAULT_MAX_GRIDE_ITEM_COUNT);
+    ShowCamera = getIntent().getBooleanExtra(EXTRA_SHOW_CAMERA, true);
+    ShowGif = getIntent().getBooleanExtra(EXTRA_SHOW_GIF, false);
+    IsCheckBoxOnly = getIntent().getBooleanExtra(EXTRA_CHECK_BOX_ONLY, false);
+    MaxGrideItemCount = getIntent().getIntExtra(EXTRA_MAX_GRIDE_ITEM_COUNT , DEFAULT_MAX_GRIDE_ITEM_COUNT);
 
-    setShowGif(showGif);
+    setShowGif(ShowGif);
     Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
     mToolbar.setTitle(R.string.y_photopicker_image_select_title);
     setSupportActionBar(mToolbar);
 
-    ActionBar actionBar = getSupportActionBar();
+    ActionBar ActionBar = getSupportActionBar();
 
-    assert actionBar != null;
-    actionBar.setDisplayHomeAsUpEnabled(true);
+    assert ActionBar != null;
+    ActionBar.setDisplayHomeAsUpEnabled(true);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      actionBar.setElevation(25);
+      ActionBar.setElevation(25);
     }
-    maxCount = getIntent().getIntExtra(EXTRA_MAX_COUNT, DEFAULT_MAX_COUNT);
+    MaxCount = getIntent().getIntExtra(EXTRA_MAX_COUNT, DEFAULT_MAX_COUNT);
     setPickerFragment();
   }
 
+  //PhotoPickerFragment로 연결
   private void setPickerFragment(){
-    if(pickerFragment == null){
-      pickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentById(R.id.photoPickerFragment);
-      pickerFragment.getPhotogridAdapter().setShowCamera(showCamera);
-      pickerFragment.getPhotogridAdapter().setOnItemCheckListener(new OnItemCheckListener() {
+    if(PickerFragment == null){
+      PickerFragment = (PhotoPickerFragment) getSupportFragmentManager().findFragmentById(R.id.PhotoPickerFragment);
+      PickerFragment.getPhotogridAdapter().setShowCamera(ShowCamera);
+      PickerFragment.getPhotogridAdapter().setOnItemCheckListener(new OnItemCheckListener() {
         @Override public boolean OnItemCheck(int position, Photo photo, final boolean isCheck, int selectedItemCount) {
           int total = selectedItemCount + (isCheck ? -1 : 1);
-          menuDoneItem.setEnabled(total > 0);
-          if (maxCount <= 1) {
-            List<Photo> photos = pickerFragment.getPhotogridAdapter().getSelectedPhoto_List();
-            if (!photos.contains(photo)) {
-              photos.clear();
-              pickerFragment.getPhotogridAdapter().notifyDataSetChanged();
+          MenuDoneItem.setEnabled(total > 0);
+          if (MaxCount <= 1) {
+            List<Photo> PhotoList = PickerFragment.getPhotogridAdapter().getSelectedPhoto_List();
+            if (!PhotoList.contains(photo)) {
+              PhotoList.clear();
+              PickerFragment.getPhotogridAdapter().notifyDataSetChanged();
             }
             return true;
           }
-          if (total > maxCount) {
-            Toast.makeText(getActivity(), getString(R.string.y_photopicker_over_max_count_tips, maxCount),
+          if (total > MaxCount) {
+            Toast.makeText(getActivity(), getString(R.string.y_photopicker_over_max_count_tips, MaxCount),
                     LENGTH_LONG).show();
             return false;
           }
-          menuDoneItem.setTitle(getString(R.string.y_photopicker_done_with_count, total, maxCount));
+          MenuDoneItem.setTitle(getString(R.string.y_photopicker_done_with_count, total, MaxCount));
           return true;
         }
       });
     }else{
-      pickerFragment.getPhotogridAdapter().notifyDataSetChanged();
+      PickerFragment.getPhotogridAdapter().notifyDataSetChanged();
     }
   }
 
@@ -176,9 +180,11 @@ public class PhotoPickerActivity extends AppCompatActivity {
    * Overriding this method allows us to run our exit animation first, then exiting
    * the activity when it complete.
    */
+
+  //BackPressed의 이벤트 처리
   @Override public void onBackPressed() {
-    if (imagePagerFragment != null && imagePagerFragment.isVisible()) {
-      imagePagerFragment.runExitAnimation(new Runnable() {
+    if (ImagePagerFragment != null && ImagePagerFragment.isVisible()) {
+      ImagePagerFragment.runExitAnimation(new Runnable() {
         public void run() {
           if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
@@ -192,20 +198,20 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
    // 앨범 화면에서 사진을 클릭하여 크게 볼때
   public void addImagePagerFragment(ImagePagerFragment imagePagerFragment) {
-    this.imagePagerFragment = imagePagerFragment;
+    this.ImagePagerFragment = imagePagerFragment;
     getSupportFragmentManager()
         .beginTransaction()
-        .replace(R.id.container, this.imagePagerFragment)
+        .replace(R.id.Photo_Container, this.ImagePagerFragment)
         .addToBackStack(null)
         .commit();
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
-    if (!menuIsInflated) {
+    if (!MenuIsInflated) {
       getMenuInflater().inflate(R.menu.menu_picker, menu);
-      menuDoneItem = menu.findItem(R.id.done);
-      menuDoneItem.setEnabled(false);
-      menuIsInflated = true;
+      MenuDoneItem = menu.findItem(R.id.done);
+      MenuDoneItem.setEnabled(false);
+      MenuIsInflated = true;
       return true;
     }
     return false;
@@ -219,8 +225,8 @@ public class PhotoPickerActivity extends AppCompatActivity {
     }
     if (item.getItemId() == R.id.done) {
       Intent intent = new Intent();
-      ArrayList<String> selectedPhotos = pickerFragment.getPhotogridAdapter().getSelectedPhotoPaths();
-      intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, selectedPhotos);
+      ArrayList<String> SelectedPhotoList = PickerFragment.getPhotogridAdapter().getSelectedPhotoPaths();
+      intent.putStringArrayListExtra(KEY_SELECTED_PHOTOS, SelectedPhotoList);
       setResult(RESULT_OK, intent);
       finish();
       return true;
@@ -233,11 +239,11 @@ public class PhotoPickerActivity extends AppCompatActivity {
   }
 
   public boolean isShowGif() {
-    return showGif;
+    return ShowGif;
   }
 
   public void setShowGif(boolean showGif) {
-    this.showGif = showGif;
+    this.ShowGif = showGif;
   }
 
 }

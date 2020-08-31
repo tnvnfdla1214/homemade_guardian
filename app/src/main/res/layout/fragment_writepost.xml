@@ -23,7 +23,7 @@
             android:padding="10dp">
 
             <EditText
-                android:id="@+id/titleEditText"
+                android:id="@+id/Post_Title_EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -57,7 +57,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/image"
+                    android:id="@+id/Select_Post_Image_Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -66,7 +66,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/check"
+                android:id="@+id/Post_Write_Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="확인" />
@@ -76,7 +76,7 @@
     </ScrollView>
 
     <RelativeLayout
-        android:id="@+id/buttonsBackgroundLayout"
+        android:id="@+id/ButtonsBackground_Layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#91646464"
@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:text="이미지 수정" />
                 <Button
-                    android:id="@+id/delete"
+                    android:id="@+id/Comment_Delete_Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="삭제" />

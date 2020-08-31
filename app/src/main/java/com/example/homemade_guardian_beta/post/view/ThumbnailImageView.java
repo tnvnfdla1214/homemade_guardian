@@ -19,19 +19,19 @@ import java.util.Locale;
 
 public class ThumbnailImageView extends LinearLayout {
     private LayoutInflater Layoutinflater;
-    private Context Mcontext;
+    private Context Context;
 
     private int moreIndex = -1;             //썸네일에 사진 1장 만을 만들기 위한 인덱스
 
-    public ThumbnailImageView(Context Mcontext) {
-        super(Mcontext);
-        this.Mcontext = Mcontext;
+    public ThumbnailImageView(Context Context) {
+        super(Context);
+        this.Context = Context;
         initView();
     }
 
-    public ThumbnailImageView(Context Mcontext, @Nullable AttributeSet attributeSet) {
-        super(Mcontext, attributeSet);
-        this.Mcontext = Mcontext;
+    public ThumbnailImageView(Context Context, @Nullable AttributeSet attributeSet) {
+        super(Context, attributeSet);
+        this.Context = Context;
         initView();
     }
 
@@ -46,14 +46,14 @@ public class ThumbnailImageView extends LinearLayout {
 
     //구체적으로 썸네일을 설정하는 부분 i가 moreIndex 같다면 "더보기"를 게시물하단부에 출력시키고 종료한다.
     public void Set_Post_Thumbnail(PostModel postModel){
-        TextView DateOfManufacture_TextView = findViewById(R.id.createAtTextView);
+        TextView DateOfManufacture_TextView = findViewById(R.id.Post_DateOfManufacture);
         DateOfManufacture_TextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(postModel.getPostModel_DateOfManufacture()));
         LinearLayout Thumbnail_Layout = findViewById(R.id.contentsLayout);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ArrayList<String> ArrayList_ImageList = postModel.getPostModel_ImageList();
         for (int i = 0; i < ArrayList_ImageList.size(); i++) {                                                 // part17 : 더보기기능 추가
             if (i == moreIndex) {
-                TextView Textview = new TextView(Mcontext);
+                TextView Textview = new TextView(Context);
                 Textview.setLayoutParams(layoutParams);
                 Textview.setText("더보기...");
                 Thumbnail_Layout.addView(Textview);

@@ -26,11 +26,11 @@ public class ImageCaptureManager {
 
   private final static String CAPTURED_PHOTO_PATH_KEY = "mCurrentPhotoPath";
   public static final int REQUEST_TAKE_PHOTO = 1;
-  private String MCurrentPhotoPath;
-  private Context MContext;
+  private String CurrentPhotoPath;
+  private Context Context;
   private boolean IsNativeCamera = false;
-  public ImageCaptureManager(Context MContext) {
-    this.MContext = MContext;
+  public ImageCaptureManager(Context Context) {
+    this.Context = Context;
   }
 
   //찍은 이미지의 이름과 형식을 설정
@@ -50,15 +50,15 @@ public class ImageCaptureManager {
         StorageDir      /* directory */
     );
     // Save a file: path for use with ACTION_VIEW intents
-    MCurrentPhotoPath = Image.getAbsolutePath();
+    CurrentPhotoPath = Image.getAbsolutePath();
     return Image;
   }
 
   public Intent dispatchTakePictureIntent() throws IOException {
     Intent TakePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-    if (TakePictureIntent.resolveActivity(MContext.getPackageManager()) != null) {
-      ResolveInfo MInfo = MContext.getPackageManager().resolveActivity(TakePictureIntent, 0);
+    if (TakePictureIntent.resolveActivity(Context.getPackageManager()) != null) {
+      ResolveInfo MInfo = Context.getPackageManager().resolveActivity(TakePictureIntent, 0);
       TakePictureIntent.setComponent(new ComponentName(MInfo.activityInfo.packageName, MInfo.activityInfo.name));
       if(IsNativeCamera){
           TakePictureIntent.setAction(Intent.ACTION_MAIN);
@@ -66,7 +66,7 @@ public class ImageCaptureManager {
       }
       File PhotoFile = createImageFile();
       if (PhotoFile != null) {
-        Uri URI = FileProvider.getUriForFile(MContext, "com.example.homemade_guardian_beta.provider", PhotoFile);
+        Uri URI = FileProvider.getUriForFile(Context, "com.example.homemade_guardian_beta.provider", PhotoFile);
         TakePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, URI);
       }
     }
@@ -78,12 +78,12 @@ public class ImageCaptureManager {
     String DcimPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
     String TimeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
     String ResultImageDri = DcimPath + "/"+TimeStamp+".jpg";
-    copyFile(MCurrentPhotoPath, ResultImageDri );
-    File TempImage = new File(MCurrentPhotoPath);
+    copyFile(CurrentPhotoPath, ResultImageDri );
+    File TempImage = new File(CurrentPhotoPath);
     File f = new File(ResultImageDri);
     Intent MediaIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
     MediaIntent.setData(Uri.fromFile(f));
-    MContext.sendBroadcast(MediaIntent);
+    Context.sendBroadcast(MediaIntent);
     if(TempImage.delete()){Log.d("Y-Photo-Picker","#### DELETE TEMP IMAGE");}
   }
 
@@ -118,18 +118,18 @@ public class ImageCaptureManager {
   }
 
   public String getCurrentPhotoPath() {
-    return MCurrentPhotoPath;
+    return CurrentPhotoPath;
   }
 
   public void onSaveInstanceState(Bundle savedInstanceState) {
-    if (savedInstanceState != null && MCurrentPhotoPath != null) {
-      savedInstanceState.putString(CAPTURED_PHOTO_PATH_KEY, MCurrentPhotoPath);
+    if (savedInstanceState != null && CurrentPhotoPath != null) {
+      savedInstanceState.putString(CAPTURED_PHOTO_PATH_KEY, CurrentPhotoPath);
     }
   }
 
   public void onRestoreInstanceState(Bundle savedInstanceState) {
     if (savedInstanceState != null && savedInstanceState.containsKey(CAPTURED_PHOTO_PATH_KEY)) {
-      MCurrentPhotoPath = savedInstanceState.getString(CAPTURED_PHOTO_PATH_KEY);
+      CurrentPhotoPath = savedInstanceState.getString(CAPTURED_PHOTO_PATH_KEY);
     }
   }
 }

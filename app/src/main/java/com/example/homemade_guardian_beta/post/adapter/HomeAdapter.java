@@ -23,21 +23,21 @@ import java.util.ArrayList;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder> {
     private ArrayList<PostModel> ArrayList_PostModel;       //게시물에 담을 PostModel의 정보들을 담는다.
-    private Activity activity;
+    private Activity Activity;
 
     private final int MORE_INDEX = 1;                       //게시물에서 미리 표현할 사진의 개수
 
     static class MainViewHolder extends RecyclerView.ViewHolder {
-        CardView cardView;
+        CardView Cardview;
         MainViewHolder(CardView v) {
             super(v);
-            cardView = v;
+            Cardview = v;
         }
     }
 
     public HomeAdapter(Activity activity, ArrayList<PostModel> ArrayList_PostModel) {
         this.ArrayList_PostModel = ArrayList_PostModel;
-        this.activity = activity;
+        this.Activity = activity;
     }
 
     //POSTS에서 불러온 게시물 내용을 화면에 나타내는 Holder
@@ -49,9 +49,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
         Cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {                                                                   // part18 : 게시물 클릭시 게시물페이지로 이동 (36'10")
-                Intent Intent_PostActivity = new Intent(activity, PostActivity.class);
+                Intent Intent_PostActivity = new Intent(Activity, PostActivity.class);
                 Intent_PostActivity.putExtra("postInfo", ArrayList_PostModel.get(Mainviewholder.getAdapterPosition()));
-                activity.startActivity(Intent_PostActivity);
+                Activity.startActivity(Intent_PostActivity);
             }
         });
         return Mainviewholder;
@@ -59,12 +59,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull final MainViewHolder holder, int position) {                      // part : 게시물을 나열
-        CardView Contents_CardView = holder.cardView;
-        TextView Title_TextView = Contents_CardView.findViewById(R.id.titleTextView);
+        CardView Contents_CardView = holder.Cardview;
+        TextView Title_TextView = Contents_CardView.findViewById(R.id.Post_Title_TextView);
         PostModel Postmodel = ArrayList_PostModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
         Title_TextView.setText(Postmodel.getPostModel_Title());
-        ThumbnailImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.readContentsView);                   //contentsLayout에다가 날짜포함
-        LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);
+        ThumbnailImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);                   //contentsLayout에다가 날짜포함
+        LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);                      /////////////////////이거 대신 텍스트 만든거 보여주기로
 
         if (Contentslayout.getTag() == null || !Contentslayout.getTag().equals(Postmodel)) {                 // part16 : 게시물 개수에 변화가 있을 때만 실행..? (26'40")
             Contentslayout.setTag(Postmodel);

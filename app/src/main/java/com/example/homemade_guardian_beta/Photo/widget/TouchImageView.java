@@ -77,7 +77,7 @@ public class TouchImageView extends AppCompatImageView {
     private Context MContext;
     private Fling Fling;
     
-    private ScaleType MScaleType;
+    private ScaleType ScaleType;
     
     private boolean ImageRenderedAtLeastOnce;
     private boolean OnDrawReady;
@@ -100,9 +100,9 @@ public class TouchImageView extends AppCompatImageView {
     private OnTouchListener UserTouchListener = null;
     private OnTouchImageViewListener TouchImageViewListener = null;
 
-    public TouchImageView(Context MContext) {
-        super(MContext);
-        sharedConstructing(MContext);
+    public TouchImageView(Context Context) {
+        super(Context);
+        sharedConstructing(Context);
     }
 
     public TouchImageView(Context MContext, AttributeSet attrs) {
@@ -124,8 +124,8 @@ public class TouchImageView extends AppCompatImageView {
         PrevMatrix = new Matrix();
         M = new float[9];
         NormalizedScale = 1;
-        if (MScaleType == null) {
-        	MScaleType = ScaleType.FIT_CENTER;
+        if (ScaleType == null) {
+        	ScaleType = ScaleType.FIT_CENTER;
         }
         MinScale = 1;
         MaxScale = 3;
@@ -188,7 +188,7 @@ public class TouchImageView extends AppCompatImageView {
     		super.setScaleType(ScaleType.MATRIX);
     		
     	} else {
-    		MScaleType = type;
+    		ScaleType = type;
     		if (OnDrawReady) {
     			//
     			// If the image is already rendered, scaleType has been called programmatically
@@ -201,7 +201,7 @@ public class TouchImageView extends AppCompatImageView {
     
     @Override
     public ScaleType getScaleType() {
-    	return MScaleType;
+    	return ScaleType;
     }
     
     /**
@@ -217,7 +217,7 @@ public class TouchImageView extends AppCompatImageView {
      * @return rect representing zoomed image
      */
     public RectF getZoomedRect() {
-    	if (MScaleType == ScaleType.FIT_XY) {
+    	if (ScaleType == ScaleType.FIT_XY) {
     		throw new UnsupportedOperationException("getZoomedRect() not supported with FIT_XY");
     	}
     	PointF topLeft = transformCoordTouchToBitmap(0, 0, true);
@@ -363,7 +363,7 @@ public class TouchImageView extends AppCompatImageView {
      * @param focusY
      */
     public void setZoom(float scale, float focusX, float focusY) {
-    	setZoom(scale, focusX, focusY, MScaleType);
+    	setZoom(scale, focusX, focusY, ScaleType);
     }
     
     /**
@@ -387,7 +387,7 @@ public class TouchImageView extends AppCompatImageView {
     		return;
     	}
     	
-    	if (scaleType != MScaleType) {
+    	if (scaleType != ScaleType) {
     		setScaleType(scaleType);
     	}
     	resetZoom();
@@ -563,7 +563,7 @@ public class TouchImageView extends AppCompatImageView {
         float ScaleX = (float) ViewWidth / DrawableWidth;
         float ScaleY = (float) ViewHeight / DrawableHeight;
         
-        switch (MScaleType) {
+        switch (ScaleType) {
         case CENTER:
         	ScaleX = ScaleY = 1;
         	break;

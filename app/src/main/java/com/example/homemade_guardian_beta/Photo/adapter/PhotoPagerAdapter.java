@@ -24,11 +24,11 @@ import java.util.List;
 public class PhotoPagerAdapter extends PagerAdapter {
 
   private List<String> PathList = new ArrayList<>();  //확대 된 상태에서도 뷰페이저로 슬라이드하여 다른 이미지들을 볼 수 있으므로 보여지는 단일 이미지만 받는 것이 아닌 리스트로 받아온다.
-  private Context MContext;
+  private Context Context;
   private LayoutInflater LayoutInflater;
 
   public PhotoPagerAdapter(Context MContext, List<String> PathList) {
-    this.MContext = MContext;
+    this.Context = MContext;
     this.PathList = PathList;
     LayoutInflater = LayoutInflater.from(MContext);
   }
@@ -36,15 +36,15 @@ public class PhotoPagerAdapter extends PagerAdapter {
   @Override
   public Object instantiateItem(ViewGroup Container, int Position) {
     View Itemview = LayoutInflater.inflate(R.layout.util_item_pager, Container, false);
-    ImageView Imageview = (ImageView) Itemview.findViewById(R.id.iv_pager);
+    ImageView Imageview = (ImageView) Itemview.findViewById(R.id.Enlarge_Pager);
     final String Path = PathList.get(Position);
     final Uri URI;
     if (Path.startsWith("http")) {
       URI = Uri.parse(Path);
     } else {
-      URI = FileProvider.getUriForFile(MContext, "com.example.homemade_guardian_beta.provider", new File(Path));
+      URI = FileProvider.getUriForFile(Context, "com.example.homemade_guardian_beta.provider", new File(Path));
     }
-    Glide.with(MContext)
+    Glide.with(Context)
             .load(URI)
             .thumbnail(0.4f)
             .apply(new RequestOptions()
@@ -55,9 +55,9 @@ public class PhotoPagerAdapter extends PagerAdapter {
     //이미지를 클릭하여 크게 보았을 때 한번더 누르면 백프레스의 기능을 한다.
     Imageview.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
-        if (MContext instanceof PhotoPickerActivity) {
-          if (!((Activity) MContext).isFinishing()) {
-            ((Activity) MContext).onBackPressed();
+        if (Context instanceof PhotoPickerActivity) {
+          if (!((Activity) Context).isFinishing()) {
+            ((Activity) Context).onBackPressed();
           }
         }
       }

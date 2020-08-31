@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="${relativePackage}.${activityClass}">
+    <!--안 쓰는 xml -->
 
     <include layout="@layout/util_img_select_toolbar" />
 

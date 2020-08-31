@@ -16,7 +16,7 @@ public class PostUtil {                                                         
     public static final int GALLERY_IMAGE = 0;
     public static final int GALLERY_VIDEO = 1;
 
-    public static void showToast(Activity activity, String Msg){ Toast.makeText(activity, Msg, Toast.LENGTH_SHORT).show(); }
+    public static void showToast(Activity Activity, String Msg){ Toast.makeText(Activity, Msg, Toast.LENGTH_SHORT).show(); }
 
     public static boolean isStorageUrl(String URL){ return Patterns.WEB_URL.matcher(URL).matches() && URL.contains("https://firebasestorage.googleapis.com/v0/b/homemade-guardian-beta.appspot.com/o/POSTS"); }
     // part17 : 스토리지 주소에 대한 등록 [SHA1코드같은..] (16'45")

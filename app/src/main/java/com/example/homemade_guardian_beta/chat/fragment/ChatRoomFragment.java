@@ -234,7 +234,7 @@ public class ChatRoomFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), ChatActivity.class);
-                    intent.putExtra("RoomUiD", chatRoomListModel.getChatRoomListModel_RoomUid());
+                    intent.putExtra("RoomUid", chatRoomListModel.getChatRoomListModel_RoomUid());
                     intent.putExtra("ChatRoomListModel_Title", chatRoomListModel.getChatRoomListModel_Title());
                     startActivity(intent);
                 }

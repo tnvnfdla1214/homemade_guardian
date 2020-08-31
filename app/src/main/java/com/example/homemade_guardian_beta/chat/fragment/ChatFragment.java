@@ -128,7 +128,7 @@ public class ChatFragment extends Fragment {
         ChatFragment chatFragment = new ChatFragment();
         Bundle bundle = new Bundle();
         bundle.putString("To_User_Uid", To_User_Uid);
-        bundle.putString("RoomUiD", RoomUiD);
+        bundle.putString("RoomUid", RoomUiD);
         chatFragment.setArguments(bundle);
         return chatFragment;
     }
@@ -202,11 +202,12 @@ public class ChatFragment extends Fragment {
 
     //유저의 uid와 room의 uid 체크 함수
     public void Chat_User_Check(){
-
         if (getArguments() != null) {
-            ChatRoomListModel_RoomUid = getArguments().getString("RoomUiD");
+            ChatRoomListModel_RoomUid = getArguments().getString("RoomUid");
             ToUid = getArguments().getString("To_User_Uid");
+            Log.d("태그3","ToUid2"+ToUid);
         }
+
         if (!"".equals(ToUid) && ToUid !=null) {                     // find existing room for two user
             findChatRoom(ToUid);
         } else
@@ -218,7 +219,7 @@ public class ChatFragment extends Fragment {
             MyUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             ToUid = getArguments().getString("To_User_Uid");
             Log.d("태그3","MyUid"+MyUid);
-            Log.d("태그3","ToUid"+ToUid);
+            Log.d("태그3","ToUid3"+ToUid);
             getUserInfoFromServer(MyUid);
             getUserInfoFromServer(ToUid);
             NumberOfUser = 2;
@@ -314,7 +315,7 @@ public class ChatFragment extends Fragment {
             USERS.put(key, 0);
         }
         Map<String, Object> data = new HashMap<>();
-        data.put("Title", null);
+        data.put("ChatRoomListModel_Title", null);
         data.put("USERS", USERS);
 
         room.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -396,7 +397,7 @@ public class ChatFragment extends Fragment {
                 List<String> ReadUsers = new ArrayList();
                 ReadUsers.add(MyUid);
                 MessageModel.put("MessageModel_ReadUser", ReadUsers);//new String[]{myUid} );
-                batch.set(docRef.collection("MessageModel_Message").document(), MessageModel);
+                batch.set(docRef.collection("MESSAGE").document(), MessageModel);
 
                 // inc unread message count
                 DocumentSnapshot document = task.getResult();
@@ -813,7 +814,7 @@ public class ChatFragment extends Fragment {
         Button.OnClickListener imageClickListener = new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), ViewPagerActivity.class);
-                intent.putExtra("RoomUiD", ChatRoomListModel_RoomUid);
+                intent.putExtra("RoomUid", ChatRoomListModel_RoomUid);
                 intent.putExtra("realname", realname); //<- 이게 뭔지 정확히 모르겠음
                 startActivity(intent);
             }

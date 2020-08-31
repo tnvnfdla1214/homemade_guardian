@@ -213,7 +213,7 @@ public class PostActivity extends BasicActivity {                               
                 //버튼 눌러짐
                 Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                 //상대방 uid 넘겨주기
-                Intent_ChatActivity.putExtra("toUid", Postmodel.getPostModel_Host_Uid());
+                Intent_ChatActivity.putExtra("To_User_Uid", Postmodel.getPostModel_Host_Uid());
                 startActivity(Intent_ChatActivity);
                 return true;
             default:
@@ -235,7 +235,7 @@ public class PostActivity extends BasicActivity {                               
                     //버튼 눌러짐
                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                     //상대방 uid 넘겨주기
-                    Intent_ChatActivity.putExtra("toUid", Postmodel.getPostModel_Host_Uid());
+                    Intent_ChatActivity.putExtra("To_User_Uid", Postmodel.getPostModel_Host_Uid());
                     startActivity(Intent_ChatActivity);
                     break;
                 case R.id.writeBtn:
@@ -347,7 +347,7 @@ public class PostActivity extends BasicActivity {                               
                                     //버튼 눌러짐
                                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                                     //상대방 uid 넘겨주기
-                                    Intent_ChatActivity.putExtra("toUid", Postmodel.getPostModel_Host_Uid());
+                                    Intent_ChatActivity.putExtra("To_User_Uid", Postmodel.getPostModel_Host_Uid());
                                     startActivity(Intent_ChatActivity);
                                     return true;
                                 default:

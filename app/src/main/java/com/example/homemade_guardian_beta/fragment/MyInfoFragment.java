@@ -121,7 +121,7 @@ public class MyInfoFragment extends Fragment {
                     //chatactivity는 해당 고유uid를 가진 사람을 찾아 그사람과의 채팅방을 들어감
                     Intent intent = new Intent(getView().getContext(), ChatActivity.class);
                     intent.putExtra("To_User_Uid", user.getUserModel_Uid());
-                    Log.d("태그","MyInfoFragment");
+                    Log.d("태그","MyInfoFragment"+user.getUserModel_Uid());
                     startActivity(intent);
                 }
             });

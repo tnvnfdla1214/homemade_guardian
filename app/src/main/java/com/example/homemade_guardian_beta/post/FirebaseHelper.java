@@ -17,12 +17,12 @@ import static com.example.homemade_guardian_beta.post.PostUtil.storageUrlToName;
 //파이어베이스에서 파이어스토어,파이어스토리지의 삭제에 관여한다.
 
 public class FirebaseHelper {                                                                           // part19 : Firevasehelper로 이동 (61')
-    private Activity activity;
+    private Activity Activity;
     private OnPostListener Onpostlistener;
     private int SuccessCount;
 
-    public FirebaseHelper(Activity activity) {
-        this.activity = activity;
+    public FirebaseHelper(Activity Activity) {
+        this.Activity = Activity;
     }
 
     public void setOnpostlistener(OnPostListener Onpostlistener){ this.Onpostlistener = Onpostlistener; }
@@ -46,7 +46,7 @@ public class FirebaseHelper {                                                   
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onFailure(@NonNull Exception exception) { showToast(activity, "Error");
+                    public void onFailure(@NonNull Exception exception) { showToast(Activity, "Error");
                     }
                 });
             }
@@ -63,13 +63,13 @@ public class FirebaseHelper {                                                   
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            showToast(activity, "게시글을 삭제하였습니다.");
+                            showToast(Activity, "게시글을 삭제하였습니다.");
                             Onpostlistener.onDelete(Postmodel);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public void onFailure(@NonNull Exception e) { showToast(activity, "게시글을 삭제하지 못하였습니다.");
+                        public void onFailure(@NonNull Exception e) { showToast(Activity, "게시글을 삭제하지 못하였습니다.");
                         }
                     });
         }
@@ -84,13 +84,13 @@ public class FirebaseHelper {                                                   
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        showToast(activity, "댓글을 삭제하였습니다.");
+                        showToast(Activity, "댓글을 삭제하였습니다.");
                         Onpostlistener.oncommentDelete(Commentmodel);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onFailure(@NonNull Exception e) { showToast(activity, "댓글을 삭제하지 못하였습니다.");
+                    public void onFailure(@NonNull Exception e) { showToast(Activity, "댓글을 삭제하지 못하였습니다.");
                     }
                 });
     }

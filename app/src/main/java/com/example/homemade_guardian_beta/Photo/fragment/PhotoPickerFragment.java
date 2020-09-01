@@ -47,8 +47,8 @@ import static com.example.homemade_guardian_beta.Photo.utils.MediaStoreHelper.IN
 
 public class PhotoPickerFragment extends Fragment {
 
-    private Context MContext = null;
-    private Activity MActivity = null;
+    private Context Context = null;
+    private Activity Activity = null;
 
     private ImageCaptureManager Capturemanager;
     private PhotoGridAdapter PhotogridAdapter;
@@ -60,8 +60,8 @@ public class PhotoPickerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MContext = this.getActivity().getApplicationContext();
-        MActivity = this.getActivity();
+        Context = this.getActivity().getApplicationContext();
+        Activity = this.getActivity();
         DirectoryList = new ArrayList<>();
         Capturemanager = new ImageCaptureManager(getActivity());
         Bundle mediaStoreArgs = new Bundle();
@@ -81,20 +81,20 @@ public class PhotoPickerFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup Photo_Container, Bundle savedInstanceState) {
         setRetainInstance(true);
-        final View Rootview = inflater.inflate(R.layout.util_fragment_photo_picker, container, false);
-        PhotogridAdapter = new PhotoGridAdapter(getActivity(), DirectoryList, ((PhotoPickerActivity)getActivity()).isCheckBoxOnly);
+        final View Rootview = inflater.inflate(R.layout.util_fragment_photo_picker, Photo_Container, false);
+        PhotogridAdapter = new PhotoGridAdapter(getActivity(), DirectoryList, ((PhotoPickerActivity)getActivity()).IsCheckBoxOnly);
         PopupdirectoryListAdapter = new PopupDirectoryListAdapter(getActivity(), DirectoryList);
 
-        RecyclerView recyclerView = (RecyclerView) Rootview.findViewById(R.id.rv_photos);
-        StaggeredGridLayoutManager LayoutManager = new StaggeredGridLayoutManager(((PhotoPickerActivity)getActivity()).maxGrideItemCount, OrientationHelper.VERTICAL);
+        RecyclerView recyclerView = (RecyclerView) Rootview.findViewById(R.id.Arrange_Images);
+        StaggeredGridLayoutManager LayoutManager = new StaggeredGridLayoutManager(((PhotoPickerActivity)getActivity()).MaxGrideItemCount, OrientationHelper.VERTICAL);
         LayoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         recyclerView.setLayoutManager(LayoutManager);
         recyclerView.setAdapter(PhotogridAdapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        final Button SwitchDirectory_Button = (Button) Rootview.findViewById(R.id.button);
+        final Button SwitchDirectory_Button = (Button) Rootview.findViewById(R.id.SwitchDirectory_Button);
 
         final ListPopupWindow ListPopupWindow = new ListPopupWindow(getActivity());
         ListPopupWindow.setWidth(ListPopupWindow.MATCH_PARENT);
@@ -202,7 +202,7 @@ public class PhotoPickerFragment extends Fragment {
         String CameraPath = "'";
         String FileName = "";
         try {
-            final Cursor CursorImages = MActivity.getContentResolver().query(UriImage, IMAGE_PROJECTION, null, null, null);
+            final Cursor CursorImages = Activity.getContentResolver().query(UriImage, IMAGE_PROJECTION, null, null, null);
             if (CursorImages != null && CursorImages.moveToLast()) {
                 CameraPath = CursorImages.getString(0);
                 CursorImages.close();

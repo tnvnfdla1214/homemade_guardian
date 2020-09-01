@@ -7,23 +7,22 @@ import android.widget.RelativeLayout;
 // PhotoGridAdapter를 이용하여 이미지들을 나열 할 때에 이미지의 규격을 설정한 것이다.
 
 public class SquareItemLayout extends RelativeLayout {
-  public SquareItemLayout(Context context, AttributeSet attrs, int defStyle) {
-    super(context, attrs, defStyle);
+  public SquareItemLayout(Context Context, AttributeSet Attrs, int DefStyle) {
+    super(Context, Attrs, DefStyle);
   }
 
-  public SquareItemLayout(Context context, AttributeSet attrs) {
-    super(context, attrs);
+  public SquareItemLayout(Context Context, AttributeSet Attrs) {
+    super(Context, Attrs);
   }
 
-  public SquareItemLayout(Context context) {
-    super(context);
+  public SquareItemLayout(Context Context) {
+    super(Context);
   }
 
-  @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    setMeasuredDimension(getDefaultSize(0, widthMeasureSpec), getDefaultSize(0, heightMeasureSpec));
-    int childWidthSize = getMeasuredWidth();
-    heightMeasureSpec =
-        widthMeasureSpec = MeasureSpec.makeMeasureSpec(childWidthSize, MeasureSpec.EXACTLY);
-    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+  @Override protected void onMeasure(int WidthMeasureSpec, int HeightMeasureSpec) {
+    setMeasuredDimension(getDefaultSize(0, WidthMeasureSpec), getDefaultSize(0, HeightMeasureSpec));
+    int ChildWidthSize = getMeasuredWidth();
+    HeightMeasureSpec = WidthMeasureSpec = MeasureSpec.makeMeasureSpec(ChildWidthSize, MeasureSpec.EXACTLY);
+    super.onMeasure(WidthMeasureSpec, HeightMeasureSpec);
   }
 }

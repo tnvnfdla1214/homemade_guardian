@@ -102,9 +102,9 @@ public class ImagePagerFragment extends Fragment {
 
   @Nullable
   @Override
-  public View onCreateView(LayoutInflater Inflater, ViewGroup Container, Bundle savedInstanceState) {
-    View Rootview = Inflater.inflate(R.layout.util_fragment_image_pager, Container, false);
-    Viewpager = (ViewPager) Rootview.findViewById(R.id.vp_photos);
+  public View onCreateView(LayoutInflater Inflater, ViewGroup Photo_Container, Bundle savedInstanceState) {
+    View Rootview = Inflater.inflate(R.layout.util_fragment_image_pager, Photo_Container, false);
+    Viewpager = (ViewPager) Rootview.findViewById(R.id.Enlarge_Images);
     Viewpager.setAdapter(Pageradapter);
     Viewpager.setCurrentItem(CurrentItem);
     Viewpager.setOffscreenPageLimit(5);

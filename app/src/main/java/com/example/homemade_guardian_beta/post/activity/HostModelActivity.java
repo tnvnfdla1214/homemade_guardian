@@ -20,12 +20,12 @@ import com.google.firebase.storage.StorageReference;
 public class HostModelActivity extends BasicActivity {
     private UserModel Usermodel;                //UserModel 참조 선언
 
-    private TextView Address_TextView;                    //사용자의 주소
-    private TextView BirthDay_TextView;                  //사용자의 생일
-    private TextView Name_TextView;                      //사용자의 이름
-    private TextView PhoneNumber_TextView;               //사용자의 전화번호
-    private TextView Usernm_TextView;                    //사용지의 닉네임
-    private ImageView ProfileImageView_ImageView;         //사용자의 이미지
+    private TextView Users_Address_TextView;                    //사용자의 주소
+    private TextView Users_BirthDay_TextView;                  //사용자의 생일
+    private TextView Users_Name_TextView;                      //사용자의 이름
+    private TextView Users_PhoneNumber_TextView;               //사용자의 전화번호
+    private TextView Users_Usernm_TextView;                    //사용지의 닉네임
+    private ImageView Users_Profile_ImageView;         //사용자의 이미지
 
     private FirebaseFirestore Firebasefirestore =null;   //파이어스토어에 접근하기 위한 선언
     private StorageReference Storagereference;  //파이어스토리지에 접근하기 위한 선언
@@ -36,12 +36,12 @@ public class HostModelActivity extends BasicActivity {
         setContentView(R.layout.activity_host_info);
         setToolbarTitle("호스트용 회원정보");
 
-        Address_TextView = (TextView)findViewById(R.id.adress);
-        BirthDay_TextView = (TextView)findViewById(R.id.birthDay);
-        Name_TextView = (TextView)findViewById(R.id.name);
-        PhoneNumber_TextView = (TextView)findViewById(R.id.phoneNumber);
-        Usernm_TextView = (TextView)findViewById(R.id.usernm);
-        ProfileImageView_ImageView = (ImageView) findViewById(R.id.profileImageView);
+        Users_Address_TextView = (TextView)findViewById(R.id.Users_Address);
+        Users_BirthDay_TextView = (TextView)findViewById(R.id.Users_BirthDay);
+        Users_Name_TextView = (TextView)findViewById(R.id.Users_Name);
+        Users_PhoneNumber_TextView = (TextView)findViewById(R.id.Users_PhoneNumber);
+        Users_Usernm_TextView = (TextView)findViewById(R.id.Users_Usernm);
+        Users_Profile_ImageView = (ImageView) findViewById(R.id.Users_Profile_ImageView);
 
         String CurrentUid = getIntent().getStringExtra("toUid");    //postActivity에서 정보를 받아옴
 
@@ -58,17 +58,13 @@ public class HostModelActivity extends BasicActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Usermodel = documentSnapshot.toObject(UserModel.class);
-                Address_TextView.setText(Usermodel.getUserModel_Address());
-                BirthDay_TextView.setText(Usermodel.getUserModel_BirthDay());
-                Name_TextView.setText(Usermodel.getUserModel_Name());
-                PhoneNumber_TextView.setText(Usermodel.getUserModel_PhoneNumber());
-                Usernm_TextView.setText(Usermodel.getUserModel_NickName());
-                if(Usermodel.getUserModel_ProfileImage() != null){
-                    Glide.with(HostModelActivity.this).load(Usermodel.getUserModel_ProfileImage()).centerCrop().override(500).into(ProfileImageView_ImageView);
-                }
-                else{
-                    Glide.with(getApplicationContext()).load(R.drawable.user).into(ProfileImageView_ImageView);
-                }
+                Users_Address_TextView.setText(Usermodel.getUserModel_Address());
+                Users_BirthDay_TextView.setText(Usermodel.getUserModel_BirthDay());
+                Users_Name_TextView.setText(Usermodel.getUserModel_Name());
+                Users_PhoneNumber_TextView.setText(Usermodel.getUserModel_PhoneNumber());
+                Users_Usernm_TextView.setText(Usermodel.getUserModel_NickName());
+                if(Usermodel.getphotoUrl() != null){ Glide.with(HostModelActivity.this).load(Usermodel.getphotoUrl()).centerCrop().override(500).into(Users_Profile_ImageView); }
+                else{ Glide.with(getApplicationContext()).load(R.drawable.user).into(Users_Profile_ImageView); }
             }
         });
     }

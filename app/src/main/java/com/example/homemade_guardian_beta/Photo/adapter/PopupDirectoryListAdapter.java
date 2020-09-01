@@ -18,14 +18,14 @@ import java.util.List;
 
 public class PopupDirectoryListAdapter extends BaseAdapter {
 
-  private Context MContext;
+  private Context Context;
   private List<PhotoDirectory> Photodirectory_List = new ArrayList<>();
   private LayoutInflater LayoutInflater;
 
-  public PopupDirectoryListAdapter(Context MContext, List<PhotoDirectory> Photodirectory_List) {
-    this.MContext = MContext;
+  public PopupDirectoryListAdapter(Context Context, List<PhotoDirectory> Photodirectory_List) {
+    this.Context = Context;
     this.Photodirectory_List = Photodirectory_List;
-    LayoutInflater = LayoutInflater.from(MContext);
+    LayoutInflater = LayoutInflater.from(Context);
   }
 
   @Override
@@ -59,25 +59,25 @@ public class PopupDirectoryListAdapter extends BaseAdapter {
   }
 
   private class ViewHolder {
-    public ImageView IvCover;
-    public TextView TvName;
-    public TextView TvCount;
+    public ImageView Directory_Cover_Image_ImageView;
+    public TextView Directory_Cover_Name_TextView;
+    public TextView Directory_Cover_ImageCount_TextView;
 
     public ViewHolder(View Rootview) {
-      IvCover = (ImageView) Rootview.findViewById(R.id.iv_dir_cover);
-      TvName = (TextView)  Rootview.findViewById(R.id.tv_dir_name);
-      TvCount = (TextView)  Rootview.findViewById(R.id.tv_dir_count);
+      Directory_Cover_Image_ImageView = (ImageView) Rootview.findViewById(R.id.Directory_Cover_Image);
+      Directory_Cover_Name_TextView = (TextView)  Rootview.findViewById(R.id.Directory_Cover_Name);
+      Directory_Cover_ImageCount_TextView = (TextView)  Rootview.findViewById(R.id.Directory_Cover_ImageCount);
     }
 
     //디렉토리의 정보 (커버사진,이름,이미지개수 등)를 set
     public void bindData(PhotoDirectory Directory) {
-      if (MContext instanceof Activity && ((Activity) MContext).isFinishing()) { return; }
-      Glide.with(MContext)
+      if (Context instanceof Activity && ((Activity) Context).isFinishing()) { return; }
+      Glide.with(Context)
           .load(Directory.getPhotoDirectory_CoverPath())
           .thumbnail(0.1f)
-          .into(IvCover);
-      TvName.setText(Directory.getPhotoDirectory_Name());
-      TvCount.setText(MContext.getString(R.string.y_photopicker_image_count, Directory.getPhotoList().size()));
+          .into(Directory_Cover_Image_ImageView);
+      Directory_Cover_Name_TextView.setText(Directory.getPhotoDirectory_Name());
+      Directory_Cover_ImageCount_TextView.setText(Context.getString(R.string.y_photopicker_image_count, Directory.getPhotoList().size()));
     }
   }
 }

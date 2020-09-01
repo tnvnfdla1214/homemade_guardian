@@ -26,64 +26,65 @@ public class ImageCaptureManager {
 
   private final static String CAPTURED_PHOTO_PATH_KEY = "mCurrentPhotoPath";
   public static final int REQUEST_TAKE_PHOTO = 1;
-  private String mCurrentPhotoPath;
-  private Context mContext;
-  private boolean isNativeCamera = false;
-  public ImageCaptureManager(Context mContext) {
-    this.mContext = mContext;
+  private String CurrentPhotoPath;
+  private Context Context;
+  private boolean IsNativeCamera = false;
+  public ImageCaptureManager(Context Context) {
+    this.Context = Context;
   }
 
+  //찍은 이미지의 이름과 형식을 설정
   private File createImageFile() throws IOException {
-    // Create an image file name
-    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-    String imageFileName = "JPEG_" + timeStamp + "_";
-    File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-    if (!storageDir.exists()) {
-      if (!storageDir.mkdir()) {
+    // Create an Image file name
+    String TimeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+    String ImageFileName = "JPEG_" + TimeStamp + "_";
+    File StorageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+    if (!StorageDir.exists()) {
+      if (!StorageDir.mkdir()) {
         throw new IOException();
       }
     }
-    File image = File.createTempFile(
-        imageFileName,  /* prefix */
+    File Image = File.createTempFile(
+        ImageFileName,  /* prefix */
         ".jpg",         /* suffix */
-        storageDir      /* directory */
+        StorageDir      /* directory */
     );
     // Save a file: path for use with ACTION_VIEW intents
-    mCurrentPhotoPath = image.getAbsolutePath();
-    return image;
+    CurrentPhotoPath = Image.getAbsolutePath();
+    return Image;
   }
 
   public Intent dispatchTakePictureIntent() throws IOException {
-    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    Intent TakePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-    if (takePictureIntent.resolveActivity(mContext.getPackageManager()) != null) {
-      ResolveInfo mInfo = mContext.getPackageManager().resolveActivity(takePictureIntent, 0);
-      takePictureIntent.setComponent(new ComponentName(mInfo.activityInfo.packageName, mInfo.activityInfo.name));
-      if(isNativeCamera){
-          takePictureIntent.setAction(Intent.ACTION_MAIN);
-          takePictureIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+    if (TakePictureIntent.resolveActivity(Context.getPackageManager()) != null) {
+      ResolveInfo MInfo = Context.getPackageManager().resolveActivity(TakePictureIntent, 0);
+      TakePictureIntent.setComponent(new ComponentName(MInfo.activityInfo.packageName, MInfo.activityInfo.name));
+      if(IsNativeCamera){
+          TakePictureIntent.setAction(Intent.ACTION_MAIN);
+          TakePictureIntent.addCategory(Intent.CATEGORY_LAUNCHER);
       }
-      File photoFile = createImageFile();
-      if (photoFile != null) {
-        Uri uri = FileProvider.getUriForFile(mContext, "com.example.homemade_guardian_beta.provider", photoFile);
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+      File PhotoFile = createImageFile();
+      if (PhotoFile != null) {
+        Uri URI = FileProvider.getUriForFile(Context, "com.example.homemade_guardian_beta.provider", PhotoFile);
+        TakePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, URI);
       }
     }
-    return takePictureIntent;
+    return TakePictureIntent;
   }
 
-
+  //찍은 이미지를 디렉토리에 저장
   public void galleryAddPic() {
     String DcimPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
     String TimeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-    String resultImageDri = DcimPath + "/"+TimeStamp+".jpg";
-    copyFile(mCurrentPhotoPath , resultImageDri );
-    File tempImage = new File(mCurrentPhotoPath);
-    File f = new File(resultImageDri);
-    Intent mediaIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-    mediaIntent.setData(Uri.fromFile(f));
-    mContext.sendBroadcast(mediaIntent);
-    if(tempImage.delete()){Log.d("Y-Photo-Picker","#### DELETE TEMP IMAGE");}
+    String ResultImageDri = DcimPath + "/"+TimeStamp+".jpg";
+    copyFile(CurrentPhotoPath, ResultImageDri );
+    File TempImage = new File(CurrentPhotoPath);
+    File f = new File(ResultImageDri);
+    Intent MediaIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+    MediaIntent.setData(Uri.fromFile(f));
+    Context.sendBroadcast(MediaIntent);
+    if(TempImage.delete()){Log.d("Y-Photo-Picker","#### DELETE TEMP IMAGE");}
   }
 
   /**
@@ -93,42 +94,42 @@ public class ImageCaptureManager {
    * @return
    */
   private boolean copyFile(String strSrc , String save_file){
-    File file = new File(strSrc);
-    boolean result;
-    if(file!=null&&file.exists()){
+    File CopyFile = new File(strSrc);
+    boolean Result;
+    if(CopyFile!=null&&CopyFile.exists()){
       try {
-        FileInputStream fis = new FileInputStream(file);
-        FileOutputStream newfos = new FileOutputStream(save_file);
-        int readcount=0;
-        byte[] buffer = new byte[1024];
-        while((readcount = fis.read(buffer,0,1024))!= -1){
-          newfos.write(buffer,0,readcount);
+        FileInputStream Fis = new FileInputStream(CopyFile);
+        FileOutputStream Newfos = new FileOutputStream(save_file);
+        int Readcount=0;
+        byte[] Buffer = new byte[1024];
+        while((Readcount = Fis.read(Buffer,0,1024))!= -1){
+          Newfos.write(Buffer,0,Readcount);
         }
-        newfos.close();
-        fis.close();
+        Newfos.close();
+        Fis.close();
       } catch (Exception e) {
         e.printStackTrace();
       }
-      result = true;
+      Result = true;
     }else{
-      result = false;
+      Result = false;
     }
-    return result;
+    return Result;
   }
 
   public String getCurrentPhotoPath() {
-    return mCurrentPhotoPath;
+    return CurrentPhotoPath;
   }
 
   public void onSaveInstanceState(Bundle savedInstanceState) {
-    if (savedInstanceState != null && mCurrentPhotoPath != null) {
-      savedInstanceState.putString(CAPTURED_PHOTO_PATH_KEY, mCurrentPhotoPath);
+    if (savedInstanceState != null && CurrentPhotoPath != null) {
+      savedInstanceState.putString(CAPTURED_PHOTO_PATH_KEY, CurrentPhotoPath);
     }
   }
 
   public void onRestoreInstanceState(Bundle savedInstanceState) {
     if (savedInstanceState != null && savedInstanceState.containsKey(CAPTURED_PHOTO_PATH_KEY)) {
-      mCurrentPhotoPath = savedInstanceState.getString(CAPTURED_PHOTO_PATH_KEY);
+      CurrentPhotoPath = savedInstanceState.getString(CAPTURED_PHOTO_PATH_KEY);
     }
   }
 }

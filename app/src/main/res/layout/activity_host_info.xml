@@ -17,7 +17,7 @@
         app:cardCornerRadius="100dp">
 
         <ImageView
-            android:id="@+id/profileImageView"
+            android:id="@+id/Users_Profile_ImageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
@@ -25,7 +25,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/adress"
+        android:id="@+id/Users_Address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -34,7 +34,7 @@
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/birthDay"
+        android:id="@+id/Users_BirthDay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -43,7 +43,7 @@
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/Users_Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -52,7 +52,7 @@
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/phoneNumber"
+        android:id="@+id/Users_PhoneNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -61,7 +61,7 @@
         android:inputType="textPersonName" />
 
     <TextView
-        android:id="@+id/usernm"
+        android:id="@+id/Users_Usernm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"

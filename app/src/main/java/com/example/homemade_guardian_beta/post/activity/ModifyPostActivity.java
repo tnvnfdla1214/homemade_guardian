@@ -41,7 +41,7 @@ public class ModifyPostActivity extends BasicActivity {
     private PostModel Postmodel;                                        //UserModel 참조 선언
 
     private int PathCount;                                              //이미지 리스트 중 몇번째인지 나타내는 변수
-    public  ArrayList<String> ArrayList_SelectedPhotos = new ArrayList<>();       //선택한 이미지들이 담기는 리스트
+    public  ArrayList<String> ArrayList_SelectedPhoto = new ArrayList<>();       //선택한 이미지들이 담기는 리스트
 
     private RelativeLayout ButtonsBackgroundLayout;                     ////결과적으로는 안쓸 버튼
     private RelativeLayout LoaderLayout;                                //로딩중을 나타내는 layout 선언
@@ -60,14 +60,14 @@ public class ModifyPostActivity extends BasicActivity {
         setToolbarTitle("게시글 수정");
 
 
-        ButtonsBackgroundLayout = findViewById(R.id.buttonsBackgroundLayout);
-        LoaderLayout = findViewById(R.id.loaderLyaout);
-        Title_EditText = findViewById(R.id.titleEditText);
+        ButtonsBackgroundLayout = findViewById(R.id.ButtonsBackground_Layout);
+        LoaderLayout = findViewById(R.id.Loader_Lyaout);
+        Title_EditText = findViewById(R.id.Post_Title_EditText);
 
-        findViewById(R.id.check).setOnClickListener(onClickListener);
-        findViewById(R.id.image).setOnClickListener(onClickListener);
+        findViewById(R.id.Post_Write_Button).setOnClickListener(onClickListener);
+        findViewById(R.id.Select_Post_Image_Button).setOnClickListener(onClickListener);
         findViewById(R.id.imageModify).setOnClickListener(onClickListener);
-        findViewById(R.id.delete).setOnClickListener(onClickListener);
+        findViewById(R.id.Comment_Delete_Button).setOnClickListener(onClickListener);
 
         ButtonsBackgroundLayout.setOnClickListener(onClickListener);
         Title_EditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -93,7 +93,7 @@ public class ModifyPostActivity extends BasicActivity {
                 photos = data.getStringArrayListExtra(PhotoPickerActivity.KEY_SELECTED_PHOTOS);
             }
             if (photos != null) {
-                ArrayList_SelectedPhotos.addAll(photos);
+                ArrayList_SelectedPhoto.addAll(photos);
             }
         }
     }
@@ -103,13 +103,13 @@ public class ModifyPostActivity extends BasicActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.check:
+                case R.id.Post_Write_Button:
                     Modify_Storage_Upload();
                     break;
-                case R.id.image:
+                case R.id.Select_Post_Image_Button:
                     myStartActivity(GalleryActivity.class, GALLERY_IMAGE, 0);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
                     break;
-                case R.id.buttonsBackgroundLayout:
+                case R.id.ButtonsBackground_Layout:
                     if (ButtonsBackgroundLayout.getVisibility() == View.VISIBLE) {
                         ButtonsBackgroundLayout.setVisibility(View.GONE);                               // part12 : 실행되고나면 사라지게 설정 (15'19")
                     }
@@ -118,7 +118,7 @@ public class ModifyPostActivity extends BasicActivity {
                     myStartActivity(GalleryActivity.class, GALLERY_IMAGE, 1);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
                     ButtonsBackgroundLayout.setVisibility(View.GONE);
                     break;
-                case R.id.delete:                                                                       // part12 : 작성중인 게시물에서 사진 빼기 (12'30")
+                case R.id.Comment_Delete_Button:                                                                       // part12 : 작성중인 게시물에서 사진 빼기 (12'30")
                     break;
             }
         }
@@ -136,7 +136,7 @@ public class ModifyPostActivity extends BasicActivity {
 
     //WritePostFragment와 비슷한 형태로 차이점이 있다면, docRef_POSTS_PostUid에 새로운 Uid를 생성 받는 것이 아니라 수정하고자하는 게시물의 Uid를 받아서 쓴다.
     private void Modify_Storage_Upload() {
-        final String Title = ((EditText) findViewById(R.id.titleEditText)).getText().toString();
+        final String Title = ((EditText) findViewById(R.id.Post_Title_EditText)).getText().toString();
         final String Post_Uid = Postmodel.getPostModel_Post_Uid();
         if (Title.length() > 0) {
             LoaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
@@ -147,16 +147,16 @@ public class ModifyPostActivity extends BasicActivity {
             FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
             final DocumentReference docRef_POSTS_PostUid = Firebasefirestore.collection("POSTS").document(Postmodel.getPostModel_Post_Uid());     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
             final Date DateOfManufacture = Postmodel.getPostModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
-            for (int i = 0; i < ArrayList_SelectedPhotos.size(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
+            for (int i = 0; i < ArrayList_SelectedPhoto.size(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
 
                 // part11 : 자식뷰 저장
                 // part11 : EditText가 아닐 때 ---> 이미지 뷰일때는
-                String path = ArrayList_SelectedPhotos.get(PathCount);
+                String path = ArrayList_SelectedPhoto.get(PathCount);
                 ImageList.add(path);
                 String[] pathArray = path.split("\\.");                                         // part14 : 이미지의 확장자를 주어진대로 (2'40")
                 final StorageReference ImagesRef_POSTS_Uid_PathCount = Storagereference.child("POSTS/" + docRef_POSTS_PostUid.getId() + "/" + PathCount + "." + pathArray[pathArray.length - 1]);
                 try {
-                    InputStream Stream = new FileInputStream(new File(ArrayList_SelectedPhotos.get(PathCount)));            // part11 : 경로 설정 (27'20")
+                    InputStream Stream = new FileInputStream(new File(ArrayList_SelectedPhoto.get(PathCount)));            // part11 : 경로 설정 (27'20")
                     StorageMetadata Metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (ImageList.size() - 1)).build();
                     UploadTask Uploadtask = ImagesRef_POSTS_Uid_PathCount.putStream(Stream, Metadata);
                     ///

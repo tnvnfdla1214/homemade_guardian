@@ -33,7 +33,7 @@
                     app:cardCornerRadius="20dp">
 
                     <ImageButton
-                        android:id="@+id/hostuserpageimage"
+                        android:id="@+id/Host_UserPage_ImageButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/user" />
@@ -50,12 +50,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="이름"
-                        android:id="@+id/user_name"
+                        android:id="@+id/Post_Host_Name"
                         android:textSize="14dp"
                         android:layout_gravity="center_vertical"/>
 
                     <TextView
-                        android:id="@+id/createAtTextView"
+                        android:id="@+id/Post_DateOfManufacture"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="2019-04-25" />
@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="제목"
-                android:id="@+id/title"
+                android:id="@+id/Post_Title"
                 android:textSize="20dp"
                 android:padding="5dp"
                 android:layout_gravity="center_vertical"
@@ -76,11 +76,11 @@
             <com.example.homemade_guardian_beta.post.view.ThumbnailImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/readContentsView">
+                android:id="@+id/Post_ImageView">
             </com.example.homemade_guardian_beta.post.view.ThumbnailImageView>
 
             <view
-                android:id="@+id/viewPager"
+                android:id="@+id/ViewPager"
                 class="androidx.viewpager.widget.ViewPager"
                 android:layout_width="wrap_content"
                 android:layout_height="419dp"
@@ -106,16 +106,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="채팅하기"
-            android:id="@+id/chattingroom"/>
+            android:id="@+id/Chat_With_PostHost_Button"/>
         <EditText
-            android:id="@+id/comment_input"
+            android:id="@+id/Comment_Input_EditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             />
 
         <Button
-            android:id="@+id/writeBtn"
+            android:id="@+id/Comment_Write_Button"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:background="@android:drawable/ic_menu_send"/>

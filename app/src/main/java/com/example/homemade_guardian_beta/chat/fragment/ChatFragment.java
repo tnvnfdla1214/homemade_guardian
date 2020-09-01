@@ -738,7 +738,7 @@ public class ChatFragment extends Fragment {
             Message_TextView = view.findViewById(R.id.Message_TextView);
             Message_Image_ImageView = view.findViewById(R.id.Message_Image_ImageView);
             Message_DateOfManufacture = view.findViewById(R.id.Message_DateOfManufacture);
-            Message_NickName = view.findViewById(R.id.Message_NickName);
+            Message_NickName = (TextView) view.findViewById(R.id.Message_NickName);//////////////////////////////msg_name
             Read_Check = view.findViewById(R.id.Read_Check);
             Message_Divider = view.findViewById(R.id.Message_Divider);
             Message_Divider_Date = view.findViewById(R.id.Message_Divider_Date);

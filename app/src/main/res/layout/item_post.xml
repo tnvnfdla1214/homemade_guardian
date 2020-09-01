@@ -21,7 +21,7 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/titleTextView"
+                android:id="@+id/Post_Title_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -57,7 +57,7 @@
         <com.example.homemade_guardian_beta.post.view.ThumbnailImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/readContentsView">
+            android:id="@+id/Post_ImageView">
 
         </com.example.homemade_guardian_beta.post.view.ThumbnailImageView>
 

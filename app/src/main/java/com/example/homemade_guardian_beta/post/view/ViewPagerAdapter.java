@@ -16,11 +16,11 @@ import java.util.ArrayList;
 
 public class ViewPagerAdapter extends PagerAdapter {
     private ArrayList<String> ArrayList_ImageList = new ArrayList<String>();      //받아온 이미지리스트
-    private Context Mcontext;
+    private Context Context;
 
-    public ViewPagerAdapter(Context Mcontext, ArrayList<String> ArrayList_ImageList)
+    public ViewPagerAdapter(Context Context, ArrayList<String> ArrayList_ImageList)
     {
-        this.Mcontext = Mcontext;
+        this.Context = Context;
         this.ArrayList_ImageList = ArrayList_ImageList;
     }
 
@@ -28,10 +28,10 @@ public class ViewPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
-        LayoutInflater Inflater = (LayoutInflater) Mcontext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater Inflater = (LayoutInflater) Context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = Inflater.inflate(R.layout.post_silder, null);
-        ImageView Imageview = view.findViewById(R.id.imageView);
-        Glide.with(view).load(ArrayList_ImageList.get(position)).into(Imageview);
+        ImageView Post_ImageView = view.findViewById(R.id.PostActivity_Post_ImageView);
+        Glide.with(view).load(ArrayList_ImageList.get(position)).into(Post_ImageView);
         container.addView(view);
         return view;
     }

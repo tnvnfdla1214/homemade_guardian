@@ -43,7 +43,7 @@ import com.example.homemade_guardian_beta.chat.model.UserModel;
 //그룹채팅에 쓰이는 액티비티
 //그룹 채팅방 할때 쓰는거 지워야함
 public class SelectUserActivity extends AppCompatActivity {
-    private String roomID;
+    private String ChatRoomListModel_RoomUid;
     private Map<String, String> selectedUsers = new HashMap<>();
     private FirestoreAdapter firestoreAdapter;
 
@@ -68,15 +68,15 @@ public class SelectUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_user);
 
-        roomID = getIntent().getStringExtra("roomID");
+        ChatRoomListModel_RoomUid = getIntent().getStringExtra("ChatRoomListModel_RoomUid");
 
-        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("USERS").orderBy("userModel_NickName"));
+        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("USERS").orderBy("UserModel_NickName"));
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager( new LinearLayoutManager((this)));
         recyclerView.setAdapter(firestoreAdapter);
 
         Button makeRoomBtn = findViewById(R.id.makeRoomBtn);
-        if (roomID==null)
+        if (ChatRoomListModel_RoomUid ==null)
              makeRoomBtn.setOnClickListener(makeRoomClickListener);
         else makeRoomBtn.setOnClickListener(addRoomUserClickListener);
     }
@@ -92,7 +92,7 @@ public class SelectUserActivity extends AppCompatActivity {
 
             selectedUsers.put(FirebaseAuth.getInstance().getCurrentUser().getUid(), "");
 
-            DocumentReference newRoom = FirebaseFirestore.getInstance().collection("rooms").document();
+            DocumentReference newRoom = FirebaseFirestore.getInstance().collection("ROOMS").document();
             CreateChattingRoom(newRoom);
         }
     };
@@ -104,7 +104,7 @@ public class SelectUserActivity extends AppCompatActivity {
                 ChatUtil.showMessage(getApplicationContext(), "Please select 1 or more user");
                 return;
             }
-            CreateChattingRoom(FirebaseFirestore.getInstance().collection("rooms").document(roomID) );
+            CreateChattingRoom(FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid) );
         }
     };
 
@@ -122,15 +122,15 @@ public class SelectUserActivity extends AppCompatActivity {
             }
         }
         Map<String, Object> data = new HashMap<>();
-        data.put("title", title.substring(0, title.length() - 2));
-        data.put("users", users);
+        data.put("ChatRoomListModel_Title", title.substring(0, title.length() - 2));
+        data.put("USERS", users);
 
         room.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Intent intent = new Intent(SelectUserActivity.this, ChatActivity.class);
-                    intent.putExtra("roomID", room.getId());
+                    intent.putExtra("ChatRoomListModel_RoomUid", room.getId());
                     startActivity(intent);
                     SelectUserActivity.this.finish();
                 }
@@ -171,8 +171,8 @@ public class SelectUserActivity extends AppCompatActivity {
             viewHolder.user_name.setText(userModel.getUserModel_NickName());
 
             //그룹 채팅 프로필 사진 부분
-            if (userModel.getphotoUrl()!=null) {
-                Glide.with(getApplicationContext()).load(userModel.getphotoUrl()).centerCrop().override(500).into(viewHolder.user_photo);
+            if (userModel.getUserModel_ProfileImage()!=null) {
+                Glide.with(getApplicationContext()).load(userModel.getUserModel_ProfileImage()).centerCrop().override(500).into(viewHolder.user_photo);
             } else{
                 Glide.with(getApplicationContext()).load(R.drawable.user).into(viewHolder.user_photo);
             }

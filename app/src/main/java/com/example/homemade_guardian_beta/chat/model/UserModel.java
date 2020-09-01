@@ -1,16 +1,11 @@
 package com.example.homemade_guardian_beta.chat.model;
 
-//address : 지역(성남), birthDay : 생일 (950310), createdID : 가입 날짜 (2020년 8월 5일 오후 11시 54분 43초 UTC+9)
-//name : 이름 (이석규), token : ? (null) , photoUrl : 스토리지 저장 경로 ("https://firebasestorage.googleapis.com/v0/b/homemade-guardian-beta.appspot.com/o/user%2FBMpq3vmEN6Pi4by5Sm283ZEIdNw1%2FprofileImage.jpg?alt=media&token=d8f58529-4580-44d3-9658-eca84cc4b424")
-//uid : Auth고유 번호 ("BMpq3vmEN6Pi4by5Sm283ZEIdNw1"), userid : (tnvnfdla12@gmail.com), usermsg : 상태메세지 (안녕하세요. 좋은하루 보내세요.)
-//usernm : 이름 -> 차후 닉네임(NickName)으로 변경해야함 (tnvnfdla12 -> 번듯한 오크, null시 tnvnfdla12로 설정)
-
 import java.util.Date;
 
 public class UserModel {
     private String UserModel_ID; //아이디
     private String UserModel_Uid; //uid
-    private String userModel_NickName; //지금은 tnvnfdla1214 -> 번듯한 오크 바뀌어야함
+    private String UserModel_NickName; //지금은 tnvnfdla1214 -> 번듯한 오크 바뀌어야함
     private String UserModel_StateMassage; //상태메세지
     private String UserModel_Name; //이름
     private String UserModel_PhoneNumber; //전화번호
@@ -57,11 +52,11 @@ public class UserModel {
     }
 
     public String getUserModel_NickName() {
-        return userModel_NickName;
+        return UserModel_NickName;
     }
 
     public void setUserModel_NickName(String userModel_NickName) {
-        this.userModel_NickName = userModel_NickName;
+        this.UserModel_NickName = userModel_NickName;
     }
 
     public String getUserModel_StateMassage() {
@@ -105,11 +100,11 @@ public class UserModel {
         this.UserModel_Address = userModel_Address;
     }
 
-    public String getphotoUrl(){
+    public String getUserModel_ProfileImage(){
         return this.UserModel_ProfileImage;
     }
 
-    public void setphotoUrl(String photoUrl){
+    public void setUserModel_ProfileImage(String photoUrl){
         this.UserModel_ProfileImage = photoUrl;
     }
     

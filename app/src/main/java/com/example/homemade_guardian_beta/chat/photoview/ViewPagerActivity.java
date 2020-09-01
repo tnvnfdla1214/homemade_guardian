@@ -57,7 +57,7 @@ import com.example.homemade_guardian_beta.chat.model.MessageModel;
 //chatfragment에서 roomID와 realname이거 줌
 public class ViewPagerActivity extends AppCompatActivity {
 
-	private static String roomID; //룸 uid
+	private static String ChatRoomListModel_RoomUid; //룸 uid
 	private static String realname; //뭔지 모르겟음
 	private static ViewPager viewPager; //뷰페이저
 	private static ArrayList<MessageModel> Message_Image_List = new ArrayList<>();
@@ -71,7 +71,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
-		roomID = getIntent().getStringExtra("roomID");
+		ChatRoomListModel_RoomUid = getIntent().getStringExtra("ChatRoomListModel_RoomUid");
 		realname = getIntent().getStringExtra("realname");
 
 		viewPager = findViewById(R.id.view_pager);
@@ -106,10 +106,10 @@ public class ViewPagerActivity extends AppCompatActivity {
 			MessageModel messageModel = Message_Image_List.get(viewPager.getCurrentItem());
             /// showProgressDialog("Downloading File.");
 
-			final File localFile = new File(rootPath, messageModel.getFilename());
+			final File localFile = new File(rootPath, messageModel.getMessageModel_FileName());
 
 			// realname == message.msg
-			FirebaseStorage.getInstance().getReference().child("files/"+ messageModel.getMsg()).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+			FirebaseStorage.getInstance().getReference().child("files/"+ messageModel.getMessageModel_Message()).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
 				@Override
 				public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
 					// hideProgressDialog();
@@ -132,7 +132,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 		public SamplePagerAdapter() {
 			storageReference  = FirebaseStorage.getInstance().getReference();
 
-			FirebaseFirestore.getInstance().collection("rooms").document(roomID).collection("messages").whereEqualTo("msgtype", "1")
+			FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid).collection("MESSAGE").whereEqualTo("Message_MessageType", "1")
 					.get()
 					.addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 						@Override
@@ -142,7 +142,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 							for (QueryDocumentSnapshot document : task.getResult()) {
 								MessageModel messageModel = document.toObject(MessageModel.class);
 								Message_Image_List.add(messageModel);
-								if (realname.equals(messageModel.getMsg())) {inx = Message_Image_List.size()-1; }
+								if (realname.equals(messageModel.getMessageModel_Message())) {inx = Message_Image_List.size()-1; }
 							}
 							notifyDataSetChanged();
 							if (inx>-1) {
@@ -163,7 +163,7 @@ public class ViewPagerActivity extends AppCompatActivity {
             photoView.setId(R.id.photoView);
 
 			Glide.with(container.getContext())
-					.load(storageReference.child("filesmall/"+ Message_Image_List.get(position).getMsg()))
+					.load(storageReference.child("filesmall/"+ Message_Image_List.get(position).getMessageModel_Message()))
 					.into(photoView);
 
 			container.addView(photoView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);

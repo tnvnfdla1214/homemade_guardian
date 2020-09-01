@@ -157,7 +157,7 @@ public class PostActivity extends BasicActivity {                               
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Usermodel = documentSnapshot.toObject(UserModel.class);
                 Host_Name = Usermodel.getUserModel_Name();
-                Comment_Host_Image = Usermodel.getphotoUrl();
+                Comment_Host_Image = Usermodel.getUserModel_ProfileImage();
             }
         });
     }
@@ -169,9 +169,9 @@ public class PostActivity extends BasicActivity {                               
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Usermodel = documentSnapshot.toObject(UserModel.class);
-                if(Usermodel.getphotoUrl() != null){
-                    Glide.with(PostActivity.this).load(Usermodel.getphotoUrl()).centerCrop().override(500).into(Host_UserPage_ImageButton);
-                    Post_Host_Name_TextView = findViewById(R.id.Post_Host_Name);
+                if(Usermodel.getUserModel_ProfileImage() != null){
+                    Glide.with(PostActivity.this).load(Usermodel.getUserModel_ProfileImage()).centerCrop().override(500).into(Post_Host_ImageButton);
+                    Post_Host_Name_TextView = findViewById(R.id.user_name);
                     Post_Host_Name_TextView.setText(Usermodel.getUserModel_Name());
                 }
                 else{
@@ -213,7 +213,7 @@ public class PostActivity extends BasicActivity {                               
                 //버튼 눌러짐
                 Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                 //상대방 uid 넘겨주기
-                Intent_ChatActivity.putExtra("toUid", Postmodel.getPostModel_Host_Uid());
+                Intent_ChatActivity.putExtra("To_User_Uid", Postmodel.getPostModel_Host_Uid());
                 startActivity(Intent_ChatActivity);
                 return true;
             default:
@@ -235,7 +235,7 @@ public class PostActivity extends BasicActivity {                               
                     //버튼 눌러짐
                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                     //상대방 uid 넘겨주기
-                    Intent_ChatActivity.putExtra("toUid", Postmodel.getPostModel_Host_Uid());
+                    Intent_ChatActivity.putExtra("To_User_Uid", Postmodel.getPostModel_Host_Uid());
                     startActivity(Intent_ChatActivity);
                     break;
                 case R.id.Comment_Write_Button:
@@ -347,7 +347,7 @@ public class PostActivity extends BasicActivity {                               
                                     //버튼 눌러짐
                                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                                     //상대방 uid 넘겨주기
-                                    Intent_ChatActivity.putExtra("toUid", Postmodel.getPostModel_Host_Uid());
+                                    Intent_ChatActivity.putExtra("To_User_Uid", Postmodel.getPostModel_Host_Uid());
                                     startActivity(Intent_ChatActivity);
                                     return true;
                                 default:
@@ -383,6 +383,7 @@ public class PostActivity extends BasicActivity {                               
             Comment_UserName_TextView = view.findViewById(R.id.Comment_UserName);
             Comment_UserComment_TextView = view.findViewById(R.id.Comment_UserComment);
             Comment_Menu_CardView = view.findViewById(R.id.Comment_Menu);
+
         }
     }
 }

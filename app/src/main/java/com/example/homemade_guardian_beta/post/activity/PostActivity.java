@@ -170,8 +170,8 @@ public class PostActivity extends BasicActivity {                               
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Usermodel = documentSnapshot.toObject(UserModel.class);
                 if(Usermodel.getUserModel_ProfileImage() != null){
-                    Glide.with(PostActivity.this).load(Usermodel.getUserModel_ProfileImage()).centerCrop().override(500).into(Post_Host_ImageButton);
-                    Post_Host_Name_TextView = findViewById(R.id.user_name);
+                    Glide.with(PostActivity.this).load(Usermodel.getUserModel_ProfileImage()).centerCrop().override(500).into(Host_UserPage_ImageButton);
+                    Post_Host_Name_TextView = findViewById(R.id.Post_Host_Name);
                     Post_Host_Name_TextView.setText(Usermodel.getUserModel_Name());
                 }
                 else{

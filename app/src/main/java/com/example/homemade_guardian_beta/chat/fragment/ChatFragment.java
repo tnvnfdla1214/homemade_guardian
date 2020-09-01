@@ -156,13 +156,11 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        Chat_User_Check();                    //유저의 uid와 room의 uid 체크 함수
-
         Firestore = FirebaseFirestore.getInstance();
         StorageReference = FirebaseStorage.getInstance().getReference();
         MyUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-
+        Chat_User_Check();                    //유저의 uid와 room의 uid 체크 함수
         KroreaTime();                         //한국 시간 가져오기 함수
         Chat_RecyclerView_Arrangement();      // Chat_RecyclerView의 배열 정리에 관한 함수
 
@@ -205,10 +203,9 @@ public class ChatFragment extends Fragment {
         if (getArguments() != null) {
             ChatRoomListModel_RoomUid = getArguments().getString("RoomUid");
             ToUid = getArguments().getString("To_User_Uid");
-            Log.d("태그3","ToUid2"+ToUid);
         }
 
-        if (!"".equals(ToUid) && ToUid !=null) {                     // find existing room for two user
+        if (!"".equals(ToUid) && ToUid !=null) {                     // find existing room for two user ToUid가 널이 아니거나 ToUid가 ""이거가 아니면
             findChatRoom(ToUid);
         } else
         if (!"".equals(ChatRoomListModel_RoomUid) && ChatRoomListModel_RoomUid !=null) {                   // existing room (multi user)

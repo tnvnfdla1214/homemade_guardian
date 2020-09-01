@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.chat.SelectUserActivity;
-import com.example.homemade_guardian_beta.chat.model.UserModel;
+import com.example.homemade_guardian_beta.chat.activity.SelectUserActivity;
+import com.example.homemade_guardian_beta.model.UserModel;
 
 //그룹채팅 프래그먼트
 //우리 그룹채팅 안할거니까 빼야할 프래그먼트

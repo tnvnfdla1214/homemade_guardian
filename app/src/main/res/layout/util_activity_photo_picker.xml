@@ -14,7 +14,7 @@
 
       <fragment
           android:id="@+id/PhotoPickerFragment"
-          android:name="com.example.homemade_guardian_beta.Photo.fragment.PhotoPickerFragment"
+          android:name="com.example.homemade_guardian_beta.PhotoModel.fragment.PhotoPickerFragment"
           android:layout_width="match_parent"
           android:layout_height="match_parent" />
 

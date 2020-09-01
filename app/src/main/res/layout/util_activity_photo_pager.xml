@@ -15,7 +15,7 @@
 
         <fragment
             android:id="@+id/photoPagerFragment"
-            android:name="com.example.homemade_guardian_beta.Photo.fragment.ImagePagerFragment"
+            android:name="com.example.homemade_guardian_beta.PhotoModel.fragment.ImagePagerFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>

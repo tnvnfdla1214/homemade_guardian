@@ -43,10 +43,10 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.chat.ChatActivity;
-import com.example.homemade_guardian_beta.chat.model.ChatRoomListModel;
-import com.example.homemade_guardian_beta.chat.model.MessageModel;
-import com.example.homemade_guardian_beta.chat.model.UserModel;
+import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
+import com.example.homemade_guardian_beta.model.chat.ChatRoomListModel;
+import com.example.homemade_guardian_beta.model.chat.MessageModel;
+import com.example.homemade_guardian_beta.model.UserModel;
 
 
 //채팅 목록 프래그먼트

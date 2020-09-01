@@ -38,7 +38,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.example.homemade_guardian_beta.chat.photoview.ViewPagerActivity;
+import com.example.homemade_guardian_beta.chat.common.photoview.ViewPagerActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -74,11 +74,11 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.chat.common.ChatUtil;
-import com.example.homemade_guardian_beta.chat.model.ChatModel;
-import com.example.homemade_guardian_beta.chat.model.MessageModel;
-import com.example.homemade_guardian_beta.chat.model.NotificationModel;
-import com.example.homemade_guardian_beta.chat.model.UserModel;
+import com.example.homemade_guardian_beta.chat.ChatUtil;
+import com.example.homemade_guardian_beta.model.chat.ChatModel;
+import com.example.homemade_guardian_beta.model.chat.MessageModel;
+import com.example.homemade_guardian_beta.model.chat.NotificationModel;
+import com.example.homemade_guardian_beta.model.UserModel;
 
 
 import okhttp3.Call;

@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.homemade_guardian_beta.post.PostModel;
+import com.example.homemade_guardian_beta.model.post.PostModel;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.post.activity.PostActivity;
-import com.example.homemade_guardian_beta.post.view.ThumbnailImageView;
+import com.example.homemade_guardian_beta.post.common.view.ThumbnailImageView;
 
 import java.util.ArrayList;
 

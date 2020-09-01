@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.post.PostModel;
+import com.example.homemade_guardian_beta.model.post.PostModel;
 import com.example.homemade_guardian_beta.post.activity.PostActivity;
-import com.example.homemade_guardian_beta.post.view.ThumbnailImageView;
+import com.example.homemade_guardian_beta.post.common.view.ThumbnailImageView;
 import java.util.ArrayList;
 
 //SearchResultFragment와 연결된 어댑터이다. onBindViewHolder로 카드뷰에 검색된 게시물의 정보들을 담는 역할을 한다. !검색된 결과의 게시물 나열!

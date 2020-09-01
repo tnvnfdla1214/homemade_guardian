@@ -54,12 +54,12 @@
             android:layout_marginBottom="5dp"
             android:background="#DDDDDD"/>
 
-        <com.example.homemade_guardian_beta.post.view.ThumbnailImageView
+        <com.example.homemade_guardian_beta.post.common.view.ThumbnailImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/Post_ImageView">
 
-        </com.example.homemade_guardian_beta.post.view.ThumbnailImageView>
+        </com.example.homemade_guardian_beta.post.common.view.ThumbnailImageView>
 
     </LinearLayout>
 

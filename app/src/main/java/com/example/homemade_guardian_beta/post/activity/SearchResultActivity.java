@@ -3,7 +3,7 @@ package com.example.homemade_guardian_beta.post.activity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.fragment.SearchResultFragment;
+import com.example.homemade_guardian_beta.post.fragment.SearchResultFragment;
 
 //SearchActivity에서 버튼을 눌러 넘어 온 액티비티이다.
 //      Ex) SearchResultFragment에서 Fragment를 이용하여 결과물을 출력한다. <-> SearchResultAdapter와 연결된다.

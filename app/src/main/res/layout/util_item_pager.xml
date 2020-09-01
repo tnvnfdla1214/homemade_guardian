@@ -6,7 +6,7 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <com.example.homemade_guardian_beta.Photo.widget.TouchImageView
+    <com.example.homemade_guardian_beta.PhotoModel.widget.TouchImageView
         android:id="@+id/Enlarge_Pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

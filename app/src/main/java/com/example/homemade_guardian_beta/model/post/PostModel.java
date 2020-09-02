@@ -37,11 +37,17 @@ public class PostModel implements Serializable {                                
     private String PostModel_Post_Uid;              //게시물의 Uid
     private Date PostModel_DateOfManufacture;       //게시물의 작성 시간
     private ArrayList<String> PostModel_ImageList;  //게시물의 사진 리스트
-    //private String PostModel_Text;                //게시물의 글
+    private String PostModel_Text;                //게시물의 글
 
     public PostModel(String PostModel_Title, ArrayList<String> PostModel_ImageList, Date PostModel_DateOfManufacture, String PostModel_Host_Uid, String PostModel_Post_Uid){
         this.PostModel_Title = PostModel_Title;
         this.PostModel_ImageList = PostModel_ImageList;
+        this.PostModel_DateOfManufacture = PostModel_DateOfManufacture;
+        this.PostModel_Host_Uid = PostModel_Host_Uid;
+        this.PostModel_Post_Uid = PostModel_Post_Uid;
+    }
+    public PostModel(String PostModel_Title, Date PostModel_DateOfManufacture, String PostModel_Host_Uid, String PostModel_Post_Uid){
+        this.PostModel_Title = PostModel_Title;
         this.PostModel_DateOfManufacture = PostModel_DateOfManufacture;
         this.PostModel_Host_Uid = PostModel_Host_Uid;
         this.PostModel_Post_Uid = PostModel_Post_Uid;
@@ -77,8 +83,6 @@ public class PostModel implements Serializable {                                
         return this.PostModel_Post_Uid;
     }
     public void setPostModel_Post_Uid(String PostModel_Post_Uid){ this.PostModel_Post_Uid = PostModel_Post_Uid; }
-/*
     public String getPostModel_Text(){return this.PostModel_Text;}
     public void setPostModel_Text(String postModel_Text){this.PostModel_Text = postModel_Text;}
-*/
 }

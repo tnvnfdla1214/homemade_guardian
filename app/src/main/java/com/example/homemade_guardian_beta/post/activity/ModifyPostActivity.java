@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.example.homemade_guardian_beta.photo.activity.PhotoPickerActivity;
@@ -32,6 +33,7 @@ import java.util.Date;
 import java.util.List;
 import static com.example.homemade_guardian_beta.post.PostUtil.GALLERY_IMAGE;
 import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_MEDIA;
+import static com.example.homemade_guardian_beta.post.PostUtil.isStorageUrl;
 
 //게시물의 수정을 위한 액티비티 이다. 형태는 WritePostFragment와 비슷하지만, 수정은 Activity라는 차이가 있다.
 //      Ex) 게시물에서 수정을 눌렀을 때 실행되는 액티비티이다.
@@ -82,6 +84,7 @@ public class ModifyPostActivity extends BasicActivity {
         FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();
         Storagereference = Firebasestorage.getReference();
         Postmodel = (PostModel) getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
+        postInit();
     }
 
     @Override
@@ -105,6 +108,7 @@ public class ModifyPostActivity extends BasicActivity {
             switch (v.getId()) {
                 case R.id.Post_Write_Button:
                     Modify_Storage_Upload();
+                    Toast.makeText(getApplicationContext(), "수정 성공", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.Select_Post_Image_Button:
                     myStartActivity(GalleryActivity.class, GALLERY_IMAGE, 0);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
@@ -184,6 +188,11 @@ public class ModifyPostActivity extends BasicActivity {
                 }
                 PathCount++;
             }
+            if (ArrayList_SelectedPhoto.size() == 0) {
+                PostModel Postmodel = new PostModel(Title, DateOfManufacture, CurrentUser.getUid(), Post_Uid);
+                Postmodel.setPostModel_Post_Uid(Post_Uid);
+                Modify_Store_Upload(docRef_POSTS_PostUid,Postmodel);
+            }
         } else {
             Toast.makeText(this, "제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
         }
@@ -214,5 +223,38 @@ public class ModifyPostActivity extends BasicActivity {
         Intent intent = new Intent(this, c);
         intent.putExtra(INTENT_MEDIA, media);
         startActivityForResult(intent, requestCode);
+    }
+    private void postInit() {                                                                               // part17 : (33')
+        if (Postmodel != null) {                                                                             //수정 버튼을 눌러서 들어왔을 때 null이 아니면 == 나 수정 하러 왔음 >> 화면에는 수정하고자하는 게시물의 정보들이 띄워져있음
+            Title_EditText.setText(Postmodel.getPostModel_Title());
+            //ArrayList<String> contentsList = Postmodel.getContents();
+//            for (int i = 0; i < contentsList.size(); i++) {
+//                String contents = contentsList.get(i);
+//                if (isStorageUrl(contents)) {
+//                    pathList.add(contents);
+//                    ContentsItemView contentsItemView = new ContentsItemView(this);
+//                    parent.addView(contentsItemView);
+//
+//                    contentsItemView.setImage(contents);
+//                    contentsItemView.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            buttonsBackgroundLayout.setVisibility(View.VISIBLE);
+//                            selectedImageVIew = (ImageView) v;
+//                        }
+//                    });
+//
+//                    contentsItemView.setOnFocusChangeListener(onFocusChangeListener);
+//                    if (i < contentsList.size() - 1) {
+//                        String nextContents = contentsList.get(i + 1);
+//                        if (!isStorageUrl(nextContents)) {
+//                            contentsItemView.setText(nextContents);
+//                        }
+//                    }
+//                } else if (i == 0) {
+//                    contentsEditText.setText(contents);
+//                }
+//            }
+        }
     }
 }

@@ -204,7 +204,6 @@ public class PostActivity extends BasicActivity {                               
                 return true;
             case R.id.Post_Modify_Button:
                 myStartActivity(ModifyPostActivity.class, Postmodel);
-                Toast.makeText(getApplicationContext(), "수정 성공", Toast.LENGTH_SHORT).show();
                 return true;
 
             case R.id.Post_Report_Button:

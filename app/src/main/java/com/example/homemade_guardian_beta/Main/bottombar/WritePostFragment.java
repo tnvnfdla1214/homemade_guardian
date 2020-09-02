@@ -214,6 +214,11 @@ public class WritePostFragment extends Fragment {
                 }
                 pathCount++;
             }
+            if (selectedPhotos.size() == 0) {
+                PostModel postModel = new PostModel(title, date, currentUser.getUid(), postID);
+                postModel.setPostModel_Post_Uid(postID);
+                storeUpload(documentReference,postModel);
+            }
         } else {
             Toast.makeText(getActivity(), "제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
         }

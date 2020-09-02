@@ -77,10 +77,10 @@
         </activity>
         <activity android:name=".post.activity.SearchResultActivity">
         </activity>
-        <activity android:name=".PhotoModel.PhotoPickerActivity"
+        <activity android:name=".photo.activity.PhotoPickerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
-        <activity android:name=".PhotoModel.PhotoPagerActivity"
+        <activity android:name=".photo.activity.PhotoPagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
 
     </application>

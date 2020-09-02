@@ -51,18 +51,20 @@ public class ThumbnailImageView extends LinearLayout {
         LinearLayout Thumbnail_Layout = findViewById(R.id.contentsLayout);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ArrayList<String> ArrayList_ImageList = postModel.getPostModel_ImageList();
-        for (int i = 0; i < ArrayList_ImageList.size(); i++) {                                                 // part17 : 더보기기능 추가
-            if (i == moreIndex) {
-                TextView Textview = new TextView(Context);
-                Textview.setLayoutParams(layoutParams);
-                Textview.setText("더보기...");
-                Thumbnail_Layout.addView(Textview);
-                break;
+        if(ArrayList_ImageList != null) {
+            for (int i = 0; i < ArrayList_ImageList.size(); i++) {                                                 // part17 : 더보기기능 추가
+                if (i == moreIndex) {
+                    TextView Textview = new TextView(Context);
+                    Textview.setLayoutParams(layoutParams);
+                    Textview.setText("더보기...");
+                    Thumbnail_Layout.addView(Textview);
+                    break;
+                }
+                String Image = ArrayList_ImageList.get(i);                                                                    // part20 : 컨텐츠의 정보에 따라 다르게 만듦 (12')
+                ImageView Imageview = (ImageView) Layoutinflater.inflate(R.layout.view_contents_image, this, false);
+                Thumbnail_Layout.addView(Imageview);
+                Glide.with(this).load(Image).override(1000).thumbnail(0.1f).into(Imageview);         // 흐릿하게 로딩하기
             }
-            String Image = ArrayList_ImageList.get(i);                                                                    // part20 : 컨텐츠의 정보에 따라 다르게 만듦 (12')
-            ImageView Imageview = (ImageView) Layoutinflater.inflate(R.layout.view_contents_image, this, false);
-            Thumbnail_Layout.addView(Imageview);
-            Glide.with(this).load(Image).override(1000).thumbnail(0.1f).into(Imageview);         // 흐릿하게 로딩하기
         }
     } 
 }

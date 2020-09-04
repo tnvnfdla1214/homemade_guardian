@@ -77,6 +77,7 @@ public class PostActivity extends BasicActivity {                               
     private ImageButton Host_UserPage_ImageButton;      //게시물 작성자의 이미지 버튼
     private EditText Comment_Input_EditText;              //댓글 내용
     private TextView Title_TextView;                //게시물의 제목
+    private TextView TextContents_TextView;         //게시물의 내용
 
 
     private FirebaseUser CurrentUser;               //현재 사용자를 받기 위한 FirebaseUser 선언
@@ -108,6 +109,8 @@ public class PostActivity extends BasicActivity {                               
         Host_UserPage_ImageButton.setOnClickListener(onClickListener);
         Comment_Input_EditText = findViewById(R.id.Comment_Input_EditText);
         Comment_Write_Button = findViewById(R.id.Comment_Write_Button);
+        Title_TextView = findViewById(R.id.Post_Title);
+        TextContents_TextView = findViewById(R.id.Post_TextContents);
         TextView Post_DateOfManufacture = findViewById(R.id.Post_DateOfManufacture);
         findViewById(R.id.Comment_Write_Button).setOnClickListener(onClickListener);
 
@@ -118,15 +121,24 @@ public class PostActivity extends BasicActivity {                               
         Firebasehelper = new FirebaseHelper(this);
         Firebasehelper.setOnpostlistener(onPostListener);
 
+        Title_TextView.setText(Postmodel.getPostModel_Title());
+        TextContents_TextView.setText(Postmodel.getPostModel_Text());
         Post_DateOfManufacture.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Postmodel.getPostModel_DateOfManufacture()));
 
         DocRefe_USERS_CurrentUid(); //댓글을 쓰는 사람의 정보를 받는 함수
         DocRef_USERS_HostUid();     //게시물의 작성자의 정보를 받는 함수
 
         //뷰페이져
-        Viewpager = findViewById(R.id.ViewPager);
         ImageList = Postmodel.getPostModel_ImageList();
-        Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList));
+        if(ImageList != null) {
+            Viewpager = findViewById(R.id.ViewPager);
+            Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList));
+            /////////////////Viewpager.setSaveFromParentEnabled(false);
+        }
+
+        if(CurrentUid.equals(Postmodel.getPostModel_Host_Uid())){
+            Chat_With_PostHost_Button.setVisibility(View.GONE);
+        }
 
         //댓글 목록
         Firestoreadapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("POSTS").document(Postmodel.getPostModel_Post_Uid()).collection("COMMENT"));
@@ -136,15 +148,26 @@ public class PostActivity extends BasicActivity {                               
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {                              // part19 : 수정하고 오면 수정된 정보 반영 (84')
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case 0:
                 if (resultCode == Activity.RESULT_OK) {
-                    Postmodel = (PostModel)data.getSerializableExtra("postinfo");
-                    //contentsLayout.removeAllViews();
+                    Postmodel = (PostModel)data.getSerializableExtra("postInfo");
+                    Title_TextView.setText(Postmodel.getPostModel_Title());
+                    TextContents_TextView.setText(Postmodel.getPostModel_Text());
                     ImageList = Postmodel.getPostModel_ImageList();
-                    Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList));
+                    if(ImageList != null) {
+                        Viewpager = findViewById(R.id.ViewPager);
+                        Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList));
+                    }
+                    onResume();
                 }
                 break;
         }

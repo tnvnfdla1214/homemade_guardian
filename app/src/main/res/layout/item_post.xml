@@ -53,6 +53,22 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:background="#DDDDDD"/>
+        <TextView
+            android:id="@+id/Post_Contents_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            tools:text="내용" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="#DDDDDD"/>
 
         <com.example.homemade_guardian_beta.post.common.view.ThumbnailImageView
             android:layout_width="match_parent"

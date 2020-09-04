@@ -9,11 +9,16 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
+
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
@@ -22,6 +27,7 @@ import com.example.homemade_guardian_beta.photo.PhotoUtil;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.post.PostModel;
 import com.example.homemade_guardian_beta.post.activity.GalleryActivity;
+import com.example.homemade_guardian_beta.post.common.view.ViewPagerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +38,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.protobuf.StringValue;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -54,6 +62,11 @@ public class WritePostFragment extends Fragment {
     private int pathCount;
     public final static int REQUEST_CODE = 1;
     public  ArrayList<String> selectedPhotos = new ArrayList<>();
+////////////////////////
+    private ImageView Selected_ImageView;
+    private Button Select_Post_Image_Button;
+    private ArrayList<String> ImageList;            //게시물의 이미지 리스트
+    private ViewPager Viewpager;                    //이미지들을 보여주기 위한 ViewPager 선언
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -75,10 +88,17 @@ public class WritePostFragment extends Fragment {
         buttonsBackgroundLayout = view.findViewById(R.id.ButtonsBackground_Layout);
         loaderLayout = view.findViewById(R.id.Loader_Lyaout);
         titleEditText = view.findViewById(R.id.Post_Title_EditText);
+        selectedEditText = view.findViewById(R.id.contentsEditText);
+        //////////////////
+        //Selected_ImageView = view.findViewById(R.id.Selected_ImageView);
+        Select_Post_Image_Button = view.findViewById(R.id.Select_Post_Image_Button);
+
         view.findViewById(R.id.Post_Write_Button).setOnClickListener(onClickListener);
         view.findViewById(R.id.Select_Post_Image_Button).setOnClickListener(onClickListener);
         view.findViewById(R.id.imageModify).setOnClickListener(onClickListener);
         view.findViewById(R.id.Comment_Delete_Button).setOnClickListener(onClickListener);
+        ////////
+        Viewpager = view.findViewById(R.id.ViewPager);
 
         buttonsBackgroundLayout.setOnClickListener(onClickListener);
         titleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -120,6 +140,14 @@ public class WritePostFragment extends Fragment {
             }
             if (photos != null) {
                 selectedPhotos.addAll(photos);
+                ////////////////////
+                //Selected_ImageView.setImageURI(Uri.parse(selectedPhotos.get(0)));
+                ImageList = selectedPhotos;
+                if(ImageList != null) {
+                    Viewpager.setAdapter(new ViewPagerAdapter(getContext(), ImageList));
+                }
+                Select_Post_Image_Button.setText(Html.fromHtml(selectedPhotos.size()+"/20"+"<br/>"+"클릭시 이미지 재선택"));
+
             }
         }
     }
@@ -132,6 +160,9 @@ public class WritePostFragment extends Fragment {
                     storageUpload();
                     break;
                 case R.id.Select_Post_Image_Button:
+                    //////////////
+                    selectedPhotos = new ArrayList<>();
+
                     PhotoUtil intent = new PhotoUtil(getActivity());
                     intent.setMaxSelectCount(20);
                     intent.setShowCamera(true);
@@ -166,6 +197,7 @@ public class WritePostFragment extends Fragment {
 
     private void storageUpload() {
         final String title = ((EditText) getView().findViewById(R.id.Post_Title_EditText)).getText().toString();
+        final String textcontents = ((EditText) getView().findViewById(R.id.contentsEditText)).getText().toString();
         if (title.length() > 0) {
             String postID = null;
             loaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
@@ -202,7 +234,7 @@ public class WritePostFragment extends Fragment {
                                         @Override
                                         public void onSuccess(Uri uri) {
                                             contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                            PostModel postModel = new PostModel(title, contentsList,  date, currentUser.getUid(), newPostID);
+                                            PostModel postModel = new PostModel(title, textcontents, contentsList,  date, currentUser.getUid(), newPostID);
                                             postModel.setPostModel_Post_Uid(newPostID);
                                             storeUpload(documentReference, postModel);
                                         }
@@ -215,7 +247,7 @@ public class WritePostFragment extends Fragment {
                 pathCount++;
             }
             if (selectedPhotos.size() == 0) {
-                PostModel postModel = new PostModel(title, date, currentUser.getUid(), postID);
+                PostModel postModel = new PostModel(title, textcontents, date, currentUser.getUid(), postID);
                 postModel.setPostModel_Post_Uid(postID);
                 storeUpload(documentReference,postModel);
             }

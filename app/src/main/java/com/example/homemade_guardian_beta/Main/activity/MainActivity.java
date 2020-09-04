@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 init();
                 break;
+            case 0:
+                init();
+                break;
         }
     }
 

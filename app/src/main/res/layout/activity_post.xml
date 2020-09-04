@@ -72,12 +72,16 @@
                 android:layout_gravity="center_vertical"
                 android:textStyle="bold"
                 />
-
-            <com.example.homemade_guardian_beta.post.common.view.ThumbnailImageView
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/Post_ImageView">
-            </com.example.homemade_guardian_beta.post.common.view.ThumbnailImageView>
+                android:text="내용"
+                android:id="@+id/Post_TextContents"
+                android:textSize="15dp"
+                android:padding="15dp"
+                android:layout_gravity="center_vertical"
+                />
+
 
             <view
                 android:id="@+id/ViewPager"

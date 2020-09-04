@@ -70,7 +70,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
   @Override
   protected void onResume() { super.onResume(); }
 
-  //저장결오의 접근권한 요청
+  //저장경로의 접근권한 요청
   private void checkExternalStoragePermission(){
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
       if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -210,7 +210,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
     if (!MenuIsInflated) {
       getMenuInflater().inflate(R.menu.menu_picker, menu);
       MenuDoneItem = menu.findItem(R.id.done);
-      MenuDoneItem.setEnabled(false);
+      MenuDoneItem.setEnabled(true);                                                                  //완료버튼
       MenuIsInflated = true;
       return true;
     }

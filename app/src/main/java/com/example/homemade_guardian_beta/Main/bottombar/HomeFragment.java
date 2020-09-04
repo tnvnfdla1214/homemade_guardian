@@ -163,6 +163,7 @@ public class HomeFragment extends Fragment {
                                 Log.d("로그","스크롤 3333");
                                 postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("PostModel_Title").toString(),
+                                        document.getData().get("PostModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_ImageList"),
                                         new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
                                         document.getData().get("PostModel_Host_Uid").toString(),

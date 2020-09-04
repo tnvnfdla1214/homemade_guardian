@@ -5,15 +5,22 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.viewpager.widget.ViewPager;
+
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.example.homemade_guardian_beta.photo.PhotoUtil;
 import com.example.homemade_guardian_beta.photo.activity.PhotoPickerActivity;
 import com.example.homemade_guardian_beta.model.post.PostModel;
 import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.post.common.view.ViewPagerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,6 +62,13 @@ public class ModifyPostActivity extends BasicActivity {
 
     public final static int REQUEST_CODE = 1;                           //REQUEST_CODE 초기화
 
+
+
+    private ImageView Selected_ImageView;
+    private Button Select_Post_Image_Button;
+    private ArrayList<String> ImageList;            //게시물의 이미지 리스트
+    private ViewPager Viewpager;                    //이미지들을 보여주기 위한 ViewPager 선언
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +79,9 @@ public class ModifyPostActivity extends BasicActivity {
         ButtonsBackgroundLayout = findViewById(R.id.ButtonsBackground_Layout);
         LoaderLayout = findViewById(R.id.Loader_Lyaout);
         Title_EditText = findViewById(R.id.Post_Title_EditText);
-
+        Selected_EditText = findViewById(R.id.contentsEditText);
+        Select_Post_Image_Button = findViewById(R.id.Select_Post_Image_Button);
+        Viewpager = findViewById(R.id.ViewPager);
         findViewById(R.id.Post_Write_Button).setOnClickListener(onClickListener);
         findViewById(R.id.Select_Post_Image_Button).setOnClickListener(onClickListener);
         findViewById(R.id.imageModify).setOnClickListener(onClickListener);
@@ -97,6 +113,11 @@ public class ModifyPostActivity extends BasicActivity {
             }
             if (photos != null) {
                 ArrayList_SelectedPhoto.addAll(photos);
+                ImageList = ArrayList_SelectedPhoto;
+                if(ImageList != null) {
+                    Viewpager.setAdapter(new ViewPagerAdapter(getApplicationContext(), ImageList));
+                }
+                Select_Post_Image_Button.setText(Html.fromHtml(ArrayList_SelectedPhoto.size()+"/20"+"<br/>"+"클릭시 이미지 재선택"));
             }
         }
     }
@@ -111,19 +132,15 @@ public class ModifyPostActivity extends BasicActivity {
                     Toast.makeText(getApplicationContext(), "수정 성공", Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.Select_Post_Image_Button:
-                    myStartActivity(GalleryActivity.class, GALLERY_IMAGE, 0);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
-                    break;
-                case R.id.ButtonsBackground_Layout:
-                    if (ButtonsBackgroundLayout.getVisibility() == View.VISIBLE) {
-                        ButtonsBackgroundLayout.setVisibility(View.GONE);                               // part12 : 실행되고나면 사라지게 설정 (15'19")
-                    }
-                    break;
-                case R.id.imageModify:
-                    myStartActivity(GalleryActivity.class, GALLERY_IMAGE, 1);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
-                    ButtonsBackgroundLayout.setVisibility(View.GONE);
-                    break;
-                case R.id.Comment_Delete_Button:                                                                       // part12 : 작성중인 게시물에서 사진 빼기 (12'30")
-                    break;
+                    ArrayList_SelectedPhoto = new ArrayList<>();
+                    PhotoUtil intent = new PhotoUtil(ModifyPostActivity.this);
+                    intent.setMaxSelectCount(20);
+                    intent.setShowCamera(true);
+                    intent.setShowGif(true);
+                    intent.setSelectCheckBox(false);
+                    intent.setMaxGrideItemCount(3);
+                    startActivityForResult(intent, REQUEST_CODE);
+                break;
             }
         }
     };
@@ -141,6 +158,7 @@ public class ModifyPostActivity extends BasicActivity {
     //WritePostFragment와 비슷한 형태로 차이점이 있다면, docRef_POSTS_PostUid에 새로운 Uid를 생성 받는 것이 아니라 수정하고자하는 게시물의 Uid를 받아서 쓴다.
     private void Modify_Storage_Upload() {
         final String Title = ((EditText) findViewById(R.id.Post_Title_EditText)).getText().toString();
+        final String TextContents = ((EditText) findViewById(R.id.contentsEditText)).getText().toString();
         final String Post_Uid = Postmodel.getPostModel_Post_Uid();
         if (Title.length() > 0) {
             LoaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
@@ -176,7 +194,7 @@ public class ModifyPostActivity extends BasicActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {                                             // part11 : SUCCEESSCOUNT 개의 사진 (37')
                                     ImageList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                        PostModel Postmodel = new PostModel(Title, ImageList,  DateOfManufacture, CurrentUser.getUid(), Post_Uid);
+                                        PostModel Postmodel = new PostModel(Title, TextContents, ImageList,  DateOfManufacture, CurrentUser.getUid(), Post_Uid);
                                         Postmodel.setPostModel_Post_Uid(Post_Uid);
                                         Modify_Store_Upload(docRef_POSTS_PostUid, Postmodel);
                                 }
@@ -189,7 +207,7 @@ public class ModifyPostActivity extends BasicActivity {
                 PathCount++;
             }
             if (ArrayList_SelectedPhoto.size() == 0) {
-                PostModel Postmodel = new PostModel(Title, DateOfManufacture, CurrentUser.getUid(), Post_Uid);
+                PostModel Postmodel = new PostModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Post_Uid);
                 Postmodel.setPostModel_Post_Uid(Post_Uid);
                 Modify_Store_Upload(docRef_POSTS_PostUid,Postmodel);
             }
@@ -206,7 +224,7 @@ public class ModifyPostActivity extends BasicActivity {
                     public void onSuccess(Void aVoid) {
                         LoaderLayout.setVisibility(View.GONE);
                         Intent Resultintent = new Intent();
-                        Resultintent.putExtra("postinfo", Postmodel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
+                        Resultintent.putExtra("postInfo", Postmodel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                         setResult(Activity.RESULT_OK, Resultintent);
                         finish();
                     }
@@ -227,6 +245,12 @@ public class ModifyPostActivity extends BasicActivity {
     private void postInit() {                                                                               // part17 : (33')
         if (Postmodel != null) {                                                                             //수정 버튼을 눌러서 들어왔을 때 null이 아니면 == 나 수정 하러 왔음 >> 화면에는 수정하고자하는 게시물의 정보들이 띄워져있음
             Title_EditText.setText(Postmodel.getPostModel_Title());
+            Selected_EditText.setText(Postmodel.getPostModel_Text());
+            if(Postmodel.getPostModel_ImageList() != null ){
+                Viewpager.setAdapter(new ViewPagerAdapter(getApplicationContext(), Postmodel.getPostModel_ImageList()));
+                Select_Post_Image_Button.setText(Html.fromHtml(Postmodel.getPostModel_ImageList().size()+"/20"+"<br/>"+"클릭시 이미지 재선택"));
+            }
+
             //ArrayList<String> contentsList = Postmodel.getContents();
 //            for (int i = 0; i < contentsList.size(); i++) {
 //                String contents = contentsList.get(i);

@@ -39,15 +39,17 @@ public class PostModel implements Serializable {                                
     private ArrayList<String> PostModel_ImageList;  //게시물의 사진 리스트
     private String PostModel_Text;                //게시물의 글
 
-    public PostModel(String PostModel_Title, ArrayList<String> PostModel_ImageList, Date PostModel_DateOfManufacture, String PostModel_Host_Uid, String PostModel_Post_Uid){
+    public PostModel(String PostModel_Title, String PostModel_Text ,ArrayList<String> PostModel_ImageList, Date PostModel_DateOfManufacture, String PostModel_Host_Uid, String PostModel_Post_Uid){
         this.PostModel_Title = PostModel_Title;
+        this.PostModel_Text = PostModel_Text;
         this.PostModel_ImageList = PostModel_ImageList;
         this.PostModel_DateOfManufacture = PostModel_DateOfManufacture;
         this.PostModel_Host_Uid = PostModel_Host_Uid;
         this.PostModel_Post_Uid = PostModel_Post_Uid;
     }
-    public PostModel(String PostModel_Title, Date PostModel_DateOfManufacture, String PostModel_Host_Uid, String PostModel_Post_Uid){
+    public PostModel(String PostModel_Title, String PostModel_Text ,Date PostModel_DateOfManufacture, String PostModel_Host_Uid, String PostModel_Post_Uid){
         this.PostModel_Title = PostModel_Title;
+        this.PostModel_Text = PostModel_Text;
         this.PostModel_DateOfManufacture = PostModel_DateOfManufacture;
         this.PostModel_Host_Uid = PostModel_Host_Uid;
         this.PostModel_Post_Uid = PostModel_Post_Uid;
@@ -56,6 +58,7 @@ public class PostModel implements Serializable {                                
     public Map<String, Object> getPostInfo(){
         Map<String, Object> docData = new HashMap<>();
         docData.put("PostModel_Title", PostModel_Title);
+        docData.put("PostModel_Text", PostModel_Text);
         docData.put("PostModel_ImageList", PostModel_ImageList);
         docData.put("PostModel_Host_Uid", PostModel_Host_Uid);
         docData.put("PostModel_DateOfManufacture", PostModel_DateOfManufacture);

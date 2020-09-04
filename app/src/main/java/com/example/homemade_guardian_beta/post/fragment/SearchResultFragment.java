@@ -50,9 +50,7 @@ public class SearchResultFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d ("로그w","a");
         View view = inflater.inflate(R.layout.fragment_searchresult, container, false);
-        Log.d ("로그w","b");
         search = (String)  getActivity().getIntent().getSerializableExtra("search");
 
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -62,7 +60,6 @@ public class SearchResultFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(searchResultAdapter);
-        Log.d ("로그w",search);
         postsUpdate(true);
         return  view;
     }
@@ -71,7 +68,6 @@ public class SearchResultFragment extends Fragment {
 
         Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getPostModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
-        Log.d("로그w","스크롤 333"+search);
         collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -81,22 +77,18 @@ public class SearchResultFragment extends Fragment {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
                                 postList.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
-                            Log.d("로그","스크롤 555");
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                Log.d("로그","스크롤 3333");
                                 title = document.getData().get("PostModel_Title").toString();
-                                Log.d("로그qwe","스크롤 3333"+title);
                                 if(title.toLowerCase().contains(search.toLowerCase())) {
                                     postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
                                             document.getData().get("PostModel_Title").toString(),
+                                            document.getData().get("PostModel_Text").toString(),
                                             (ArrayList<String>) document.getData().get("PostModel_ImageList"),
                                             new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
                                             document.getData().get("PostModel_Host_Uid").toString(),
                                             document.getId()));
                                 }
                                 title = null;
-                                Log.d("로그qwe","스크롤 3333"+title);
                             }
                             searchResultAdapter.notifyDataSetChanged();
                         } else {

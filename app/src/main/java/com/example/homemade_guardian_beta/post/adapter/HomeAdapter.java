@@ -61,8 +61,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
     public void onBindViewHolder(@NonNull final MainViewHolder holder, int position) {                      // part : 게시물을 나열
         CardView Contents_CardView = holder.Cardview;
         TextView Title_TextView = Contents_CardView.findViewById(R.id.Post_Title_TextView);
+        TextView Contents_TextView = Contents_CardView.findViewById(R.id.Post_Contents_TextView);
         PostModel Postmodel = ArrayList_PostModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
         Title_TextView.setText(Postmodel.getPostModel_Title());
+        Contents_TextView.setText(Postmodel.getPostModel_Text());
         ThumbnailImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);                   //contentsLayout에다가 날짜포함
         LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);                      /////////////////////이거 대신 텍스트 만든거 보여주기로
 

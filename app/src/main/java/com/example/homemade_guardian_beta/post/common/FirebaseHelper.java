@@ -1,15 +1,26 @@
 package com.example.homemade_guardian_beta.post.common;
 
 import android.app.Activity;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
+import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.model.UserModel;
 import com.example.homemade_guardian_beta.model.post.CommentModel;
 import com.example.homemade_guardian_beta.model.post.PostModel;
+import com.example.homemade_guardian_beta.post.activity.PostActivity;
 import com.example.homemade_guardian_beta.post.common.listener.OnPostListener;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
@@ -23,7 +34,7 @@ public class FirebaseHelper {                                                   
     private Activity Activity;
     private OnPostListener Onpostlistener;
     private int SuccessCount;
-
+    private CommentModel CommentModel;
     public FirebaseHelper(Activity Activity) {
         this.Activity = Activity;
     }
@@ -36,46 +47,76 @@ public class FirebaseHelper {                                                   
         StorageReference Storagereference = Firebasestorage.getReference();
         final String Post_Uid = postModel.getPostModel_Post_Uid();
         ArrayList<String> Post_ImageList = postModel.getPostModel_ImageList();
-        for (int i = 0; i < Post_ImageList.size(); i++) {
-            String Image = Post_ImageList.get(i);
-            if (isStorageUrl(Image)) {
-                SuccessCount++;                                                                             // part17 : 사진의 개수가 여러개인 게시물의 경우 (23'35")
-                StorageReference desertRef_POSTS_PostUid = Storagereference.child("POSTS/" + Post_Uid + "/" + storageUrlToName(Image));    // part17: (((파이어베이스에서 삭제))) 파이에베이스 스토리지는 폴더가 없다, 하나하나가 객체로서 저장 (13'30")
-                desertRef_POSTS_PostUid.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        SuccessCount--;
-                        Post_Storedelete(Post_Uid, postModel);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) { showToast(Activity, "Error");
-                    }
-                });
+        if(Post_ImageList != null) {
+            for (int i = 0; i < Post_ImageList.size(); i++) {
+                String Image = Post_ImageList.get(i);
+                if (isStorageUrl(Image)) {
+                    SuccessCount++;                                                                             // part17 : 사진의 개수가 여러개인 게시물의 경우 (23'35")
+                    StorageReference desertRef_POSTS_PostUid = Storagereference.child("POSTS/" + Post_Uid + "/" + storageUrlToName(Image));    // part17: (((파이어베이스에서 삭제))) 파이에베이스 스토리지는 폴더가 없다, 하나하나가 객체로서 저장 (13'30")
+                    desertRef_POSTS_PostUid.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            SuccessCount--;
+                            Post_Storedelete(Post_Uid, postModel);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            showToast(Activity, "Error");
+                        }
+                    });
+                }
             }
         }
         Post_Storedelete(Post_Uid, postModel);
     }
 
-    //파이어스토리지에서의 삭제가 끝난 후 파이어스토어에 있는 게시물의 데이터를 삭제한다.
+    //파이어스토리지에서의 삭제가 끝난 후 파이어스토어에 있는 게시물의 데이터를 삭제한다., 댓글은 하위 컬렉션이기 때문에 미리삭제하고 게시물 삭제로 이동한다.
     private void Post_Storedelete(final String Post_Uid, final PostModel Postmodel) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
-        FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
-        if (SuccessCount == 0) {
-            Firebasefirestore.collection("POSTS").document(Post_Uid)
-                    .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            showToast(Activity, "게시글을 삭제하였습니다.");
-                            Onpostlistener.onDelete(Postmodel);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) { showToast(Activity, "게시글을 삭제하지 못하였습니다.");
-                        }
-                    });
-        }
+        final FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
+        final ArrayList<String> CommentList = new ArrayList<>();
+        FirebaseFirestore.getInstance().collection("POSTS").document(Postmodel.getPostModel_Post_Uid()).collection("COMMENT")
+        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        CommentList.add(document.getId());
+                    }
+                }
+                else {
+                    Log.d("태그", "Error getting documents: ", task.getException());
+                }
+                for(int i = 0; i < CommentList.size(); i++){
+                    Firebasefirestore.collection("POSTS").document(Post_Uid).collection("COMMENT").document(CommentList.get(i))
+                            .delete()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {}
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {}
+                            });
+                }
+            }
+        });
+
+        Firebasefirestore.collection("POSTS").document(Post_Uid)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showToast(Activity, "게시글을 삭제하였습니다.");
+                        Onpostlistener.onDelete(Postmodel);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) { showToast(Activity, "게시글을 삭제하지 못하였습니다.");
+                       }
+                });
+
     }
 
     //댓글은 파이어스토리지를 이용하지 않으므로 파이어스토어 삭제만 진행한다.

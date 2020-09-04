@@ -39,31 +39,37 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="150dp"
                     android:orientation="vertical">
 
                     <include
                         layout="@layout/view_contents_edit_text"
-                        android:layout_width="409dp"
-                        android:layout_height="292dp" />
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
 
                 </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
 
-                <Button
-                    android:id="@+id/Select_Post_Image_Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="이미지 추가" />
+            <Button
+                android:id="@+id/Select_Post_Image_Button"
+                android:layout_width="167dp"
+                android:layout_height="148dp"
+                android:layout_weight="1"
+                android:text="이미지 추가" />
 
-            </LinearLayout>
+                <view
+                    android:id="@+id/ViewPager"
+                    class="androidx.viewpager.widget.ViewPager"
+                    android:layout_width="215dp"
+                    android:layout_height="148dp"/>
+        </LinearLayout>
 
             <Button
                 android:id="@+id/Post_Write_Button"

@@ -75,6 +75,7 @@ public class PostModel implements Serializable {                                
         return  docData;
     }
 
+    public PostModel(){ }
     public String getPostModel_Title(){
         return this.PostModel_Title;
     }

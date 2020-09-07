@@ -38,21 +38,28 @@ public class PostModel implements Serializable {                                
     private Date PostModel_DateOfManufacture;       //게시물의 작성 시간
     private ArrayList<String> PostModel_ImageList;  //게시물의 사진 리스트
     private String PostModel_Text;                //게시물의 글
+    private String PostModel_Category;            //게시물의 카테고리
+    private ArrayList<String> PostModel_LikeList;  //게시물의 사진 리스트
 
-    public PostModel(String PostModel_Title, String PostModel_Text ,ArrayList<String> PostModel_ImageList, Date PostModel_DateOfManufacture, String PostModel_Host_Uid, String PostModel_Post_Uid){
+    public PostModel(String PostModel_Title, String PostModel_Text ,ArrayList<String> PostModel_ImageList, Date PostModel_DateOfManufacture, String PostModel_Host_Uid, String PostModel_Post_Uid, String PostModel_Category,ArrayList<String> PostModel_LikeList){
         this.PostModel_Title = PostModel_Title;
         this.PostModel_Text = PostModel_Text;
         this.PostModel_ImageList = PostModel_ImageList;
         this.PostModel_DateOfManufacture = PostModel_DateOfManufacture;
         this.PostModel_Host_Uid = PostModel_Host_Uid;
         this.PostModel_Post_Uid = PostModel_Post_Uid;
+        this.PostModel_Category = PostModel_Category;
+        this.PostModel_LikeList = PostModel_LikeList;
+
     }
-    public PostModel(String PostModel_Title, String PostModel_Text ,Date PostModel_DateOfManufacture, String PostModel_Host_Uid, String PostModel_Post_Uid){
+    public PostModel(String PostModel_Title, String PostModel_Text ,Date PostModel_DateOfManufacture, String PostModel_Host_Uid, String PostModel_Post_Uid, String PostModel_Category, ArrayList<String> PostModel_LikeList){
         this.PostModel_Title = PostModel_Title;
         this.PostModel_Text = PostModel_Text;
         this.PostModel_DateOfManufacture = PostModel_DateOfManufacture;
         this.PostModel_Host_Uid = PostModel_Host_Uid;
         this.PostModel_Post_Uid = PostModel_Post_Uid;
+        this.PostModel_Category = PostModel_Category;
+        this.PostModel_LikeList = PostModel_LikeList;
     }
 
     public Map<String, Object> getPostInfo(){
@@ -63,6 +70,8 @@ public class PostModel implements Serializable {                                
         docData.put("PostModel_Host_Uid", PostModel_Host_Uid);
         docData.put("PostModel_DateOfManufacture", PostModel_DateOfManufacture);
         docData.put("PostModel_Post_Uid", PostModel_Post_Uid);
+        docData.put("PostModel_Category", PostModel_Category);
+        docData.put("PostModel_LikeList", PostModel_LikeList);
         return  docData;
     }
 
@@ -88,4 +97,10 @@ public class PostModel implements Serializable {                                
     public void setPostModel_Post_Uid(String PostModel_Post_Uid){ this.PostModel_Post_Uid = PostModel_Post_Uid; }
     public String getPostModel_Text(){return this.PostModel_Text;}
     public void setPostModel_Text(String postModel_Text){this.PostModel_Text = postModel_Text;}
+    public String getPostModel_Category(){return this.PostModel_Category;}
+    public void setPostModel_Category(String PostModel_Category){this.PostModel_Category = PostModel_Category;}
+    public ArrayList<String> getPostModel_LikeList(){
+        return this.PostModel_LikeList;
+    }
+    public void setPostModel_LikeList(ArrayList<String> PostModel_LikeList){ this.PostModel_LikeList = PostModel_LikeList; }
 }

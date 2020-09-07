@@ -16,7 +16,9 @@ import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.post.activity.PostActivity;
 import com.example.homemade_guardian_beta.post.common.view.ThumbnailImageView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 //HomeFragment와 연결된 어댑터이다. onBindViewHolder로 카드뷰에 게시물의 정보들을 담는 역할을 한다.
 //      Ex) MORE_INDEX를 readContentsView에서 MORE_INDEX 보다 작은 수의 사진만 MainFragment에서 나타낸다.
@@ -67,6 +69,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
         Contents_TextView.setText(Postmodel.getPostModel_Text());
         ThumbnailImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);                   //contentsLayout에다가 날짜포함
         LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);                      /////////////////////이거 대신 텍스트 만든거 보여주기로
+        TextView DateOfManufacture_TextView = Contents_CardView.findViewById(R.id.Post_DateOfManufacture);
+        DateOfManufacture_TextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Postmodel.getPostModel_DateOfManufacture()));
 
         if (Contentslayout.getTag() == null || !Contentslayout.getTag().equals(Postmodel)) {                 // part16 : 게시물 개수에 변화가 있을 때만 실행..? (26'40")
             Contentslayout.setTag(Postmodel);

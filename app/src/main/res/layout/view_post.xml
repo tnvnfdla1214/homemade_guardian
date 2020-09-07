@@ -6,6 +6,7 @@
     tools:parentTag="android.widget.LinearLayout"
     tools:orientation="vertical">
 
+
     <LinearLayout
         android:id="@+id/contentsLayout"
         android:layout_width="match_parent"
@@ -14,11 +15,6 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/Post_DateOfManufacture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        tools:text="2019-04-25" />
+
 
 </merge>

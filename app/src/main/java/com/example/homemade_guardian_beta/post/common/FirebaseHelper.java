@@ -75,48 +75,49 @@ public class FirebaseHelper {                                                   
     private void Post_Storedelete(final String Post_Uid, final PostModel Postmodel) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
         final FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
         final ArrayList<String> CommentList = new ArrayList<>();
-        FirebaseFirestore.getInstance().collection("POSTS").document(Postmodel.getPostModel_Post_Uid()).collection("COMMENT")
-        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        CommentList.add(document.getId());
-                    }
-                }
-                else {
-                    Log.d("태그", "Error getting documents: ", task.getException());
-                }
-                for(int i = 0; i < CommentList.size(); i++){
-                    Firebasefirestore.collection("POSTS").document(Post_Uid).collection("COMMENT").document(CommentList.get(i))
-                            .delete()
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {}
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {}
-                            });
-                }
-            }
-        });
+        if(SuccessCount == 0){
+            FirebaseFirestore.getInstance().collection("POSTS").document(Postmodel.getPostModel_Post_Uid()).collection("COMMENT")
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    CommentList.add(document.getId());
+                                }
+                            }
+                            else {
+                                Log.d("태그", "Error getting documents: ", task.getException());
+                            }
+                            for(int i = 0; i < CommentList.size(); i++){
+                                Firebasefirestore.collection("POSTS").document(Post_Uid).collection("COMMENT").document(CommentList.get(i))
+                                        .delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {}
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {}
+                                        });
+                            }
+                        }
+                    });
 
-        Firebasefirestore.collection("POSTS").document(Post_Uid)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        showToast(Activity, "게시글을 삭제하였습니다.");
-                        Onpostlistener.onDelete(Postmodel);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) { showToast(Activity, "게시글을 삭제하지 못하였습니다.");
-                       }
-                });
-
+            Firebasefirestore.collection("POSTS").document(Post_Uid)
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            showToast(Activity, "게시글을 삭제하였습니다.");
+                            Onpostlistener.onDelete(Postmodel);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) { showToast(Activity, "게시글을 삭제하지 못하였습니다.");
+                        }
+                    });
+        }
     }
 
     //댓글은 파이어스토리지를 이용하지 않으므로 파이어스토어 삭제만 진행한다.

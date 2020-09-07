@@ -16,10 +16,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.photo.activity.PhotoPickerActivity;
@@ -85,6 +87,12 @@ public class WritePostFragment extends Fragment {
             actionBar.setTitle("게시글 작성");
         }
 
+        Spinner Post_Category_Spinner = (Spinner)view.findViewById(R.id.Post_Category_Spinner);
+        ArrayAdapter Post_Category_Adapter = ArrayAdapter.createFromResource(getContext(), R.array.Category, android.R.layout.simple_spinner_item);
+        Post_Category_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Post_Category_Spinner.setAdapter(Post_Category_Adapter);
+
+
         buttonsBackgroundLayout = view.findViewById(R.id.ButtonsBackground_Layout);
         loaderLayout = view.findViewById(R.id.Loader_Lyaout);
         titleEditText = view.findViewById(R.id.Post_Title_EditText);
@@ -146,7 +154,7 @@ public class WritePostFragment extends Fragment {
                 if(ImageList != null) {
                     Viewpager.setAdapter(new ViewPagerAdapter(getContext(), ImageList));
                 }
-                Select_Post_Image_Button.setText(Html.fromHtml(selectedPhotos.size()+"/20"+"<br/>"+"클릭시 이미지 재선택"));
+                Select_Post_Image_Button.setText(Html.fromHtml(selectedPhotos.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
 
             }
         }
@@ -164,7 +172,7 @@ public class WritePostFragment extends Fragment {
                     selectedPhotos = new ArrayList<>();
 
                     PhotoUtil intent = new PhotoUtil(getActivity());
-                    intent.setMaxSelectCount(20);
+                    intent.setMaxSelectCount(5);
                     intent.setShowCamera(true);
                     intent.setShowGif(true);
                     intent.setSelectCheckBox(false);
@@ -198,6 +206,9 @@ public class WritePostFragment extends Fragment {
     private void storageUpload() {
         final String title = ((EditText) getView().findViewById(R.id.Post_Title_EditText)).getText().toString();
         final String textcontents = ((EditText) getView().findViewById(R.id.contentsEditText)).getText().toString();
+        final ArrayList<String> LikeList = new ArrayList<>();
+        final String Category = ((Spinner)getView().findViewById(R.id.Post_Category_Spinner)).getSelectedItem().toString();
+        Log.e("로그", "카테고리 : " + Category);
         if (title.length() > 0) {
             String postID = null;
             loaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
@@ -208,7 +219,7 @@ public class WritePostFragment extends Fragment {
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
             ///
             postID = firebaseFirestore.collection("POSTS").document().getId();
-            final DocumentReference documentReference =  postModel == null ? firebaseFirestore.collection("POSTS").document(postID) : firebaseFirestore.collection("POSTS").document(postModel.getPostModel_Post_Uid());     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
+            final DocumentReference documentReference =firebaseFirestore.collection("POSTS").document(postID);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
             final Date date = postModel == null ? new Date() : postModel.getPostModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             Log.d("로그","111");
             for (int i = 0; i < selectedPhotos.size(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
@@ -234,7 +245,8 @@ public class WritePostFragment extends Fragment {
                                         @Override
                                         public void onSuccess(Uri uri) {
                                             contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                            PostModel postModel = new PostModel(title, textcontents, contentsList,  date, currentUser.getUid(), newPostID);
+                                            Log.e("로그", "카테고리 11: " + Category);
+                                            PostModel postModel = new PostModel(title, textcontents, contentsList,  date, currentUser.getUid(), newPostID, Category, LikeList);
                                             postModel.setPostModel_Post_Uid(newPostID);
                                             storeUpload(documentReference, postModel);
                                         }
@@ -247,7 +259,8 @@ public class WritePostFragment extends Fragment {
                 pathCount++;
             }
             if (selectedPhotos.size() == 0) {
-                PostModel postModel = new PostModel(title, textcontents, date, currentUser.getUid(), postID);
+                Log.e("로그", "카테고리 22 : " + Category);
+                PostModel postModel = new PostModel(title, textcontents, date, currentUser.getUid(), postID, Category, LikeList);
                 postModel.setPostModel_Post_Uid(postID);
                 storeUpload(documentReference,postModel);
             }

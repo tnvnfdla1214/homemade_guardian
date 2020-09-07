@@ -46,8 +46,7 @@ public class ThumbnailImageView extends LinearLayout {
 
     //구체적으로 썸네일을 설정하는 부분 i가 moreIndex 같다면 "더보기"를 게시물하단부에 출력시키고 종료한다.
     public void Set_Post_Thumbnail(PostModel postModel){
-        TextView DateOfManufacture_TextView = findViewById(R.id.Post_DateOfManufacture);
-        DateOfManufacture_TextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(postModel.getPostModel_DateOfManufacture()));
+
         LinearLayout Thumbnail_Layout = findViewById(R.id.contentsLayout);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ArrayList<String> ArrayList_ImageList = postModel.getPostModel_ImageList();

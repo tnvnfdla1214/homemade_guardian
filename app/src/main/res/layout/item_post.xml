@@ -10,73 +10,78 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="5dp">
+            android:layout_width="233dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/Post_Title_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="#000000"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    tools:text="타이블" />
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="#DDDDDD" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/Post_Contents_TextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="#000000"
+                    android:textSize="10sp"
+                    tools:text="내용" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="#DDDDDD" />
             <TextView
-                android:id="@+id/Post_Title_TextView"
-                android:layout_width="wrap_content"
+                android:id="@+id/Post_DateOfManufacture"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="#000000"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="타이블" />
-
-            <!--androidx.cardview.widget.CardView
-                android:id="@+id/menu"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_margin="5dp"
-                app:cardCornerRadius="15dp">
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="3dp"
-                    android:src="@drawable/ic_more_vert_black_24dp" />
-            </androidx.cardview.widget.CardView-->
-
+                android:gravity="end"
+                tools:text="2019-04-25"
+                android:textSize="9sp"/>
         </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="#DDDDDD"/>
-        <TextView
-            android:id="@+id/Post_Contents_TextView"
+        <com.example.homemade_guardian_beta.post.common.view.ThumbnailImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="#000000"
-            android:textSize="15sp"
-            android:maxLines="2"
-            android:ellipsize="end"
-            tools:text="내용" />
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="#DDDDDD"/>
-
-        <com.example.homemade_guardian_beta.post.common.view.ThumbnailImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/Post_ImageView">
+            android:id="@+id/Post_ImageView"
+            android:layout_gravity="right">
 
         </com.example.homemade_guardian_beta.post.common.view.ThumbnailImageView>
-
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

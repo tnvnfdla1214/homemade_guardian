@@ -38,6 +38,7 @@ import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.post.common.listener.OnPostListener;
 import com.example.homemade_guardian_beta.post.common.view.ViewPagerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -75,6 +76,7 @@ public class PostActivity extends BasicActivity {                               
     private Button Comment_Write_Button;            //댓글 작성 버튼
     private TextView Post_Host_Name_TextView;       //게시물 작성자의 이름
     private ImageButton Host_UserPage_ImageButton;      //게시물 작성자의 이미지 버튼
+    private ImageButton Like_ImageButton;      //게시물 작성자의 이미지 버튼
     private EditText Comment_Input_EditText;              //댓글 내용
     private TextView Title_TextView;                //게시물의 제목
     private TextView TextContents_TextView;         //게시물의 내용
@@ -107,6 +109,8 @@ public class PostActivity extends BasicActivity {                               
         Chat_With_PostHost_Button.setOnClickListener(onClickListener);
         Host_UserPage_ImageButton = (ImageButton) findViewById(R.id.Host_UserPage_ImageButton);
         Host_UserPage_ImageButton.setOnClickListener(onClickListener);
+        Like_ImageButton = (ImageButton) findViewById(R.id.Like_ImageButton);
+        Like_ImageButton.setOnClickListener(onClickListener);
         Comment_Input_EditText = findViewById(R.id.Comment_Input_EditText);
         Comment_Write_Button = findViewById(R.id.Comment_Write_Button);
         Title_TextView = findViewById(R.id.Post_Title);
@@ -139,12 +143,18 @@ public class PostActivity extends BasicActivity {                               
         if(CurrentUid.equals(Postmodel.getPostModel_Host_Uid())){
             Chat_With_PostHost_Button.setVisibility(View.GONE);
         }
+        Glide.with(getApplicationContext()).load(R.drawable.empty_heart).into(Like_ImageButton);
 
         //댓글 목록
         Firestoreadapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("POSTS").document(Postmodel.getPostModel_Post_Uid()).collection("COMMENT"));
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(PostActivity.this));
         recyclerView.setAdapter(Firestoreadapter);
+        ////////
+//        Firestoreadapter = new Like_RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("POSTS").document(Postmodel.getPostModel_Post_Uid()));
+//        final RecyclerView Like_recyclerView = findViewById(R.id.recyclerView);
+//        Like_recyclerView.setLayoutManager(new LinearLayoutManager(PostActivity.this));
+//        Like_recyclerView.setAdapter(Firestoreadapter);
     }
 
     @Override
@@ -265,6 +275,23 @@ public class PostActivity extends BasicActivity {                               
                     String Comment = PostActivity.this.Comment_Input_EditText.getText().toString();
                     Write_Comment(Comment, Host_Name, Comment_Host_Image);
                     PostActivity.this.Comment_Input_EditText.setText("");
+                    break;
+                case R.id.Like_ImageButton:
+                    Glide.with(getApplicationContext()).load(R.drawable.heart).into(Like_ImageButton);
+                    FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                    ArrayList<String> LikeList = new ArrayList<>();
+                    final DocumentReference documentReference =firebaseFirestore.collection("POSTS").document(Postmodel.getPostModel_Post_Uid());
+                    LikeList = Postmodel.getPostModel_LikeList();
+                    LikeList.add(CurrentUid);
+                    Postmodel.setPostModel_LikeList(LikeList);
+                    documentReference.set(Postmodel.getPostInfo())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) { }})
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) { }
+                            });
                     break;
             }
         }
@@ -409,4 +436,87 @@ public class PostActivity extends BasicActivity {                               
 
         }
     }
+
+
+    //댓글을 화면에 생성해주는 RecyclerView
+    class Like_RecyclerViewAdapter extends FirestoreAdapter<CustomViewHolder> {
+        final private RequestOptions Requestoptions = new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(90));
+        private StorageReference Storagereference;
+
+        Like_RecyclerViewAdapter(Query query) {
+            super(query);
+            Storagereference = FirebaseStorage.getInstance().getReference();
+        }
+
+        @Override
+        public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new CustomViewHolder(LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_comment, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(CustomViewHolder viewHolder, int position) {
+            DocumentSnapshot DocumentSnapshot = getSnapshot(position);
+            final CommentModel Commentmodel = DocumentSnapshot.toObject(CommentModel.class);
+
+            viewHolder.Comment_UserName_TextView.setText(Commentmodel.getCommentModel_Host_Name());
+            viewHolder.Comment_UserComment_TextView.setText(Commentmodel.getCommentModel_Comment());
+
+            if (Commentmodel.getCommentModel_Host_Image()!=null) {
+                Glide.with(PostActivity.this).load(Commentmodel.getCommentModel_Host_Image()).centerCrop().override(500).into(viewHolder.Comment_UserProfile_ImageView);
+            } else{
+                Glide.with(PostActivity.this).load(R.drawable.user).into(viewHolder.Comment_UserProfile_ImageView);
+            }
+
+            viewHolder.Comment_Menu_CardView.setOnClickListener(new View.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(View view) {
+                PopupMenu Menu_Popup = new PopupMenu(PostActivity.this, view);
+                Menu_Popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                                                            @Override
+                                                                            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+
+                case R.id.Comment_Delete_Button:
+                                                                                        Firebasehelper.Comment_Storedelete(Commentmodel);
+                                                                                        return true;
+                                                                                    case R.id.Comment_Report_Button:
+                                                                                        Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
+                                                                                        return true;
+
+                                                                                    case R.id.Chat_With_CommentHost_Button:
+                                                                                        //버튼 눌러짐
+                                                                                        Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
+                                                                                        //상대방 uid 넘겨주기
+                                                                                        Intent_ChatActivity.putExtra("To_User_Uid", Postmodel.getPostModel_Host_Uid());
+                                                                                        startActivity(Intent_ChatActivity);
+                                                                                        return true;
+                                                                                    default:
+                                                                                        return false;
+                                                                                }
+                                                                            }
+                                                                        });
+
+                                                                        MenuInflater Menu_Inflater = Menu_Popup.getMenuInflater();
+                                                                        if(CurrentUser.getUid().equals(Commentmodel.getCommentModel_Host_Uid())){
+                                                                            Menu_Inflater.inflate(R.menu.comment_host, Menu_Popup.getMenu());
+                                                                        }
+                                                                        else{
+                                                                            Menu_Inflater.inflate(R.menu.comment_guest, Menu_Popup.getMenu());
+                                                                        }
+                                                                        Menu_Popup.show();}
+                                                                }
+            );
+
+        }
+    }
+    // 댓글의 Data
+    private class LikeViewHolder extends RecyclerView.ViewHolder {
+        public TextView Like_Count_TextView;
+        LikeViewHolder(View view) {
+            super(view);
+            Like_Count_TextView = view.findViewById(R.id.Like_Count_TextView);
+        }
+    }
+
 }

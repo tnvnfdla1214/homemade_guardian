@@ -20,6 +20,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <Button
+                    android:id="@+id/Select_Post_Image_Button"
+                    android:layout_width="136dp"
+                    android:layout_height="118dp"
+                    android:text="이미지 변경"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="10dp"/>
+
+                <view
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"
+                    android:id="@+id/ViewPager"
+                    class="androidx.viewpager.widget.ViewPager"
+                    android:layout_width="180dp"
+                    android:layout_height="148dp"/>
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/Post_Category_Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
 
             <EditText
                 android:id="@+id/Post_Title_EditText"
@@ -50,25 +78,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
 
-                <Button
-                    android:id="@+id/Select_Post_Image_Button"
-                    android:layout_width="167dp"
-                    android:layout_height="148dp"
-                    android:layout_weight="1"
-                    android:text="이미지 추가" />
-
-                <view
-                    android:id="@+id/ViewPager"
-                    class="androidx.viewpager.widget.ViewPager"
-                    android:layout_width="215dp"
-                    android:layout_height="148dp"/>
-            </LinearLayout>
 
             <Button
                 android:id="@+id/Post_Write_Button"

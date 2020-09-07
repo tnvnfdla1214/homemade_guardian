@@ -10,10 +10,12 @@ import androidx.viewpager.widget.ViewPager;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
@@ -86,6 +88,10 @@ public class ModifyPostActivity extends BasicActivity {
         findViewById(R.id.Select_Post_Image_Button).setOnClickListener(onClickListener);
         findViewById(R.id.imageModify).setOnClickListener(onClickListener);
         findViewById(R.id.Comment_Delete_Button).setOnClickListener(onClickListener);
+        Spinner Post_Category_Spinner = (Spinner)findViewById(R.id.Post_Category_Spinner);
+        ArrayAdapter Post_Category_Adapter = ArrayAdapter.createFromResource(this, R.array.Category, android.R.layout.simple_spinner_item);
+        Post_Category_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Post_Category_Spinner.setAdapter(Post_Category_Adapter);
 
         ButtonsBackgroundLayout.setOnClickListener(onClickListener);
         Title_EditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -117,7 +123,7 @@ public class ModifyPostActivity extends BasicActivity {
                 if(ImageList != null) {
                     Viewpager.setAdapter(new ViewPagerAdapter(getApplicationContext(), ImageList));
                 }
-                Select_Post_Image_Button.setText(Html.fromHtml(ArrayList_SelectedPhoto.size()+"/20"+"<br/>"+"클릭시 이미지 재선택"));
+                Select_Post_Image_Button.setText(Html.fromHtml(ArrayList_SelectedPhoto.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
             }
         }
     }
@@ -134,7 +140,7 @@ public class ModifyPostActivity extends BasicActivity {
                 case R.id.Select_Post_Image_Button:
                     ArrayList_SelectedPhoto = new ArrayList<>();
                     PhotoUtil intent = new PhotoUtil(ModifyPostActivity.this);
-                    intent.setMaxSelectCount(20);
+                    intent.setMaxSelectCount(5);
                     intent.setShowCamera(true);
                     intent.setShowGif(true);
                     intent.setSelectCheckBox(false);
@@ -159,7 +165,11 @@ public class ModifyPostActivity extends BasicActivity {
     private void Modify_Storage_Upload() {
         final String Title = ((EditText) findViewById(R.id.Post_Title_EditText)).getText().toString();
         final String TextContents = ((EditText) findViewById(R.id.contentsEditText)).getText().toString();
-        final String Post_Uid = Postmodel.getPostModel_Post_Uid();
+        String Post_Uid = Postmodel.getPostModel_Post_Uid();
+        final ArrayList<String> LikeList = new ArrayList<>();
+        final String Category = ((Spinner)findViewById(R.id.Post_Category_Spinner)).getSelectedItem().toString();
+        Log.e("로그", "Uid 111 : " + Post_Uid);
+        Log.e("로그", "카테고리 111 : " + Category);
         if (Title.length() > 0) {
             LoaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
             final ArrayList<String> ImageList = new ArrayList<>();                                   // part11 : contentsList에는 컨텐츠 내용이
@@ -167,7 +177,7 @@ public class ModifyPostActivity extends BasicActivity {
             FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();                                    // part12 :
             Storagereference = Firebasestorage.getReference();
             FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
-            final DocumentReference docRef_POSTS_PostUid = Firebasefirestore.collection("POSTS").document(Postmodel.getPostModel_Post_Uid());     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
+            final DocumentReference docRef_POSTS_PostUid = Firebasefirestore.collection("POSTS").document(Post_Uid);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
             final Date DateOfManufacture = Postmodel.getPostModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             for (int i = 0; i < ArrayList_SelectedPhoto.size(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
 
@@ -181,7 +191,7 @@ public class ModifyPostActivity extends BasicActivity {
                     InputStream Stream = new FileInputStream(new File(ArrayList_SelectedPhoto.get(PathCount)));            // part11 : 경로 설정 (27'20")
                     StorageMetadata Metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (ImageList.size() - 1)).build();
                     UploadTask Uploadtask = ImagesRef_POSTS_Uid_PathCount.putStream(Stream, Metadata);
-                    ///
+                    final String Get_PostUid = Post_Uid;
                     Uploadtask.addOnFailureListener(new OnFailureListener() {                               // part11 :
                         @Override
                         public void onFailure(@NonNull Exception exception) {
@@ -194,8 +204,8 @@ public class ModifyPostActivity extends BasicActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {                                             // part11 : SUCCEESSCOUNT 개의 사진 (37')
                                     ImageList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                        PostModel Postmodel = new PostModel(Title, TextContents, ImageList,  DateOfManufacture, CurrentUser.getUid(), Post_Uid);
-                                        Postmodel.setPostModel_Post_Uid(Post_Uid);
+                                        PostModel Postmodel = new PostModel(Title, TextContents, ImageList,  DateOfManufacture, CurrentUser.getUid(), Get_PostUid, Category, LikeList);
+                                        Postmodel.setPostModel_Post_Uid(Get_PostUid);
                                         Modify_Store_Upload(docRef_POSTS_PostUid, Postmodel);
                                 }
                             });
@@ -207,7 +217,9 @@ public class ModifyPostActivity extends BasicActivity {
                 PathCount++;
             }
             if (ArrayList_SelectedPhoto.size() == 0) {
-                PostModel Postmodel = new PostModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Post_Uid);
+                Log.e("로그", "카테고리 222 : " + Category);
+                Log.e("로그", "Uid 222 : " + Post_Uid);
+                PostModel Postmodel = new PostModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Post_Uid, Category, LikeList);
                 Postmodel.setPostModel_Post_Uid(Post_Uid);
                 Modify_Store_Upload(docRef_POSTS_PostUid,Postmodel);
             }
@@ -250,6 +262,20 @@ public class ModifyPostActivity extends BasicActivity {
                 Viewpager.setAdapter(new ViewPagerAdapter(getApplicationContext(), Postmodel.getPostModel_ImageList()));
                 Select_Post_Image_Button.setText(Html.fromHtml(Postmodel.getPostModel_ImageList().size()+"/20"+"<br/>"+"클릭시 이미지 재선택"));
             }
+            Log.e("로그", "카 : " + Postmodel.getPostInfo());
+            Log.e("로그", "카테고리 1 : " + Postmodel.getPostModel_Category());
+            int Selected_Category = 0;
+            if(Postmodel.getPostModel_Category().equals("음식")) {
+                Log.e("로그", "카테고리 2 : " + Postmodel.getPostModel_Category());
+                ((Spinner)findViewById(R.id.Post_Category_Spinner)).setSelection(0);
+            }else if (Postmodel.getPostModel_Category().equals("생필품")){
+                ((Spinner)findViewById(R.id.Post_Category_Spinner)).setSelection(1);
+            }else if (Postmodel.getPostModel_Category().equals("대여")){
+                ((Spinner)findViewById(R.id.Post_Category_Spinner)).setSelection(2);
+            }else if(Postmodel.getPostModel_Category().equals("용역")){
+                ((Spinner)findViewById(R.id.Post_Category_Spinner)).setSelection(3);
+            }
+             //((Spinner)findViewById(R.id.Post_Category_Spinner)).setSelection(Selected_Category);
 
             //ArrayList<String> contentsList = Postmodel.getContents();
 //            for (int i = 0; i < contentsList.size(); i++) {

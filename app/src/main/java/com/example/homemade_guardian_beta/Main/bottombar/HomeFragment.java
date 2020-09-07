@@ -167,7 +167,9 @@ public class HomeFragment extends Fragment {
                                         (ArrayList<String>) document.getData().get("PostModel_ImageList"),
                                         new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
                                         document.getData().get("PostModel_Host_Uid").toString(),
-                                        document.getId()));
+                                        document.getId(),
+                                        document.getData().get("PostModel_Category").toString(),
+                                        (ArrayList<String>) document.getData().get("PostModel_LikeList")));
                             }
                             homeAdapter.notifyDataSetChanged();
                         } else {

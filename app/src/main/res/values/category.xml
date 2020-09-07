@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="Category">
+        <item>음식</item>
+        <item>생필품</item>
+        <item>대여</item>
+        <item>용역</item>
+    </string-array>
+
+
+</resources>

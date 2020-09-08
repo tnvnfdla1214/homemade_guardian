@@ -11,13 +11,13 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary">
 
-        <Button
+        <!--Button
             android:id="@+id/rightMenuBtn"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="right"
             android:layout_marginRight="10dp"
-            android:background="@drawable/ic_menu" />
+            android:background="@drawable/ic_menu" /-->
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.drawerlayout.widget.DrawerLayout

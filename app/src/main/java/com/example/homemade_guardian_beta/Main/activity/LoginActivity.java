@@ -2,6 +2,7 @@ package com.example.homemade_guardian_beta.Main.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ import com.example.homemade_guardian_beta.chat.ChatUtil;
 public class LoginActivity extends AppCompatActivity {
     private SessionCallback sessionCallback;
 
-    private FirebaseAuth mAuth=null;
+    private FirebaseAuth Firebaseauth =null;
     private FirebaseUser currentUser=null;
 
     private GoogleSignInClient mGoogleSignInClient;
@@ -53,11 +54,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         signInButton = findViewById(R.id.signInButton);
 
-        mAuth = FirebaseAuth.getInstance();
+        Firebaseauth = FirebaseAuth.getInstance();
 
-
-        KaKaoLoginSession(); //카카오 세션 함수
         User_login_Check(); //유저 로그인 되어있는지 체크하는 함수
+        KaKaoLoginSession(); //카카오 세션 함수
         FirebaseAuthgoogle(); //구글 로그인 메인 함수(onCreate안의 함수)
     }
 
@@ -75,25 +75,6 @@ public class LoginActivity extends AppCompatActivity {
         sessionCallback = new SessionCallback(); //세션콜백 초기화
         Session.getCurrentSession().addCallback(sessionCallback);  //현재 세션에 콜백 붙임
         Session.getCurrentSession().checkAndImplicitOpen();  //자동 로그인
-    }
-
-    //카카오 로그인 액티비티에서 넘어온 경우일경우일때 실행
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-            return;
-        }
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-            }
-        }
     }
 
     //카카오 로그인
@@ -128,7 +109,6 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(MeV2Response result) {
                     FirebaseAuthkakaologin(result.getKakaoAccount().getEmail(), KakaoPassword);
-                    FirebaseAuthkakaosignup(result.getKakaoAccount().getEmail(), KakaoPassword);
 
                 }
             });
@@ -140,19 +120,17 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     //카카오 로그인
-    public void FirebaseAuthkakaologin(String email, String password) {
-        mAuth.signInWithEmailAndPassword(email, password)
+    public void FirebaseAuthkakaologin(final String email, String password) {
+        Firebaseauth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            currentUser = mAuth.getCurrentUser();
+                            currentUser = Firebaseauth.getCurrentUser();
                             updateUI(currentUser);
-                            finish();
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         } else {
-                            OK=1;
-                            ChatUtil.showMessage(getApplicationContext(), task.getException().getMessage());
+                            String Email = email;
+                            FirebaseAuthkakaosignup(Email, KakaoPassword);
                         }
                     }
                 });
@@ -161,25 +139,37 @@ public class LoginActivity extends AppCompatActivity {
 
     //파이어베이스 카카오 가입 함수
     public void FirebaseAuthkakaosignup(String email, String password){
-        if(OK==1){
-            final String id = email;
-            mAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
+        Firebaseauth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
 
-                            if(!task.isSuccessful()) {
-                                ChatUtil.showMessage(getApplicationContext(), task.getException().getMessage());
-                            }else{
-                                currentUser = mAuth.getCurrentUser();
-                                updateUI(currentUser);
-                            }
+                        if(!task.isSuccessful()) {
+                            Log.d("태그","카카오 로그인(가입) 실패");
+                        }else{
+                            currentUser = Firebaseauth.getCurrentUser();
+                            updateUI(currentUser);
                         }
-                    });
+                    }
+                });
+    }
 
-
+    //구글 정보 기입 성공시 실행
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+            return;
         }
-
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+            }
+        }
     }
 
 
@@ -208,14 +198,14 @@ public class LoginActivity extends AppCompatActivity {
     //구글 로그인
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
+        Firebaseauth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             //추가 -가입할때 uid,id,userm,usermsg 만들기
-                            currentUser = mAuth.getCurrentUser();
+                            currentUser = Firebaseauth.getCurrentUser();
                             updateUI(currentUser);
                         } else {
                             // 로그인이 실패하면 사용자에게 메시지를 표시하기

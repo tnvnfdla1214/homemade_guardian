@@ -18,6 +18,7 @@ import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
 import com.example.homemade_guardian_beta.chat.fragment.GroupUserFragment;
+import com.example.homemade_guardian_beta.post.common.FirebaseHelper;
 
 
 //채팅방안 액티비티 -chatFragment랑 연결됨
@@ -28,6 +29,7 @@ public class ChatActivity extends AppCompatActivity {
     String To_User_Uid;
     String ChatRoomListModel_RoomUid;
     String ChatRoomListModel_Title;
+    private FirebaseHelper Firebasehelper;          //FirebaseHelper 참조 선언
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,9 @@ public class ChatActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.mainFragment, chatFragment )
                 .commit();
+
+        Firebasehelper = new FirebaseHelper(this);
+
     }
 
 
@@ -93,6 +98,7 @@ public class ChatActivity extends AppCompatActivity {
             case R.id.Chat_Delete_Button:
                 //이거 3번째 프레그먼트로 넘어가야 함
                 Log.d("태그","ChatRoomListModel_RoomUid : " + ChatRoomListModel_RoomUid);
+                Firebasehelper.ROOMS_Storagedelete(ChatRoomListModel_RoomUid);
                 Intent Intent_MainActivity = new Intent(ChatActivity.this, MainActivity.class);
                 startActivity(Intent_MainActivity);
                 return true;

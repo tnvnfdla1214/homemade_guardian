@@ -64,6 +64,8 @@ public class ThumbnailImageView extends LinearLayout {
                 Thumbnail_Layout.addView(Imageview);
                 Glide.with(this).load(Image).override(1000).thumbnail(0.1f).into(Imageview);         // 흐릿하게 로딩하기
             }
+        }else{
+            Thumbnail_Layout.setVisibility(GONE);
         }
     } 
 }

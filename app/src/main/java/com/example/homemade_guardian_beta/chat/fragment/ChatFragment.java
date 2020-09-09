@@ -38,6 +38,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.homemade_guardian_beta.chat.ChatUtil;
+import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.chat.common.photoview.ViewPagerActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -119,6 +121,11 @@ public class ChatFragment extends Fragment {
     private static final int PICK_FROM_ALBUM = 1;                                                  //앨범 선택
     private static final int PICK_FROM_FILE = 2;                                                   //이미지 선택
     private static String rootPath = ChatUtil.getRootPath()+"/homemade_guardian_beta/";            //경로 설정
+
+    private MessageModel MessageModel;                    //UserModel 참조 선언
+    int Java_MessageModel_ImageCount;                         //string형을 int로 형변환
+
+    private RoomUidSetListener roomUidSetListener;
 
     public ChatFragment() {
     }
@@ -304,18 +311,28 @@ public class ChatFragment extends Fragment {
         });
     }
 
-    //채팅룸 만들기,1을 0으로 변경하는 함수
+    //최초 채팅룸 만들기,1을 0으로 변경하는 함수
     public void CreateChattingRoom(final DocumentReference room) {
         Map<String, Integer> USERS = new HashMap<>();
         for( String key : UserModel_UserList.keySet() ){
             USERS.put(key, 0);
         }
-        Map<String, Object> data = new HashMap<>();
+        final Map<String,Object> MessageModel = new HashMap<>();
         //이름
+        MessageModel.put("MessageModel_Title", null);
+        MessageModel.put("USERS", USERS);
+        //최초 MessageModel_ImageCount 는 0으로 시작
+        MessageModel.put("MessageModel_ImageCount","0");
+        /*
+        Map<String, Object> data = new HashMap<>();
         data.put("ChatRoomListModel_Title", null);
         data.put("USERS", USERS);
+        //최초 MessageModel_ImageCount 는 0으로 시작
+        data.put("MessageModel_ImageCount",0);
 
-        room.set(data).addOnCompleteListener(new OnCompleteListener<Void>() {
+         */
+
+        room.set(MessageModel).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -343,6 +360,17 @@ public class ChatFragment extends Fragment {
     // 이미지 보내기 버튼 함수
     Button.OnClickListener Chat_Image_Send_Button_ClickListener = new View.OnClickListener() {
         public void onClick(final View view) {
+            //여기서 처음이면 0 다음부터는 +1씩 증가시킨다. 그후 이름을 해당 에 맞추어 이름을 지어 배열로 가진다.
+            DocumentReference docRefe_ROOMS_CurrentUid = FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid);
+            docRefe_ROOMS_CurrentUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    MessageModel = documentSnapshot.toObject(MessageModel.class);
+                    Java_MessageModel_ImageCount = Integer.parseInt(MessageModel.getMessageModel_ImageCount());
+                    Log.d("태그1","MessageModel_ImageCount : " + Java_MessageModel_ImageCount);
+                }
+            });
+            Log.d("태그1","MessageModel_ImageCount2 : " + Java_MessageModel_ImageCount);
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
             startActivityForResult(intent, PICK_FROM_ALBUM);
@@ -369,9 +397,14 @@ public class ChatFragment extends Fragment {
         if(ChatRoomListModel_RoomUid ==null) {             // create chatting room for two user
             ChatRoomListModel_RoomUid = Firestore.collection("ROOMS").document().getId();
             CreateChattingRoom( Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid) );
-        }
 
+            //ChatActivity에 Room_uid 넘겨주기
+            roomUidSetListener.RoomUidSet(ChatRoomListModel_RoomUid);
+
+
+        }
         //이거 어떻게 바꿈?
+        //메세지 모델에 들어가는거
         final Map<String,Object> MessageModel = new HashMap<>();
         MessageModel.put("MessageModel_UserUid", MyUid);
         MessageModel.put("MessageModel_Message", MessageModel_Message);
@@ -457,14 +490,31 @@ public class ChatFragment extends Fragment {
         showProgressDialog("사진을 보내는 중입니다.");
         final ChatModel.FileInfo fileinfo  = getFileDetailFromUri(getContext(), fileUri); //chatmodel.fileinfo에 넣기
 
-        //filename -> ChatRoomListModel_RoomUid + filename = ROOMS 디렉토리안에 RoomUid 의 디렉토리안에 사진을 넣는다.
-        StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + filename).putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+        //filename -> ChatRoomListModel_RoomUid + filename = ROOMS 디렉토리안에 RoomUid 의 디렉토리안에 사진을 넣는다
+        Java_MessageModel_ImageCount = Java_MessageModel_ImageCount +1;
+        StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + Java_MessageModel_ImageCount).putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                sendMessage(filename, Integer.toString(requestCode), fileinfo);
+                sendMessage(String.valueOf(Java_MessageModel_ImageCount), Integer.toString(requestCode), fileinfo);
+                //추가 ()
+                DocumentReference docRefe_ROOMS_CurrentUid = FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid);
+                docRefe_ROOMS_CurrentUid.update("MessageModel_ImageCount", String.valueOf(Java_MessageModel_ImageCount)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("민규", "MessageModel_ImageCount 변환 성공");
+                        Log.d("태그1","MessageModel_ImageCount : : " + Java_MessageModel_ImageCount);
+                    }
+                })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w("민규", "MessageModel_ImageCount 변환 실패", e);
+                            }
+                        });
                 hideProgressDialog();
             }
         });
+
         if (requestCode != PICK_FROM_ALBUM) { return;}
 
         // small image
@@ -655,7 +705,6 @@ public class ChatFragment extends Fragment {
                         .apply(new RequestOptions().override(1000, 1000))
                         .into(messageViewHolder.Message_Image_ImageView);
             }
-
              */
             //변경
             if ("0".equals(messageModel.getMessage_MessageType())) {                                      // text message
@@ -730,7 +779,6 @@ public class ChatFragment extends Fragment {
                         document.getReference().update("USERS", users);
                     }
                 });
-
             }
         }
 
@@ -845,5 +893,25 @@ public class ChatFragment extends Fragment {
     }
 
     public void backPressed() {
+    }
+
+
+    //Room_Uid를 넘겨주는 interface
+    public interface RoomUidSetListener{
+        void RoomUidSet(String RoomUid);
+    }
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        if(context instanceof RoomUidSetListener){
+            roomUidSetListener = (RoomUidSetListener) context;
+        }else{
+            throw new RuntimeException(context.toString() + "must implement RoomUidSetListener");
+        }
+    }
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        roomUidSetListener = null;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.homemade_guardian_beta.post.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,10 +11,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -33,6 +37,7 @@ import com.example.homemade_guardian_beta.chat.common.FirestoreAdapter;
 import com.example.homemade_guardian_beta.model.UserModel;
 import com.example.homemade_guardian_beta.model.post.CommentModel;
 import com.example.homemade_guardian_beta.photo.common.widget.TouchImageView;
+import com.example.homemade_guardian_beta.post.common.BackPressEditText;
 import com.example.homemade_guardian_beta.post.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.model.post.PostModel;
 import com.example.homemade_guardian_beta.R;
@@ -71,7 +76,7 @@ public class PostActivity extends BasicActivity {                               
     private String CurrentUid;                      //현재 사용자의 Uid
     private String Host_Name = null;                //(댓글,게시물)작성자의 이름 (현재사용자)
     private String Comment_Host_Image;              //댓글 작성자의 이미지
-    private ArrayList<String> ImageList;            //게시물의 이미지 리스트
+    private ArrayList<String> ImageList = new ArrayList<>();            //게시물의 이미지 리스트
 
     private ViewPager Viewpager;                    //이미지들을 보여주기 위한 ViewPager 선언
     private Button Chat_With_PostHost_Button;                     //채팅하기 버튼
@@ -79,10 +84,10 @@ public class PostActivity extends BasicActivity {                               
     private TextView Post_Host_Name_TextView;       //게시물 작성자의 이름
     private ImageButton Host_UserPage_ImageButton;      //게시물 작성자의 이미지 버튼
     private ImageButton Like_ImageButton;      //게시물 작성자의 이미지 버튼
-    private EditText Comment_Input_EditText;              //댓글 내용
+    private BackPressEditText Comment_Input_EditText;              //댓글 내용
     private TextView Title_TextView;                //게시물의 제목
     private TextView TextContents_TextView;         //게시물의 내용
-
+    private LinearLayout Scrollview;                  //하단바 외의 영역
 
     private FirebaseUser CurrentUser;               //현재 사용자를 받기 위한 FirebaseUser 선언
 
@@ -119,7 +124,12 @@ public class PostActivity extends BasicActivity {                               
         Host_UserPage_ImageButton.setOnClickListener(onClickListener);
         Like_ImageButton = (ImageButton) findViewById(R.id.Like_ImageButton);
         Like_ImageButton.setOnClickListener(onClickListener);
-        Comment_Input_EditText = findViewById(R.id.Comment_Input_EditText);
+        Comment_Input_EditText = (BackPressEditText) findViewById(R.id.Comment_Input_EditText);
+        Comment_Input_EditText.setOnBackPressListener(onBackPressListener);
+        Comment_Input_EditText.setOnClickListener(onClickListener);
+
+        Scrollview = (LinearLayout) findViewById(R.id.Scrollbar);
+        Scrollview.setOnClickListener(onClickListener);
         Comment_Write_Button = findViewById(R.id.Comment_Write_Button);
         Title_TextView = findViewById(R.id.Post_Title);
         TextContents_TextView = findViewById(R.id.Post_TextContents);
@@ -145,18 +155,24 @@ public class PostActivity extends BasicActivity {                               
         if(ImageList != null) {
             Viewpager = findViewById(R.id.ViewPager);
             Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList));
+            Viewpager.setOnClickListener(onClickListener);
             /////////////////Viewpager.setSaveFromParentEnabled(false);
+        }else{
+            Viewpager = findViewById(R.id.ViewPager);
+            Viewpager.setVisibility(View.GONE);
         }
 
+        //작성자일 때 채팅버튼 비활성화
         if(CurrentUid.equals(Postmodel.getPostModel_Host_Uid())){
             Chat_With_PostHost_Button.setVisibility(View.GONE);
         }
 
+        // 좋아요 버튼의 활성화 상태 결정
         int Check_Like = 0;
         for(int count = 0 ; count < Postmodel.getPostModel_LikeList().size() ; count ++){
             if(CurrentUid.equals(Postmodel.getPostModel_LikeList().get(count))){
                 Glide.with(getApplicationContext()).load(R.drawable.heart).into(Like_ImageButton);
-                Check_Like++;
+                Check_Like = 1;
             }
         }
         if(Check_Like == 0) {
@@ -177,10 +193,36 @@ public class PostActivity extends BasicActivity {                               
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onResume() { super.onResume(); }
 
-    }
+    private void didBackPressOnEditText() { finish(); }
+    private BackPressEditText.OnBackPressListener onBackPressListener = new BackPressEditText.OnBackPressListener()
+    {
+        @Override
+        public void onBackPress() {
+            Log.d("로그","onBackPress1");
+            InputMethodManager immHide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            Log.d("로그","onBackPress2");
+            immHide.hideSoftInputFromWindow(Comment_Input_EditText.getWindowToken(), 0);
+            Log.d("로그","onBackPress3");
+            if(!CurrentUid.equals(Postmodel.getPostModel_Host_Uid())){
+                Log.d("로그","onBackPress4");
+                Chat_With_PostHost_Button.setVisibility(View.VISIBLE);
+            }
+            //didBackPressOnEditText();
+        }
+    };
+    ///////////////////////////////////////////////////////////////
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        InputMethodManager immHide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//        immHide.hideSoftInputFromWindow(Comment_Input_EditText.getWindowToken(), 0);
+//        if(!CurrentUid.equals(Postmodel.getPostModel_Host_Uid())){
+//            Chat_With_PostHost_Button.setVisibility(View.VISIBLE);
+//        }
+//
+//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {                              // part19 : 수정하고 오면 수정된 정보 반영 (84')
@@ -195,6 +237,9 @@ public class PostActivity extends BasicActivity {                               
                     if(ImageList != null) {
                         Viewpager = findViewById(R.id.ViewPager);
                         Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList));
+                    }else{
+                        Viewpager = findViewById(R.id.ViewPager);
+                        Viewpager.setVisibility(View.GONE);
                     }
                     onResume();
                 }
@@ -294,6 +339,26 @@ public class PostActivity extends BasicActivity {                               
                     String Comment = PostActivity.this.Comment_Input_EditText.getText().toString();
                     Write_Comment(Comment, Host_Name, Comment_Host_Image);
                     PostActivity.this.Comment_Input_EditText.setText("");
+                    //비행기 보양 눌렀을 때 사라졌던 채팅버튼
+                    InputMethodManager immhide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    if(!CurrentUid.equals(Postmodel.getPostModel_Host_Uid())){
+                        Chat_With_PostHost_Button.setVisibility(View.VISIBLE);
+                    }
+                    break;
+                case R.id.Comment_Input_EditText:
+                    Chat_With_PostHost_Button.setVisibility(View.GONE);
+                    Comment_Input_EditText.setFocusableInTouchMode(true);
+                    Comment_Input_EditText.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                    break;
+                case R.id.Scrollbar:
+                    InputMethodManager immHide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    immHide.hideSoftInputFromWindow(Comment_Input_EditText.getWindowToken(), 0);
+                    if(!CurrentUid.equals(Postmodel.getPostModel_Host_Uid())){
+                        Chat_With_PostHost_Button.setVisibility(View.VISIBLE);
+                    }
                     break;
                 case R.id.Like_ImageButton:
                     int Check_Like = 0;
@@ -466,7 +531,7 @@ public class PostActivity extends BasicActivity {                               
     }
 
 
-    //댓글을 화면에 생성해주는 RecyclerView
+    //좋아요를 화면에 생성해주는 RecyclerView
     class Like_RecyclerViewAdapter extends FirestoreAdapter<LikeViewHolder> {
         Like_RecyclerViewAdapter(Query query) {
             super(query);

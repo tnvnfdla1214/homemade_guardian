@@ -78,6 +78,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
             Thumbnail_ImageView.setMoreIndex(MORE_INDEX);
             Thumbnail_ImageView.Set_Post_Thumbnail(Postmodel);
         }
+
     }
 
     @Override

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.UserModel;
+import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.model.post.CommentModel;
 import com.example.homemade_guardian_beta.model.post.PostModel;
 import com.example.homemade_guardian_beta.post.activity.PostActivity;
@@ -35,6 +36,9 @@ public class FirebaseHelper {                                                   
     private OnPostListener Onpostlistener;
     private int SuccessCount;
     private CommentModel CommentModel;
+    private com.example.homemade_guardian_beta.model.chat.MessageModel MessageModel;                    //UserModel 참조 선언
+    int Java_MessageModel_ImageCount;                         //string형을 int로 형변환
+
     public FirebaseHelper(Activity Activity) {
         this.Activity = Activity;
     }
@@ -122,24 +126,38 @@ public class FirebaseHelper {                                                   
 
 
     //룸의 경우에는 이미지가 파이어스토리지에 있기 때문에 파이어스토리지 또한 삭제해주어야한다.
-    public void ROOMS_Storagedelete(final String ChatRoomListModel_RoomUid){                                                 // part16: 스토리지의 삭제 (13')
+    public void ROOMS_Storagedelete(final String ChatRoomListModel_RoomUid) {                                                 // part16: 스토리지의 삭제 (13')
         FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();                                        // part17 : 스토리지 삭제 (문서) (19'50")
-        StorageReference Storagereference = Firebasestorage.getReference();
+        final StorageReference Storagereference = Firebasestorage.getReference();
 
-        StorageReference desertRef_POSTS_PostUid = Storagereference.child("ROOMS/" + ChatRoomListModel_RoomUid);    // part17: (((파이어베이스에서 삭제))) 파이에베이스 스토리지는 폴더가 없다, 하나하나가 객체로서 저장 (13'30")
-        desertRef_POSTS_PostUid.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        DocumentReference docRefe_ROOMS_CurrentUid = FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid);
+        docRefe_ROOMS_CurrentUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(Void aVoid) {
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                MessageModel = documentSnapshot.toObject(MessageModel.class);
+                Java_MessageModel_ImageCount = Integer.parseInt(MessageModel.getMessageModel_ImageCount());
+                Log.d("민규1", "Helper Java_MessageModel_ImageCount : " + Java_MessageModel_ImageCount);
+                for (int i = 1; i <= Java_MessageModel_ImageCount; i++) {
+                    StorageReference desertRef_ROOMS_ChatRoomListModel_RoomUid = Storagereference.child("ROOMS/" + ChatRoomListModel_RoomUid + "/" + String.valueOf(i));
+                    // part17: (((파이어베이스에서 삭제))) 파이에베이스 스토리지는 폴더가 없다, 하나하나가 객체로서 저장 (13'30")
+                    desertRef_ROOMS_ChatRoomListModel_RoomUid.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("민규1", "스토리지 삭제 성공");
+                            //ROOMS_Storedelete(ChatRoomListModel_RoomUid);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            Log.d("민규1", "스토리지 삭제 실패");
+                        }
+                    });
+                }
                 ROOMS_Storedelete(ChatRoomListModel_RoomUid);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                ROOMS_Storedelete(ChatRoomListModel_RoomUid);
-                showToast(Activity, "스토리지 에러");
             }
         });
     }
+
 
     //파이어스토리지에서의 삭제가 끝난 후 파이어스토어에 있는 채팅의 데이터를 삭제한다., 댓글은 하위 컬렉션이기 때문에 미리삭제하고 게시물 삭제로 이동한다.
     private void ROOMS_Storedelete(String ChatRoomListModel_RoomUid) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
@@ -149,16 +167,18 @@ public class FirebaseHelper {                                                   
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d("태그", "파이어스토어 삭제 성공");
+                        Log.d("민규1", "파이어스토어 삭제 성공");
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w("태그", "파이어스토어 삭제 실패", e);
+                        Log.w("민규1", "파이어스토어 삭제 실패", e);
                     }
                 });
-        }
+    }
+
 
     //댓글은 파이어스토리지를 이용하지 않으므로 파이어스토어 삭제만 진행한다.
     public void Comment_Storedelete(final CommentModel Commentmodel){                                                 // part16: 스토리지의 삭제 (13')

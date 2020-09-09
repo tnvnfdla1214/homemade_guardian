@@ -12,6 +12,7 @@ public class MessageModel {
     private List<String> MessageModel_ReadUser = new ArrayList<>(); //메세지 읽음 체크 <- 근데 보낸유저의 uid는 무조건 0, 반댄 1인듯 ??
     private String MessageModel_FileName; //메세지 파일 이름 <- 뺴야할듯
     private String MessageModel_FileSize; //메세지 파일 사이즈 <- 빼야할듯
+    private String MessageModel_ImageCount;
 
     public MessageModel(){}
 
@@ -85,5 +86,12 @@ public class MessageModel {
 
     public void setMessageModel_FileSize(String messageModel_FileSize) {
         this.MessageModel_FileSize = messageModel_FileSize;
+    }
+    public String getMessageModel_ImageCount() {
+        return MessageModel_ImageCount;
+    }
+
+    public void setMessageModel_ImageCount(String MessageModel_ImageCount) {
+        this.MessageModel_ImageCount = MessageModel_ImageCount;
     }
 }

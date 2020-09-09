@@ -166,7 +166,7 @@ public class ModifyPostActivity extends BasicActivity {
         final String Title = ((EditText) findViewById(R.id.Post_Title_EditText)).getText().toString();
         final String TextContents = ((EditText) findViewById(R.id.contentsEditText)).getText().toString();
         String Post_Uid = Postmodel.getPostModel_Post_Uid();
-        final ArrayList<String> LikeList = new ArrayList<>();
+        final ArrayList<String> LikeList = Postmodel.getPostModel_LikeList();
         final String Category = ((Spinner)findViewById(R.id.Post_Category_Spinner)).getSelectedItem().toString();
         Log.e("로그", "Uid 111 : " + Post_Uid);
         Log.e("로그", "카테고리 111 : " + Category);

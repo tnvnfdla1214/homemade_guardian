@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,11 +19,21 @@ import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
 import com.example.homemade_guardian_beta.chat.fragment.GroupUserFragment;
+import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.post.common.FirebaseHelper;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import static com.example.homemade_guardian_beta.post.PostUtil.showToast;
 
 
 //채팅방안 액티비티 -chatFragment랑 연결됨
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements ChatFragment.RoomUidSetListener{
     private DrawerLayout drawerLayout;
     private ChatFragment chatFragment;
     private GroupUserFragment groupUserFragment = null;
@@ -30,6 +41,8 @@ public class ChatActivity extends AppCompatActivity {
     String ChatRoomListModel_RoomUid;
     String ChatRoomListModel_Title;
     private FirebaseHelper Firebasehelper;          //FirebaseHelper 참조 선언
+    private MessageModel MessageModel;                    //UserModel 참조 선언
+    int Java_MessageModel_ImageCount;                         //string형을 int로 형변환
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,15 +109,20 @@ public class ChatActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.Chat_Delete_Button:
-                //이거 3번째 프레그먼트로 넘어가야 함
-                Log.d("태그","ChatRoomListModel_RoomUid : " + ChatRoomListModel_RoomUid);
+                RoomUidSet(ChatRoomListModel_RoomUid);
                 Firebasehelper.ROOMS_Storagedelete(ChatRoomListModel_RoomUid);
                 Intent Intent_MainActivity = new Intent(ChatActivity.this, MainActivity.class);
                 startActivity(Intent_MainActivity);
+
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void RoomUidSet(String RoomUid){
+        ChatRoomListModel_RoomUid = RoomUid;
     }
 }

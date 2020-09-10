@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.post.common;
+package com.example.homemade_guardian_beta.Main.common;
 
 import android.app.Activity;
 import android.util.Log;
@@ -159,9 +159,37 @@ public class FirebaseHelper {                                                   
     }
 
 
-    //파이어스토리지에서의 삭제가 끝난 후 파이어스토어에 있는 채팅의 데이터를 삭제한다., 댓글은 하위 컬렉션이기 때문에 미리삭제하고 게시물 삭제로 이동한다.
-    private void ROOMS_Storedelete(String ChatRoomListModel_RoomUid) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
+    //파이어스토리지에서의 삭제가 끝난 후 파이어스토어에 있는 채팅의 데이터를 삭제한다., 메세지는 하위 컬렉션이기 때문에 미리삭제하고 Room 삭제로 이동한다.
+    private void ROOMS_Storedelete(final String ChatRoomListModel_RoomUid) {
+        //Room의 Message 지우기
         final FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
+        final ArrayList<String> MessageList = new ArrayList<>();
+            FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid).collection("MESSAGE")
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            MessageList.add(document.getId());
+                        }
+                    }
+                    else {
+                        Log.d("태그", "Error getting documents: ", task.getException());
+                    }
+                    for(int i = 0; i < MessageList.size(); i++){
+                        Firebasefirestore.collection("ROOMS").document(ChatRoomListModel_RoomUid).collection("MESSAGE").document(MessageList.get(i))
+                                .delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {}
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {}
+                                });
+                    }
+                }
+            });
         Firebasefirestore.collection("ROOMS").document(ChatRoomListModel_RoomUid)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

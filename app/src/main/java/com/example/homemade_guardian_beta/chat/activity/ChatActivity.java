@@ -2,13 +2,9 @@ package com.example.homemade_guardian_beta.chat.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -20,16 +16,7 @@ import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
 import com.example.homemade_guardian_beta.chat.fragment.GroupUserFragment;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
-import com.example.homemade_guardian_beta.post.common.FirebaseHelper;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-
-import static com.example.homemade_guardian_beta.post.PostUtil.showToast;
+import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 
 
 //채팅방안 액티비티 -chatFragment랑 연결됨

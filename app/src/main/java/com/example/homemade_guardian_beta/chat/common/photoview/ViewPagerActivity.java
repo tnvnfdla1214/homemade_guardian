@@ -62,12 +62,12 @@ public class ViewPagerActivity extends AppCompatActivity {
 	private static ViewPager viewPager; //뷰페이저
 	private static ArrayList<MessageModel> Message_Image_List = new ArrayList<>();
 
-    private String rootPath = ChatUtil.getRootPath()+"/homemade_guardian_beta/";
+	private String rootPath = ChatUtil.getRootPath()+"/homemade_guardian_beta/";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_pager);
+		setContentView(R.layout.activity_view_pager);
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
@@ -77,10 +77,10 @@ public class ViewPagerActivity extends AppCompatActivity {
 		viewPager = findViewById(R.id.view_pager);
 		viewPager.setAdapter(new SamplePagerAdapter());
 
-        findViewById(R.id.downloadBtn).setOnClickListener(downloadBtnClickListener);
+		findViewById(R.id.downloadBtn).setOnClickListener(downloadBtnClickListener);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("PhotoView");
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setTitle("PhotoView");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
 	}
@@ -100,11 +100,11 @@ public class ViewPagerActivity extends AppCompatActivity {
 	//다운로드 버튼 함수
 	Button.OnClickListener downloadBtnClickListener = new View.OnClickListener() {
 		public void onClick(final View view) {
-            if (!ChatUtil.isPermissionGranted((Activity) view.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                return ;
-            }
+			if (!ChatUtil.isPermissionGranted((Activity) view.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+				return ;
+			}
 			MessageModel messageModel = Message_Image_List.get(viewPager.getCurrentItem());
-            /// showProgressDialog("Downloading File.");
+			/// showProgressDialog("Downloading File.");
 
 			final File localFile = new File(rootPath, messageModel.getMessageModel_FileName());
 
@@ -160,7 +160,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 		@Override
 		public View instantiateItem(final ViewGroup container, final int position) {
 			final PhotoView photoView = new PhotoView(container.getContext());
-            photoView.setId(R.id.photoView);
+			photoView.setId(R.id.photoView);
 
 			Glide.with(container.getContext())
 					.load(storageReference.child("filesmall/"+ Message_Image_List.get(position).getMessageModel_Message()))

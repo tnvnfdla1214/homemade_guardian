@@ -20,7 +20,7 @@ import androidx.viewpager.widget.ViewPager;
  * @author Chris Banes
  */
 public class HackyViewPager extends ViewPager {
-	
+
     public HackyViewPager(Context context) {
         super(context);
     }
@@ -31,10 +31,10 @@ public class HackyViewPager extends ViewPager {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-		try {
-			return super.onInterceptTouchEvent(ev);
-		} catch (IllegalArgumentException e) {
-			return false;
-		}
+        try {
+            return super.onInterceptTouchEvent(ev);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 }

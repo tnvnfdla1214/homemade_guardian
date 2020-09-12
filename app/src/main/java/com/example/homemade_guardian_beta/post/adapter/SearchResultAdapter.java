@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.post.PostModel;
 import com.example.homemade_guardian_beta.post.activity.PostActivity;
@@ -61,19 +64,27 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     @Override
     public void onBindViewHolder(@NonNull final MainViewHolder holder, int position) {                      // part : 게시물을 나열
-        CardView Cardview = holder.Cardview;
-        TextView Title_TextView = Cardview.findViewById(R.id.Post_Title_TextView);
+        CardView Contents_CardView = holder.Cardview;
+        TextView Title_TextView = Contents_CardView.findViewById(R.id.Post_Title_TextView);
+        TextView Contents_TextView = Contents_CardView.findViewById(R.id.Post_Contents_TextView);
+        TextView Post_Category = Contents_CardView.findViewById(R.id.Post_Category);
+        TextView Post_LikeCount = Contents_CardView.findViewById(R.id.Post_LikeCount);
         PostModel Postmodel = ArrayList_PostModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
         Title_TextView.setText(Postmodel.getPostModel_Title());
-        ThumbnailImageView Thumbnail_ImageView = Cardview.findViewById(R.id.Post_ImageView);                   //contentsLayout에다가 날짜포함
-        LinearLayout Contentslayout = Cardview.findViewById(R.id.contentsLayout);                       /////////////////////이거 대신 텍스트 만든거 보여주기로
-        TextView DateOfManufacture_TextView = Cardview.findViewById(R.id.Post_DateOfManufacture);
+        Contents_TextView.setText(Postmodel.getPostModel_Text());
+        Post_Category.setText(Postmodel.getPostModel_Category());
+        Post_LikeCount.setText(String.valueOf(Postmodel.getPostModel_LikeList().size()));
+        ImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);                   //contentsLayout에다가 날짜포함
+        LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);                      /////////////////////이거 대신 텍스트 만든거 보여주기로
+        TextView DateOfManufacture_TextView = Contents_CardView.findViewById(R.id.Post_DateOfManufacture);
         DateOfManufacture_TextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Postmodel.getPostModel_DateOfManufacture()));
-        if (Contentslayout.getTag() == null || !Contentslayout.getTag().equals(Postmodel)) {                 // part16 : 게시물 개수에 변화가 있을 때만 실행..? (26'40")
-            Contentslayout.setTag(Postmodel);
-            Contentslayout.removeAllViews();                                                                // part14: 다 지웠다가 다시 생성
-            Thumbnail_ImageView.setMoreIndex(MORE_INDEX);                                                      // part19 : 위에서 두개 까지만 표시
-            Thumbnail_ImageView.Set_Post_Thumbnail(Postmodel);
+
+        ArrayList<String> ArrayList_ImageList = Postmodel.getPostModel_ImageList();
+        if(ArrayList_ImageList != null) {
+            String Image = ArrayList_ImageList.get(0);
+            Glide.with(Activity).load(Image).override(1000).thumbnail(0.1f).into(Thumbnail_ImageView);         // 흐릿하게 로딩하기
+        }else {
+            Thumbnail_ImageView.setVisibility(View.GONE);
         }
     }
 

@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +19,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,8 +29,11 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
 
+import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
+import com.example.homemade_guardian_beta.chat.common.ItemTouchHelperCallback;
+import com.example.homemade_guardian_beta.chat.common.ItemTouchHelperListener;
 import com.example.homemade_guardian_beta.model.chat.ChatRoomListModel;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.model.UserModel;
@@ -62,6 +68,10 @@ public class ChatroomListFragment extends Fragment {
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private RecyclerViewAdapter mAdapter;
+    ItemTouchHelper helper;
+    private FirebaseHelper Firebasehelper;          //FirebaseHelper 참조 선언
+    String RoomUid;                                 //해당 포지션에 따른 룸 uid
+    String ToUserUid;                               // 해당 포지션에 따른 상대방 uid
 
     public ChatroomListFragment() {
     }
@@ -77,12 +87,19 @@ public class ChatroomListFragment extends Fragment {
         if(actionBar != null){
             actionBar.setTitle("채팅 목록");
         }
+
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
         mAdapter = new RecyclerViewAdapter();
         recyclerView.setAdapter(mAdapter);
 
+        //메모 프로젝트에서는 리사이클뷰 이고 madapter는 리사이클뷰어뎁터임
+        helper = new ItemTouchHelper(new ItemTouchHelperCallback(mAdapter));
+        helper.attachToRecyclerView(recyclerView);                                // RecyclerView에 ItemTouchHelper 붙이기
+
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+
+        Firebasehelper = new FirebaseHelper(getActivity());
 
         return view;
     }
@@ -96,7 +113,7 @@ public class ChatroomListFragment extends Fragment {
         }
     }
     // =============================================================================================
-    class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchHelperListener {
         final private RequestOptions requestOptions = new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(90));
         private List<ChatRoomListModel> RoomList = new ArrayList<>();
         private Map<String, UserModel> UserList = new HashMap<>();
@@ -105,6 +122,7 @@ public class ChatroomListFragment extends Fragment {
         private FirebaseFirestore Firestore;
         private ListenerRegistration listenerRegistration;
         private ListenerRegistration listenerUsers;
+        Integer unreadTotal = 0;
 
         RecyclerViewAdapter() {
             Firestore = FirebaseFirestore.getInstance();
@@ -118,7 +136,6 @@ public class ChatroomListFragment extends Fragment {
                         public void onEvent(@Nullable QuerySnapshot value,
                                             @Nullable FirebaseFirestoreException e) {
                             if (e != null) {return;}
-
                             for (QueryDocumentSnapshot doc : value) {
                                 UserList.put(doc.getId(), doc.toObject(UserModel.class));
                             }
@@ -127,26 +144,21 @@ public class ChatroomListFragment extends Fragment {
                     });
         }
 
-        Integer unreadTotal = 0;
         public void getRoomInfo() {
             // my chatting room information
-            listenerRegistration = Firestore.collection("ROOMS").whereGreaterThanOrEqualTo("USERS."+ My_User_Uid, 0)
-//                    a.orderBy("timestamp", Query.Direction.DESCENDING)
+            //.whereGreaterThanOrEqualTo("USERS."+ My_User_Uid, 0)
+            listenerRegistration = Firestore.collection("ROOMS").whereGreaterThanOrEqualTo("USERS_OUT."+My_User_Uid,1)
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot value,
                                             @Nullable FirebaseFirestoreException e) {
                             if (e != null) {return;}
-
                             TreeMap<Date, ChatRoomListModel> orderedRooms = new TreeMap<Date, ChatRoomListModel>(Collections.reverseOrder());
-
                             for (final QueryDocumentSnapshot document : value) {
                                 MessageModel messageModel = document.toObject(MessageModel.class);
                                 if (messageModel.getMessageModel_Message() !=null & messageModel.getMessageModel_DateOfManufacture() == null) {continue;} // FieldValue.serverTimestamp is so late
-
                                 ChatRoomListModel chatRoomListModel = new ChatRoomListModel();
                                 chatRoomListModel.setChatRoomListModel_RoomUid(document.getId());
-
                                 if (messageModel.getMessageModel_Message() !=null) { // there are no last message
                                     chatRoomListModel.setChatRoomListModel_MessageLastDateTime(simpleDateFormat.format(messageModel.getMessageModel_DateOfManufacture()));
                                     switch(messageModel.getMessage_MessageType()){
@@ -170,12 +182,16 @@ public class ChatroomListFragment extends Fragment {
                                         if (My_User_Uid.equals(key)) continue;
                                         UserModel userModel = UserList.get(key);
                                         chatRoomListModel.setChatRoomListModel_Title(userModel.getUserModel_NickName());
-                                        //chatRoomModel.setPhoto(userModel.getUserphoto());
+                                        //ChatRoomListModel_ToUserUid 받아오기
+                                        chatRoomListModel.setChatRoomListModel_ToUserUid(userModel.getUserModel_Uid());
                                         chatRoomListModel.setChatRoomListModel_ProfileImage(userModel.getUserModel_ProfileImage());
                                     }
-                                } else {                // group chat room
-                                    chatRoomListModel.setChatRoomListModel_Title(document.getString("ChatRoomListModel_Title"));
                                 }
+
+                                // else {                // group chat room
+                                //     chatRoomListModel.setChatRoomListModel_Title(document.getString("ChatRoomListModel_Title"));
+                                // }
+
                                 if (messageModel.getMessageModel_DateOfManufacture()==null) messageModel.setMessageModel_DateOfManufacture(new Date());
                                 orderedRooms.put(messageModel.getMessageModel_DateOfManufacture(), chatRoomListModel);
                             }
@@ -246,6 +262,7 @@ public class ChatroomListFragment extends Fragment {
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), ChatActivity.class);
                     intent.putExtra("RoomUid", chatRoomListModel.getChatRoomListModel_RoomUid());
+                    intent.putExtra("To_User_Uid", chatRoomListModel.getChatRoomListModel_ToUserUid());
                     intent.putExtra("ChatRoomListModel_Title", chatRoomListModel.getChatRoomListModel_Title());
                     startActivity(intent);
                 }
@@ -255,6 +272,23 @@ public class ChatroomListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return RoomList.size();
+        }
+
+        @Override
+        public void onItemSwipe(int position) {
+            RoomList.remove(position);
+            notifyItemRemoved(position);
+        }
+
+        @Override
+        public void onRightClick(int position, RecyclerView.ViewHolder viewHolder) { ;
+            RoomUid = RoomList.get(position).getChatRoomListModel_RoomUid();           // position으로 ID를 get
+            ToUserUid = RoomList.get(position).getChatRoomListModel_ToUserUid();
+            //((ChatActivity) getActivity()).ChatFragment_User_GoOut();
+            Firebasehelper.ROOMS_USERS_OUT_CHECK(RoomUid,My_User_Uid,ToUserUid);
+            //Firebasehelper.ROOMS_Storagedelete(RoomUid);
+            RoomList.remove(position);                         // 해당 position의 리스트의 데이터도 삭제한다.
+            notifyItemRemoved(position);
         }
 
         private class RoomViewHolder extends RecyclerView.ViewHolder {

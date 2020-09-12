@@ -13,16 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -36,9 +35,8 @@ import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.chat.common.FirestoreAdapter;
 import com.example.homemade_guardian_beta.model.UserModel;
 import com.example.homemade_guardian_beta.model.post.CommentModel;
-import com.example.homemade_guardian_beta.photo.common.widget.TouchImageView;
 import com.example.homemade_guardian_beta.post.common.BackPressEditText;
-import com.example.homemade_guardian_beta.post.common.FirebaseHelper;
+import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.model.post.PostModel;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.post.common.listener.OnPostListener;
@@ -47,6 +45,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -60,6 +59,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import me.relex.circleindicator.CircleIndicator;
 
 // 게시물을 클릭하여 들어온 게시물의 상세정보에 대한 액티비티이다.
 // 게시물의 제목, 내용, 작성자, 작성자 이미지, 게시물에 추가한 이미지 등이 있고, 하단부에 채팅과 댓글을 달 수 있는 기능이 있다.
@@ -88,6 +89,8 @@ public class PostActivity extends BasicActivity {                               
     private TextView Title_TextView;                //게시물의 제목
     private TextView TextContents_TextView;         //게시물의 내용
     private LinearLayout Scrollview;                  //하단바 외의 영역
+    private TextView Like_TextView;
+    private ConstraintLayout ViewPagerLayout;
 
     private FirebaseUser CurrentUser;               //현재 사용자를 받기 위한 FirebaseUser 선언
 
@@ -133,6 +136,7 @@ public class PostActivity extends BasicActivity {                               
         Comment_Write_Button = findViewById(R.id.Comment_Write_Button);
         Title_TextView = findViewById(R.id.Post_Title);
         TextContents_TextView = findViewById(R.id.Post_TextContents);
+        Like_TextView = findViewById(R.id.Like_TextView);
         TextView Post_DateOfManufacture = findViewById(R.id.Post_DateOfManufacture);
         findViewById(R.id.Comment_Write_Button).setOnClickListener(onClickListener);
 
@@ -153,13 +157,22 @@ public class PostActivity extends BasicActivity {                               
         //뷰페이져
         ImageList = Postmodel.getPostModel_ImageList();
         if(ImageList != null) {
+            Log.d("로그","이미지 있다");
             Viewpager = findViewById(R.id.ViewPager);
             Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList));
             Viewpager.setOnClickListener(onClickListener);
+
+            CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
+            indicator.setViewPager(Viewpager);
+//            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabDots);
+//            tabLayout.setupWithViewPager(Viewpager, true);
             /////////////////Viewpager.setSaveFromParentEnabled(false);
         }else{
-            Viewpager = findViewById(R.id.ViewPager);
-            Viewpager.setVisibility(View.GONE);
+            Log.d("로그","이미지 없");
+            ViewPagerLayout = (ConstraintLayout) findViewById(R.id.ViewPagerLayout);
+            Log.d("로그","이미지 없");
+            ViewPagerLayout.setVisibility(View.GONE);
+            Log.d("로그","이미지 없");
         }
 
         //작성자일 때 채팅버튼 비활성화
@@ -168,6 +181,7 @@ public class PostActivity extends BasicActivity {                               
         }
 
         // 좋아요 버튼의 활성화 상태 결정
+        Like_TextView.setText(String.valueOf(Postmodel.getPostModel_LikeList().size()));
         int Check_Like = 0;
         for(int count = 0 ; count < Postmodel.getPostModel_LikeList().size() ; count ++){
             if(CurrentUid.equals(Postmodel.getPostModel_LikeList().get(count))){
@@ -180,16 +194,18 @@ public class PostActivity extends BasicActivity {                               
         }
 
 
+
         //댓글 목록
         Comment_Firestoreadapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("POSTS").document(Postmodel.getPostModel_Post_Uid()).collection("COMMENT"));
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(PostActivity.this));
         recyclerView.setAdapter(Comment_Firestoreadapter);
         ////////
-        Like_Firestoreadapter = new Like_RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("POSTS"));
-        final RecyclerView Like_recyclerView = findViewById(R.id.Like_recyclerView);
-        Like_recyclerView.setLayoutManager(new LinearLayoutManager(PostActivity.this));
-        Like_recyclerView.setAdapter(Like_Firestoreadapter);
+//        Like_Firestoreadapter = new Like_RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("POSTS"));
+//        final RecyclerView Like_recyclerView = findViewById(R.id.Like_recyclerView);
+//        Like_recyclerView.setLayoutManager(new LinearLayoutManager(PostActivity.this));
+//        Like_recyclerView.setAdapter(Like_Firestoreadapter);
+///////////////////////////////////////////Postmodel.setPostModel_LikeList(LikeList);
     }
 
     @Override
@@ -237,9 +253,14 @@ public class PostActivity extends BasicActivity {                               
                     if(ImageList != null) {
                         Viewpager = findViewById(R.id.ViewPager);
                         Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList));
+                        CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
+                        indicator.setViewPager(Viewpager);
                     }else{
-                        Viewpager = findViewById(R.id.ViewPager);
-                        Viewpager.setVisibility(View.GONE);
+                        Log.d("로그","이미지 없");
+                        ViewPagerLayout = (ConstraintLayout) findViewById(R.id.ViewPagerLayout);
+                        Log.d("로그","이미지 없");
+                        ViewPagerLayout.setVisibility(View.GONE);
+                        Log.d("로그","이미지 없");
                     }
                     onResume();
                 }
@@ -384,6 +405,7 @@ public class PostActivity extends BasicActivity {                               
                                     @Override
                                     public void onFailure(@NonNull Exception e) { }
                                 });
+                        Like_TextView.setText(String.valueOf(Postmodel.getPostModel_LikeList().size()));
                     }
                     break;
             }
@@ -410,7 +432,7 @@ public class PostActivity extends BasicActivity {                               
         startActivityForResult(Intent_Post_Data, 0);
     }
 
-    // 댓글을 작성하는 함수
+       // 댓글을 작성하는 함수
     private void Write_Comment(final String Comment, final String Host_Name, final String Comment_Host_Image) {
         Comment_Write_Button.setEnabled(false);
         String Comment_Uid = null;
@@ -448,7 +470,9 @@ public class PostActivity extends BasicActivity {                               
         RecyclerViewAdapter(Query query) {
             super(query);
             Storagereference = FirebaseStorage.getInstance().getReference();
+            //setUnread2Read();
         }
+
 
         @Override
         public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -460,7 +484,7 @@ public class PostActivity extends BasicActivity {                               
         public void onBindViewHolder(CustomViewHolder viewHolder, int position) {
             DocumentSnapshot DocumentSnapshot = getSnapshot(position);
             final CommentModel Commentmodel = DocumentSnapshot.toObject(CommentModel.class);
-
+            Log.d("로그","Commentmodel : "+Commentmodel);
             viewHolder.Comment_UserName_TextView.setText(Commentmodel.getCommentModel_Host_Name());
             viewHolder.Comment_UserComment_TextView.setText(Commentmodel.getCommentModel_Comment());
 
@@ -531,6 +555,10 @@ public class PostActivity extends BasicActivity {                               
     }
 
 
+
+
+
+
     //좋아요를 화면에 생성해주는 RecyclerView
     class Like_RecyclerViewAdapter extends FirestoreAdapter<LikeViewHolder> {
         Like_RecyclerViewAdapter(Query query) {
@@ -548,7 +576,7 @@ public class PostActivity extends BasicActivity {                               
 
             String LikeCount = String.valueOf(Postmodel.getPostModel_LikeList().size());
             viewHolder.Like_Count_TextView.setText(LikeCount);
-
+            Log.d("로그","LikeCount :" + LikeCount);
             }
     }
     // 댓글의 Data

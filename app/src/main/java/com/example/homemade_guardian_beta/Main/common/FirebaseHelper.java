@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.post.common;
+package com.example.homemade_guardian_beta.Main.common;
 
 import android.app.Activity;
 import android.util.Log;
@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
 import com.example.homemade_guardian_beta.model.UserModel;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.model.post.CommentModel;
@@ -25,6 +26,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
+import java.util.Map;
+
 import static com.example.homemade_guardian_beta.post.PostUtil.isStorageUrl;
 import static com.example.homemade_guardian_beta.post.PostUtil.showToast;
 import static com.example.homemade_guardian_beta.post.PostUtil.storageUrlToName;
@@ -38,6 +41,7 @@ public class FirebaseHelper {                                                   
     private CommentModel CommentModel;
     private com.example.homemade_guardian_beta.model.chat.MessageModel MessageModel;                    //UserModel 참조 선언
     int Java_MessageModel_ImageCount;                         //string형을 int로 형변환
+    ChatFragment chatFragment;
 
     public FirebaseHelper(Activity Activity) {
         this.Activity = Activity;
@@ -82,30 +86,30 @@ public class FirebaseHelper {                                                   
         if(SuccessCount == 0){
             FirebaseFirestore.getInstance().collection("POSTS").document(Postmodel.getPostModel_Post_Uid()).collection("COMMENT")
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    CommentList.add(document.getId());
-                                }
-                            }
-                            else {
-                                Log.d("태그", "Error getting documents: ", task.getException());
-                            }
-                            for(int i = 0; i < CommentList.size(); i++){
-                                Firebasefirestore.collection("POSTS").document(Post_Uid).collection("COMMENT").document(CommentList.get(i))
-                                        .delete()
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {}
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {}
-                                        });
-                            }
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            CommentList.add(document.getId());
                         }
-                    });
+                    }
+                    else {
+                        Log.d("태그", "Error getting documents: ", task.getException());
+                    }
+                    for(int i = 0; i < CommentList.size(); i++){
+                        Firebasefirestore.collection("POSTS").document(Post_Uid).collection("COMMENT").document(CommentList.get(i))
+                                .delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {}
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {}
+                                });
+                    }
+                }
+            });
 
             Firebasefirestore.collection("POSTS").document(Post_Uid)
                     .delete()
@@ -123,35 +127,57 @@ public class FirebaseHelper {                                                   
                     });
         }
     }
+    //현재 사용자는 룸을 나간다. 룸의 USERS_OUT의 필드값에 해당 uid를 찾아 1 ->0으로 만들어 준다. 해당 유저들의 값이 전부 0일 경우 ROOMS_Storagedelete를 실행 시켜준다.
+    public void ROOMS_USERS_OUT_CHECK(final String ChatRoomListModel_RoomUid , final String Current_My_user, final String To_User_Uid){
+        FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
+        Firebasefirestore = FirebaseFirestore.getInstance();
+        Firebasefirestore.collection("ROOMS").document(ChatRoomListModel_RoomUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    return;
+                }
+                DocumentSnapshot document = task.getResult();
+                Map<String, Long> USERS_OUT = (Map<String, Long>) document.get("USERS_OUT");
+                if (USERS_OUT.get(To_User_Uid)==0){
+                    ROOMS_Storagedelete(ChatRoomListModel_RoomUid);
+                }
+                else{
+                    USERS_OUT.put(Current_My_user, (long) 0);
+                    document.getReference().update("USERS_OUT", USERS_OUT);
+                }
+            }
+        });
+    }
 
 
     //룸의 경우에는 이미지가 파이어스토리지에 있기 때문에 파이어스토리지 또한 삭제해주어야한다.
     public void ROOMS_Storagedelete(final String ChatRoomListModel_RoomUid) {                                                 // part16: 스토리지의 삭제 (13')
         FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();                                        // part17 : 스토리지 삭제 (문서) (19'50")
         final StorageReference Storagereference = Firebasestorage.getReference();
-
         DocumentReference docRefe_ROOMS_CurrentUid = FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid);
         docRefe_ROOMS_CurrentUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 MessageModel = documentSnapshot.toObject(MessageModel.class);
                 Java_MessageModel_ImageCount = Integer.parseInt(MessageModel.getMessageModel_ImageCount());
-                Log.d("민규1", "Helper Java_MessageModel_ImageCount : " + Java_MessageModel_ImageCount);
-                for (int i = 1; i <= Java_MessageModel_ImageCount; i++) {
-                    StorageReference desertRef_ROOMS_ChatRoomListModel_RoomUid = Storagereference.child("ROOMS/" + ChatRoomListModel_RoomUid + "/" + String.valueOf(i));
-                    // part17: (((파이어베이스에서 삭제))) 파이에베이스 스토리지는 폴더가 없다, 하나하나가 객체로서 저장 (13'30")
-                    desertRef_ROOMS_ChatRoomListModel_RoomUid.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("민규1", "스토리지 삭제 성공");
-                            //ROOMS_Storedelete(ChatRoomListModel_RoomUid);
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            Log.d("민규1", "스토리지 삭제 실패");
-                        }
-                    });
+                if(Java_MessageModel_ImageCount > 0){
+                    for (int i = 1; i <= Java_MessageModel_ImageCount; i++) {
+                        StorageReference desertRef_ROOMS_ChatRoomListModel_RoomUid = Storagereference.child("ROOMS/" + ChatRoomListModel_RoomUid + "/" + String.valueOf(i));
+                        // part17: (((파이어베이스에서 삭제))) 파이에베이스 스토리지는 폴더가 없다, 하나하나가 객체로서 저장 (13'30")
+                        desertRef_ROOMS_ChatRoomListModel_RoomUid.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.d("민규1", "스토리지 삭제 성공");
+                                //ROOMS_Storedelete(ChatRoomListModel_RoomUid);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                Log.d("민규1", "스토리지 삭제 실패");
+                            }
+                        });
+                    }
                 }
                 ROOMS_Storedelete(ChatRoomListModel_RoomUid);
             }
@@ -159,9 +185,37 @@ public class FirebaseHelper {                                                   
     }
 
 
-    //파이어스토리지에서의 삭제가 끝난 후 파이어스토어에 있는 채팅의 데이터를 삭제한다., 댓글은 하위 컬렉션이기 때문에 미리삭제하고 게시물 삭제로 이동한다.
-    private void ROOMS_Storedelete(String ChatRoomListModel_RoomUid) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
+    //파이어스토리지에서의 삭제가 끝난 후 파이어스토어에 있는 채팅의 데이터를 삭제한다., 메세지는 하위 컬렉션이기 때문에 미리삭제하고 Room 삭제로 이동한다.
+    private void ROOMS_Storedelete(final String ChatRoomListModel_RoomUid) {
+        //Room의 Message 지우기
         final FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
+        final ArrayList<String> MessageList = new ArrayList<>();
+        FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid).collection("MESSAGE")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        MessageList.add(document.getId());
+                    }
+                }
+                else {
+                    Log.d("태그", "Error getting documents: ", task.getException());
+                }
+                for(int i = 0; i < MessageList.size(); i++){
+                    Firebasefirestore.collection("ROOMS").document(ChatRoomListModel_RoomUid).collection("MESSAGE").document(MessageList.get(i))
+                            .delete()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {}
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {}
+                            });
+                }
+            }
+        });
         Firebasefirestore.collection("ROOMS").document(ChatRoomListModel_RoomUid)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

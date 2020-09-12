@@ -77,7 +77,7 @@ public class SelectUserActivity extends AppCompatActivity {
 
         Button makeRoomBtn = findViewById(R.id.makeRoomBtn);
         if (ChatRoomListModel_RoomUid ==null)
-             makeRoomBtn.setOnClickListener(makeRoomClickListener);
+            makeRoomBtn.setOnClickListener(makeRoomClickListener);
         else makeRoomBtn.setOnClickListener(addRoomUserClickListener);
     }
 

@@ -8,6 +8,15 @@ public class ChatRoomListModel {
     private String ChatRoomListModel_MessageLastDateTime; //마지막 메세지 날짜
     private Integer ChatRoomListModel_NumberOfUser; //채팅방에 몇명 들어갔는지
     private Integer ChatRoomListModel_UnreadCheck; //채팅방을 읽었는지 안익었는지
+    private String ChatRoomListModel_ToUserUid; // 상대방 user의 uid 가져오기
+
+    public String getChatRoomListModel_ToUserUid() {
+        return ChatRoomListModel_ToUserUid;
+    }
+
+    public void setChatRoomListModel_ToUserUid(String ChatRoomListModel_ToUserUid) {
+        this.ChatRoomListModel_ToUserUid = ChatRoomListModel_ToUserUid;
+    }
 
     public String getChatRoomListModel_RoomUid() {
         return ChatRoomListModel_RoomUid;

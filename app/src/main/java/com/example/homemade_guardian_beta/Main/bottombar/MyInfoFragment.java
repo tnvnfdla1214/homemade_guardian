@@ -22,6 +22,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
+import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.chat.common.FirestoreAdapter;
@@ -39,6 +40,7 @@ import com.google.firebase.storage.StorageReference;
 //MyInfoFragment -> ChatActivity -> ChatFragment ->
 public class MyInfoFragment extends Fragment {
     private FirestoreAdapter firestoreAdapter;
+    private FirebaseHelper Firebasehelper;          //FirebaseHelper 참조 선언
 
     public MyInfoFragment() {
     }
@@ -75,6 +77,7 @@ public class MyInfoFragment extends Fragment {
         recyclerView.setLayoutManager( new LinearLayoutManager((inflater.getContext())));
         recyclerView.setAdapter(firestoreAdapter);
 
+        Firebasehelper = new FirebaseHelper(getActivity());
         return view;
     }
 
@@ -82,7 +85,7 @@ public class MyInfoFragment extends Fragment {
         final private RequestOptions requestOptions = new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(90));
         private StorageReference storageReference;
         //현재 들어와 있는 유저 uid 가져오기
-        private String UserModel_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        private String CurrentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         RecyclerViewAdapter(Query query) {
             super(query);
@@ -100,7 +103,7 @@ public class MyInfoFragment extends Fragment {
             DocumentSnapshot documentSnapshot = getSnapshot(position);
             final UserModel user = documentSnapshot.toObject(UserModel.class);
 
-            if (UserModel_Uid.equals(user.getUserModel_Uid())) {
+            if (CurrentUserUid.equals(user.getUserModel_Uid())) {
                 viewHolder.itemView.setVisibility(View.INVISIBLE);
                 viewHolder.itemView.getLayoutParams().height = 0;
                 return;
@@ -119,9 +122,9 @@ public class MyInfoFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     //chatactivity는 해당 고유uid를 가진 사람을 찾아 그사람과의 채팅방을 들어감
+                    Firebasehelper.ROOMS_Re_Entry(CurrentUserUid, user.getUserModel_Uid());
                     Intent intent = new Intent(getView().getContext(), ChatActivity.class);
                     intent.putExtra("To_User_Uid", user.getUserModel_Uid());
-                    Log.d("태그","MyInfoFragment"+user.getUserModel_Uid());
                     startActivity(intent);
                 }
             });

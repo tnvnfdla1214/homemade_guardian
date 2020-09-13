@@ -84,6 +84,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
         if(ArrayList_ImageList != null) {
             Log.d("로그","썸네일 있");
             ImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);
+            Thumbnail_ImageView.setVisibility(View.VISIBLE);
             String Image = ArrayList_ImageList.get(0);
             Glide.with(Activity).load(Image).override(1000).thumbnail(0.1f).into(Thumbnail_ImageView);         // 흐릿하게 로딩하기
         }else {

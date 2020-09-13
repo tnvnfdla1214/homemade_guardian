@@ -196,7 +196,7 @@ public class PostActivity extends BasicActivity {                               
 
 
         //댓글 목록
-        Comment_Firestoreadapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("POSTS").document(Postmodel.getPostModel_Post_Uid()).collection("COMMENT"));
+        Comment_Firestoreadapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("POSTS").document(Postmodel.getPostModel_Post_Uid()).collection("COMMENT").orderBy("commentModel_DateOfManufacture"));
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(PostActivity.this));
         recyclerView.setAdapter(Comment_Firestoreadapter);
@@ -216,13 +216,13 @@ public class PostActivity extends BasicActivity {                               
     {
         @Override
         public void onBackPress() {
-            Log.d("로그","onBackPress1");
+            Log.d("onBackPress","onBackPress1");
             InputMethodManager immHide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            Log.d("로그","onBackPress2");
+            Log.d("onBackPress","onBackPress2");
             immHide.hideSoftInputFromWindow(Comment_Input_EditText.getWindowToken(), 0);
-            Log.d("로그","onBackPress3");
+            Log.d("onBackPress","onBackPress3");
             if(!CurrentUid.equals(Postmodel.getPostModel_Host_Uid())){
-                Log.d("로그","onBackPress4");
+                Log.d("onBackPress","onBackPress4");
                 Chat_With_PostHost_Button.setVisibility(View.VISIBLE);
             }
             //didBackPressOnEditText();
@@ -260,7 +260,6 @@ public class PostActivity extends BasicActivity {                               
                         ViewPagerLayout = (ConstraintLayout) findViewById(R.id.ViewPagerLayout);
                         Log.d("로그","이미지 없");
                         ViewPagerLayout.setVisibility(View.GONE);
-                        Log.d("로그","이미지 없");
                     }
                     onResume();
                 }

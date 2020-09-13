@@ -216,13 +216,7 @@ public class PostActivity extends BasicActivity {                               
     {
         @Override
         public void onBackPress() {
-            Log.d("onBackPress","onBackPress1");
-            InputMethodManager immHide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            Log.d("onBackPress","onBackPress2");
-            immHide.hideSoftInputFromWindow(Comment_Input_EditText.getWindowToken(), 0);
-            Log.d("onBackPress","onBackPress3");
             if(!CurrentUid.equals(Postmodel.getPostModel_Host_Uid())){
-                Log.d("onBackPress","onBackPress4");
                 Chat_With_PostHost_Button.setVisibility(View.VISIBLE);
             }
             //didBackPressOnEditText();

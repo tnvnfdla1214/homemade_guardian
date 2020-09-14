@@ -897,7 +897,7 @@ public class ChatFragment extends Fragment {
                 }
                 DocumentSnapshot document = task.getResult();
                 String NickName = (String)document.get("userModel_NickName");
-                String msg = NickName + "  님이 나갔습니다.";
+                String msg = "("+ NickName + ")" + "  님이 나갔습니다.";
                 sendMessage(msg, "0", null);
             }
         });

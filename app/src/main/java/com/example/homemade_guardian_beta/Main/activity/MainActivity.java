@@ -12,6 +12,7 @@ import com.example.homemade_guardian_beta.Main.bottombar.HomeFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.MyInfoFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.WritePostFragment;
 import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -53,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
                 init();
                 break;
         }
+    }
+    public void test(){
+        ((ChatActivity)ChatActivity.mcontext).ChatFragment_User_GoOut();
     }
 
     private void init() {

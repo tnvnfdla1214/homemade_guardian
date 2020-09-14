@@ -29,6 +29,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
 
+import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
@@ -284,9 +285,8 @@ public class ChatroomListFragment extends Fragment {
         public void onRightClick(int position, RecyclerView.ViewHolder viewHolder) { ;
             RoomUid = RoomList.get(position).getChatRoomListModel_RoomUid();           // position으로 ID를 get
             ToUserUid = RoomList.get(position).getChatRoomListModel_ToUserUid();
-            //((ChatActivity) getActivity()).ChatFragment_User_GoOut();
+            ((MainActivity) getActivity()).test();
             Firebasehelper.ROOMS_USERS_OUT_CHECK(RoomUid,My_User_Uid,ToUserUid);
-            //Firebasehelper.ROOMS_Storagedelete(RoomUid);
             RoomList.remove(position);                         // 해당 position의 리스트의 데이터도 삭제한다.
             notifyItemRemoved(position);
         }

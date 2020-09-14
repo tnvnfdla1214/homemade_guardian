@@ -1,5 +1,6 @@
 package com.example.homemade_guardian_beta.chat.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,6 +36,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
     private MessageModel MessageModel;                    //UserModel 참조 선언
     int Java_MessageModel_ImageCount;                         //string형을 int로 형변환
     FirebaseUser firebaseCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+    public static Context mcontext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,8 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
                 .commit();
 
         Firebasehelper = new FirebaseHelper(this);
+
+        mcontext = this;
 
     }
 

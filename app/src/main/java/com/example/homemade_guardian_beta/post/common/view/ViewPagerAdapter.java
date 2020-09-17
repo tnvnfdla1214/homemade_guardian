@@ -31,7 +31,8 @@ public class ViewPagerAdapter extends PagerAdapter {
         LayoutInflater Inflater = (LayoutInflater) Context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = Inflater.inflate(R.layout.post_silder, null);
         ImageView Post_ImageView = view.findViewById(R.id.PostActivity_Post_ImageView);
-        Glide.with(view).load(ArrayList_ImageList.get(position)).into(Post_ImageView);
+        //Glide.with(view).load(ArrayList_ImageList.get(position)).into(Post_ImageView);
+        Glide.with(view).load(ArrayList_ImageList.get(position)).centerCrop().override(500).thumbnail(0.1f).into(Post_ImageView);
         container.addView(view);
         return view;
     }

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="Local">
+        <item>홍익대학교 세종</item>
+        <item>고려대학교 세종</item>
+    </string-array>
+
+
+</resources>

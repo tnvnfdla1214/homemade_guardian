@@ -2,12 +2,17 @@ package com.example.homemade_guardian_beta.Main.bottombar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -69,6 +74,11 @@ public class WritePostFragment extends Fragment {
     private Button Select_Post_Image_Button;
     private ArrayList<String> ImageList;            //게시물의 이미지 리스트
     private ViewPager Viewpager;                    //이미지들을 보여주기 위한 ViewPager 선언
+    private ImageView FoodPostbtn;
+    private ImageView LifePostbtn;
+    private ImageView BorrowPostbtn;
+    private ImageView WorkPostbtn;
+    private String Category = null;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -80,17 +90,9 @@ public class WritePostFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_writepost, container, false);
-        Toolbar myToolbar = view.findViewById(R.id.toolbar);
+        Toolbar myToolbar = view.findViewById(R.id.toolbar_title);
         ((AppCompatActivity) getActivity()).setSupportActionBar(myToolbar);
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if(actionBar != null){
-            actionBar.setTitle("게시글 작성");
-        }
-
-        Spinner Post_Category_Spinner = (Spinner)view.findViewById(R.id.Post_Category_Spinner);
-        ArrayAdapter Post_Category_Adapter = ArrayAdapter.createFromResource(getContext(), R.array.Category, android.R.layout.simple_spinner_item);
-        Post_Category_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Post_Category_Spinner.setAdapter(Post_Category_Adapter);
+        GradientDrawable drawable= (GradientDrawable) ContextCompat.getDrawable(getContext(), R.drawable.image_round);
 
 
         buttonsBackgroundLayout = view.findViewById(R.id.ButtonsBackground_Layout);
@@ -99,14 +101,27 @@ public class WritePostFragment extends Fragment {
         selectedEditText = view.findViewById(R.id.contentsEditText);
         //////////////////
         //Selected_ImageView = view.findViewById(R.id.Selected_ImageView);
-        Select_Post_Image_Button = view.findViewById(R.id.Select_Post_Image_Button);
-
         view.findViewById(R.id.Post_Write_Button).setOnClickListener(onClickListener);
-        view.findViewById(R.id.Select_Post_Image_Button).setOnClickListener(onClickListener);
-        view.findViewById(R.id.imageModify).setOnClickListener(onClickListener);
-        view.findViewById(R.id.Comment_Delete_Button).setOnClickListener(onClickListener);
+        Select_Post_Image_Button = view.findViewById(R.id.Select_Post_Image_Button);
+        Select_Post_Image_Button.setOnClickListener(onClickListener);
+//        Select_Post_Image_Button.setBackground(drawable);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Select_Post_Image_Button.setClipToOutline(true);
+//        }
+        FoodPostbtn = (ImageView) view.findViewById(R.id.FoodPostbtn);
+        FoodPostbtn.setOnClickListener(onClickListener);
+        LifePostbtn = (ImageView) view.findViewById(R.id.LifePostbtn);
+        LifePostbtn.setOnClickListener(onClickListener);
+        BorrowPostbtn = (ImageView) view.findViewById(R.id.BorrowPostbtn);
+        BorrowPostbtn.setOnClickListener(onClickListener);
+        WorkPostbtn = (ImageView) view.findViewById(R.id.WorkPostbtn);
+        WorkPostbtn.setOnClickListener(onClickListener);
         ////////
         Viewpager = view.findViewById(R.id.ViewPager);
+        Viewpager.setBackground(drawable);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Viewpager.setClipToOutline(true);
+        }
 
         buttonsBackgroundLayout.setOnClickListener(onClickListener);
         titleEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -152,6 +167,11 @@ public class WritePostFragment extends Fragment {
                 //Selected_ImageView.setImageURI(Uri.parse(selectedPhotos.get(0)));
                 ImageList = selectedPhotos;
                 if(ImageList != null) {
+                    GradientDrawable drawable= (GradientDrawable) ContextCompat.getDrawable(getContext(), R.drawable.image_round);
+                    Viewpager.setBackground(drawable);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        Viewpager.setClipToOutline(true);
+                    }
                     Viewpager.setAdapter(new ViewPagerAdapter(getContext(), ImageList));
                 }
                 Select_Post_Image_Button.setText(Html.fromHtml(selectedPhotos.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
@@ -179,16 +199,39 @@ public class WritePostFragment extends Fragment {
                     intent.setMaxGrideItemCount(3);
                     startActivityForResult(intent, REQUEST_CODE);
                     break;
+                case R.id.FoodPostbtn:
+                    //ImageView FoodPostbtn = (ImageView) view.findViewById(R.id.FoodPostbtn);
+                    FoodPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    LifePostbtn.setColorFilter(null);
+                    BorrowPostbtn.setColorFilter(null);
+                    WorkPostbtn.setColorFilter(null);
+                    Category = "음식";
+                    break;
+                case R.id.LifePostbtn:
+                    LifePostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    FoodPostbtn.setColorFilter(null);
+                    BorrowPostbtn.setColorFilter(null);
+                    WorkPostbtn.setColorFilter(null);
+                    Category = "생필품";
+                    break;
+                case R.id.BorrowPostbtn:
+                    BorrowPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    FoodPostbtn.setColorFilter(null);
+                    LifePostbtn.setColorFilter(null);
+                    WorkPostbtn.setColorFilter(null);
+                    Category = "대여";
+                    break;
+                case R.id.WorkPostbtn:
+                    WorkPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    FoodPostbtn.setColorFilter(null);
+                    LifePostbtn.setColorFilter(null);
+                    BorrowPostbtn.setColorFilter(null);
+                    Category = "용역";
+                    break;
                 case R.id.ButtonsBackground_Layout:
                     if (buttonsBackgroundLayout.getVisibility() == View.VISIBLE) {
                         buttonsBackgroundLayout.setVisibility(View.GONE);                               // part12 : 실행되고나면 사라지게 설정 (15'19")
                     }
-                    break;
-                case R.id.imageModify:
-                    myStartActivity(GalleryActivity.class, GALLERY_IMAGE, 1);               // part12 : 실행중인 Activity의 request 값 다르게 설정 (13'41")
-                    buttonsBackgroundLayout.setVisibility(View.GONE);
-                    break;
-                case R.id.Comment_Delete_Button:                                                                       // part12 : 작성중인 게시물에서 사진 빼기 (12'30")
                     break;
             }
         }
@@ -207,9 +250,9 @@ public class WritePostFragment extends Fragment {
         final String title = ((EditText) getView().findViewById(R.id.Post_Title_EditText)).getText().toString();
         final String textcontents = ((EditText) getView().findViewById(R.id.contentsEditText)).getText().toString();
         final ArrayList<String> LikeList = new ArrayList<>();
-        final String Category = ((Spinner)getView().findViewById(R.id.Post_Category_Spinner)).getSelectedItem().toString();
+
         Log.e("로그", "카테고리 : " + Category);
-        if (title.length() > 0) {
+        if (title.length() > 0 && Category != null) {
             String postID = null;
             loaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
             final ArrayList<String> contentsList = new ArrayList<>();                                   // part11 : contentsList에는 컨텐츠 내용이
@@ -245,7 +288,7 @@ public class WritePostFragment extends Fragment {
                                         @Override
                                         public void onSuccess(Uri uri) {
                                             contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                            Log.e("로그", "카테고리 11: " + Category);
+                                            Log.e("로그", "카테고리 11111111111: " + Category);
                                             PostModel postModel = new PostModel(title, textcontents, contentsList,  date, currentUser.getUid(), newPostID, Category, LikeList);
                                             postModel.setPostModel_Post_Uid(newPostID);
                                             storeUpload(documentReference, postModel);
@@ -259,13 +302,18 @@ public class WritePostFragment extends Fragment {
                 pathCount++;
             }
             if (selectedPhotos.size() == 0) {
-                Log.e("로그", "카테고리 22 : " + Category);
+                Log.e("로그", "카테고리 22222222222222222222 : " + Category);
                 PostModel postModel = new PostModel(title, textcontents, date, currentUser.getUid(), postID, Category, LikeList);
                 postModel.setPostModel_Post_Uid(postID);
                 storeUpload(documentReference,postModel);
             }
         } else {
-            Toast.makeText(getActivity(), "제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
+            if(title.length() == 0){
+                Toast.makeText(getActivity(), "제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
+            }else if(Category == null){
+                Toast.makeText(getActivity(), "카테고리를 선택해주세요.",Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 

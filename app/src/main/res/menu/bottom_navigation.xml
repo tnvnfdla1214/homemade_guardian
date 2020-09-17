@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/bottom_home"
         android:title="게시물 홈" />
     <item
         android:id="@+id/writepost"
-        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:icon="@drawable/bottom_writing"
         android:title="게시물 작성" />
     <item
     android:id="@+id/chatroomlist"
-    android:icon="@drawable/ic_group_black_24dp"
+    android:icon="@drawable/bottom_chatting"
     android:title="채팅방 목록" />
     <item
         android:id="@+id/myinfo"
-        android:icon="@drawable/ic_group_black_24dp"
+        android:icon="@drawable/bottom_myinfo"
         android:title="내정보" />
 </menu>

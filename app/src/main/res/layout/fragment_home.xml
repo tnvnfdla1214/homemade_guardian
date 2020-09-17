@@ -7,72 +7,138 @@
 
     android:orientation="vertical">
 
-    <include
-        layout="@layout/view_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/toolbar"
-        android:id="@+id/Linearlayout">
+        android:id="@+id/search_setting"
+        android:paddingTop="5dp">
 
-        <Button
+
+        <ImageView
             android:id="@+id/searchbtn"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:paddingTop="5dp"
+            android:src="@drawable/search" />
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="20"/>
+        <ImageView
+            android:id="@+id/settingbtn"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="검색" />
+            android:src="@drawable/setting"
+            android:paddingTop="5dp"/>
 
-        <Button
-        android:id="@+id/HotPostbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="핫게시판" />
-
-        <Button
-            android:id="@+id/AllPostbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="전체" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:id="@+id/Linearlayout"
+        android:layout_below="@+id/search_setting"
+        android:paddingTop="5dp">
+
+        <Spinner
+            android:layout_width="170dp"
+            android:layout_height="32dp"
+            android:id="@+id/Local_Spinner"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/AllPostbtn"
+            android:layout_width="60dp"
+            android:layout_height="32dp"
+            android:text="전체"
+            android:textSize="10dp"
+            android:paddingRight="10dp"/>
+
+        <ImageView
+            android:id="@+id/HotPostbtn"
+            android:layout_width="50dp"
+            android:layout_height="32dp"
+            android:src="@drawable/category_hot"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_below="@+id/Linearlayout"
-        android:id="@+id/Categorylayout">
+        android:id="@+id/Categorylayout"
+        android:paddingTop="5dp">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"/>
 
 
-
-        <Button
+        <ImageView
             android:id="@+id/FoodPostbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="음식" />
-        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/category_food"
+            android:background="@drawable/category_border"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"/>
+
+        <ImageView
             android:id="@+id/LifePostbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="생필품" />
-        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/category_daily"
+            android:background="@drawable/category_border"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"/>
+        <ImageView
             android:id="@+id/BorrowPostbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="대여" />
-        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/category_borrow"
+            android:background="@drawable/category_border"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"/>
+        <ImageView
             android:id="@+id/WorkPostbtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="용역" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/category_work"
+            android:background="@drawable/category_border"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"/>
 
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/Categorylayout">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Categorylayout"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        >
 
     </androidx.recyclerview.widget.RecyclerView>
 

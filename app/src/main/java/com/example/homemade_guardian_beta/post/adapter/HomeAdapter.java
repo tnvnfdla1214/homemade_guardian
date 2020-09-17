@@ -1,11 +1,15 @@
 package com.example.homemade_guardian_beta.post.adapter;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.homemade_guardian_beta.model.post.PostModel;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.post.activity.PostActivity;
@@ -65,6 +72,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull final MainViewHolder holder, int position) {                      // part : 게시물을 나열
+        //final RequestOptions requestOptions = new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(90));
+        GradientDrawable drawable= (GradientDrawable) ContextCompat.getDrawable(this.Activity, R.drawable.image_round);
         CardView Contents_CardView = holder.Cardview;
         TextView Title_TextView = Contents_CardView.findViewById(R.id.Post_Title_TextView);
         TextView Contents_TextView = Contents_CardView.findViewById(R.id.Post_Contents_TextView);
@@ -85,8 +94,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
             Log.d("로그","썸네일 있");
             ImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);
             Thumbnail_ImageView.setVisibility(View.VISIBLE);
+            Thumbnail_ImageView.setBackground(drawable);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Thumbnail_ImageView.setClipToOutline(true);
+            }
             String Image = ArrayList_ImageList.get(0);
-            Glide.with(Activity).load(Image).override(1000).thumbnail(0.1f).into(Thumbnail_ImageView);         // 흐릿하게 로딩하기
+            Glide.with(Activity).load(Image).centerCrop().override(500).thumbnail(0.1f).into(Thumbnail_ImageView);
         }else {
             Log.d("로그","썸네일 없");
             ImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);

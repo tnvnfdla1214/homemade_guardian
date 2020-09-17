@@ -6,9 +6,10 @@
 
 
     <include
-        layout="@layout/view_toolbar"
+        layout="@layout/toolbar_writepost"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -27,29 +28,103 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 >
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"/>
 
                 <Button
                     android:id="@+id/Select_Post_Image_Button"
                     android:layout_width="136dp"
                     android:layout_height="118dp"
                     android:text="이미지 추가"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_round"/>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"/>
 
                 <view
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="20dp"
                     android:id="@+id/ViewPager"
                     class="androidx.viewpager.widget.ViewPager"
-                    android:layout_width="180dp"
-                    android:layout_height="148dp"/>
+                    android:layout_width="162dp"
+                    android:layout_height="162dp"
+                    android:background="@drawable/category_border"
+                    android:layout_weight="1"/>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"/>
             </LinearLayout>
 
-            <Spinner
-                android:id="@+id/Post_Category_Spinner"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:orientation="horizontal"
+                android:layout_below="@+id/Linearlayout"
+                android:id="@+id/Categorylayout"
+                android:paddingTop="20dp"
+                >
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"/>
+
+
+                <ImageView
+                    android:id="@+id/FoodPostbtn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/category_food"
+                    android:background="@drawable/category_border"/>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:id="@+id/LifePostbtn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/category_daily"
+                    android:background="@drawable/category_border"/>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"/>
+                <ImageView
+                    android:id="@+id/BorrowPostbtn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/category_borrow"
+                    android:background="@drawable/category_border"/>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"/>
+                <ImageView
+                    android:id="@+id/WorkPostbtn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/category_work"
+                    android:background="@drawable/category_border"/>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
             <EditText
                 android:id="@+id/Post_Title_EditText"
                 android:layout_width="match_parent"

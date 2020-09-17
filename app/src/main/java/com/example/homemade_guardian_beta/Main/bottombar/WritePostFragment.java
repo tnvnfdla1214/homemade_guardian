@@ -250,6 +250,7 @@ public class WritePostFragment extends Fragment {
         final String title = ((EditText) getView().findViewById(R.id.Post_Title_EditText)).getText().toString();
         final String textcontents = ((EditText) getView().findViewById(R.id.contentsEditText)).getText().toString();
         final ArrayList<String> LikeList = new ArrayList<>();
+        final String HotPost = "X";
 
         Log.e("로그", "카테고리 : " + Category);
         if (title.length() > 0 && Category != null) {
@@ -289,7 +290,7 @@ public class WritePostFragment extends Fragment {
                                         public void onSuccess(Uri uri) {
                                             contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
                                             Log.e("로그", "카테고리 11111111111: " + Category);
-                                            PostModel postModel = new PostModel(title, textcontents, contentsList,  date, currentUser.getUid(), newPostID, Category, LikeList);
+                                            PostModel postModel = new PostModel(title, textcontents, contentsList,  date, currentUser.getUid(), newPostID, Category, LikeList, HotPost);
                                             postModel.setPostModel_Post_Uid(newPostID);
                                             storeUpload(documentReference, postModel);
                                         }
@@ -303,7 +304,7 @@ public class WritePostFragment extends Fragment {
             }
             if (selectedPhotos.size() == 0) {
                 Log.e("로그", "카테고리 22222222222222222222 : " + Category);
-                PostModel postModel = new PostModel(title, textcontents, date, currentUser.getUid(), postID, Category, LikeList);
+                PostModel postModel = new PostModel(title, textcontents, date, currentUser.getUid(), postID, Category, LikeList, HotPost);
                 postModel.setPostModel_Post_Uid(postID);
                 storeUpload(documentReference,postModel);
             }

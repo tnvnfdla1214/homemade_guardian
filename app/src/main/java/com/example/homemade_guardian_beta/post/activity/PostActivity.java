@@ -389,7 +389,11 @@ public class PostActivity extends BasicActivity {                               
                         final DocumentReference documentReference =firebaseFirestore.collection("POSTS").document(Postmodel.getPostModel_Post_Uid());
                         LikeList = Postmodel.getPostModel_LikeList();
                         LikeList.add(CurrentUid);
+                       if(LikeList.size()>0){
+                           Postmodel.setPostModel_HotPost("O");
+                       }
                         Postmodel.setPostModel_LikeList(LikeList);
+
                         documentReference.set(Postmodel.getPostInfo())
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override

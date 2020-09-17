@@ -273,7 +273,8 @@ public class HomeFragment extends Fragment {
 //                                        document.getData().get("PostModel_Host_Uid").toString(),
 //                                        document.getId(),
 //                                        document.getData().get("PostModel_Category").toString(),
-//                                        (ArrayList<String>) document.getData().get("PostModel_LikeList")));
+//                                        (ArrayList<String>) document.getData().get("PostModel_LikeList"),
+//                                            (Integer) document.getData().get("PostModel_LikeCount")));
 //                            }
 //                            homeAdapter.notifyDataSetChanged();
 //                        } else {
@@ -289,7 +290,7 @@ public class HomeFragment extends Fragment {
         Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getPostModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
         Log.d("로그","스크롤 333");
-        collectionReference.orderBy("PostModel_DateOfManufacture").whereEqualTo("PostModel_Category", "생필품").get()        // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개
+        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).limit(10).get()        // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -309,8 +310,9 @@ public class HomeFragment extends Fragment {
                                         document.getData().get("PostModel_Host_Uid").toString(),
                                         document.getId(),
                                         document.getData().get("PostModel_Category").toString(),
-                                        (ArrayList<String>) document.getData().get("PostModel_LikeList")));
-                            }
+                                        (ArrayList<String>) document.getData().get("PostModel_LikeList"),
+                                        document.getData().get("PostModel_HotPost").toString()));
+                        }
                             homeAdapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
@@ -326,7 +328,7 @@ public class HomeFragment extends Fragment {
 
         Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getPostModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_HotPost","O").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -348,7 +350,8 @@ public class HomeFragment extends Fragment {
                                             document.getData().get("PostModel_Host_Uid").toString(),
                                             document.getId(),
                                             document.getData().get("PostModel_Category").toString(),
-                                            (ArrayList<String>) document.getData().get("PostModel_LikeList")));
+                                            (ArrayList<String>) document.getData().get("PostModel_LikeList"),
+                                            document.getData().get("PostModel_HotPost").toString()));
                                 }
                                 HotPostCut = 0;
                             }
@@ -367,30 +370,27 @@ public class HomeFragment extends Fragment {
 
         Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getPostModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_Category","음식").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        String Food;
+
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
                                 postList.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                Food = document.getData().get("PostModel_Category").toString();
-                                if(Food.equals("음식")) {
-                                    Log.d("로그","Food : "+Food);
-                                    postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
-                                            document.getData().get("PostModel_Title").toString(),
-                                            document.getData().get("PostModel_Text").toString(),
-                                            (ArrayList<String>) document.getData().get("PostModel_ImageList"),
-                                            new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
-                                            document.getData().get("PostModel_Host_Uid").toString(),
-                                            document.getId(),
-                                            document.getData().get("PostModel_Category").toString(),
-                                            (ArrayList<String>) document.getData().get("PostModel_LikeList")));
-                                }
+                                postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
+                                        document.getData().get("PostModel_Title").toString(),
+                                        document.getData().get("PostModel_Text").toString(),
+                                        (ArrayList<String>) document.getData().get("PostModel_ImageList"),
+                                        new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
+                                        document.getData().get("PostModel_Host_Uid").toString(),
+                                        document.getId(),
+                                        document.getData().get("PostModel_Category").toString(),
+                                        (ArrayList<String>) document.getData().get("PostModel_LikeList"),
+                                        document.getData().get("PostModel_HotPost").toString()));
                             }
                             homeAdapter.notifyDataSetChanged();
                         } else {
@@ -407,7 +407,7 @@ public class HomeFragment extends Fragment {
 
         Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getPostModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_Category","생필품").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -418,19 +418,16 @@ public class HomeFragment extends Fragment {
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                Thing = document.getData().get("PostModel_Category").toString();
-                                if(Thing.equals("생필품")) {
-                                    Log.d("로그","Thing : "+Thing);
-                                    postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
-                                            document.getData().get("PostModel_Title").toString(),
-                                            document.getData().get("PostModel_Text").toString(),
-                                            (ArrayList<String>) document.getData().get("PostModel_ImageList"),
-                                            new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
-                                            document.getData().get("PostModel_Host_Uid").toString(),
-                                            document.getId(),
-                                            document.getData().get("PostModel_Category").toString(),
-                                            (ArrayList<String>) document.getData().get("PostModel_LikeList")));
-                                }
+                                postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
+                                        document.getData().get("PostModel_Title").toString(),
+                                        document.getData().get("PostModel_Text").toString(),
+                                        (ArrayList<String>) document.getData().get("PostModel_ImageList"),
+                                        new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
+                                        document.getData().get("PostModel_Host_Uid").toString(),
+                                        document.getId(),
+                                        document.getData().get("PostModel_Category").toString(),
+                                        (ArrayList<String>) document.getData().get("PostModel_LikeList"),
+                                        document.getData().get("PostModel_HotPost").toString()));
                             }
                             homeAdapter.notifyDataSetChanged();
                         } else {
@@ -447,7 +444,7 @@ public class HomeFragment extends Fragment {
 
         Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getPostModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_Category","대여").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -458,19 +455,16 @@ public class HomeFragment extends Fragment {
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                Borrow = document.getData().get("PostModel_Category").toString();
-                                if(Borrow.equals("대여")) {
-                                    Log.d("로그","Borrow : "+Borrow);
-                                    postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
-                                            document.getData().get("PostModel_Title").toString(),
-                                            document.getData().get("PostModel_Text").toString(),
-                                            (ArrayList<String>) document.getData().get("PostModel_ImageList"),
-                                            new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
-                                            document.getData().get("PostModel_Host_Uid").toString(),
-                                            document.getId(),
-                                            document.getData().get("PostModel_Category").toString(),
-                                            (ArrayList<String>) document.getData().get("PostModel_LikeList")));
-                                }
+                                postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
+                                        document.getData().get("PostModel_Title").toString(),
+                                        document.getData().get("PostModel_Text").toString(),
+                                        (ArrayList<String>) document.getData().get("PostModel_ImageList"),
+                                        new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
+                                        document.getData().get("PostModel_Host_Uid").toString(),
+                                        document.getId(),
+                                        document.getData().get("PostModel_Category").toString(),
+                                        (ArrayList<String>) document.getData().get("PostModel_LikeList"),
+                                        document.getData().get("PostModel_HotPost").toString()));
                             }
                             homeAdapter.notifyDataSetChanged();
                         } else {
@@ -487,7 +481,7 @@ public class HomeFragment extends Fragment {
 
         Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getPostModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_Category","용역").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -498,19 +492,16 @@ public class HomeFragment extends Fragment {
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                Work = document.getData().get("PostModel_Category").toString();
-                                if(Work.equals("용역")) {
-                                    Log.d("로그","Work : "+Work);
-                                    postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
-                                            document.getData().get("PostModel_Title").toString(),
-                                            document.getData().get("PostModel_Text").toString(),
-                                            (ArrayList<String>) document.getData().get("PostModel_ImageList"),
-                                            new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
-                                            document.getData().get("PostModel_Host_Uid").toString(),
-                                            document.getId(),
-                                            document.getData().get("PostModel_Category").toString(),
-                                            (ArrayList<String>) document.getData().get("PostModel_LikeList")));
-                                }
+                                postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
+                                        document.getData().get("PostModel_Title").toString(),
+                                        document.getData().get("PostModel_Text").toString(),
+                                        (ArrayList<String>) document.getData().get("PostModel_ImageList"),
+                                        new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
+                                        document.getData().get("PostModel_Host_Uid").toString(),
+                                        document.getId(),
+                                        document.getData().get("PostModel_Category").toString(),
+                                        (ArrayList<String>) document.getData().get("PostModel_LikeList"),
+                                        document.getData().get("PostModel_HotPost").toString()));
                             }
                             homeAdapter.notifyDataSetChanged();
                         } else {

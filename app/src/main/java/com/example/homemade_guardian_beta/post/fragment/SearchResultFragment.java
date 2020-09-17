@@ -68,7 +68,7 @@ public class SearchResultFragment extends Fragment {
 
         Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getPostModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -88,7 +88,8 @@ public class SearchResultFragment extends Fragment {
                                             document.getData().get("PostModel_Host_Uid").toString(),
                                             document.getId(),
                                             document.getData().get("PostModel_Category").toString(),
-                                            (ArrayList<String>) document.getData().get("PostModel_LikeList")));
+                                            (ArrayList<String>) document.getData().get("PostModel_LikeList"),
+                                            document.getData().get("PostModel_HotPost").toString()));
                                 }
                                 title = null;
                             }

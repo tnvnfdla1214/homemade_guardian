@@ -168,6 +168,7 @@ public class ModifyPostActivity extends BasicActivity {
         String Post_Uid = Postmodel.getPostModel_Post_Uid();
         final ArrayList<String> LikeList = Postmodel.getPostModel_LikeList();
         final String Category = ((Spinner)findViewById(R.id.Post_Category_Spinner)).getSelectedItem().toString();
+        final String HotPost = Postmodel.getPostModel_HotPost();
         Log.e("로그", "Uid 111 : " + Post_Uid);
         Log.e("로그", "카테고리 111 : " + Category);
         if (Title.length() > 0) {
@@ -204,7 +205,7 @@ public class ModifyPostActivity extends BasicActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {                                             // part11 : SUCCEESSCOUNT 개의 사진 (37')
                                     ImageList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                        PostModel Postmodel = new PostModel(Title, TextContents, ImageList,  DateOfManufacture, CurrentUser.getUid(), Get_PostUid, Category, LikeList);
+                                        PostModel Postmodel = new PostModel(Title, TextContents, ImageList,  DateOfManufacture, CurrentUser.getUid(), Get_PostUid, Category, LikeList, HotPost);
                                         Postmodel.setPostModel_Post_Uid(Get_PostUid);
                                         Modify_Store_Upload(docRef_POSTS_PostUid, Postmodel);
                                 }
@@ -219,7 +220,7 @@ public class ModifyPostActivity extends BasicActivity {
             if (ArrayList_SelectedPhoto.size() == 0) {
                 Log.e("로그", "카테고리 222 : " + Category);
                 Log.e("로그", "Uid 222 : " + Post_Uid);
-                PostModel Postmodel = new PostModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Post_Uid, Category, LikeList);
+                PostModel Postmodel = new PostModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Post_Uid, Category, LikeList, HotPost);
                 Postmodel.setPostModel_Post_Uid(Post_Uid);
                 Modify_Store_Upload(docRef_POSTS_PostUid,Postmodel);
             }

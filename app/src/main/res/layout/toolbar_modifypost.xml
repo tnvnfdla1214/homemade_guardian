@@ -9,13 +9,13 @@
     android:minHeight="?attr/actionBarSize"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-    android:id="@+id/toolbar_title_write"
+    android:id="@+id/toolbar_title_modify"
     >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="글쓰기"
+        android:text="글 수정하기"
         android:layout_gravity="center"
         android:id="@+id/toolbar_titles"
         android:textSize="20sp"

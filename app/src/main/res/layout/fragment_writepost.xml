@@ -36,7 +36,7 @@
 
                 <Button
                     android:id="@+id/Select_Post_Image_Button"
-                    android:layout_width="136dp"
+                    android:layout_width="118dp"
                     android:layout_height="118dp"
                     android:text="이미지 추가"
                     android:layout_marginTop="20dp"

@@ -1,8 +1,10 @@
 package com.example.homemade_guardian_beta.Main.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -16,6 +18,7 @@ import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -103,6 +106,17 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.container, writepostFragment)
                                 .commit();
+                        switch (item.getItemId()) {
+                            case R.id.home:
+                                showMessage();
+                                return true;
+                            case R.id.chatroomlist:
+                                showMessage();
+                                return true;
+                            case R.id.myinfo:
+                                showMessage();
+                                return true;
+                        }
                         return true;
                     case R.id.chatroomlist:
                         ChatroomListFragment chatroomFragment = new ChatroomListFragment();
@@ -127,6 +141,29 @@ public class MainActivity extends AppCompatActivity {
     private void myStartActivity(Class c) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
         Intent intent = new Intent(this, c);
         startActivityForResult(intent, 1);
+    }
+    public void showMessage(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("안내");
+        builder.setMessage("다른 화면으로 넘어갈 시 내용이 저장 되지 않습니다.");
+        builder.setIcon(android.R.drawable.ic_dialog_alert);
+
+        builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Snackbar.make(textView,"예 버튼이 눌렸습니다.",Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //Snackbar.make(textView,"아니오 버튼이 눌렸습니다.",Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
 }

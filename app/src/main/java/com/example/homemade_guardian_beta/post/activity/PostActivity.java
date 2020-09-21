@@ -323,8 +323,9 @@ public class PostActivity extends BasicActivity {                               
             case R.id.Chat_With_PostHost_Button:
                 //버튼 눌러짐
                 Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
-                //상대방 uid 넘겨주기
+                //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
                 Intent_ChatActivity.putExtra("To_User_Uid", Postmodel.getPostModel_Host_Uid());
+                Intent_ChatActivity.putExtra("PostModel_Post_Uid",Postmodel.getPostModel_Post_Uid());
                 startActivity(Intent_ChatActivity);
                 return true;
             default:
@@ -345,10 +346,10 @@ public class PostActivity extends BasicActivity {                               
                 case R.id.Chat_With_PostHost_Button:
                     //버튼 눌러짐
                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
-                    //상대방 uid 넘겨주기
+                    //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
                     Intent_ChatActivity.putExtra("To_User_Uid", Postmodel.getPostModel_Host_Uid());
+                    Intent_ChatActivity.putExtra("PostModel_Post_Uid",Postmodel.getPostModel_Post_Uid());
                     startActivity(Intent_ChatActivity);
-                    Log.d("getPostModel_Post_Uid","Postmodel.getPostModel_Post_Uid()2 : "+Postmodel.getPostModel_Post_Uid());
                     break;
                 case R.id.Comment_Write_Button:
                     String Comment = PostActivity.this.Comment_Input_EditText.getText().toString();
@@ -509,11 +510,11 @@ public class PostActivity extends BasicActivity {                               
                                     return true;
 
                                 case R.id.Chat_With_CommentHost_Button:
-                                    Log.d("getPostModel_Post_Uid","Postmodel.getPostModel_Post_Uid() : "+Postmodel.getPostModel_Post_Uid());
                                     //버튼 눌러짐
                                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
-                                    //상대방 uid 넘겨주기
+                                    //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
                                     Intent_ChatActivity.putExtra("To_User_Uid", Postmodel.getPostModel_Host_Uid());
+                                    Intent_ChatActivity.putExtra("PostModel_Post_Uid",Postmodel.getPostModel_Post_Uid());
                                     startActivity(Intent_ChatActivity);
                                     return true;
                                 default:

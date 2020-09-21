@@ -147,7 +147,6 @@ public class ChatroomListFragment extends Fragment {
 
         public void getRoomInfo() {
             // my chatting room information
-            //.whereGreaterThanOrEqualTo("USERS."+ My_User_Uid, 0)
             listenerRegistration = Firestore.collection("ROOMS").whereGreaterThanOrEqualTo("USERS_OUT."+My_User_Uid,1)
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
@@ -160,6 +159,9 @@ public class ChatroomListFragment extends Fragment {
                                 if (messageModel.getMessageModel_Message() !=null & messageModel.getMessageModel_DateOfManufacture() == null) {continue;} // FieldValue.serverTimestamp is so late
                                 ChatRoomListModel chatRoomListModel = new ChatRoomListModel();
                                 chatRoomListModel.setChatRoomListModel_RoomUid(document.getId());
+                                //추가
+                                chatRoomListModel.setChatRoomListModel_PostUid(document.getData().get("MessageModel_PostUid").toString());
+
                                 if (messageModel.getMessageModel_Message() !=null) { // there are no last message
                                     chatRoomListModel.setChatRoomListModel_MessageLastDateTime(simpleDateFormat.format(messageModel.getMessageModel_DateOfManufacture()));
                                     switch(messageModel.getMessage_MessageType()){
@@ -188,10 +190,6 @@ public class ChatroomListFragment extends Fragment {
                                         chatRoomListModel.setChatRoomListModel_ProfileImage(userModel.getUserModel_ProfileImage());
                                     }
                                 }
-
-                                // else {                // group chat room
-                                //     chatRoomListModel.setChatRoomListModel_Title(document.getString("ChatRoomListModel_Title"));
-                                // }
 
                                 if (messageModel.getMessageModel_DateOfManufacture()==null) messageModel.setMessageModel_DateOfManufacture(new Date());
                                 orderedRooms.put(messageModel.getMessageModel_DateOfManufacture(), chatRoomListModel);
@@ -265,6 +263,7 @@ public class ChatroomListFragment extends Fragment {
                     intent.putExtra("RoomUid", chatRoomListModel.getChatRoomListModel_RoomUid());
                     intent.putExtra("To_User_Uid", chatRoomListModel.getChatRoomListModel_ToUserUid());
                     intent.putExtra("ChatRoomListModel_Title", chatRoomListModel.getChatRoomListModel_Title());
+                    intent.putExtra("PostModel_Post_Uid", chatRoomListModel.getChatRoomListModel_PostUid());
                     startActivity(intent);
                 }
             });

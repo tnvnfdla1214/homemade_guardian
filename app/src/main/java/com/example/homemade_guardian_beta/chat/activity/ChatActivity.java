@@ -16,6 +16,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
+import com.example.homemade_guardian_beta.chat.fragment.Chat_PostInfoFragment;
 import com.example.homemade_guardian_beta.chat.fragment.GroupUserFragment;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
@@ -28,13 +29,13 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
 
     private DrawerLayout drawerLayout;
     private ChatFragment chatFragment;
-    private GroupUserFragment groupUserFragment = null;
+    private Chat_PostInfoFragment chat_postInfoFragment;
     String To_User_Uid;
     String ChatRoomListModel_RoomUid;
     String ChatRoomListModel_Title;
+    String PostModel_Post_Uid;
     private FirebaseHelper Firebasehelper;          //FirebaseHelper 참조 선언
     private MessageModel MessageModel;                    //UserModel 참조 선언
-    int Java_MessageModel_ImageCount;                         //string형을 int로 형변환
     FirebaseUser firebaseCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
     public static Context mcontext;
 
@@ -52,12 +53,14 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         To_User_Uid = getIntent().getStringExtra("To_User_Uid");     //MyInfoFragment에서 받아옴 ,PostActivity 받아옴, ChatroomListFragment에서 받아옴, 포스트에선 아마 못받아올듯
         ChatRoomListModel_RoomUid = getIntent().getStringExtra("RoomUid");     //ChatRoomListFragment에서 받아옴
         ChatRoomListModel_Title = getIntent().getStringExtra("ChatRoomListModel_Title"); //ChatRoomListFragment에서 받아옴
+        PostModel_Post_Uid = getIntent().getStringExtra("PostModel_Post_Uid"); //PostActivity에서 받아옴//ChatRoomListFragment에서 받아옴
 
         if (ChatRoomListModel_Title!=null) { actionBar.setTitle(ChatRoomListModel_Title); }
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+
         // chatting area
-        chatFragment = ChatFragment.getInstance(To_User_Uid, ChatRoomListModel_RoomUid);
+        chatFragment = ChatFragment.getInstance(To_User_Uid, ChatRoomListModel_RoomUid,PostModel_Post_Uid);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.mainFragment, chatFragment )
@@ -66,6 +69,13 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         Firebasehelper = new FirebaseHelper(this);
 
         mcontext = this;
+
+        //chat_postInfoFragment area
+        chat_postInfoFragment = new Chat_PostInfoFragment();
+        getSupportFragmentManager().beginTransaction().add(R.id.postinfoFragment, chat_postInfoFragment).commit();
+        Bundle Postbundle = new Bundle();
+        Postbundle.putString("PostModel_Post_Uid",PostModel_Post_Uid);
+        chat_postInfoFragment.setArguments(Postbundle);
 
     }
 

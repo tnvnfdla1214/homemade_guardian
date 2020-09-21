@@ -9,6 +9,17 @@ public class ChatRoomListModel {
     private Integer ChatRoomListModel_NumberOfUser; //채팅방에 몇명 들어갔는지
     private Integer ChatRoomListModel_UnreadCheck; //채팅방을 읽었는지 안익었는지
     private String ChatRoomListModel_ToUserUid; // 상대방 user의 uid 가져오기
+    //추가
+    private String ChatRoomListModel_PostUid;  //현재 어떤 포스트의 uid인지 가져오기
+
+
+    public String getChatRoomListModel_PostUid() {
+        return ChatRoomListModel_PostUid;
+    }
+
+    public void setChatRoomListModel_PostUid(String ChatRoomListModel_PostUid) {
+        this.ChatRoomListModel_PostUid = ChatRoomListModel_PostUid;
+    }
 
     public String getChatRoomListModel_ToUserUid() {
         return ChatRoomListModel_ToUserUid;

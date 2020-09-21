@@ -136,6 +136,7 @@ public class WritePostFragment extends Fragment {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
         postModel = (PostModel) getActivity().getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
+
         return view;
     }
     @Override

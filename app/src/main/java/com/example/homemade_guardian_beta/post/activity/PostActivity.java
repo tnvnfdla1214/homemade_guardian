@@ -282,7 +282,7 @@ public class PostActivity extends BasicActivity {                               
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Usermodel = documentSnapshot.toObject(UserModel.class);
                 if(Usermodel.getUserModel_ProfileImage() != null){
-                    Glide.with(PostActivity.this).load(Usermodel.getUserModel_ProfileImage()).centerCrop().override(500).into(Host_UserPage_ImageButton);
+                    Glide.with(PostActivity.this).load(Usermodel.getUserModel_ProfileImage()).centerInside().override(500).into(Host_UserPage_ImageButton);
                     Post_Host_Name_TextView = findViewById(R.id.Post_Host_Name);
                     Post_Host_Name_TextView.setText(Usermodel.getUserModel_Name());
                 }
@@ -348,6 +348,7 @@ public class PostActivity extends BasicActivity {                               
                     //상대방 uid 넘겨주기
                     Intent_ChatActivity.putExtra("To_User_Uid", Postmodel.getPostModel_Host_Uid());
                     startActivity(Intent_ChatActivity);
+                    Log.d("getPostModel_Post_Uid","Postmodel.getPostModel_Post_Uid()2 : "+Postmodel.getPostModel_Post_Uid());
                     break;
                 case R.id.Comment_Write_Button:
                     String Comment = PostActivity.this.Comment_Input_EditText.getText().toString();
@@ -486,7 +487,7 @@ public class PostActivity extends BasicActivity {                               
             viewHolder.Comment_UserComment_TextView.setText(Commentmodel.getCommentModel_Comment());
 
             if (Commentmodel.getCommentModel_Host_Image()!=null) {
-                Glide.with(PostActivity.this).load(Commentmodel.getCommentModel_Host_Image()).centerCrop().override(500).into(viewHolder.Comment_UserProfile_ImageView);
+                Glide.with(PostActivity.this).load(Commentmodel.getCommentModel_Host_Image()).centerInside().override(500).into(viewHolder.Comment_UserProfile_ImageView);
             } else{
                 Glide.with(PostActivity.this).load(R.drawable.user).into(viewHolder.Comment_UserProfile_ImageView);
             }
@@ -508,6 +509,7 @@ public class PostActivity extends BasicActivity {                               
                                     return true;
 
                                 case R.id.Chat_With_CommentHost_Button:
+                                    Log.d("getPostModel_Post_Uid","Postmodel.getPostModel_Post_Uid() : "+Postmodel.getPostModel_Post_Uid());
                                     //버튼 눌러짐
                                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                                     //상대방 uid 넘겨주기

@@ -51,6 +51,12 @@ public class HomeFragment extends Fragment {
     private ImageView BorrowPostbtn;
     private ImageView WorkPostbtn;
     private ImageView HotPostbtn;
+    private String FoodPostbtn_State = "unSelected";
+    private String LifePostbtn_State = "unSelected";
+    private String BorrowPostbtn_State = "unSelected";
+    private String WorkPostbtn_State = "unSelected";
+    private String HotPostbtn_State = "unSelected";
+    private ImageView searchbtn;
 
     public HomeFragment() {                                                                                 // part22 : 프레그먼트로 내용 이전 (21'40")
         // Required empty public constructor
@@ -83,7 +89,7 @@ public class HomeFragment extends Fragment {
 
         view.findViewById(R.id.searchbtn).setOnClickListener(onClickListener);
 
-        view.findViewById(R.id.AllPostbtn).setOnClickListener(onClickListener);
+        //view.findViewById(R.id.AllPostbtn).setOnClickListener(onClickListener);
         HotPostbtn = (ImageView) view.findViewById(R.id.HotPostbtn);
         HotPostbtn.setOnClickListener(onClickListener);
         FoodPostbtn = (ImageView) view.findViewById(R.id.FoodPostbtn);
@@ -94,6 +100,9 @@ public class HomeFragment extends Fragment {
         BorrowPostbtn.setOnClickListener(onClickListener);
         WorkPostbtn = (ImageView) view.findViewById(R.id.WorkPostbtn);
         WorkPostbtn.setOnClickListener(onClickListener);
+        searchbtn = (ImageView) view.findViewById(R.id.searchbtn);
+        searchbtn.setOnClickListener(onClickListener);
+        searchbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
 
         State = "전체";
         recyclerView.setHasFixedSize(true);
@@ -184,6 +193,7 @@ public class HomeFragment extends Fragment {
                     myStartActivity(SearchActivity.class);
                     break;
                 case R.id.HotPostbtn:
+                    if(HotPostbtn_State.equals("unSelected")){
                     HotPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
                     FoodPostbtn.setColorFilter(null);
                     LifePostbtn.setColorFilter(null);
@@ -192,29 +202,56 @@ public class HomeFragment extends Fragment {
                     postList.clear();
                     Hot_postsUpdate(true);
                     State = "핫게시판";
+                        HotPostbtn_State = "Selected";
+                    }else if(HotPostbtn_State.equals("Selected")){
+                        FoodPostbtn.setColorFilter(null);
+                        LifePostbtn.setColorFilter(null);
+                        BorrowPostbtn.setColorFilter(null);
+                        WorkPostbtn.setColorFilter(null);
+                        HotPostbtn.setColorFilter(null);
+                        postList.clear();
+                        All_postsUpdate(true);
+                        State = "전체";
+                        HotPostbtn_State = "unSelected";
+                    }
                     break;
-                case R.id.AllPostbtn:
-                    FoodPostbtn.setColorFilter(null);
-                    LifePostbtn.setColorFilter(null);
-                    BorrowPostbtn.setColorFilter(null);
-                    WorkPostbtn.setColorFilter(null);
-                    HotPostbtn.setColorFilter(null);
-                    postList.clear();
-                    All_postsUpdate(true);
-                    State = "전체";
-                    break;
+//                case R.id.AllPostbtn:
+//                    FoodPostbtn.setColorFilter(null);
+//                    LifePostbtn.setColorFilter(null);
+//                    BorrowPostbtn.setColorFilter(null);
+//                    WorkPostbtn.setColorFilter(null);
+//                    HotPostbtn.setColorFilter(null);
+//                    postList.clear();
+//                    All_postsUpdate(true);
+//                    State = "전체";
+//                    break;
                 case R.id.FoodPostbtn:
                     //ImageView FoodPostbtn = (ImageView) view.findViewById(R.id.FoodPostbtn);
-                    FoodPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    LifePostbtn.setColorFilter(null);
-                    BorrowPostbtn.setColorFilter(null);
-                    WorkPostbtn.setColorFilter(null);
-                    HotPostbtn.setColorFilter(null);
-                    postList.clear();
-                    Food_postsUpdate(true);
-                    State = "음식";
+                    if(FoodPostbtn_State.equals("unSelected")){
+                        FoodPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                        LifePostbtn.setColorFilter(null);
+                        BorrowPostbtn.setColorFilter(null);
+                        WorkPostbtn.setColorFilter(null);
+                        HotPostbtn.setColorFilter(null);
+                        postList.clear();
+                        Food_postsUpdate(true);
+                        State = "음식";
+                        FoodPostbtn_State = "Selected";
+                    }else if(FoodPostbtn_State.equals("Selected")){
+                        FoodPostbtn.setColorFilter(null);
+                        LifePostbtn.setColorFilter(null);
+                        BorrowPostbtn.setColorFilter(null);
+                        WorkPostbtn.setColorFilter(null);
+                        HotPostbtn.setColorFilter(null);
+                        postList.clear();
+                        All_postsUpdate(true);
+                        State = "전체";
+                        FoodPostbtn_State = "unSelected";
+                    }
+
                     break;
                 case R.id.LifePostbtn:
+                    if(LifePostbtn_State.equals("unSelected")){
                     LifePostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
                     FoodPostbtn.setColorFilter(null);
                     BorrowPostbtn.setColorFilter(null);
@@ -223,8 +260,21 @@ public class HomeFragment extends Fragment {
                     postList.clear();
                     Thing_postsUpdate(true);
                     State = "생필품";
+                    LifePostbtn_State = "Selected";
+                    } else if(LifePostbtn_State.equals("Selected")){
+                        FoodPostbtn.setColorFilter(null);
+                        LifePostbtn.setColorFilter(null);
+                        BorrowPostbtn.setColorFilter(null);
+                        WorkPostbtn.setColorFilter(null);
+                        HotPostbtn.setColorFilter(null);
+                        postList.clear();
+                        All_postsUpdate(true);
+                        State = "전체";
+                        LifePostbtn_State = "unSelected";
+                    }
                     break;
                 case R.id.BorrowPostbtn:
+                    if(BorrowPostbtn_State.equals("unSelected")){
                     BorrowPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
                     FoodPostbtn.setColorFilter(null);
                     LifePostbtn.setColorFilter(null);
@@ -233,8 +283,21 @@ public class HomeFragment extends Fragment {
                     postList.clear();
                     Borrow_postsUpdate(true);
                     State = "대여";
+                    BorrowPostbtn_State = "Selected";
+                    } else if(BorrowPostbtn_State.equals("Selected")){
+                        FoodPostbtn.setColorFilter(null);
+                        LifePostbtn.setColorFilter(null);
+                        BorrowPostbtn.setColorFilter(null);
+                        WorkPostbtn.setColorFilter(null);
+                        HotPostbtn.setColorFilter(null);
+                        postList.clear();
+                        All_postsUpdate(true);
+                        State = "전체";
+                        BorrowPostbtn_State = "unSelected";
+                    }
                     break;
                 case R.id.WorkPostbtn:
+                    if(WorkPostbtn_State.equals("unSelected")){
                     WorkPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
                     FoodPostbtn.setColorFilter(null);
                     LifePostbtn.setColorFilter(null);
@@ -243,6 +306,18 @@ public class HomeFragment extends Fragment {
                     postList.clear();
                     Work_postsUpdate(true);
                     State = "용역";
+                    WorkPostbtn_State = "Selected";
+                    } else if(WorkPostbtn_State.equals("Selected")){
+                        FoodPostbtn.setColorFilter(null);
+                        LifePostbtn.setColorFilter(null);
+                        BorrowPostbtn.setColorFilter(null);
+                        WorkPostbtn.setColorFilter(null);
+                        HotPostbtn.setColorFilter(null);
+                        postList.clear();
+                        All_postsUpdate(true);
+                        State = "전체";
+                        WorkPostbtn_State = "unSelected";
+                    }
                     break;
             }
         }

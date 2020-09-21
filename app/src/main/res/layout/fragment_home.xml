@@ -14,19 +14,24 @@
         android:orientation="horizontal"
         android:id="@+id/search_setting"
         android:paddingTop="5dp">
-
-
+        <Spinner
+            android:layout_width="170dp"
+            android:layout_height="32dp"
+            android:id="@+id/Local_Spinner"
+            android:textStyle="bold"
+            />
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="20"/>
         <ImageView
             android:id="@+id/searchbtn"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:paddingTop="5dp"
             android:src="@drawable/search" />
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_weight="20"/>
+
         <ImageView
             android:id="@+id/settingbtn"
             android:layout_width="50dp"
@@ -43,28 +48,25 @@
         android:layout_below="@+id/search_setting"
         android:paddingTop="5dp">
 
-        <Spinner
-            android:layout_width="170dp"
-            android:layout_height="32dp"
-            android:id="@+id/Local_Spinner"/>
+
+        <!--
+
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="32dp"
             android:layout_marginLeft="5dp"
             android:layout_weight="1"/>
-        <Button
+
+            <Button
             android:id="@+id/AllPostbtn"
             android:layout_width="60dp"
             android:layout_height="32dp"
             android:text="전체"
             android:textSize="10dp"
             android:paddingRight="10dp"/>
+            -->
 
-        <ImageView
-            android:id="@+id/HotPostbtn"
-            android:layout_width="50dp"
-            android:layout_height="32dp"
-            android:src="@drawable/category_hot"/>
+
 
     </LinearLayout>
 
@@ -82,6 +84,17 @@
             android:layout_marginLeft="5dp"
             android:layout_weight="1"/>
 
+        <ImageView
+            android:id="@+id/HotPostbtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/category_hot"
+            android:background="@drawable/category_border"/>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"/>
 
         <ImageView
             android:id="@+id/FoodPostbtn"

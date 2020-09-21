@@ -87,7 +87,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MainViewHolder
                          //contentsLayout에다가 날짜포함
         LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);                      /////////////////////이거 대신 텍스트 만든거 보여주기로
         TextView DateOfManufacture_TextView = Contents_CardView.findViewById(R.id.Post_DateOfManufacture);
-        DateOfManufacture_TextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Postmodel.getPostModel_DateOfManufacture()));
+        DateOfManufacture_TextView.setText(new SimpleDateFormat("MM/dd hh:mm", Locale.getDefault()).format(Postmodel.getPostModel_DateOfManufacture()));
 
         ArrayList<String> ArrayList_ImageList = Postmodel.getPostModel_ImageList();
         if(ArrayList_ImageList != null) {

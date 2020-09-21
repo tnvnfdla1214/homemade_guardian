@@ -3,6 +3,7 @@ package com.example.homemade_guardian_beta.Main.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
+    private String LocalState = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, homeFragment)
                 .commit();
+        LocalState = "home";
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);            // part22 : 바텀 네비게이션바  설정 (47'20")
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -97,38 +100,39 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.home:
                         HomeFragment homeFragment = new HomeFragment();
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, homeFragment)
-                                .commit();
+                        if(LocalState.equals("writepost")){
+                            showMessage(homeFragment);
+                        }else{
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
+                        }
+                        LocalState = "home";
                         return true;
                     case R.id.writepost:
                         WritePostFragment writepostFragment = new WritePostFragment();
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, writepostFragment)
-                                .commit();
-                        switch (item.getItemId()) {
-                            case R.id.home:
-                                showMessage();
-                                return true;
-                            case R.id.chatroomlist:
-                                showMessage();
-                                return true;
-                            case R.id.myinfo:
-                                showMessage();
-                                return true;
+                        if(LocalState.equals("writepost")){
+                            showMessage(writepostFragment);
+                        }else{
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container, writepostFragment).commit();
                         }
+                        LocalState = "writepost";
                         return true;
                     case R.id.chatroomlist:
                         ChatroomListFragment chatroomFragment = new ChatroomListFragment();
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, chatroomFragment)
-                                .commit();
+                        if(LocalState.equals("writepost")){
+                            showMessage(chatroomFragment);
+                        }else{
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container, chatroomFragment).commit();
+                        }
+                        LocalState = "chatroomlist";
                         return true;
                     case R.id.myinfo:
                         MyInfoFragment myinfoFragment = new MyInfoFragment();
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.container, myinfoFragment)
-                                .commit();
+                        if(LocalState.equals("writepost")){
+                            showMessage(myinfoFragment);
+                        }else{
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container, myinfoFragment).commit();
+                        }
+                        LocalState = "myinfo";
                         return true;
                 }
                 return false;
@@ -142,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, c);
         startActivityForResult(intent, 1);
     }
-    public void showMessage(){
+    public void showMessage(final Fragment fragment){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("안내");
         builder.setMessage("다른 화면으로 넘어갈 시 내용이 저장 되지 않습니다.");
@@ -152,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //Snackbar.make(textView,"예 버튼이 눌렸습니다.",Snackbar.LENGTH_LONG).show();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
             }
         });
 

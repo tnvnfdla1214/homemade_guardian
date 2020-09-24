@@ -140,6 +140,7 @@ public class PostActivity extends BasicActivity {                               
         TextView Post_DateOfManufacture = findViewById(R.id.Post_DateOfManufacture);
         findViewById(R.id.Comment_Write_Button).setOnClickListener(onClickListener);
 
+
         Postmodel = (PostModel) getIntent().getSerializableExtra("postInfo");
         CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         CurrentUid =CurrentUser.getUid();
@@ -157,10 +158,15 @@ public class PostActivity extends BasicActivity {                               
         //뷰페이져
         ImageList = Postmodel.getPostModel_ImageList();
         if(ImageList != null) {
-            Log.d("로그","이미지 있다");
+            Log.d("클릭","1");
+            ViewPagerLayout = (ConstraintLayout) findViewById(R.id.ViewPagerLayout);
+            Log.d("클릭","2");
+            ViewPagerLayout.setOnClickListener(onClickListener);
+            Log.d("클릭","3");
             Viewpager = findViewById(R.id.ViewPager);
             Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList));
             Viewpager.setOnClickListener(onClickListener);
+
 
             CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
             indicator.setViewPager(Viewpager);
@@ -219,20 +225,8 @@ public class PostActivity extends BasicActivity {                               
             if(!CurrentUid.equals(Postmodel.getPostModel_Host_Uid())){
                 Chat_With_PostHost_Button.setVisibility(View.VISIBLE);
             }
-            //didBackPressOnEditText();
         }
     };
-    ///////////////////////////////////////////////////////////////
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        InputMethodManager immHide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//        immHide.hideSoftInputFromWindow(Comment_Input_EditText.getWindowToken(), 0);
-//        if(!CurrentUid.equals(Postmodel.getPostModel_Host_Uid())){
-//            Chat_With_PostHost_Button.setVisibility(View.VISIBLE);
-//        }
-//
-//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {                              // part19 : 수정하고 오면 수정된 정보 반영 (84')
@@ -406,6 +400,12 @@ public class PostActivity extends BasicActivity {                               
                                 });
                         Like_TextView.setText(String.valueOf(Postmodel.getPostModel_LikeList().size()));
                     }
+                    break;
+                case R.id.ViewPager:
+                    Log.d("클릭","ㅁ");
+                    Intent Intent_ViewPagerViewer = new Intent(getApplicationContext(), EnlargeImageActivity.class);
+                    Intent_ViewPagerViewer.putExtra("postInfo",Postmodel);
+                    startActivity(Intent_ViewPagerViewer);
                     break;
             }
         }

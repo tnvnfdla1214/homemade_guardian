@@ -1,34 +1,56 @@
-package com.example.homemade_guardian_beta.photo.activity;
-
-import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.homemade_guardian_beta.photo.fragment.ImagePagerFragment;
-
-// 안 쓰는듯
-public class PhotoPagerActivity extends AppCompatActivity {
-
-  private ImagePagerFragment pagerFragment;
-
-  private static final String FOLDER_NAME = "y_photopicker";
-
-  public final static String EXTRA_CURRENT_ITEM = "current_item";
-  public final static String EXTRA_PHOTOS = "photos";
-
-  private ActionBar actionBar;
-
-  private TextView tv_count;
-  private ImageView iv_back_btn;
-
-  private int mSaveEditPostion = 0;
-
-  @Override protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
+//package com.example.homemade_guardian_beta.photo.activity;
+//
+//import android.content.Context;
+//import android.content.DialogInterface;
+//import android.content.Intent;
+//import android.database.Cursor;
+//import android.net.Uri;
+//import android.os.Build;
+//import android.os.Bundle;
+//import android.os.Environment;
+//import android.provider.MediaStore;
+//import android.view.Menu;
+//import android.view.MenuItem;
+//import android.view.View;
+//import android.widget.ImageView;
+//import android.widget.TextView;
+//
+//import androidx.appcompat.app.ActionBar;
+//import androidx.appcompat.app.AlertDialog;
+//import androidx.appcompat.app.AppCompatActivity;
+//import androidx.appcompat.widget.Toolbar;
+//import androidx.viewpager.widget.ViewPager;
+//
+//import com.example.homemade_guardian_beta.R;
+//import com.example.homemade_guardian_beta.photo.fragment.ImagePagerFragment;
+//import com.google.android.material.snackbar.Snackbar;
+//
+//import java.io.File;
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//// 안 쓰는듯
+//public class PhotoPagerActivity extends AppCompatActivity {
+//
+//  private ImagePagerFragment pagerFragment;
+//
+//  private static final String FOLDER_NAME = "y_photopicker";
+//
+//  public final static String EXTRA_CURRENT_ITEM = "current_item";
+//  public final static String EXTRA_PHOTOS = "photos";
+//
+//  private ActionBar actionBar;
+//
+//  private TextView tv_count;
+//  private ImageView iv_back_btn;
+//
+//  private int mSaveEditPostion = 0;
+//
+//  private String PostModel_Post_Uid;
+//
+//  @Override protected void onCreate(Bundle savedInstanceState) {
+//    super.onCreate(savedInstanceState);
+//
 //    setContentView(R.layout.util_activity_photo_pager);
 //
 //    int currentItem = getIntent().getIntExtra(EXTRA_CURRENT_ITEM, 0);
@@ -73,6 +95,8 @@ public class PhotoPagerActivity extends AppCompatActivity {
 //      }
 //    });
 //
+//    PostModel_Post_Uid = getIntent().getStringExtra("PostModel_Post_Uid");
+//
 //  }
 //
 //
@@ -85,7 +109,7 @@ public class PhotoPagerActivity extends AppCompatActivity {
 //  @Override public void onBackPressed() {
 //
 //    Intent intent = new Intent();
-//    intent.putExtra(PhotoPickerActivity.KEY_SELECTED_PHOTOS, pagerFragment.getPaths());
+//    intent.putExtra(PhotoPickerActivity.KEY_SELECTED_PHOTOS, pagerFragment.getPathList());
 //    setResult(RESULT_OK, intent);
 //    finish();
 //
@@ -95,8 +119,8 @@ public class PhotoPagerActivity extends AppCompatActivity {
 //
 //  @Override
 //  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//
-////      if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+//    super.onActivityResult(requestCode, resultCode, data);
+//    //      if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
 ////        final Uri resultUri = UCrop.getOutput(data);
 ////
 ////        Toast.makeText(PhotoPagerActivity.this , "Saved Image ["+ resultUri + "]" , Toast.LENGTH_LONG).show();
@@ -115,13 +139,13 @@ public class PhotoPagerActivity extends AppCompatActivity {
 //      return true;
 //    }
 //
-//    if (item.getItemId() == R.id.delete) {
+//    if (item.getItemId() == R.id.Comment_Delete_Button) {
 //      final int index = pagerFragment.getCurrentItem();
 //
-//      final String deletedPath =  pagerFragment.getPaths().get(index);
+//      final String deletedPath =  pagerFragment.getPathList().get(index);
 //
 //      Snackbar snackbar = Snackbar.make(pagerFragment.getView(), R.string.y_photopicker_deleted_a_photo, Snackbar.LENGTH_LONG);
-//      if (pagerFragment.getPaths().size() <= 1) {
+//      if (pagerFragment.getPathList().size() <= 1) {
 //
 //        // show confirm dialog
 //        new AlertDialog.Builder(this)
@@ -144,17 +168,17 @@ public class PhotoPagerActivity extends AppCompatActivity {
 //
 //        snackbar.show();
 //
-//        pagerFragment.getPaths().remove(index);
+//        pagerFragment.getPathList().remove(index);
 //        pagerFragment.getViewPager().getAdapter().notifyDataSetChanged();
 //      }
 //
 //      snackbar.setAction(R.string.y_photopicker_undo, new View.OnClickListener() {
 //        @Override
 //        public void onClick(View view) {
-//          if (pagerFragment.getPaths().size() > 0) {
-//            pagerFragment.getPaths().add(index, deletedPath);
+//          if (pagerFragment.getPathList().size() > 0) {
+//            pagerFragment.getPathList().add(index, deletedPath);
 //          } else {
-//            pagerFragment.getPaths().add(deletedPath);
+//            pagerFragment.getPathList().add(deletedPath);
 //          }
 //          pagerFragment.getViewPager().getAdapter().notifyDataSetChanged();
 //          pagerFragment.getViewPager().setCurrentItem(index, true);
@@ -168,7 +192,7 @@ public class PhotoPagerActivity extends AppCompatActivity {
 //  }
 //
 //  public void updateActionBarTitle() {
-//    tv_count.setText("" + (pagerFragment.getViewPager().getCurrentItem() + 1) + "/" + pagerFragment.getPaths().size());
+//    tv_count.setText("" + (pagerFragment.getViewPager().getCurrentItem() + 1) + "/" + pagerFragment.getPathList().size());
 //  }
 //
 //  /**
@@ -230,5 +254,5 @@ public class PhotoPagerActivity extends AppCompatActivity {
 //    }
 //    return fileName;
 //  }
-  }
-}
+//
+//}

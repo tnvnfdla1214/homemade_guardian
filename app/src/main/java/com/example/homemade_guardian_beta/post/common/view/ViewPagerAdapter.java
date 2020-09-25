@@ -22,11 +22,14 @@ import java.util.ArrayList;
 public class ViewPagerAdapter extends PagerAdapter {
     private ArrayList<String> ArrayList_ImageList = new ArrayList<String>();      //받아온 이미지리스트
     private Context Context;
+    private String ViewpagerState;
 
-    public ViewPagerAdapter(Context Context, ArrayList<String> ArrayList_ImageList)
+    public ViewPagerAdapter(Context Context, ArrayList<String> ArrayList_ImageList,String ViewpagerState)
     {
         this.Context = Context;
         this.ArrayList_ImageList = ArrayList_ImageList;
+        this.ViewpagerState = ViewpagerState;
+
     }
 
     //로그를 찍어본다면 이미 이미지의 정보를 ArrayList_ImageList에 갖고 왔으므로 Glide로 생성만 해준다.
@@ -38,9 +41,11 @@ public class ViewPagerAdapter extends PagerAdapter {
         view.setOnClickListener( new View.OnClickListener() {
             public void onClick(View m) {
                 Log.d("민규","ㅁ");
-                Intent Intent_ViewPagerViewer = new Intent(Context, EnlargeImageActivity.class);
-                Intent_ViewPagerViewer.putExtra("postImage",ArrayList_ImageList);
-                Context.startActivity(Intent_ViewPagerViewer);
+                if(ViewpagerState.equals("Enable")){
+                    Intent Intent_ViewPagerViewer = new Intent(Context, EnlargeImageActivity.class);
+                    Intent_ViewPagerViewer.putExtra("postImage",ArrayList_ImageList);
+                    Context.startActivity(Intent_ViewPagerViewer);
+                }
             }
         });
         ImageView Post_ImageView = view.findViewById(R.id.PostActivity_Post_ImageView);

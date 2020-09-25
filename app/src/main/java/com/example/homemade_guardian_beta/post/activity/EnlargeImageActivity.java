@@ -27,9 +27,10 @@ public class EnlargeImageActivity extends BasicActivity  {
 
         ImageList = (ArrayList<String>) getIntent().getSerializableExtra("postImage");
 
+        String ViewpagerState = "Disable";
         if(ImageList != null) {
             Viewpager = findViewById(R.id.ViewPager);
-            Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList));
+            Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList, ViewpagerState));
             CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
             indicator.setViewPager(Viewpager);
         }else{

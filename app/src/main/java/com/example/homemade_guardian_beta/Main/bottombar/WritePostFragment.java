@@ -173,7 +173,8 @@ public class WritePostFragment extends Fragment {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Viewpager.setClipToOutline(true);
                     }
-                    Viewpager.setAdapter(new ViewPagerAdapter(getContext(), ImageList));
+                    String ViewpagerState = "Disable";
+                    Viewpager.setAdapter(new ViewPagerAdapter(getContext(), ImageList, ViewpagerState));
                 }
                 Select_Post_Image_Button.setText(Html.fromHtml(selectedPhotos.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
 

@@ -136,7 +136,8 @@ public class ModifyPostActivity extends BasicActivity {
                 ModifyImageList = ArrayList_SelectedPhoto;
                 ImageList = null;
                 if(ModifyImageList != null) {
-                    Viewpager.setAdapter(new ViewPagerAdapter(getApplicationContext(), ModifyImageList));
+                    String ViewpagerState = "Disable";
+                    Viewpager.setAdapter(new ViewPagerAdapter(getApplicationContext(), ModifyImageList, ViewpagerState));
                 }
                 Select_Post_Image_Button.setText(Html.fromHtml(ArrayList_SelectedPhoto.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
             }
@@ -310,7 +311,8 @@ public class ModifyPostActivity extends BasicActivity {
             Selected_EditText.setText(Postmodel.getPostModel_Text());
             ImageList = Postmodel.getPostModel_ImageList();
             if(ImageList != null ){
-                Viewpager.setAdapter(new ViewPagerAdapter(getApplicationContext(), ImageList));
+                String ViewpagerState = "Disable";
+                Viewpager.setAdapter(new ViewPagerAdapter(getApplicationContext(), ImageList, ViewpagerState));
                 Select_Post_Image_Button.setText(Html.fromHtml(ImageList.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
             }
             Category = Postmodel.getPostModel_Category();

@@ -158,15 +158,9 @@ public class PostActivity extends BasicActivity {                               
         //뷰페이져
         ImageList = Postmodel.getPostModel_ImageList();
         if(ImageList != null) {
-            Log.d("클릭","1");
-            ViewPagerLayout = (ConstraintLayout) findViewById(R.id.ViewPagerLayout);
-            Log.d("클릭","2");
-            ViewPagerLayout.setOnClickListener(onClickListener);
-            Log.d("클릭","3");
+            String ViewpagerState = "Enable";
             Viewpager = findViewById(R.id.ViewPager);
-            Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList));
-            Viewpager.setOnClickListener(onClickListener);
-
+            Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList, ViewpagerState));
 
             CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
             indicator.setViewPager(Viewpager);
@@ -239,8 +233,9 @@ public class PostActivity extends BasicActivity {                               
                     TextContents_TextView.setText(Postmodel.getPostModel_Text());
                     ImageList = Postmodel.getPostModel_ImageList();
                     if(ImageList != null) {
+                        String ViewpagerState = "Enable";
                         Viewpager = findViewById(R.id.ViewPager);
-                        Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList));
+                        Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList, ViewpagerState));
                         CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
                         indicator.setViewPager(Viewpager);
                     }else{
@@ -342,7 +337,7 @@ public class PostActivity extends BasicActivity {                               
                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                     //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
                     Intent_ChatActivity.putExtra("To_User_Uid", Postmodel.getPostModel_Host_Uid());
-                    Intent_ChatActivity.putExtra("PostModel_Post_Uid",Postmodel.getPostModel_Post_Uid());
+                    Intent_ChatActivity.putExtra("PostModel_Post_Uid", Postmodel.getPostModel_Post_Uid());
                     startActivity(Intent_ChatActivity);
                     break;
                 case R.id.Comment_Write_Button:
@@ -352,7 +347,7 @@ public class PostActivity extends BasicActivity {                               
                     //비행기 보양 눌렀을 때 사라졌던 채팅버튼
                     InputMethodManager immhide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                    if(!CurrentUid.equals(Postmodel.getPostModel_Host_Uid())){
+                    if (!CurrentUid.equals(Postmodel.getPostModel_Host_Uid())) {
                         Chat_With_PostHost_Button.setVisibility(View.VISIBLE);
                     }
                     break;
@@ -366,46 +361,43 @@ public class PostActivity extends BasicActivity {                               
                 case R.id.Scrollbar:
                     InputMethodManager immHide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     immHide.hideSoftInputFromWindow(Comment_Input_EditText.getWindowToken(), 0);
-                    if(!CurrentUid.equals(Postmodel.getPostModel_Host_Uid())){
+                    if (!CurrentUid.equals(Postmodel.getPostModel_Host_Uid())) {
                         Chat_With_PostHost_Button.setVisibility(View.VISIBLE);
                     }
                     break;
                 case R.id.Like_ImageButton:
                     int Check_Like = 0;
-                    for(int count = 0 ; count < Postmodel.getPostModel_LikeList().size() ; count ++){
-                        if(CurrentUid.equals(Postmodel.getPostModel_LikeList().get(count))){
+                    for (int count = 0; count < Postmodel.getPostModel_LikeList().size(); count++) {
+                        if (CurrentUid.equals(Postmodel.getPostModel_LikeList().get(count))) {
                             Toast.makeText(getApplicationContext(), "이미 좋아요를 누르셨습니다.", Toast.LENGTH_SHORT).show();
                             Check_Like++;
                         }
                     }
-                    if(Check_Like == 0){
+                    if (Check_Like == 0) {
                         Glide.with(getApplicationContext()).load(R.drawable.heart).into(Like_ImageButton);
                         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
                         ArrayList<String> LikeList = new ArrayList<>();
-                        final DocumentReference documentReference =firebaseFirestore.collection("POSTS").document(Postmodel.getPostModel_Post_Uid());
+                        final DocumentReference documentReference = firebaseFirestore.collection("POSTS").document(Postmodel.getPostModel_Post_Uid());
                         LikeList = Postmodel.getPostModel_LikeList();
                         LikeList.add(CurrentUid);
-                       if(LikeList.size()>0){
-                           Postmodel.setPostModel_HotPost("O");
-                       }
+                        if (LikeList.size() > 0) {
+                            Postmodel.setPostModel_HotPost("O");
+                        }
                         Postmodel.setPostModel_LikeList(LikeList);
 
                         documentReference.set(Postmodel.getPostInfo())
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
-                                    public void onSuccess(Void aVoid) { }})
+                                    public void onSuccess(Void aVoid) {
+                                    }
+                                })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
-                                    public void onFailure(@NonNull Exception e) { }
+                                    public void onFailure(@NonNull Exception e) {
+                                    }
                                 });
                         Like_TextView.setText(String.valueOf(Postmodel.getPostModel_LikeList().size()));
                     }
-                    break;
-                case R.id.ViewPager:
-                    Log.d("클릭","ㅁ");
-                    Intent Intent_ViewPagerViewer = new Intent(getApplicationContext(), EnlargeImageActivity.class);
-                    Intent_ViewPagerViewer.putExtra("postInfo",Postmodel);
-                    startActivity(Intent_ViewPagerViewer);
                     break;
             }
         }

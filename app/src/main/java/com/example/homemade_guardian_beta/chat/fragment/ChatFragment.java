@@ -800,9 +800,11 @@ public class ChatFragment extends Fragment {
             if (msgLine_item!=null) {
                 msgLine_item.setOnClickListener(downloadClickListener);
             }
+            /*
             if (Message_Image_ImageView !=null) {                                       // for image
                 Message_Image_ImageView.setOnClickListener(imageClickListener);
             }
+            */
         }
         // 파일 다운로드및 열기 버튼 함수
         Button.OnClickListener downloadClickListener = new View.OnClickListener() {

@@ -163,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                
                 //Snackbar.make(textView,"아니오 버튼이 눌렸습니다.",Snackbar.LENGTH_LONG).show();
             }
         });

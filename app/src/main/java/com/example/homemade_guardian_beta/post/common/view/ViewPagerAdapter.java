@@ -1,6 +1,8 @@
 package com.example.homemade_guardian_beta.post.common.view;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +10,10 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 import com.bumptech.glide.Glide;
+import com.example.homemade_guardian_beta.Main.activity.HostModelActivity;
 import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.post.activity.EnlargeImageActivity;
+
 import java.util.ArrayList;
 
 //뷰페이져에서 이미지리스트의 string으로 저장된 이미지들을 imageList에 넣어서 PostActivity에서 슬라이드하여 이미지들을 볼 수 있게 해준다.
@@ -30,6 +35,14 @@ public class ViewPagerAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         LayoutInflater Inflater = (LayoutInflater) Context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = Inflater.inflate(R.layout.post_silder, null);
+        view.setOnClickListener( new View.OnClickListener() {
+            public void onClick(View m) {
+                Log.d("민규","ㅁ");
+                Intent Intent_ViewPagerViewer = new Intent(Context, EnlargeImageActivity.class);
+                Intent_ViewPagerViewer.putExtra("postImage",ArrayList_ImageList);
+                Context.startActivity(Intent_ViewPagerViewer);
+            }
+        });
         ImageView Post_ImageView = view.findViewById(R.id.PostActivity_Post_ImageView);
         //Glide.with(view).load(ArrayList_ImageList.get(position)).into(Post_ImageView);
         Glide.with(view).load(ArrayList_ImageList.get(position)).centerCrop().override(500).thumbnail(0.1f).into(Post_ImageView);

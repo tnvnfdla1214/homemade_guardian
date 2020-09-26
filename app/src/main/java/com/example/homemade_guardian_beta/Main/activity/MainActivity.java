@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.homemade_guardian_beta.Main.bottombar.ChatroomListFragment;
@@ -19,7 +20,6 @@ import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -29,10 +29,21 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class MainActivity extends AppCompatActivity {
 
     private String LocalState = null;
+    HomeFragment homeFragment;
+    WritePostFragment writepostFragment;
+    ChatroomListFragment chatroomFragment;
+    MyInfoFragment myinfoFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        homeFragment = new HomeFragment();
+        writepostFragment = new WritePostFragment();
+        chatroomFragment = new ChatroomListFragment();
+        myinfoFragment = new MyInfoFragment();
+
+
         init();
     }
 
@@ -60,7 +71,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-    public void test(){
+    //ChatRoomListFragment가 한번에 ChatActivity의 함수를 불러올수 없으므로 만든 험슈
+    public void ChatRoomListUserGoOutArtichecture(){
         ((ChatActivity)ChatActivity.mcontext).ChatFragment_User_GoOut();
     }
 
@@ -69,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
         if (firebaseUser == null) {
             myStartActivity(LoginActivity.class);                                                              // part5 : 로그인 정보 없으면 회원가입 화면으로
         } else {
-            //myStartActivity(CameraActivity.class);                                                            // part5 : test
             DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(firebaseUser.getUid());
             documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -88,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        HomeFragment homeFragment = new HomeFragment();
+        //HomeFragment homeFragment = new HomeFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, homeFragment)
                 .commit();
@@ -99,36 +110,41 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home:
-                        HomeFragment homeFragment = new HomeFragment();
                         if(LocalState.equals("writepost")){
-                            showMessage(homeFragment);
+                            if(writepostFragment.WritePostFragmentDataCheck()){
+                                showMessage(homeFragment);
+                            };
                         }else{
                             getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
                         }
                         LocalState = "home";
                         return true;
                     case R.id.writepost:
-                        WritePostFragment writepostFragment = new WritePostFragment();
+                        //WritePostFragment writepostFragment = new WritePostFragment();
                         if(LocalState.equals("writepost")){
-                            showMessage(writepostFragment);
+                            return false;
                         }else{
                             getSupportFragmentManager().beginTransaction().replace(R.id.container, writepostFragment).commit();
                         }
                         LocalState = "writepost";
                         return true;
                     case R.id.chatroomlist:
-                        ChatroomListFragment chatroomFragment = new ChatroomListFragment();
+                        //ChatroomListFragment chatroomFragment = new ChatroomListFragment();
                         if(LocalState.equals("writepost")){
-                            showMessage(chatroomFragment);
+                            if(writepostFragment.WritePostFragmentDataCheck()){
+                                showMessage(homeFragment);
+                            };
                         }else{
                             getSupportFragmentManager().beginTransaction().replace(R.id.container, chatroomFragment).commit();
                         }
                         LocalState = "chatroomlist";
                         return true;
                     case R.id.myinfo:
-                        MyInfoFragment myinfoFragment = new MyInfoFragment();
+                        //MyInfoFragment myinfoFragment = new MyInfoFragment();
                         if(LocalState.equals("writepost")){
-                            showMessage(myinfoFragment);
+                            if(writepostFragment.WritePostFragmentDataCheck()){
+                                showMessage(homeFragment);
+                            };
                         }else{
                             getSupportFragmentManager().beginTransaction().replace(R.id.container, myinfoFragment).commit();
                         }

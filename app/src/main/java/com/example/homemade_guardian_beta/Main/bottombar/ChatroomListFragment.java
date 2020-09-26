@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -284,7 +282,7 @@ public class ChatroomListFragment extends Fragment {
         public void onRightClick(int position, RecyclerView.ViewHolder viewHolder) { ;
             RoomUid = RoomList.get(position).getChatRoomListModel_RoomUid();           // position으로 ID를 get
             ToUserUid = RoomList.get(position).getChatRoomListModel_ToUserUid();
-            ((MainActivity) getActivity()).test();
+            ((MainActivity) getActivity()).ChatRoomListUserGoOutArtichecture();
             Firebasehelper.ROOMS_USERS_OUT_CHECK(RoomUid,My_User_Uid,ToUserUid);
             RoomList.remove(position);                         // 해당 position의 리스트의 데이터도 삭제한다.
             notifyItemRemoved(position);

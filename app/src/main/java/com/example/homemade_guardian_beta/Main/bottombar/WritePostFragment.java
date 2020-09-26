@@ -80,6 +80,10 @@ public class WritePostFragment extends Fragment {
     private ImageView WorkPostbtn;
     private String Category = null;
 
+    private String title;
+    private String textcontents;
+
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,6 +136,7 @@ public class WritePostFragment extends Fragment {
                 }
             }
         });
+
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
@@ -249,8 +254,8 @@ public class WritePostFragment extends Fragment {
     };
 
     private void storageUpload() {
-        final String title = ((EditText) getView().findViewById(R.id.Post_Title_EditText)).getText().toString();
-        final String textcontents = ((EditText) getView().findViewById(R.id.contentsEditText)).getText().toString();
+        title = ((EditText) getView().findViewById(R.id.Post_Title_EditText)).getText().toString();
+        textcontents = ((EditText) getView().findViewById(R.id.contentsEditText)).getText().toString();
         final ArrayList<String> LikeList = new ArrayList<>();
         final String HotPost = "X";
 
@@ -346,5 +351,14 @@ public class WritePostFragment extends Fragment {
         Intent intent = new Intent(getActivity(), c);
         intent.putExtra(INTENT_MEDIA, media);
         startActivityForResult(intent, requestCode);
+    }
+
+    public Boolean WritePostFragmentDataCheck(){
+        title = ((EditText) getView().findViewById(R.id.Post_Title_EditText)).getText().toString();
+        textcontents = ((EditText) getView().findViewById(R.id.contentsEditText)).getText().toString();
+        if(title.length()!=0||title.length()!=0){
+            return true;
+        }
+        return false;
     }
 }

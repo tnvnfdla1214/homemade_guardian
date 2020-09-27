@@ -89,6 +89,8 @@ public class SearchResultFragment extends Fragment {
                                             document.getId(),
                                             document.getData().get("PostModel_Category").toString(),
                                             (ArrayList<String>) document.getData().get("PostModel_LikeList"),
+                                            document.getData().get("PostModel_HotPost").toString(),
+                                            document.getData().get("PostModel_HotPost").toString(),
                                             document.getData().get("PostModel_HotPost").toString()));
                                 }
                                 title = null;

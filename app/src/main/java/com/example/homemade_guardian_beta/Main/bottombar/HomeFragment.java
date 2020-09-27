@@ -349,7 +349,11 @@ public class HomeFragment extends Fragment {
                                         document.getId(),
                                         document.getData().get("PostModel_Category").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_LikeList"),
-                                        document.getData().get("PostModel_HotPost").toString()));
+                                        document.getData().get("PostModel_HotPost").toString(),
+                                        document.getData().get("PostModel_HotPost").toString(),
+                                        document.getData().get("PostModel_HotPost").toString()
+                                        )
+                                );
                         }
                             homeAdapter.notifyDataSetChanged();
                         } else {
@@ -389,7 +393,10 @@ public class HomeFragment extends Fragment {
                                             document.getId(),
                                             document.getData().get("PostModel_Category").toString(),
                                             (ArrayList<String>) document.getData().get("PostModel_LikeList"),
-                                            document.getData().get("PostModel_HotPost").toString()));
+                                            document.getData().get("PostModel_HotPost").toString(),
+                                            document.getData().get("PostModel_HotPost").toString(),
+                                            document.getData().get("PostModel_HotPost").toString()
+                                    ));
                                 }
                                 HotPostCut = 0;
                             }
@@ -428,7 +435,10 @@ public class HomeFragment extends Fragment {
                                         document.getId(),
                                         document.getData().get("PostModel_Category").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_LikeList"),
-                                        document.getData().get("PostModel_HotPost").toString()));
+                                        document.getData().get("PostModel_HotPost").toString(),
+                                        document.getData().get("PostModel_HotPost").toString(),
+                                        document.getData().get("PostModel_HotPost").toString()
+                                ));
                             }
                             homeAdapter.notifyDataSetChanged();
                         } else {
@@ -465,7 +475,10 @@ public class HomeFragment extends Fragment {
                                         document.getId(),
                                         document.getData().get("PostModel_Category").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_LikeList"),
-                                        document.getData().get("PostModel_HotPost").toString()));
+                                        document.getData().get("PostModel_HotPost").toString(),
+                                        document.getData().get("PostModel_HotPost").toString(),
+                                        document.getData().get("PostModel_HotPost").toString()
+                                ));
                             }
                             homeAdapter.notifyDataSetChanged();
                         } else {
@@ -502,7 +515,10 @@ public class HomeFragment extends Fragment {
                                         document.getId(),
                                         document.getData().get("PostModel_Category").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_LikeList"),
-                                        document.getData().get("PostModel_HotPost").toString()));
+                                        document.getData().get("PostModel_HotPost").toString(),
+                                        document.getData().get("PostModel_HotPost").toString(),
+                                        document.getData().get("PostModel_HotPost").toString()
+                                ));
                             }
                             homeAdapter.notifyDataSetChanged();
                         } else {
@@ -539,7 +555,10 @@ public class HomeFragment extends Fragment {
                                         document.getId(),
                                         document.getData().get("PostModel_Category").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_LikeList"),
-                                        document.getData().get("PostModel_HotPost").toString()));
+                                        document.getData().get("PostModel_HotPost").toString(),
+                                        document.getData().get("PostModel_HotPost").toString(),
+                                        document.getData().get("PostModel_HotPost").toString()
+                                ));
                             }
                             homeAdapter.notifyDataSetChanged();
                         } else {

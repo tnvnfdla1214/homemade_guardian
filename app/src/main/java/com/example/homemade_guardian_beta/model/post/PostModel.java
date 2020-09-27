@@ -41,8 +41,10 @@ public class PostModel implements Serializable {                                
     private String PostModel_Category;            //게시물의 카테고리
     private ArrayList<String> PostModel_LikeList;  //게시물의 좋아요 리스트
     private String PostModel_HotPost;
+    private String PostModel_reservation;             //게시자가 예약을 할때 안했을때는 0 했다면 1
+    private String PostModel_deal;                    //게시물이 거래 안했을때 0, 했으면 1
 
-    public PostModel(String PostModel_Title, String PostModel_Text ,ArrayList<String> PostModel_ImageList, Date PostModel_DateOfManufacture, String PostModel_Host_Uid, String PostModel_Post_Uid, String PostModel_Category,ArrayList<String> PostModel_LikeList, String PostModel_HotPost){
+    public PostModel(String PostModel_Title, String PostModel_Text ,ArrayList<String> PostModel_ImageList, Date PostModel_DateOfManufacture, String PostModel_Host_Uid, String PostModel_Post_Uid, String PostModel_Category,ArrayList<String> PostModel_LikeList, String PostModel_HotPost,String PostModel_reservation,String PostModel_deal){
         this.PostModel_Title = PostModel_Title;
         this.PostModel_Text = PostModel_Text;
         this.PostModel_ImageList = PostModel_ImageList;
@@ -52,9 +54,10 @@ public class PostModel implements Serializable {                                
         this.PostModel_Category = PostModel_Category;
         this.PostModel_LikeList = PostModel_LikeList;
         this.PostModel_HotPost = PostModel_HotPost;
-
+        this.PostModel_reservation = PostModel_reservation;
+        this.PostModel_deal = PostModel_deal;
     }
-    public PostModel(String PostModel_Title, String PostModel_Text ,Date PostModel_DateOfManufacture, String PostModel_Host_Uid, String PostModel_Post_Uid, String PostModel_Category, ArrayList<String> PostModel_LikeList, String PostModel_HotPost){
+    public PostModel(String PostModel_Title, String PostModel_Text ,Date PostModel_DateOfManufacture, String PostModel_Host_Uid, String PostModel_Post_Uid, String PostModel_Category, ArrayList<String> PostModel_LikeList, String PostModel_HotPost,String PostModel_reservation,String PostModel_deal){
         this.PostModel_Title = PostModel_Title;
         this.PostModel_Text = PostModel_Text;
         this.PostModel_DateOfManufacture = PostModel_DateOfManufacture;
@@ -63,6 +66,8 @@ public class PostModel implements Serializable {                                
         this.PostModel_Category = PostModel_Category;
         this.PostModel_LikeList = PostModel_LikeList;
         this.PostModel_HotPost = PostModel_HotPost;
+        this.PostModel_reservation = PostModel_reservation;
+        this.PostModel_deal = PostModel_deal;
     }
 
     public Map<String, Object> getPostInfo(){
@@ -76,6 +81,8 @@ public class PostModel implements Serializable {                                
         docData.put("PostModel_Category", PostModel_Category);
         docData.put("PostModel_LikeList", PostModel_LikeList);
         docData.put("PostModel_HotPost", PostModel_HotPost);
+        docData.put("PostModel_reservation", PostModel_reservation);
+        docData.put("PostModel_deal", PostModel_deal);
 
         return  docData;
     }
@@ -113,4 +120,12 @@ public class PostModel implements Serializable {                                
         return this.PostModel_HotPost;
     }
     public void setPostModel_HotPost(String PostModel_HotPost){ this.PostModel_HotPost = PostModel_HotPost; }
+    public String getPostModel_reservation(){
+        return this.PostModel_reservation;
+    }
+    public void setPostModel_reservation(String PostModel_reservation){ this.PostModel_reservation = PostModel_reservation; }
+    public String getPostModel_deal(){
+        return this.PostModel_deal;
+    }
+    public void setPostModel_deal(String PostModel_deal){ this.PostModel_deal = PostModel_deal; }
 }

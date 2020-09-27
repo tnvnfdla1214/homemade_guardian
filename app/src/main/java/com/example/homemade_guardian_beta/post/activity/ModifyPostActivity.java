@@ -212,6 +212,8 @@ public class ModifyPostActivity extends BasicActivity {
         String Post_Uid = Postmodel.getPostModel_Post_Uid();
         final ArrayList<String> LikeList = Postmodel.getPostModel_LikeList();
         final String HotPost = Postmodel.getPostModel_HotPost();
+        final String PostModel_reservation = Postmodel.getPostModel_reservation();
+        final String PostModel_deal = Postmodel.getPostModel_deal();
         if (Title.length() > 0 && Category != null) {
             LoaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
             CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -252,7 +254,7 @@ public class ModifyPostActivity extends BasicActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {                                             // part11 : SUCCEESSCOUNT 개의 사진 (37')
                                         contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                        PostModel Postmodel = new PostModel(Title, TextContents, contentsList,  DateOfManufacture, CurrentUser.getUid(), Get_PostUid, Category, LikeList, HotPost);
+                                        PostModel Postmodel = new PostModel(Title, TextContents, contentsList,  DateOfManufacture, CurrentUser.getUid(), Get_PostUid, Category, LikeList, HotPost,PostModel_reservation,PostModel_deal);
                                         Postmodel.setPostModel_Post_Uid(Get_PostUid);
                                         Modify_Store_Upload(docRef_POSTS_PostUid, Postmodel);
                                     }
@@ -265,7 +267,7 @@ public class ModifyPostActivity extends BasicActivity {
                     PathCount++;
                 }
                 if (ArrayList_SelectedPhoto.size() == 0) {
-                    PostModel Postmodel = new PostModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Post_Uid, Category, LikeList, HotPost);
+                    PostModel Postmodel = new PostModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Post_Uid, Category, LikeList, HotPost,PostModel_reservation,PostModel_deal);
                     Postmodel.setPostModel_Post_Uid(Post_Uid);
                     Modify_Store_Upload(docRef_POSTS_PostUid,Postmodel);
                 }

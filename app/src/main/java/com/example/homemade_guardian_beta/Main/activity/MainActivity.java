@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         LocalState = "home";
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);            // part22 : 바텀 네비게이션바  설정 (47'20")
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
@@ -120,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
                         LocalState = "home";
                         return true;
                     case R.id.writepost:
-                        //WritePostFragment writepostFragment = new WritePostFragment();
                         if(LocalState.equals("writepost")){
                             return false;
                         }else{
@@ -129,7 +129,6 @@ public class MainActivity extends AppCompatActivity {
                         LocalState = "writepost";
                         return true;
                     case R.id.chatroomlist:
-                        //ChatroomListFragment chatroomFragment = new ChatroomListFragment();
                         if(LocalState.equals("writepost")){
                             if(writepostFragment.WritePostFragmentDataCheck()){
                                 showMessage(homeFragment);
@@ -140,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
                         LocalState = "chatroomlist";
                         return true;
                     case R.id.myinfo:
-                        //MyInfoFragment myinfoFragment = new MyInfoFragment();
                         if(LocalState.equals("writepost")){
                             if(writepostFragment.WritePostFragmentDataCheck()){
                                 showMessage(homeFragment);
@@ -179,8 +177,8 @@ public class MainActivity extends AppCompatActivity {
         builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                
-                //Snackbar.make(textView,"아니오 버튼이 눌렸습니다.",Snackbar.LENGTH_LONG).show();
+                BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+                bottomNavigationView.setSelectedItemId(R.id.writepost);
             }
         });
 

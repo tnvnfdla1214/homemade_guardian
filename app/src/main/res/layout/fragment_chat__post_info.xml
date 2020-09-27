@@ -19,7 +19,7 @@
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+        android:layout_width="230dp"
         android:layout_height="match_parent"
         android:orientation="vertical">
         <TextView
@@ -35,6 +35,39 @@
             android:paddingTop="3dp"
             android:text="포스트 내용"
             android:textSize="17dp"/>
+        </LinearLayout>
+    <Button
+        android:id="@+id/Chat_PostInfo_reservation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="예약"
+        android:textSize="15dp"/>
+
+    <LinearLayout
+        android:id="@+id/Chat_PostInfo_reservation_LinearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+
+        <Button
+            android:id="@+id/Chat_PostInfo_reservation_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="예약 취소"
+            android:textSize="10dp"/>
+
+        <Button
+            android:id="@+id/Chat_PostInfo_deal_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:text="거래 완료"
+            android:textSize="10dp"/>
+
         </LinearLayout>
     </LinearLayout>
 

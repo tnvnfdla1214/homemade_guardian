@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.kakao.auth.ApiErrorCode;
+import com.kakao.auth.AuthType;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
@@ -44,7 +46,10 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseUser currentUser=null;
 
     private GoogleSignInClient mGoogleSignInClient;
-    private SignInButton signInButton;
+    private SignInButton local_google_login;
+
+    private ImageView login_google;
+    private ImageView login_kakao;
 
     String KakaoPassword = "1234567890"; //카카오 패스워드
 
@@ -55,13 +60,26 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        signInButton = findViewById(R.id.signInButton);
+        local_google_login = findViewById(R.id.local_google_login);
 
         Firebaseauth = FirebaseAuth.getInstance();
 
+        login_google = findViewById(R.id.login_google);
+        login_kakao = findViewById(R.id.login_kakao);
+
         User_login_Check(); //유저 로그인 되어있는지 체크하는 함수
-        KaKaoLoginSession(); //카카오 세션 함수
         FirebaseAuthgoogle(); //구글 로그인 메인 함수(onCreate안의 함수)
+        
+        login_kakao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                KaKaoLoginSession(); //카카오 세션 함수
+            }
+        });
+
+
+        //KaKaoLoginSession(); //카카오 세션 함수
+        //FirebaseAuthgoogle(); //구글 로그인 메인 함수(onCreate안의 함수)
 
         ImageView charactor = (ImageView) findViewById(R.id.charactor);
         Glide.with(this).load(R.drawable.charactor).into(new DrawableImageViewTarget(charactor));
@@ -81,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
     public void KaKaoLoginSession(){
         sessionCallback = new SessionCallback(); //세션콜백 초기화
         Session.getCurrentSession().addCallback(sessionCallback);  //현재 세션에 콜백 붙임
+        Session.getCurrentSession().open(AuthType.KAKAO_LOGIN_ALL,this);
         Session.getCurrentSession().checkAndImplicitOpen();  //자동 로그인
     }
 
@@ -188,9 +207,18 @@ public class LoginActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        /*
+        local_google_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                googlesignIn();
+            }
+        });
+         */
+        login_google.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuthgoogle(); //구글 로그인 메인 함수(onCreate안의 함수)
                 googlesignIn();
             }
         });

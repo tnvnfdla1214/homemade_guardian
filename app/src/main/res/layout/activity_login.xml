@@ -26,26 +26,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/login_google"
-            android:padding="30dp"
+            android:id="@+id/login_google"
             >
         </ImageView>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/login_kakao"
-            android:padding="30dp"
+            android:id="@+id/login_kakao"
+
             >
         </ImageView>
     </LinearLayout>
     <com.kakao.usermgmt.LoginButton
-        android:id="@+id/com_kakao_login"
+        android:id="@+id/local_kakao_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
     />
 
     <com.google.android.gms.common.SignInButton
-        android:id="@+id/signInButton"
+        android:id="@+id/local_google_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"

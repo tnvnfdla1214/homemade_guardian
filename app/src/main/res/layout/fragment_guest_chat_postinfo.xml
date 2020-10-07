@@ -36,39 +36,15 @@
             android:text="포스트 내용"
             android:textSize="17dp"/>
         </LinearLayout>
-    <Button
-        android:id="@+id/Chat_PostInfo_reservation"
+
+    <TextView
+        android:id="@+id/Chat_PostInfo_dealText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="예약"
-        android:textSize="15dp"/>
+        android:textSize="20dp"/>
 
-    <LinearLayout
-        android:id="@+id/Chat_PostInfo_reservation_LinearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:orientation="vertical"
-        android:visibility="gone"
-        >
 
-        <Button
-            android:id="@+id/Chat_PostInfo_reservation_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:text="예약 취소"
-            android:textSize="10dp"/>
-
-        <Button
-            android:id="@+id/Chat_PostInfo_deal_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:text="거래 완료"
-            android:textSize="10dp"/>
-
-        </LinearLayout>
     </LinearLayout>
 
     <RelativeLayout

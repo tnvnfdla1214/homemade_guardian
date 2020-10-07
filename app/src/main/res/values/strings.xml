@@ -20,4 +20,8 @@
     <string name="y_photopicker_all_image">모든 이미지</string>
     <string name="y_photopicker_over_max_count_tips">최대 %1$d 개만 선택하실 수 있어요 :(</string>
     <string name="y_photopicker_image_count">%1$d</string>
+
+    <string name="naver_client_id">Us33ta7HvGEcHYlNgvFy</string>
+    <string name="naver_client_secret">4A5BUw37Si</string>
+    <string name="naver_client_name">Homemade_ Guardian_Beta</string>
 </resources>

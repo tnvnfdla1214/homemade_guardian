@@ -16,12 +16,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
-import com.example.homemade_guardian_beta.chat.fragment.Chat_PostInfoFragment;
-import com.example.homemade_guardian_beta.chat.fragment.GroupUserFragment;
+import com.example.homemade_guardian_beta.chat.fragment.Guest_Chat_PostInfoFragment;
+import com.example.homemade_guardian_beta.chat.fragment.Host_Chat_PostInfoFragment;
+import com.example.homemade_guardian_beta.model.UserModel;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
+import com.example.homemade_guardian_beta.model.post.PostModel;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.Serializable;
 
 
 //채팅방안 액티비티 -chatFragment랑 연결됨
@@ -29,7 +37,9 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
 
     private DrawerLayout drawerLayout;
     private ChatFragment chatFragment;
-    private Chat_PostInfoFragment chat_postInfoFragment;
+    private Host_Chat_PostInfoFragment hostChat_postInfoFragment;
+    private Guest_Chat_PostInfoFragment guestChat_postInfoFragment;
+    private String currentUser_Uid =null;
     String To_User_Uid;
     String ChatRoomListModel_RoomUid;
     String ChatRoomListModel_Title;
@@ -38,6 +48,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
     private MessageModel MessageModel;                    //UserModel 참조 선언
     FirebaseUser firebaseCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
     public static Context mcontext;
+    PostModel postModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +65,11 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         ChatRoomListModel_RoomUid = getIntent().getStringExtra("RoomUid");     //ChatRoomListFragment에서 받아옴
         ChatRoomListModel_Title = getIntent().getStringExtra("ChatRoomListModel_Title"); //ChatRoomListFragment에서 받아옴
         PostModel_Post_Uid = getIntent().getStringExtra("PostModel_Post_Uid"); //PostActivity에서 받아옴//ChatRoomListFragment에서 받아옴
+        currentUser_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();  //현재 누구냐의 따라 포스트 정보 프레그먼트가 달라진다.
+
 
         if (ChatRoomListModel_Title!=null) { actionBar.setTitle(ChatRoomListModel_Title); }
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-
         // chatting area
         chatFragment = ChatFragment.getInstance(To_User_Uid, ChatRoomListModel_RoomUid,PostModel_Post_Uid);
         getSupportFragmentManager()
@@ -70,13 +81,32 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
 
         mcontext = this;
 
-        //chat_postInfoFragment area
-        chat_postInfoFragment = new Chat_PostInfoFragment();
-        getSupportFragmentManager().beginTransaction().add(R.id.postinfoFragment, chat_postInfoFragment).commit();
-        Bundle Postbundle = new Bundle();
-        Postbundle.putString("PostModel_Post_Uid",PostModel_Post_Uid);
-        chat_postInfoFragment.setArguments(Postbundle);
+        //Chat_postInfoFragment area
+        DocumentReference docRef_USERS_HostUid = FirebaseFirestore.getInstance().collection("POSTS").document(PostModel_Post_Uid);
+        docRef_USERS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                postModel = documentSnapshot.toObject(PostModel.class);
+                //currentUser_Uid == PostModel_Host_Uid 일 경우 Host_Chat_PostInfoFragment를 띄우고 아니라면 guest_Chat_PostInfoFragment를 띄운다.
+                if(currentUser_Uid.equals(postModel.getPostModel_Host_Uid())){
 
+                    hostChat_postInfoFragment = new Host_Chat_PostInfoFragment();
+                    getSupportFragmentManager().beginTransaction().add(R.id.postinfoFragment, hostChat_postInfoFragment).commit();
+                    Bundle Postbundle = new Bundle();
+                    Postbundle.putString("PostModel_Post_Uid",PostModel_Post_Uid);
+                    Postbundle.putString("To_User_Uid",To_User_Uid);
+                    hostChat_postInfoFragment.setArguments(Postbundle);
+
+                }
+                else{
+                    guestChat_postInfoFragment = new Guest_Chat_PostInfoFragment();
+                    getSupportFragmentManager().beginTransaction().add(R.id.postinfoFragment, guestChat_postInfoFragment).commit();
+                    Bundle Postbundle = new Bundle();
+                    Postbundle.putString("PostModel_Post_Uid",PostModel_Post_Uid);
+                    guestChat_postInfoFragment.setArguments(Postbundle);
+                }
+            }
+        });
     }
 
 

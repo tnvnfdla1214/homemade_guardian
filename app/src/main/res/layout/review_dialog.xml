@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:textSize="16dp"
+        android:text="커스텀 다이얼로그"
+        android:background="@color/color_check"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000000"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="      "
+            android:textSize="25dp"/>
+        <CheckBox
+            android:id="@+id/kind"
+            android:layout_margin="3dp"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:button="@android:color/transparent"
+            android:background="@drawable/checkbox"
+            android:checked="false"
+            android:layout_gravity="center_vertical"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  친절함          "
+            android:textSize="25dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="      "
+            android:textSize="25dp"/>
+        <CheckBox
+            android:id="@+id/correct"
+            android:layout_margin="3dp"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:button="@android:color/transparent"
+            android:background="@drawable/checkbox"
+            android:checked="false"
+            android:layout_gravity="center_vertical"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  정확함"
+            android:textSize="25dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="      "
+            android:textSize="25dp"/>
+        <CheckBox
+            android:id="@+id/complete"
+            android:layout_margin="3dp"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:button="@android:color/transparent"
+            android:background="@drawable/checkbox"
+            android:checked="false"
+            android:layout_gravity="center_vertical"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  완벽함"
+            android:textSize="25dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="      "
+            android:textSize="25dp"/>
+        <CheckBox
+            android:id="@+id/bad"
+            android:layout_margin="3dp"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:button="@android:color/transparent"
+            android:background="@drawable/checkbox"
+            android:checked="false"
+            android:layout_gravity="center_vertical"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="  불쾌함"
+            android:textSize="25dp"
+            android:textColor="@color/color_red"/>
+    </LinearLayout>
+
+    <TextView
+    android:id="@+id/Writen_Review_TextView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text=""
+    android:layout_margin="15dp"
+    android:textSize="20dp"
+    android:textColor="#000000"/>
+
+    <Button
+        android:id="@+id/WriteReview_Button"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:textColor="#000000"
+        android:textSize="20dp"
+        android:background="@color/color_check"
+        android:text="후기 내용을 입력하세요."
+        android:layout_margin="10dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000000"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/okButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="확인"
+            android:textColor="#000000"
+            android:textSize="16dp"
+            android:background="#ffffff"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#000000" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="취소"
+            android:textColor="#000000"
+            android:textSize="16dp"
+            android:background="#ffffff"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000000"/>
+</LinearLayout>

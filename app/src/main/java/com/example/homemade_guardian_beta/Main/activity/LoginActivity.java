@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.example.homemade_guardian_beta.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -42,8 +45,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private GoogleSignInClient mGoogleSignInClient;
     private SignInButton signInButton;
+
     String KakaoPassword = "1234567890"; //카카오 패스워드
-    int OK =0; //카카오 로그인 체크 함수
 
     private static final int RC_SIGN_IN = 9001;
 
@@ -59,6 +62,10 @@ public class LoginActivity extends AppCompatActivity {
         User_login_Check(); //유저 로그인 되어있는지 체크하는 함수
         KaKaoLoginSession(); //카카오 세션 함수
         FirebaseAuthgoogle(); //구글 로그인 메인 함수(onCreate안의 함수)
+
+        ImageView charactor = (ImageView) findViewById(R.id.charactor);
+        Glide.with(this).load(R.drawable.charactor).into(new DrawableImageViewTarget(charactor));
+
     }
 
     //유저 로그인 되어있는지 체크하는 함수

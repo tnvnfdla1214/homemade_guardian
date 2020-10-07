@@ -1,6 +1,9 @@
 package com.example.homemade_guardian_beta.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserModel {
     private String UserModel_ID; //아이디
@@ -13,26 +16,45 @@ public class UserModel {
     private String UserModel_Address; //주소
     private String UserModel_ProfileImage; //프로필 사진
     private Date UserModel_DateOfManufacture; //생성일자
+    private ArrayList<String> UserModel_UnReViewList;  //리뷰를 작성하지 않은 리스트
 
-    public UserModel(String UserModel_Name, String UserModel_PhoneNumber, String UserModel_BirthDay, String UserModel_Address, Date UserModel_DateOfManufacture, String UserModel_ProfileImage){     // part5 : 생성자 초기화 (7')
+    public UserModel(String UserModel_Name, String UserModel_PhoneNumber, String UserModel_BirthDay, String UserModel_Address, Date UserModel_DateOfManufacture, String UserModel_ProfileImage, ArrayList<String> UserModel_UnReViewList){     // part5 : 생성자 초기화 (7')
         this.UserModel_Name = UserModel_Name;
         this.UserModel_PhoneNumber = UserModel_PhoneNumber;
         this.UserModel_BirthDay = UserModel_BirthDay;
         this.UserModel_Address = UserModel_Address;
         this.UserModel_DateOfManufacture = UserModel_DateOfManufacture;                                                                         // + : 사용자 리스트 수정 (날짜 정보 추가)
         this.UserModel_ProfileImage = UserModel_ProfileImage;
+        this.UserModel_UnReViewList = UserModel_UnReViewList;
+
     }
 
-    public UserModel(String UserModel_Name, String UserModel_PhoneNumber, String UserModel_BirthDay, Date UserModel_DateOfManufacture, String UserModel_Address){      // + : 사용자 리스트 수정(날짜 정보 추가)
+    public UserModel(String UserModel_Name, String UserModel_PhoneNumber, String UserModel_BirthDay, Date UserModel_DateOfManufacture, String UserModel_Address, ArrayList<String> UserModel_UnReViewList){      // + : 사용자 리스트 수정(날짜 정보 추가)
         this.UserModel_Name = UserModel_Name;
         this.UserModel_PhoneNumber = UserModel_PhoneNumber;
         this.UserModel_BirthDay = UserModel_BirthDay;
         this.UserModel_Address = UserModel_Address;
         this.UserModel_DateOfManufacture = UserModel_DateOfManufacture;
+        this.UserModel_UnReViewList = UserModel_UnReViewList;
     }
 
     public UserModel(){
+    }
 
+    public Map<String, Object> getUserInfo(){
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("UserModel_ID", UserModel_ID);
+        docData.put("UserModel_Uid", UserModel_Uid);
+        docData.put("UserModel_NickName", UserModel_NickName);
+        docData.put("UserModel_StateMassage", UserModel_StateMassage);
+        docData.put("UserModel_Name", UserModel_Name);
+        docData.put("UserModel_PhoneNumber", UserModel_PhoneNumber);
+        docData.put("UserModel_BirthDay", UserModel_BirthDay);
+        docData.put("UserModel_Address", UserModel_Address);
+        docData.put("UserModel_ProfileImage", UserModel_ProfileImage);
+        docData.put("UserModel_DateOfManufacture", UserModel_DateOfManufacture);
+        docData.put("UserModel_UnReViewList", UserModel_UnReViewList);
+        return  docData;
     }
 
     public String getUserModel_ID() {
@@ -111,4 +133,9 @@ public class UserModel {
     public Date getUserModel_DateOfManufacture() { return UserModel_DateOfManufacture; }
 
     public void setUserModel_DateOfManufacture(Date userModel_DateOfManufacture) { this.UserModel_DateOfManufacture = userModel_DateOfManufacture; }
+
+    public ArrayList<String> getUserModel_UnReViewList(){
+        return this.UserModel_UnReViewList;
+    }
+    public void setUserModel_UnReViewList(ArrayList<String> UserModel_UnReViewList){ this.UserModel_UnReViewList = UserModel_UnReViewList; }
 }

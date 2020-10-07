@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_PATH;
 import static com.example.homemade_guardian_beta.post.PostUtil.showToast;
@@ -126,9 +127,10 @@ public class MemberInitActivity extends BasicActivity {
             //스토리지의 USER/유저의 UID/이미지 들어가는곳  에다가 넣는다.
             final StorageReference ImageRef_USERS_Uid = Storagereference.child("USERS/" + CurrentUser.getUid() + "/USERSImage.jpg");
             final Date DateOfManufacture = new Date();                                                              // + : 사용자 리스트 수정 (현재 날짜 받아오기 [ 사진마다 달라서 그때 그댸 불르기])
+            final ArrayList<String> UserModel_UnReViewList = new ArrayList<>();
 
             if (SelectedImagePath == null) {                                                                      // part5 : 데이터 추가 (9'10")
-                UserModel userModel = new UserModel(My_Name_EditText, My_PhoneNumber_EditText, My_BirthDay_EditText, DateOfManufacture, My_Address_EditText);          // + : 사용자 리스트 수정 (가입날짜 추가[사진 없는 버전])
+                UserModel userModel = new UserModel(My_Name_EditText, My_PhoneNumber_EditText, My_BirthDay_EditText, DateOfManufacture, My_Address_EditText,UserModel_UnReViewList);          // + : 사용자 리스트 수정 (가입날짜 추가[사진 없는 버전])
                 userModel.setUserModel_Uid(CurrentUser.getUid());
                 userModel.setUserModel_ID(CurrentUser.getEmail());
                 userModel.setUserModel_NickName(extractIDFromEmail(CurrentUser.getEmail()));
@@ -150,7 +152,7 @@ public class MemberInitActivity extends BasicActivity {
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
                                 Uri DownloadUri = task.getResult();                                         // part7 : 입력한 회원정보를 DB에 저장 (28')
-                                UserModel Usermodel = new UserModel(My_Name_EditText, My_PhoneNumber_EditText, My_BirthDay_EditText, My_Address_EditText, DateOfManufacture, DownloadUri.toString());      // + : 사용자 리스트 수정 (가입날짜 추가)
+                                UserModel Usermodel = new UserModel(My_Name_EditText, My_PhoneNumber_EditText, My_BirthDay_EditText, My_Address_EditText, DateOfManufacture, DownloadUri.toString(),UserModel_UnReViewList);      // + : 사용자 리스트 수정 (가입날짜 추가)
                                 Usermodel.setUserModel_Uid(CurrentUser.getUid());
                                 Usermodel.setUserModel_ID(CurrentUser.getEmail());
                                 Usermodel.setUserModel_NickName(extractIDFromEmail(CurrentUser.getEmail()));

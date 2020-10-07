@@ -17,7 +17,7 @@
     <color name="color_696969">#696969</color>
     <color name="color_00000000">#00000000</color>
     <color name="color_4f696969">#4f696969</color>
-    <color name="color_000000">#000000</color>
+    <color name="black">#000000</color>
     <color name="color_9c9c9c">#9c9c9c</color>
     <color name="color_ffffff">#ffffff</color>
     <color name="img_loding_placeholder">#ffffff</color>
@@ -29,4 +29,7 @@
     <color name="color_505050">#505050</color>
     <color name="color_787878">#787878</color>
     <color name="color_Mint">#2fd8df</color>
+    <color name="color_red">#ff0000</color>
+    <color name="color_check">#5BADE1</color>
+    5BADE1
 </resources>

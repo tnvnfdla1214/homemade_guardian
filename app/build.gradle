@@ -77,17 +77,16 @@ dependencies {
 
     implementation 'me.relex:circleindicator:1.2.2'
 
-    /*
-    implementation 'androidx.browser:browser:1.0.0'
-    implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
-    implementation 'androidx.media:media:1.0.1'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.firebase:firebase-database:19.3.1'
-    implementation 'com.google.firebase:firebase-crashlytics:17.1.0'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    //implementation 'androidx.cardview:cardview:1.0.0'
-    //implementation 'androidx.recyclerview:recyclerview:1.0.0'
-     */
+    //네이버 로그인
+    implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'   // import from jcenter
+
+    // naveridlogin dependencies
+    def android_x_version = "1.0.0"
+    implementation "androidx.appcompat:appcompat:$android_x_version"
+    implementation "androidx.legacy:legacy-support-core-utils:$android_x_version"
+    implementation "androidx.browser:browser:$android_x_version"
+    implementation "androidx.legacy:legacy-support-v4:$android_x_version"
+
 
 }
 apply plugin: 'com.google.gms.google-services'

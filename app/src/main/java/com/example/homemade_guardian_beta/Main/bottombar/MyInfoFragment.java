@@ -110,7 +110,6 @@ public class MyInfoFragment extends Fragment {
             }
             Log.d("태그1","viewHolder.user_name"+user.getUserModel_NickName());
             viewHolder.user_name.setText(user.getUserModel_NickName());
-            viewHolder.user_msg.setText(user.getUserModel_StateMassage());
 
             if (user.getUserModel_ProfileImage()!=null) {
                 Glide.with(getActivity()).load(user.getUserModel_ProfileImage()).centerCrop().override(500).into(viewHolder.user_photo);

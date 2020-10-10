@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="University">
+        <item>홍익대학교</item>
+        <item>고려대학교</item>
+    </string-array>
+</resources>

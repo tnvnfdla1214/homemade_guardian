@@ -6,8 +6,8 @@
         <item name="colorPrimary">@color/color_Mint</item>
         <item name="colorPrimaryDark">@color/color_Mint</item>
         <item name="colorAccent">@color/colorAccent</item>
-
     </style>
+
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

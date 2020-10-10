@@ -69,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
 
         User_login_Check(); //유저 로그인 되어있는지 체크하는 함수
         FirebaseAuthgoogle(); //구글 로그인 메인 함수(onCreate안의 함수)
-        
+
         login_kakao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,6 +135,12 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(MeV2Response result) {
                     FirebaseAuthkakaologin(result.getKakaoAccount().getEmail(), KakaoPassword);
+
+
+
+                    //result.getKakaoAccount().getGender().getValue();
+                    //result.getKakaoAccount().getBirthday();
+                    //result.getNickname();
 
                 }
             });

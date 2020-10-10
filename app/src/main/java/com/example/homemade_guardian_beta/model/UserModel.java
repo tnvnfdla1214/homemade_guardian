@@ -8,54 +8,50 @@ import java.util.Map;
 public class UserModel {
     private String UserModel_ID; //아이디
     private String UserModel_Uid; //uid
-    private String UserModel_NickName; //지금은 tnvnfdla1214 -> 번듯한 오크 바뀌어야함
-    private String UserModel_StateMassage; //상태메세지
-    private String UserModel_Name; //이름
-    private String UserModel_PhoneNumber; //전화번호
+    private String UserModel_NickName; //지금은 tnvnfdla1214 -> 번듯한 오크 만약 이용자가 임력을 하지 않을 시 전에꺼로 한다.
     private String UserModel_BirthDay; //생일
-    private String UserModel_Address; //주소
+    private int UserModel_University; //학교 0 : 홍대 세종 , 1 : 고대세종
     private String UserModel_ProfileImage; //프로필 사진
     private Date UserModel_DateOfManufacture; //생성일자
     private ArrayList<String> UserModel_UnReViewList;  //리뷰를 작성하지 않은 리스트
 
-    public UserModel(String UserModel_Name, String UserModel_PhoneNumber, String UserModel_BirthDay, String UserModel_Address, Date UserModel_DateOfManufacture, String UserModel_ProfileImage, ArrayList<String> UserModel_UnReViewList){     // part5 : 생성자 초기화 (7')
-        this.UserModel_Name = UserModel_Name;
-        this.UserModel_PhoneNumber = UserModel_PhoneNumber;
+    public UserModel(String UserModel_NickName, String UserModel_BirthDay, Date UserModel_DateOfManufacture, int UserModel_University , String UserModel_ProfileImage, ArrayList<String> UserModel_UnReViewList){     // part5 : 생성자 초기화 (7')
+        this.UserModel_NickName = UserModel_NickName;
         this.UserModel_BirthDay = UserModel_BirthDay;
-        this.UserModel_Address = UserModel_Address;
-        this.UserModel_DateOfManufacture = UserModel_DateOfManufacture;                                                                         // + : 사용자 리스트 수정 (날짜 정보 추가)
+        this.UserModel_University = UserModel_University;
         this.UserModel_ProfileImage = UserModel_ProfileImage;
+        this.UserModel_DateOfManufacture = UserModel_DateOfManufacture;    // + : 사용자 리스트 수정 (날짜 정보 추가)
         this.UserModel_UnReViewList = UserModel_UnReViewList;
 
     }
 
-    public UserModel(String UserModel_Name, String UserModel_PhoneNumber, String UserModel_BirthDay, Date UserModel_DateOfManufacture, String UserModel_Address, ArrayList<String> UserModel_UnReViewList){      // + : 사용자 리스트 수정(날짜 정보 추가)
-        this.UserModel_Name = UserModel_Name;
-        this.UserModel_PhoneNumber = UserModel_PhoneNumber;
+    public UserModel(String UserModel_NickName,String UserModel_BirthDay, Date UserModel_DateOfManufacture, int UserModel_University, ArrayList<String> UserModel_UnReViewList){      // + : 사용자 리스트 수정(날짜 정보 추가)
+        this.UserModel_NickName = UserModel_NickName;
         this.UserModel_BirthDay = UserModel_BirthDay;
-        this.UserModel_Address = UserModel_Address;
         this.UserModel_DateOfManufacture = UserModel_DateOfManufacture;
+        this.UserModel_University = UserModel_University;
         this.UserModel_UnReViewList = UserModel_UnReViewList;
     }
 
     public UserModel(){
     }
 
+    //이걸로 후기 작성 모델 만들어도 될듯
+    /*
     public Map<String, Object> getUserInfo(){
         Map<String, Object> docData = new HashMap<>();
         docData.put("UserModel_ID", UserModel_ID);
         docData.put("UserModel_Uid", UserModel_Uid);
         docData.put("UserModel_NickName", UserModel_NickName);
-        docData.put("UserModel_StateMassage", UserModel_StateMassage);
-        docData.put("UserModel_Name", UserModel_Name);
-        docData.put("UserModel_PhoneNumber", UserModel_PhoneNumber);
         docData.put("UserModel_BirthDay", UserModel_BirthDay);
-        docData.put("UserModel_Address", UserModel_Address);
+        docData.put("UserModel_Address", UserModel_University);
         docData.put("UserModel_ProfileImage", UserModel_ProfileImage);
         docData.put("UserModel_DateOfManufacture", UserModel_DateOfManufacture);
         docData.put("UserModel_UnReViewList", UserModel_UnReViewList);
         return  docData;
     }
+
+     */
 
     public String getUserModel_ID() {
         return UserModel_ID;
@@ -81,31 +77,6 @@ public class UserModel {
         this.UserModel_NickName = userModel_NickName;
     }
 
-    public String getUserModel_StateMassage() {
-        return UserModel_StateMassage;
-    }
-
-    public void setUserModel_StateMassage(String userModel_StateMassage) {
-        this.UserModel_StateMassage = userModel_StateMassage;
-    }
-
-    //추가
-    public String getUserModel_Name(){
-        return this.UserModel_Name;
-    }
-
-    public void setUserModel_Name(String userModel_Name){
-        this.UserModel_Name = userModel_Name;
-    }
-
-    public String getUserModel_PhoneNumber(){
-        return this.UserModel_PhoneNumber;
-    }
-
-    public void setUserModel_PhoneNumber(String userModel_PhoneNumber){
-        this.UserModel_PhoneNumber = userModel_PhoneNumber;
-    }
-
     public String getUserModel_BirthDay(){
         return this.UserModel_BirthDay;
     }
@@ -114,12 +85,12 @@ public class UserModel {
         this.UserModel_BirthDay = userModel_BirthDay;
     }
 
-    public String getUserModel_Address(){
-        return this.UserModel_Address;
+    public int getUserModel_University(){
+        return this.UserModel_University;
     }
 
-    public void setUserModel_Address(String userModel_Address){
-        this.UserModel_Address = userModel_Address;
+    public void setUserModel_University(int UserModel_University){
+        this.UserModel_University = UserModel_University;
     }
 
     public String getUserModel_ProfileImage(){

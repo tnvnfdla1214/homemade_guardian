@@ -154,7 +154,7 @@ public class MemberInitActivity extends BasicActivity {
         final String UserModel_Nickname = Nickname.getText().toString();
 
 
-        if (UserModel_Nickname.length() > 0 && UserModel_Nickname.length() < 10) {
+        if (UserModel_Nickname.length() < 20) {
 
             LoaderLayout.setVisibility(View.VISIBLE);
             FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();
@@ -208,7 +208,7 @@ public class MemberInitActivity extends BasicActivity {
                 }
             }
         } else {
-            showToast(MemberInitActivity.this, "회원정보를 입력해주세요.");
+            showToast(MemberInitActivity.this, "닉네임은 최대 20자까지 가능합나다.");
         }
     }
 

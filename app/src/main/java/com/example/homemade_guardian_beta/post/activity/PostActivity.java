@@ -482,7 +482,7 @@ public class PostActivity extends BasicActivity {                               
             if (Commentmodel.getCommentModel_Host_Image()!=null) {
                 Glide.with(PostActivity.this).load(Commentmodel.getCommentModel_Host_Image()).centerInside().override(500).into(viewHolder.Comment_UserProfile_ImageView);
             } else{
-                Glide.with(PostActivity.this).load(R.drawable.user).into(viewHolder.Comment_UserProfile_ImageView);
+                Glide.with(PostActivity.this).load(R.drawable.none_profile_user).into(viewHolder.Comment_UserProfile_ImageView);
             }
 
             viewHolder.Comment_Menu_CardView.setOnClickListener(new View.OnClickListener() {

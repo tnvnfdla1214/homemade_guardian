@@ -33,7 +33,6 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:cardCornerRadius="100dp"
                     >
 
                     <ImageView
@@ -41,7 +40,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:adjustViewBounds="true"
-                        android:src="@drawable/userbasicimage" />
+                        android:src="@drawable/non_profile" />
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout

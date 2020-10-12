@@ -170,7 +170,7 @@ public class MemberInitActivity extends BasicActivity {
                 UserModel userModel = new UserModel(UserModel_Nickname, BirthDay,DateOfManufacture,UserModel_University,UserModel_UnReViewList);          // + : 사용자 리스트 수정 (가입날짜 추가[사진 없는 버전])
                 userModel.setUserModel_Uid(CurrentUser.getUid());
                 userModel.setUserModel_ID(CurrentUser.getEmail());
-                if(UserModel_Nickname.equals(null)){
+                if(UserModel_Nickname.equals("")){
                     userModel.setUserModel_NickName(extractIDFromEmail(CurrentUser.getEmail()));
                 }
                 MemberInit_Store_Uploader(userModel);
@@ -194,7 +194,7 @@ public class MemberInitActivity extends BasicActivity {
                                 UserModel Usermodel = new UserModel(UserModel_Nickname, BirthDay, DateOfManufacture, UserModel_University, DownloadUri.toString(),UserModel_UnReViewList);      // + : 사용자 리스트 수정 (가입날짜 추가)
                                 Usermodel.setUserModel_Uid(CurrentUser.getUid());
                                 Usermodel.setUserModel_ID(CurrentUser.getEmail());
-                                if(UserModel_Nickname.equals(null)){
+                                if(UserModel_Nickname.equals("")){
                                     Usermodel.setUserModel_NickName(extractIDFromEmail(CurrentUser.getEmail()));
                                 }
                                 MemberInit_Store_Uploader(Usermodel);

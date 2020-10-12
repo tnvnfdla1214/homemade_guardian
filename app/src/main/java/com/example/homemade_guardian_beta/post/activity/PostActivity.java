@@ -276,7 +276,9 @@ public class PostActivity extends BasicActivity {                               
                     Post_Host_Name_TextView.setText(Usermodel.getUserModel_NickName());
                 }
                 else{
-                    Glide.with(getApplicationContext()).load(R.drawable.user).into(Host_UserPage_ImageButton);
+                    Glide.with(getApplicationContext()).load(R.drawable.none_profile_user).into(Host_UserPage_ImageButton);
+                    Post_Host_Name_TextView = findViewById(R.id.Post_Host_Name);
+                    Post_Host_Name_TextView.setText(Usermodel.getUserModel_NickName());
                 }
             }
         });

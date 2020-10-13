@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -21,19 +20,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.photo.activity.PhotoPickerActivity;
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.post.PostModel;
-import com.example.homemade_guardian_beta.post.activity.GalleryActivity;
 import com.example.homemade_guardian_beta.post.common.view.ViewPagerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,7 +43,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.protobuf.StringValue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -56,7 +53,6 @@ import java.util.Date;
 import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_MEDIA;
-import static com.example.homemade_guardian_beta.post.PostUtil.GALLERY_IMAGE;
 
 public class WritePostFragment extends Fragment {
     private FirebaseUser currentUser;
@@ -82,6 +78,10 @@ public class WritePostFragment extends Fragment {
 
     private String title;
     private String textcontents;
+
+    /////////////////////////////////////////////////////
+    private ImageView imagelist0, imagelist1, imagelist2, imagelist3, imagelist4;
+    //////////////////////////////////////////////////////
 
 
 
@@ -142,6 +142,15 @@ public class WritePostFragment extends Fragment {
         storageRef = storage.getReference();
         postModel = (PostModel) getActivity().getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
 
+
+        /////////////////////////////////////////////////
+        imagelist0 = (ImageView)view.findViewById(R.id.imagelist0);
+        imagelist1 = (ImageView)view.findViewById(R.id.imagelist1);
+        imagelist2 = (ImageView)view.findViewById(R.id.imagelist2);
+        imagelist3 = (ImageView)view.findViewById(R.id.imagelist3);
+        imagelist4 = (ImageView)view.findViewById(R.id.imagelist4);
+        //////////////////////////////////////////////////
+
         return view;
     }
     @Override
@@ -182,6 +191,30 @@ public class WritePostFragment extends Fragment {
                     Viewpager.setAdapter(new ViewPagerAdapter(getContext(), ImageList, ViewpagerState));
                 }
                 Select_Post_Image_Button.setText(Html.fromHtml(selectedPhotos.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
+
+
+
+                ////////////////////////////////////////////////////////
+                for(int i=0;i<photos.size();i++){
+                    switch (i){
+                        case 0 :
+                            Glide.with(getActivity()).load(photos.get(0)).centerInside().override(500).into(imagelist0);
+                            break;
+                        case 1 :
+                            Glide.with(getActivity()).load(photos.get(1)).centerInside().override(500).into(imagelist1);
+                            break;
+                        case 2 :
+                            Glide.with(getActivity()).load(photos.get(2)).centerInside().override(500).into(imagelist2);
+                            break;
+                        case 3 :
+                            Glide.with(getActivity()).load(photos.get(3)).centerInside().override(500).into(imagelist3);
+                            break;
+                        case 4 :
+                            Glide.with(getActivity()).load(photos.get(4)).centerInside().override(500).into(imagelist4);
+                            break;
+
+                    }
+                }
 
             }
         }

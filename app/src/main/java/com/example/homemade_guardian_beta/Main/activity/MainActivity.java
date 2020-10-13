@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         chatroomFragment = new ChatroomListFragment();
         myinfoFragment = new MyInfoFragment();
 
-
         init();
     }
 

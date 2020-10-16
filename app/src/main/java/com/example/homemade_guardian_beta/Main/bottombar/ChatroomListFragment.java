@@ -35,7 +35,7 @@ import com.example.homemade_guardian_beta.chat.common.ItemTouchHelperCallback;
 import com.example.homemade_guardian_beta.chat.common.ItemTouchHelperListener;
 import com.example.homemade_guardian_beta.model.chat.ChatRoomListModel;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
-import com.example.homemade_guardian_beta.model.UserModel;
+import com.example.homemade_guardian_beta.model.user.UserModel;
 
 
 

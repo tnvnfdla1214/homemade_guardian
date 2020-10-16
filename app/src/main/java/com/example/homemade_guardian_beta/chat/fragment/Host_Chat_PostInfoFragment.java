@@ -2,7 +2,6 @@ package com.example.homemade_guardian_beta.chat.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +17,15 @@ import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.Main.activity.ReviewActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
-import com.example.homemade_guardian_beta.model.UserModel;
+import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.example.homemade_guardian_beta.model.post.PostModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 //호스트용 포스트 정보 프레그먼트
 public class Host_Chat_PostInfoFragment extends Fragment {
@@ -51,6 +47,7 @@ public class Host_Chat_PostInfoFragment extends Fragment {
     ArrayList<String> UnReViewList = new ArrayList<>();
 
     TextView main_label;
+    TextView selected_review;
 
     @Override
     public void onAttach(Context context) {
@@ -84,7 +81,7 @@ public class Host_Chat_PostInfoFragment extends Fragment {
         currentUser_Uid = Postbundle.getString("currentUser_Uid");
 
         main_label = (TextView) View.findViewById(R.id.main_label);
-
+        selected_review = (TextView) View.findViewById(R.id.selected_review);
 
 
         DocumentReference docRef_POSTS_HostUid = FirebaseFirestore.getInstance().collection("POSTS").document(PostModel_Post_Uid);
@@ -193,7 +190,7 @@ public class Host_Chat_PostInfoFragment extends Fragment {
                                 }
                             });
                     ReviewActivity reviewActivity = new ReviewActivity(getContext());
-                    reviewActivity.callFunction(main_label);
+                    reviewActivity.callFunction(main_label, selected_review);
 
                 }else{
                     DocumentReference docRef_POSTS_HostUid = FirebaseFirestore.getInstance().collection("POSTS").document(PostModel_Post_Uid);

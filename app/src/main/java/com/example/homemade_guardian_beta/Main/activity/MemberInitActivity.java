@@ -17,7 +17,7 @@ import android.widget.Spinner;
 
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.model.UserModel;
+import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.example.homemade_guardian_beta.post.activity.BasicActivity;
 import com.example.homemade_guardian_beta.post.activity.GalleryActivity;
 import com.google.android.gms.tasks.Continuation;

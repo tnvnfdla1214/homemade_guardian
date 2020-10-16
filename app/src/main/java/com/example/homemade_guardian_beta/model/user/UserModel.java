@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.model;
+package com.example.homemade_guardian_beta.model.user;
 
 import java.util.ArrayList;
 import java.util.Date;

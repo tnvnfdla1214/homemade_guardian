@@ -3,7 +3,6 @@ package com.example.homemade_guardian_beta.chat.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,7 +17,6 @@ import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
 import com.example.homemade_guardian_beta.chat.fragment.Guest_Chat_PostInfoFragment;
 import com.example.homemade_guardian_beta.chat.fragment.Host_Chat_PostInfoFragment;
-import com.example.homemade_guardian_beta.model.UserModel;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.model.post.PostModel;
@@ -28,8 +26,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.io.Serializable;
 
 
 //채팅방안 액티비티 -chatFragment랑 연결됨

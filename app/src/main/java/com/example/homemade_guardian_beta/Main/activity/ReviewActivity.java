@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +25,7 @@ public class ReviewActivity extends BasicActivity {
     }
 
     // 호출할 다이얼로그 함수를 정의한다.
-    public void callFunction(final TextView main_label) {
+    public void callFunction(final TextView main_label, final TextView selected_review) {
 
         // 커스텀 다이얼로그를 정의하기위해 Dialog클래스를 생성한다.
         final Dialog dlg = new Dialog(context);
@@ -44,14 +45,60 @@ public class ReviewActivity extends BasicActivity {
         final Button cancelButton = (Button) dlg.findViewById(R.id.cancelButton);
         final TextView Writen_Review_TextView = (TextView) dlg.findViewById(R.id.Writen_Review_TextView);
 
+        final CheckBox kind = dlg.findViewById(R.id.kind);
+        final CheckBox correct = dlg.findViewById(R.id.correct);
+        final CheckBox complete = dlg.findViewById(R.id.complete);
+        final CheckBox bad = dlg.findViewById(R.id.bad);
+
+        kind.setOnClickListener(new CheckBox.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kind.setChecked(true);
+                correct.setChecked(false);
+                complete.setChecked(false);
+                bad.setChecked(false);
+                selected_review.setText("친절함");
+            }
+        }) ;
+
+        correct.setOnClickListener(new CheckBox.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kind.setChecked(false);
+                correct.setChecked(true);
+                complete.setChecked(false);
+                bad.setChecked(false);
+                selected_review.setText("정확함");
+            }
+        }) ;
+        complete.setOnClickListener(new CheckBox.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kind.setChecked(false);
+                correct.setChecked(false);
+                complete.setChecked(true);
+                bad.setChecked(false);
+                selected_review.setText("완벽함");
+            }
+        }) ;
+        bad.setOnClickListener(new CheckBox.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kind.setChecked(false);
+                correct.setChecked(false);
+                complete.setChecked(false);
+                bad.setChecked(true);
+                selected_review.setText("불쾌함");
+                WriteReviewActivity writeReviewActivity = new WriteReviewActivity(context,Writen_Review_TextView);
+                writeReviewActivity.callFunction(Writen_Review_TextView);
+            }
+        }) ;
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // '확인' 버튼 클릭시 메인 액티비티에서 설정한 main_label에
                 // 커스텀 다이얼로그에서 입력한 메시지를 대입한다.
-                main_label.setText(Writen_Review_TextView.getText().toString());
-//                Toast.makeText(context, "\"" +  message.getText().toString() + "\" 을 입력하였습니다.", Toast.LENGTH_SHORT).show();
-
+                //main_label.setText(Writen_Review_TextView.getText().toString());
                 // 커스텀 다이얼로그를 종료한다.
                 dlg.dismiss();
             }
@@ -76,4 +123,5 @@ public class ReviewActivity extends BasicActivity {
             }
         });
     }
+
 }

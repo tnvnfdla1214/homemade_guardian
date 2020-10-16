@@ -78,7 +78,7 @@ import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.chat.ChatModel;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.model.chat.NotificationModel;
-import com.example.homemade_guardian_beta.model.UserModel;
+import com.example.homemade_guardian_beta.model.user.UserModel;
 
 
 import okhttp3.Call;

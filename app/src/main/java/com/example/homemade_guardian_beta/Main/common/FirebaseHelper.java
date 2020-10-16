@@ -5,14 +5,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.bumptech.glide.Glide;
-import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
-import com.example.homemade_guardian_beta.model.UserModel;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.model.post.CommentModel;
 import com.example.homemade_guardian_beta.model.post.PostModel;
-import com.example.homemade_guardian_beta.post.activity.PostActivity;
 import com.example.homemade_guardian_beta.post.common.listener.OnPostListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

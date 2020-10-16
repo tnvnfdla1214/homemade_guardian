@@ -46,7 +46,7 @@ import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.model.chat.ChatRoomListModel;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
-import com.example.homemade_guardian_beta.model.UserModel;
+import com.example.homemade_guardian_beta.model.user.UserModel;
 
 
 //채팅 목록 프래그먼트

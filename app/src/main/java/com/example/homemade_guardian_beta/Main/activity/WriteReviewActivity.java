@@ -32,6 +32,7 @@ public class WriteReviewActivity extends BasicActivity {
 //        setToolbarTitle("");
         Review_Write_Button = (Button) dlg.findViewById(R.id.Review_Write_Button);
         WriteReview_EditText = (EditText) dlg.findViewById(R.id.WriteReview_EditText);
+        WriteReview_EditText.setText(Writen_Review_TextView.getText());
         Review_Write_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

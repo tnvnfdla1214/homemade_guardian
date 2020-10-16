@@ -1,18 +1,16 @@
 package com.example.homemade_guardian_beta.Main.activity;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.homemade_guardian_beta.Main.bottombar.ChatroomListFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.HomeFragment;
@@ -20,8 +18,10 @@ import com.example.homemade_guardian_beta.Main.bottombar.MyInfoFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.WritePostFragment;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
-import com.example.homemade_guardian_beta.model.UserModel;
+import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +30,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     private String LocalState = null;
@@ -37,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     WritePostFragment writepostFragment;
     ChatroomListFragment chatroomFragment;
     MyInfoFragment myinfoFragment;
+    ArrayList<String> UnReViewList = new ArrayList<>();
+    TextView test;
+    TextView test2;
 
     Button Post_Write_Button;
     Button Market_Write_Button;
@@ -95,11 +100,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        FirebaseUser currentUser_Uid = FirebaseAuth.getInstance().getCurrentUser();                                // part5 : 로그인 시        // part22 : 운래는 옮길때 homeFragment로 옮겨졌으나 매번 불러오는것이 비효율적이라 여기로 옮김
+        final FirebaseUser currentUser_Uid = FirebaseAuth.getInstance().getCurrentUser();                                // part5 : 로그인 시        // part22 : 운래는 옮길때 homeFragment로 옮겨졌으나 매번 불러오는것이 비효율적이라 여기로 옮김
+        final String User_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         if (currentUser_Uid == null) {
             myStartActivity(LoginActivity.class);                                                              // part5 : 로그인 정보 없으면 회원가입 화면으로
         } else {
-            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid.getUid());
+            final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(User_Uid);
             documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -107,8 +113,27 @@ public class MainActivity extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document != null) {
                             if (document.exists()) {
-                                 userModel = document.toObject(UserModel.class);
+                                userModel = document.toObject(UserModel.class);
+                                UnReViewList=userModel.getUserModel_UnReViewList();
+                                if(UnReViewList.size()>0){
+                                    ReviewActivity reviewActivity = new ReviewActivity(MainActivity.this);
+                                    reviewActivity.callFunction(test,test2);
+                                    UnReViewList.remove(0);
+                                    userModel.setUserModel_UnReViewList(UnReViewList);
+                                    final DocumentReference documentReferencesetCurrentUser = FirebaseFirestore.getInstance().collection("USERS").document(User_Uid);
+                                    documentReferencesetCurrentUser.set(userModel.getUserInfo())
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
 
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                }
+                                            });
+                                }
                             } else {
                                 myStartActivity(MemberInitActivity.class);
                             }
@@ -145,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

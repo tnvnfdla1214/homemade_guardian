@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
         //FirebaseAuthgoogle(); //구글 로그인 메인 함수(onCreate안의 함수)
 
         ImageView charactor = (ImageView) findViewById(R.id.charactor);
-        Glide.with(this).load(R.drawable.charactor).into(new DrawableImageViewTarget(charactor));
+        Glide.with(this).load(R.drawable.character_v2).into(new DrawableImageViewTarget(charactor));
 
     }
 

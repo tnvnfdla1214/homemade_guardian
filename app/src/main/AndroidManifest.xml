@@ -90,6 +90,8 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".post.activity.EnlargeImageActivity">
         </activity>
+        <activity android:name=".Main.activity.WritePostActivity">
+        </activity>
 
 
     </application>

@@ -5,6 +5,10 @@
         android:icon="@drawable/bottom_home"
         android:title="게시물 홈" />
     <item
+        android:id="@+id/writemarket"
+        android:icon="@drawable/bottom_market"
+        android:title="게시물 작성" />
+    <item
         android:id="@+id/writepost"
         android:icon="@drawable/bottom_writing"
         android:title="게시물 작성" />

@@ -10,6 +10,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 
 import com.example.homemade_guardian_beta.Main.bottombar.ChatroomListFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.HomeFragment;
@@ -34,10 +37,23 @@ public class MainActivity extends AppCompatActivity {
     ChatroomListFragment chatroomFragment;
     MyInfoFragment myinfoFragment;
 
+    Button Post_Write_Button;
+    Button Market_Write_Button;
+
+    private RelativeLayout Writen_ButtonsBackground_Layout;          //글쓰기 바텀 버튼 누를시
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Writen_ButtonsBackground_Layout = findViewById(R.id.Writen_ButtonsBackground_Layout);
+        Writen_ButtonsBackground_Layout.setOnClickListener(onClickListener);
+        Post_Write_Button = findViewById(R.id.Post_Write_Button);
+        Post_Write_Button.setOnClickListener(onClickListener);
+        Market_Write_Button = findViewById(R.id.Market_Write_Button);
+        Market_Write_Button.setOnClickListener(onClickListener);
+
         homeFragment = new HomeFragment();
         writepostFragment = new WritePostFragment();
         chatroomFragment = new ChatroomListFragment();
@@ -93,96 +109,60 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     } else {
-                        //Log.d("태그", "get failed with ", task.getException());
                     }
                 }
             });
         }
-        //HomeFragment homeFragment = new HomeFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, homeFragment)
                 .commit();
-        LocalState = "home";
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);            // part22 : 바텀 네비게이션바  설정 (47'20")
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.home:
-                        if(LocalState.equals("writepost")){
-                            if(writepostFragment.WritePostFragmentDataCheck()){
-                                showMessage(homeFragment);
-                            };
-                        }else{
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
-                        }
-                        LocalState = "home";
+                        HomeFragment homeFragment = new HomeFragment();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
                         return true;
                     case R.id.writepost:
-                        if(LocalState.equals("writepost")){
-                            return false;
-                        }else{
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container, writepostFragment).commit();
-                        }
-                        LocalState = "writepost";
+                        Writen_ButtonsBackground_Layout.setVisibility(View.VISIBLE);
+                        //getSupportFragmentManager().beginTransaction().replace(R.id.container, writepostFragment).commit();
                         return true;
                     case R.id.chatroomlist:
-                        if(LocalState.equals("writepost")){
-                            if(writepostFragment.WritePostFragmentDataCheck()){
-                                showMessage(homeFragment);
-                            };
-                        }else{
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container, chatroomFragment).commit();
-                        }
-                        LocalState = "chatroomlist";
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, chatroomFragment).commit();
                         return true;
                     case R.id.myinfo:
-                        if(LocalState.equals("writepost")){
-                            if(writepostFragment.WritePostFragmentDataCheck()){
-                                showMessage(homeFragment);
-                            };
-                        }else{
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container, myinfoFragment).commit();
-                        }
-                        LocalState = "myinfo";
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, myinfoFragment).commit();
                         return true;
                 }
                 return false;
             }
         });
-        //여기에 들어가는지 확실x
-        //sendRegistrationToServer();
     }
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.Writen_ButtonsBackground_Layout:
+                    Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
+                    break;
+                case R.id.Post_Write_Button:
+                    //Intent intent = new Intent( MainActivity.this, WritePostActivity.class);
+                    //startActivity(intent);
+                    myStartActivity(WritePostActivity.class);
+                    break;
+                case R.id.Market_Write_Button:
+                    Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
+                    break;
+            }
+        }
+    };
 
     private void myStartActivity(Class c) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
         Intent intent = new Intent(this, c);
         startActivityForResult(intent, 1);
-    }
-    public void showMessage(final Fragment fragment){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("안내");
-        builder.setMessage("다른 화면으로 넘어갈 시 내용이 저장 되지 않습니다.");
-        builder.setIcon(android.R.drawable.ic_dialog_alert);
-
-        builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                //Snackbar.make(textView,"예 버튼이 눌렸습니다.",Snackbar.LENGTH_LONG).show();
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
-            }
-        });
-
-        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-                bottomNavigationView.setSelectedItemId(R.id.writepost);
-            }
-        });
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
     }
 
 }

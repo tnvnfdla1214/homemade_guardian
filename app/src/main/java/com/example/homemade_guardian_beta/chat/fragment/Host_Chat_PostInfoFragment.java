@@ -44,7 +44,9 @@ public class Host_Chat_PostInfoFragment extends Fragment {
 
    ChatActivity chatActivity;
 
-    ArrayList<String> UnReViewList = new ArrayList<>();
+    ArrayList<String> UnReViewUserList = new ArrayList<>();
+    ArrayList<String> UnReViewPostList = new ArrayList<>();
+
 
     TextView main_label;
     TextView selected_review;
@@ -164,9 +166,12 @@ public class Host_Chat_PostInfoFragment extends Fragment {
                                         @Override
                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                                             userModel = documentSnapshot.toObject(UserModel.class);
-                                            UnReViewList = userModel.getUserModel_UnReViewList();
-                                            UnReViewList.add(currentUser_Uid);
-                                            userModel.setUserModel_UnReViewList(UnReViewList);
+                                            UnReViewUserList = userModel.getUserModel_UnReViewUserList();
+                                            UnReViewUserList.add(currentUser_Uid);
+                                            userModel.setUserModel_UnReViewUserList(UnReViewUserList);
+                                            UnReViewPostList = userModel.getUserModel_UnReViewPostList();
+                                            UnReViewPostList.add(PostModel_Post_Uid);
+                                            userModel.setUserModel_UnReViewPostList(UnReViewPostList);
 
                                             final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
                                             documentReferencesetToUser.set(userModel.getUserInfo())
@@ -190,7 +195,7 @@ public class Host_Chat_PostInfoFragment extends Fragment {
                                 }
                             });
                     ReviewActivity reviewActivity = new ReviewActivity(getContext());
-                    reviewActivity.callFunction(main_label, selected_review);
+                    reviewActivity.callFunction(To_User_Uid, PostModel_Post_Uid);
 
                 }else{
                     DocumentReference docRef_POSTS_HostUid = FirebaseFirestore.getInstance().collection("POSTS").document(PostModel_Post_Uid);

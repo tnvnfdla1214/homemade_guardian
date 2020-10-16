@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -39,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     WritePostFragment writepostFragment;
     ChatroomListFragment chatroomFragment;
     MyInfoFragment myinfoFragment;
-    ArrayList<String> UnReViewList = new ArrayList<>();
+    ArrayList<String> UnReViewUserList = new ArrayList<>();
+    ArrayList<String> UnReViewPostList = new ArrayList<>();
     TextView test;
     TextView test2;
 
@@ -101,10 +101,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void init() {
         final FirebaseUser currentUser_Uid = FirebaseAuth.getInstance().getCurrentUser();                                // part5 : 로그인 시        // part22 : 운래는 옮길때 homeFragment로 옮겨졌으나 매번 불러오는것이 비효율적이라 여기로 옮김
-        final String User_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         if (currentUser_Uid == null) {
             myStartActivity(LoginActivity.class);                                                              // part5 : 로그인 정보 없으면 회원가입 화면으로
         } else {
+            final String User_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(User_Uid);
             documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -114,12 +115,14 @@ public class MainActivity extends AppCompatActivity {
                         if (document != null) {
                             if (document.exists()) {
                                 userModel = document.toObject(UserModel.class);
-                                UnReViewList=userModel.getUserModel_UnReViewList();
-                                if(UnReViewList.size()>0){
+                                UnReViewUserList =userModel.getUserModel_UnReViewUserList();
+                                UnReViewPostList=userModel.getUserModel_UnReViewPostList();
+                                if(UnReViewUserList.size()>0){
                                     ReviewActivity reviewActivity = new ReviewActivity(MainActivity.this);
-                                    reviewActivity.callFunction(test,test2);
-                                    UnReViewList.remove(0);
-                                    userModel.setUserModel_UnReViewList(UnReViewList);
+                                    reviewActivity.callFunction(UnReViewUserList.get(0),UnReViewPostList.get(0));
+                                    UnReViewUserList.remove(0);
+                                    UnReViewPostList.remove(0);
+                                    userModel.setUserModel_UnReViewUserList(UnReViewUserList);
                                     final DocumentReference documentReferencesetCurrentUser = FirebaseFirestore.getInstance().collection("USERS").document(User_Uid);
                                     documentReferencesetCurrentUser.set(userModel.getUserInfo())
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {

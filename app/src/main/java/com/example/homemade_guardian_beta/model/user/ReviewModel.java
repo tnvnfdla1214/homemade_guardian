@@ -10,10 +10,10 @@ public class ReviewModel {
     private String ReviewModel_PostUid;         //작성할 리뷰의 포스트 Uid
     private String ReviewModel_To_User_Uid;     //리뷰 작성자의 Uid
     private String ReviewModel_Review;          //리뷰의 내용
-    private String ReviewModel_Selected_Review; //선택한 리뷰의 평가 지표
+    private int ReviewModel_Selected_Review; //선택한 리뷰의 평가 지표
     private Date ReviewModel_DateOfManufacture; //리뷰의 생성일자
 
-    public ReviewModel(String ReviewModel_Uid, String ReviewModel_PostUid, String ReviewModel_To_User_Uid, String ReviewModel_Review, String ReviewModel_Selected_Review, Date ReviewModel_DateOfManufacture){     // part5 : 생성자 초기화 (7')
+    public ReviewModel(String ReviewModel_Uid, String ReviewModel_PostUid, String ReviewModel_To_User_Uid, String ReviewModel_Review, int ReviewModel_Selected_Review, Date ReviewModel_DateOfManufacture){     // part5 : 생성자 초기화 (7')
         this.ReviewModel_Uid = ReviewModel_Uid;
         this.ReviewModel_PostUid = ReviewModel_PostUid;
         this.ReviewModel_To_User_Uid = ReviewModel_To_User_Uid;
@@ -25,7 +25,7 @@ public class ReviewModel {
     public ReviewModel(){
     }
 
-    public Map<String, Object> getReviewModel(){
+    public final Map<String, Object> getReviewModel(){
         Map<String, Object> docData = new HashMap<>();
         docData.put("ReviewModel_Uid", ReviewModel_Uid);
         docData.put("ReviewModel_PostUid", ReviewModel_PostUid);
@@ -57,10 +57,10 @@ public class ReviewModel {
     }
     public void setReviewModel_Review(String ReviewModel_Review){ this.ReviewModel_Review = ReviewModel_Review; }
 
-    public String getReviewModel_Selected_Review(){
+    public int getReviewModel_Selected_Review(){
         return this.ReviewModel_Selected_Review;
     }
-    public void setReviewModel_Selected_Review(String ReviewModel_Selected_Review){ this.ReviewModel_Selected_Review = ReviewModel_Selected_Review; }
+    public void setReviewModel_Selected_Review(int ReviewModel_Selected_Review){ this.ReviewModel_Selected_Review = ReviewModel_Selected_Review; }
     
     public Date getReviewModel_DateOfManufacture() { return ReviewModel_DateOfManufacture; }
     public void setReviewModel_DateOfManufacture(Date ReviewModel_DateOfManufacture) { this.ReviewModel_DateOfManufacture = ReviewModel_DateOfManufacture; }

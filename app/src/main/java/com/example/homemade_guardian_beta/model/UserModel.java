@@ -36,8 +36,7 @@ public class UserModel {
     public UserModel(){
     }
 
-    //이걸로 후기 작성 모델 만들어도 될듯
-    /*
+
     public Map<String, Object> getUserInfo(){
         Map<String, Object> docData = new HashMap<>();
         docData.put("UserModel_ID", UserModel_ID);
@@ -51,7 +50,6 @@ public class UserModel {
         return  docData;
     }
 
-     */
 
     public String getUserModel_ID() {
         return UserModel_ID;

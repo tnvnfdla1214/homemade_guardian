@@ -26,6 +26,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 //호스트용 포스트 정보 프레그먼트
 public class Host_Chat_PostInfoFragment extends Fragment {
 
@@ -43,7 +47,8 @@ public class Host_Chat_PostInfoFragment extends Fragment {
 
    ChatActivity chatActivity;
 
-   int UnReViewListSize =-1;
+    ArrayList<String> UnReViewList = new ArrayList<>();
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -75,16 +80,6 @@ public class Host_Chat_PostInfoFragment extends Fragment {
         Bundle Postbundle = getArguments();
         PostModel_Post_Uid = Postbundle.getString("PostModel_Post_Uid");
         To_User_Uid = Postbundle.getString("To_User_Uid");
-
-        //UserModel_UnReViewList 길이 가져오기
-        DocumentReference docRef_USERS_HostUid = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
-        docRef_USERS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                userModel = documentSnapshot.toObject(UserModel.class);
-                UnReViewListSize = userModel.getUserModel_UnReViewList().size();
-            }
-        });
 
 
 
@@ -163,7 +158,30 @@ public class Host_Chat_PostInfoFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+                                    final DocumentReference documentReferencegetToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
+                                    documentReferencegetToUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                            userModel = documentSnapshot.toObject(UserModel.class);
+                                            UnReViewList = userModel.getUserModel_UnReViewList();
+                                            UnReViewList.add(CurrentUserUid);
+                                            userModel.setUserModel_UnReViewList(UnReViewList);
 
+                                            final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
+                                            documentReferencesetToUser.set(userModel.getUserInfo())
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                        }
+                                                    });
+                                        }
+                                    });
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override

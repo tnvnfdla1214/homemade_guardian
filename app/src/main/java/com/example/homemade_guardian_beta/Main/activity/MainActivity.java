@@ -20,6 +20,7 @@ import com.example.homemade_guardian_beta.Main.bottombar.MyInfoFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.WritePostFragment;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
+import com.example.homemade_guardian_beta.model.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     Button Market_Write_Button;
 
     private RelativeLayout Writen_ButtonsBackground_Layout;          //글쓰기 바텀 버튼 누를시
+
+    UserModel userModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,19 +95,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void init() {
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();                                // part5 : 로그인 시        // part22 : 운래는 옮길때 homeFragment로 옮겨졌으나 매번 불러오는것이 비효율적이라 여기로 옮김
-        if (firebaseUser == null) {
+        FirebaseUser currentUser_Uid = FirebaseAuth.getInstance().getCurrentUser();                                // part5 : 로그인 시        // part22 : 운래는 옮길때 homeFragment로 옮겨졌으나 매번 불러오는것이 비효율적이라 여기로 옮김
+        if (currentUser_Uid == null) {
             myStartActivity(LoginActivity.class);                                                              // part5 : 로그인 정보 없으면 회원가입 화면으로
         } else {
-            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(firebaseUser.getUid());
+            DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid.getUid());
             documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document != null) {
-                            if (document.exists()) {                                                            // part5 : 로그인 되있었어도 정보가 있으면 불러오고
-                            } else {                                                                            // part5 : 아니면 입력받는다.   (18')
+                            if (document.exists()) {
+                                 userModel = document.toObject(UserModel.class);
+
+                            } else {
                                 myStartActivity(MemberInitActivity.class);
                             }
                         }

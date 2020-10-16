@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.homemade_guardian_beta.Main.activity.ReviewActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.model.UserModel;
@@ -49,6 +50,8 @@ public class Host_Chat_PostInfoFragment extends Fragment {
 
     ArrayList<String> UnReViewList = new ArrayList<>();
 
+    TextView main_label;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -79,6 +82,8 @@ public class Host_Chat_PostInfoFragment extends Fragment {
         PostModel_Post_Uid = Postbundle.getString("PostModel_Post_Uid");
         To_User_Uid = Postbundle.getString("To_User_Uid");
         currentUser_Uid = Postbundle.getString("currentUser_Uid");
+
+        main_label = (TextView) View.findViewById(R.id.main_label);
 
 
 
@@ -187,6 +192,8 @@ public class Host_Chat_PostInfoFragment extends Fragment {
                                 public void onFailure(@NonNull Exception e) {
                                 }
                             });
+                    ReviewActivity reviewActivity = new ReviewActivity(getContext());
+                    reviewActivity.callFunction(main_label);
 
                 }else{
                     DocumentReference docRef_POSTS_HostUid = FirebaseFirestore.getInstance().collection("POSTS").document(PostModel_Post_Uid);

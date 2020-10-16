@@ -59,7 +59,13 @@
             android:text="거래완료"
             />
 
-    </LinearLayout>>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/main_label"
+            android:text="여기에 입력한거 뜸"/>
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="370dp"

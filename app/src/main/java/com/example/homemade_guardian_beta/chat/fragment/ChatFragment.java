@@ -105,8 +105,8 @@ public class ChatFragment extends Fragment {
 
     private String PostModel_Post_Uid;
     private String ChatRoomListModel_RoomUid;                                                     //룸의 uid (확실 x)
-    private String MyUid;                                                                         //나의 uid
-    private String ToUid;                                                                         //상대방의 uid
+    private String currentUser_Uid;                                                                         //나의 uid
+    private String To_User_Uid;                                                                         //상대방의 uid
     private Map<String, UserModel> UserModel_UserList = new HashMap<>();                                    //유저 리스트
     private ProgressDialog progressDialog = null;                                                 //진행 표시(Loding창)
     private Integer NumberOfUser = 0;                                                            //현 채팅방의 들어와 있는 유저
@@ -130,12 +130,13 @@ public class ChatFragment extends Fragment {
     public ChatFragment() {
     }
 
-    public static final ChatFragment getInstance(String To_User_Uid, String RoomUiD,String PostModel_Post_Uid) {
+    public static final ChatFragment getInstance(String To_User_Uid, String RoomUiD,String PostModel_Post_Uid,String currentUser_Uid) {
         ChatFragment chatFragment = new ChatFragment();
         Bundle bundle = new Bundle();
         bundle.putString("To_User_Uid", To_User_Uid);
         bundle.putString("RoomUid", RoomUiD);
         bundle.putString("PostModel_Post_Uid", PostModel_Post_Uid);
+        bundle.putString("currentUser_Uid", currentUser_Uid);
         chatFragment.setArguments(bundle);
         return chatFragment;
     }
@@ -164,7 +165,7 @@ public class ChatFragment extends Fragment {
 
         Firestore = FirebaseFirestore.getInstance();
         StorageReference = FirebaseStorage.getInstance().getReference();
-        MyUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        currentUser_Uid = getArguments().getString("currentUser_Uid");
 
         Chat_User_Check();                    //유저의 uid와 room의 uid 체크 함수
         KroreaTime();                         //한국 시간 가져오기 함수
@@ -207,25 +208,26 @@ public class ChatFragment extends Fragment {
 
     //유저의 uid와 room를 해당 변수에 넣는 함수,또한 현재 roomuid와 touid가 맞는지 확인 하는 함수
     public void Chat_User_Check(){
+
         if (getArguments() != null) {
             ChatRoomListModel_RoomUid = getArguments().getString("RoomUid");
-            ToUid = getArguments().getString("To_User_Uid");
+            To_User_Uid = getArguments().getString("To_User_Uid");
             PostModel_Post_Uid = getArguments().getString("PostModel_Post_Uid");
             Log.d("민규123","PostModel_Post_Uid : " + PostModel_Post_Uid);
         }
 
-        if (!"".equals(ToUid) && ToUid !=null) {                     // find existing room for two user ToUid가 널이 아니거나 ToUid가 ""이거가 아니면
-            findChatRoom(ToUid);
+        if (!"".equals(To_User_Uid) && To_User_Uid !=null) {                     // find existing room for two user ToUid가 널이 아니거나 ToUid가 ""이거가 아니면
+            findChatRoom(To_User_Uid);
         } else
         if (!"".equals(ChatRoomListModel_RoomUid) && ChatRoomListModel_RoomUid !=null) {                   // existing room (multi user)
             setChatRoom(ChatRoomListModel_RoomUid);
         };
 
         if (ChatRoomListModel_RoomUid ==null) {                                         // new room for two user
-            MyUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            ToUid = getArguments().getString("To_User_Uid");
-            getUserInfoFromServer(MyUid);
-            getUserInfoFromServer(ToUid);
+            currentUser_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            To_User_Uid = getArguments().getString("To_User_Uid");
+            getUserInfoFromServer(currentUser_Uid);
+            getUserInfoFromServer(To_User_Uid);
             NumberOfUser = 2;
         };
     }
@@ -259,7 +261,7 @@ public class ChatFragment extends Fragment {
     // 사용자 ID로 채팅방을 찾은 후 룸 ID를 반환하는 함수
     void findChatRoom(final String toUid){
         Firestore = FirebaseFirestore.getInstance();
-        Firestore.collection("ROOMS").whereGreaterThanOrEqualTo("USERS."+ MyUid, 0).get()
+        Firestore.collection("ROOMS").whereGreaterThanOrEqualTo("USERS."+ currentUser_Uid, 0).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -306,7 +308,7 @@ public class ChatFragment extends Fragment {
                 DocumentSnapshot document = task.getResult();
                 Map<String, Long> users = (Map<String, Long>) document.get("USERS");
 
-                users.put(MyUid, (long) 0);
+                users.put(currentUser_Uid, (long) 0);
                 document.getReference().update("USERS", users);
             }
         });
@@ -403,13 +405,13 @@ public class ChatFragment extends Fragment {
             CreateChattingRoom( Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid) );
 
             //ChatActivity에 Room_uid 넘겨주기
-            roomUidSetListener.RoomUidSet(ChatRoomListModel_RoomUid,ToUid);
+            roomUidSetListener.RoomUidSet(ChatRoomListModel_RoomUid, To_User_Uid);
 
         }
         //이거 어떻게 바꿈?
         //메세지 모델에 들어가는거
         final Map<String,Object> MessageModel = new HashMap<>();
-        MessageModel.put("MessageModel_UserUid", MyUid);
+        MessageModel.put("MessageModel_UserUid", currentUser_Uid);
         MessageModel.put("MessageModel_Message", MessageModel_Message);
         MessageModel.put("Message_MessageType", Message_MessageType);
         MessageModel.put("MessageModel_DateOfManufacture", FieldValue.serverTimestamp());
@@ -429,7 +431,7 @@ public class ChatFragment extends Fragment {
                 batch.set(docRef, MessageModel, SetOptions.merge());
                 // save message
                 List<String> ReadUsers = new ArrayList();
-                ReadUsers.add(MyUid);
+                ReadUsers.add(currentUser_Uid);
                 MessageModel.put("MessageModel_ReadUser", ReadUsers);//new String[]{myUid} );
                 batch.set(docRef.collection("MESSAGE").document(), MessageModel);
                 // inc unread message count
@@ -437,7 +439,7 @@ public class ChatFragment extends Fragment {
                 Map<String, Long> users = (Map<String, Long>) document.get("USERS");
 
                 for( String key : users.keySet() ){
-                    if (!MyUid.equals(key)) users.put(key, users.get(key)+1);
+                    if (!currentUser_Uid.equals(key)) users.put(key, users.get(key)+1);
                 }
                 document.getReference().update("USERS", users);
                 document.getReference().update("MessageModel_PostUid", PostModel_Post_Uid);
@@ -536,13 +538,13 @@ public class ChatFragment extends Fragment {
     void sendGCM(){
         Gson gson = new Gson();
         NotificationModel notificationModel = new NotificationModel();
-        notificationModel.notification.title = UserModel_UserList.get(MyUid).getUserModel_NickName();
+        notificationModel.notification.title = UserModel_UserList.get(currentUser_Uid).getUserModel_NickName();
         notificationModel.notification.body = Chat_Message_Input_EditText.getText().toString();
-        notificationModel.data.title = UserModel_UserList.get(MyUid).getUserModel_NickName();
+        notificationModel.data.title = UserModel_UserList.get(currentUser_Uid).getUserModel_NickName();
         notificationModel.data.body = Chat_Message_Input_EditText.getText().toString();
 
         for ( Map.Entry<String, UserModel> elem : UserModel_UserList.entrySet() ){
-            if (MyUid.equals(elem.getValue().getUserModel_Uid())) continue;
+            if (currentUser_Uid.equals(elem.getValue().getUserModel_Uid())) continue;
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf8"), gson.toJson(notificationModel));
             Request request = new Request.Builder()
                     .header("Content-Type", "application/json")
@@ -619,8 +621,8 @@ public class ChatFragment extends Fragment {
                                 messageModel = change.getDocument().toObject(MessageModel.class);
                                 //if (message.msg !=null & message.timestamp == null) {continue;} // FieldValue.serverTimestamp is so late
 
-                                if (messageModel.getMessageModel_ReadUser().indexOf(MyUid) == -1) {
-                                    messageModel.getMessageModel_ReadUser().add(MyUid);
+                                if (messageModel.getMessageModel_ReadUser().indexOf(currentUser_Uid) == -1) {
+                                    messageModel.getMessageModel_ReadUser().add(currentUser_Uid);
                                     change.getDocument().getReference().update("MessageModel_ReadUser", messageModel.getMessageModel_ReadUser());
                                 }
                                 MessageModel_List.add(messageModel);
@@ -657,7 +659,7 @@ public class ChatFragment extends Fragment {
         @Override
         public int getItemViewType(int position) {
             MessageModel messageModel = MessageModel_List.get(position);
-            if (MyUid.equals(messageModel.getMessageModel_UserUid()) ) {
+            if (currentUser_Uid.equals(messageModel.getMessageModel_UserUid()) ) {
                 switch(messageModel.getMessage_MessageType()){
                     case "1": return R.layout.item_chatimage_right;
                     case "2": return R.layout.item_chatfile_right;
@@ -700,7 +702,7 @@ public class ChatFragment extends Fragment {
             ////
 
             //상대방 이름
-            if (! MyUid.equals(messageModel.getMessageModel_UserUid())) {
+            if (! currentUser_Uid.equals(messageModel.getMessageModel_UserUid())) {
                 UserModel userModel = UserModel_UserList.get(messageModel.getMessageModel_UserUid());
                 messageViewHolder.Message_NickName.setText(userModel.getUserModel_NickName());
                 //상대방 프로필사진으로 바꾸기
@@ -754,7 +756,7 @@ public class ChatFragment extends Fragment {
                         DocumentSnapshot document = task.getResult();
                         Map<String, Long> users = (Map<String, Long>) document.get("USERS");
 
-                        users.put(MyUid, (long) 0);
+                        users.put(currentUser_Uid, (long) 0);
                         document.getReference().update("USERS", users);
                     }
                 });
@@ -898,7 +900,7 @@ public class ChatFragment extends Fragment {
 
     //유저 나갈때 나갔습니다. 텍스트 띄우기 함수
     public void User_GoOut(){
-        Firestore.collection("USERS").document(MyUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        Firestore.collection("USERS").document(currentUser_Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (!task.isSuccessful()) {

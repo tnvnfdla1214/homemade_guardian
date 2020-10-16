@@ -35,7 +35,7 @@ public class Host_Chat_PostInfoFragment extends Fragment {
 
     String PostModel_Post_Uid;
     String To_User_Uid;
-    String CurrentUserUid;
+    String currentUser_Uid;
     PostModel postModel;
     UserModel userModel;
     TextView Chat_PostInfo_Title;
@@ -73,13 +73,12 @@ public class Host_Chat_PostInfoFragment extends Fragment {
         Chat_PostInfo_Image = (ImageView) View.findViewById(R.id.Chat_PostInfo_Image);
         Chat_PostInfo_reservation = (Switch) View.findViewById(R.id.Chat_PostInfo_reservation);
         Chat_PostInfo_deal = (Switch) View.findViewById(R.id.Chat_PostInfo_deal);
-        CurrentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         Chat_PostInfo_deal.setEnabled(false);
-
         Bundle Postbundle = getArguments();
         PostModel_Post_Uid = Postbundle.getString("PostModel_Post_Uid");
         To_User_Uid = Postbundle.getString("To_User_Uid");
+        currentUser_Uid = Postbundle.getString("currentUser_Uid");
 
 
 
@@ -164,7 +163,7 @@ public class Host_Chat_PostInfoFragment extends Fragment {
                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                                             userModel = documentSnapshot.toObject(UserModel.class);
                                             UnReViewList = userModel.getUserModel_UnReViewList();
-                                            UnReViewList.add(CurrentUserUid);
+                                            UnReViewList.add(currentUser_Uid);
                                             userModel.setUserModel_UnReViewList(UnReViewList);
 
                                             final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);

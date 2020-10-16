@@ -71,7 +71,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         if (ChatRoomListModel_Title!=null) { actionBar.setTitle(ChatRoomListModel_Title); }
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         // chatting area
-        chatFragment = ChatFragment.getInstance(To_User_Uid, ChatRoomListModel_RoomUid,PostModel_Post_Uid);
+        chatFragment = ChatFragment.getInstance(To_User_Uid, ChatRoomListModel_RoomUid,PostModel_Post_Uid,currentUser_Uid);
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.mainFragment, chatFragment )
@@ -95,6 +95,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
                     Bundle Postbundle = new Bundle();
                     Postbundle.putString("PostModel_Post_Uid",PostModel_Post_Uid);
                     Postbundle.putString("To_User_Uid",To_User_Uid);
+                    Postbundle.putString("currentUser_Uid",currentUser_Uid);
                     hostChat_postInfoFragment.setArguments(Postbundle);
 
                 }

@@ -40,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
     MyInfoFragment myinfoFragment;
     ArrayList<String> UnReViewUserList = new ArrayList<>();
     ArrayList<String> UnReViewPostList = new ArrayList<>();
-    TextView test;
-    TextView test2;
+
 
     Button Post_Write_Button;
     Button Market_Write_Button;
@@ -115,33 +114,16 @@ public class MainActivity extends AppCompatActivity {
                         if (document != null) {
                             if (document.exists()) {
                                 userModel = document.toObject(UserModel.class);
-                                UnReViewUserList =userModel.getUserModel_UnReViewUserList();
-                                UnReViewPostList=userModel.getUserModel_UnReViewPostList();
+                                UnReViewUserList = userModel.getUserModel_UnReViewUserList();
+                                UnReViewPostList = userModel.getUserModel_UnReViewPostList();
                                 if(UnReViewUserList.size()>0){
                                     ReviewActivity reviewActivity = new ReviewActivity(MainActivity.this);
                                     reviewActivity.callFunction(UnReViewUserList.get(0),UnReViewPostList.get(0));
-                                    UnReViewUserList.remove(0);
-                                    UnReViewPostList.remove(0);
-                                    userModel.setUserModel_UnReViewUserList(UnReViewUserList);
-                                    final DocumentReference documentReferencesetCurrentUser = FirebaseFirestore.getInstance().collection("USERS").document(User_Uid);
-                                    documentReferencesetCurrentUser.set(userModel.getUserInfo())
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void aVoid) {
-
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                }
-                                            });
                                 }
-                            } else {
+                            }else {
                                 myStartActivity(MemberInitActivity.class);
                             }
                         }
-                    } else {
                     }
                 }
             });

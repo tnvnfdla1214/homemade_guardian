@@ -192,9 +192,6 @@ public class WritePostFragment extends Fragment {
                 }
                 Select_Post_Image_Button.setText(Html.fromHtml(selectedPhotos.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
 
-
-
-                ////////////////////////////////////////////////////////
                 for(int i=0;i<photos.size();i++){
                     switch (i){
                         case 0 :

@@ -167,8 +167,13 @@ public class MemberInitActivity extends BasicActivity {
             final ArrayList<String> UserModel_UnReViewPostList = new ArrayList<>();
             final ArrayList<String> UserModel_UnReViewUserList = new ArrayList<>();
 
+            final ArrayList<String> UserModel_kindReviewList = new ArrayList<>();
+            final ArrayList<String> UserModel_correctReviewList = new ArrayList<>();
+            final ArrayList<String> UserModel_completeReviewList = new ArrayList<>();
+            final ArrayList<String> UserModel_badReviewList = new ArrayList<>();
+
             if (SelectedImagePath == null) {                                                                      // part5 : 데이터 추가 (9'10")
-                UserModel userModel = new UserModel(UserModel_Nickname, BirthDay,DateOfManufacture,UserModel_University,UserModel_UnReViewUserList,UserModel_UnReViewPostList);          // + : 사용자 리스트 수정 (가입날짜 추가[사진 없는 버전])
+                UserModel userModel = new UserModel(UserModel_Nickname, BirthDay,DateOfManufacture,UserModel_University,UserModel_UnReViewUserList,UserModel_UnReViewPostList,UserModel_kindReviewList,UserModel_correctReviewList,UserModel_completeReviewList,UserModel_badReviewList);          // + : 사용자 리스트 수정 (가입날짜 추가[사진 없는 버전])
                 userModel.setUserModel_Uid(CurrentUser.getUid());
                 userModel.setUserModel_ID(CurrentUser.getEmail());
                 if(UserModel_Nickname.equals("")){
@@ -192,7 +197,7 @@ public class MemberInitActivity extends BasicActivity {
                         public void onComplete(@NonNull Task<Uri> task) {
                             if (task.isSuccessful()) {
                                 Uri DownloadUri = task.getResult();                                         // part7 : 입력한 회원정보를 DB에 저장 (28')
-                                UserModel Usermodel = new UserModel(UserModel_Nickname, BirthDay, DateOfManufacture, UserModel_University, DownloadUri.toString(),UserModel_UnReViewUserList,UserModel_UnReViewPostList);      // + : 사용자 리스트 수정 (가입날짜 추가)
+                                UserModel Usermodel = new UserModel(UserModel_Nickname, BirthDay, DateOfManufacture, UserModel_University, DownloadUri.toString(),UserModel_UnReViewUserList,UserModel_UnReViewPostList,UserModel_kindReviewList,UserModel_correctReviewList,UserModel_completeReviewList,UserModel_badReviewList);      // + : 사용자 리스트 수정 (가입날짜 추가)
                                 Usermodel.setUserModel_Uid(CurrentUser.getUid());
                                 Usermodel.setUserModel_ID(CurrentUser.getEmail());
                                 if(UserModel_Nickname.equals("")){

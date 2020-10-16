@@ -2,6 +2,7 @@ package com.example.homemade_guardian_beta.Main.activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -14,9 +15,13 @@ import androidx.annotation.NonNull;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.post.CommentModel;
 import com.example.homemade_guardian_beta.model.user.ReviewModel;
+import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.example.homemade_guardian_beta.post.activity.BasicActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,6 +43,10 @@ public class ReviewActivity extends BasicActivity {
     private FirebaseFirestore Firestore =null;
     private ReviewModel ReviewModel;
     private int ReviewModel_Selected_Review;
+    UserModel userModel;
+    ArrayList<String> UnReViewUserList = new ArrayList<>();
+    ArrayList<String> UnReViewPostList = new ArrayList<>();
+    ArrayList<String> ReViewList = new ArrayList<>();
 
     public ReviewActivity(Context context) {
         this.context = context;
@@ -121,6 +130,7 @@ public class ReviewActivity extends BasicActivity {
                 // 커스텀 다이얼로그를 종료한다.
 
 
+
                 String ReviewModel_Uid = null;
                 ReviewModel_Uid = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid).collection("REVIEW").document().getId();
 
@@ -130,21 +140,143 @@ public class ReviewActivity extends BasicActivity {
                 final DocumentReference docRef_Users_ReviewUid = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
                 final String Reviewmodel_Uid = ReviewModel_Uid;
                 docRef_Users_ReviewUid.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            WriteBatch Batch_REVIEW_ReviewUid = FirebaseFirestore.getInstance().batch();
-                            Batch_REVIEW_ReviewUid.set(docRef_Users_ReviewUid.collection("REVIEW").document(Reviewmodel_Uid), ReviewModel.getReviewModel());
-                            Batch_REVIEW_ReviewUid.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        WriteBatch Batch_REVIEW_ReviewUid = FirebaseFirestore.getInstance().batch();
+                        Batch_REVIEW_ReviewUid.set(docRef_Users_ReviewUid.collection("REVIEW").document(Reviewmodel_Uid), ReviewModel.getReviewModel());
+                        Batch_REVIEW_ReviewUid.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                final String User_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(User_Uid);
+                                documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document != null) {
+                                                if (document.exists()) {
+                                                    userModel = document.toObject(UserModel.class);
+                                                    UnReViewUserList = userModel.getUserModel_UnReViewUserList();
+                                                    UnReViewPostList = userModel.getUserModel_UnReViewPostList();
+                                                    if(UnReViewUserList.size()>0){
+                                                        UnReViewUserList.remove(0);
+                                                        UnReViewPostList.remove(0);
+                                                        userModel.setUserModel_UnReViewUserList(UnReViewUserList);
+                                                        userModel.setUserModel_UnReViewPostList(UnReViewPostList);
+                                                        final DocumentReference documentReferencesetCurrentUser = FirebaseFirestore.getInstance().collection("USERS").document(User_Uid);
+                                                        documentReferencesetCurrentUser.set(userModel.getUserInfo())
+                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
 
-                                }
-                            });
+                                                                    }
+                                                                })
+                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                    }
+                                                                });
+                                                    }
+                                                } else {
+                                                    Intent intent = new Intent(getApplicationContext(), MemberInitActivity.class);
+                                                    startActivityForResult(intent, 1);
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                });
+
+
+                docRef_Users_ReviewUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        userModel = documentSnapshot.toObject(UserModel.class);
+                        final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
+                        switch (ReviewModel_Selected_Review){
+                            case 0 :
+                                ReViewList = userModel.getUserModel_kindReviewList();
+                                ReViewList.add(Reviewmodel_Uid);
+                                userModel.setUserModel_kindReviewList(ReViewList);
+
+                                documentReferencesetToUser.set(userModel.getUserInfo())
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                            }
+                                        });
+                                break;
+                            case 1 :
+                                ReViewList = userModel.getUserModel_correctReviewList();
+                                ReViewList.add(Reviewmodel_Uid);
+                                userModel.setUserModel_kindReviewList(ReViewList);
+
+                                documentReferencesetToUser.set(userModel.getUserInfo())
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                            }
+                                        });
+                                break;
+                            case 2 :
+                                ReViewList = userModel.getUserModel_completeReviewList();
+                                ReViewList.add(Reviewmodel_Uid);
+                                userModel.setUserModel_kindReviewList(ReViewList);
+
+                                documentReferencesetToUser.set(userModel.getUserInfo())
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                            }
+                                        });
+                                break;
+                            case 3 :
+                                ReViewList = userModel.getUserModel_badReviewList();
+                                ReViewList.add(Reviewmodel_Uid);
+                                userModel.setUserModel_kindReviewList(ReViewList);
+
+                                documentReferencesetToUser.set(userModel.getUserInfo())
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                            }
+                                        });
+                                break;
+
                         }
 
-                    });
 
-
+                    }
+                });
 
                 dlg.dismiss();
             }

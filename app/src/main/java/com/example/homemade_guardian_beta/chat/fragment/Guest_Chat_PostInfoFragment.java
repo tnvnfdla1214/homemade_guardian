@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -16,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
-import com.example.homemade_guardian_beta.model.post.PostModel;
+import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -28,7 +27,7 @@ public class Guest_Chat_PostInfoFragment extends Fragment {
 
     String PostModel_Post_Uid;
     String CurrentUserUid;
-    PostModel postModel;
+    MarketModel marketModel;
     TextView Chat_PostInfo_Title;
     TextView Chat_PostInfo_Text;
     ImageView Chat_PostInfo_Image;
@@ -73,18 +72,18 @@ public class Guest_Chat_PostInfoFragment extends Fragment {
         docRef_USERS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                postModel = documentSnapshot.toObject(PostModel.class);
-                Chat_PostInfo_Title.setText(postModel.getPostModel_Title());
-                Chat_PostInfo_Text.setText(postModel.getPostModel_Text());
+                marketModel = documentSnapshot.toObject(MarketModel.class);
+                Chat_PostInfo_Title.setText(marketModel.getPostModel_Title());
+                Chat_PostInfo_Text.setText(marketModel.getPostModel_Text());
                 //post의 이미지 섬네일 띄우기
-                if(postModel.getPostModel_ImageList() != null){
-                    Glide.with(getContext()).load(postModel.getPostModel_ImageList().get(0)).centerCrop().override(500).into(Chat_PostInfo_Image);
+                if(marketModel.getPostModel_ImageList() != null){
+                    Glide.with(getContext()).load(marketModel.getPostModel_ImageList().get(0)).centerCrop().override(500).into(Chat_PostInfo_Image);
                 }
                 else{
                     Chat_PostInfo_Image.setVisibility(View.GONE);
                 }
-                if(postModel.getPostModel_reservation().equals("O")){
-                    if(postModel.getPostModel_deal().equals("O")) {
+                if(marketModel.getPostModel_reservation().equals("O")){
+                    if(marketModel.getPostModel_deal().equals("O")) {
                         Chat_PostInfo_dealText.setText("[거래완료]");
                         Chat_PostInfo_dealText.setTextColor(Color.parseColor("#e65d5d"));
                     }

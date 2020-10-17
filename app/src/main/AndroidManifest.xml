@@ -70,25 +70,25 @@
                 android:resource="@xml/provider_paths"/>
         </provider>
 
-        <activity android:name=".post.activity.PostActivity">
+        <activity android:name=".market.activity.MarketActivity">
         </activity>
-        <activity android:name=".post.activity.ModifyPostActivity">
+        <activity android:name=".market.activity.ModifyMarketActivity">
         </activity>
-        <activity android:name=".post.activity.BasicActivity">
+        <activity android:name=".market.activity.BasicActivity">
         </activity>
-        <activity android:name=".post.activity.GalleryActivity">
+        <activity android:name=".market.activity.GalleryActivity">
         </activity>
         <activity android:name=".Main.activity.MemberInitActivity">
         </activity>
         <activity android:name=".Main.activity.HostModelActivity">
         </activity>
-        <activity android:name=".post.activity.SearchActivity">
+        <activity android:name=".market.activity.SearchActivity">
         </activity>
-        <activity android:name=".post.activity.SearchResultActivity">
+        <activity android:name=".market.activity.SearchResultActivity">
         </activity>
         <activity android:name=".photo.activity.PhotoPickerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".post.activity.EnlargeImageActivity">
+        <activity android:name=".market.activity.EnlargeImageActivity">
         </activity>
         <activity android:name=".Main.activity.WritePostActivity">
         </activity>

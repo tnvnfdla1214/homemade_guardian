@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.post.activity;
+package com.example.homemade_guardian_beta.market.activity;
 
 import android.content.Intent;
 import android.os.Bundle;

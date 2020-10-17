@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
-import com.example.homemade_guardian_beta.model.post.CommentModel;
-import com.example.homemade_guardian_beta.model.post.PostModel;
-import com.example.homemade_guardian_beta.post.common.listener.OnPostListener;
+import com.example.homemade_guardian_beta.model.market.Market_CommentModel;
+import com.example.homemade_guardian_beta.model.market.MarketModel;
+import com.example.homemade_guardian_beta.market.common.listener.OnPostListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,9 +24,9 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static com.example.homemade_guardian_beta.post.PostUtil.isStorageUrl;
-import static com.example.homemade_guardian_beta.post.PostUtil.showToast;
-import static com.example.homemade_guardian_beta.post.PostUtil.storageUrlToName;
+import static com.example.homemade_guardian_beta.market.MarketUtil.isStorageUrl;
+import static com.example.homemade_guardian_beta.market.MarketUtil.showToast;
+import static com.example.homemade_guardian_beta.market.MarketUtil.storageUrlToName;
 
 //파이어베이스에서 파이어스토어,파이어스토리지의 삭제에 관여한다.
 
@@ -34,7 +34,7 @@ public class FirebaseHelper {                                                   
     private Activity Activity;
     private OnPostListener Onpostlistener;
     private int SuccessCount;
-    private CommentModel CommentModel;
+    private Market_CommentModel Market_CommentModel;
     private com.example.homemade_guardian_beta.model.chat.MessageModel MessageModel;                    //UserModel 참조 선언
     int Java_MessageModel_ImageCount;                         //string형을 int로 형변환
     ChatFragment chatFragment;
@@ -46,11 +46,11 @@ public class FirebaseHelper {                                                   
     public void setOnpostlistener(OnPostListener Onpostlistener){ this.Onpostlistener = Onpostlistener; }
 
     //게시물의 경우에는 이미지가 파이어스토리지에 있기 때문에 파이어스토리지 또한 삭제해주어야한다.
-    public void Post_Storagedelete(final PostModel postModel){                                                 // part16: 스토리지의 삭제 (13')
+    public void Post_Storagedelete(final MarketModel marketModel){                                                 // part16: 스토리지의 삭제 (13')
         FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();                                        // part17 : 스토리지 삭제 (문서) (19'50")
         StorageReference Storagereference = Firebasestorage.getReference();
-        final String Post_Uid = postModel.getPostModel_Post_Uid();
-        ArrayList<String> Post_ImageList = postModel.getPostModel_ImageList();
+        final String Post_Uid = marketModel.getPostModel_Post_Uid();
+        ArrayList<String> Post_ImageList = marketModel.getPostModel_ImageList();
         if(Post_ImageList != null) {
             for (int i = 0; i < Post_ImageList.size(); i++) {
                 String Image = Post_ImageList.get(i);
@@ -61,7 +61,7 @@ public class FirebaseHelper {                                                   
                         @Override
                         public void onSuccess(Void aVoid) {
                             SuccessCount--;
-                            Post_Storedelete(Post_Uid, postModel);
+                            Post_Storedelete(Post_Uid, marketModel);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -72,15 +72,15 @@ public class FirebaseHelper {                                                   
                 }
             }
         }
-        Post_Storedelete(Post_Uid, postModel);
+        Post_Storedelete(Post_Uid, marketModel);
     }
 
     //파이어스토리지에서의 삭제가 끝난 후 파이어스토어에 있는 게시물의 데이터를 삭제한다., 댓글은 하위 컬렉션이기 때문에 미리삭제하고 게시물 삭제로 이동한다.
-    private void Post_Storedelete(final String Post_Uid, final PostModel Postmodel) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
+    private void Post_Storedelete(final String Post_Uid, final MarketModel postmodel) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
         final FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
         final ArrayList<String> CommentList = new ArrayList<>();
         if(SuccessCount == 0){
-            FirebaseFirestore.getInstance().collection("POSTS").document(Postmodel.getPostModel_Post_Uid()).collection("COMMENT")
+            FirebaseFirestore.getInstance().collection("POSTS").document(postmodel.getPostModel_Post_Uid()).collection("COMMENT")
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -113,7 +113,7 @@ public class FirebaseHelper {                                                   
                         @Override
                         public void onSuccess(Void aVoid) {
                             showToast(Activity, "게시글을 삭제하였습니다.");
-                            Onpostlistener.onDelete(Postmodel);
+                            Onpostlistener.onDelete(postmodel);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -268,16 +268,16 @@ public class FirebaseHelper {                                                   
 
 
     //댓글은 파이어스토리지를 이용하지 않으므로 파이어스토어 삭제만 진행한다.
-    public void Comment_Storedelete(final CommentModel Commentmodel){                                                 // part16: 스토리지의 삭제 (13')
-        final String Comment_Uid = Commentmodel.getCommentModel_Comment_Uid();
+    public void Comment_Storedelete(final Market_CommentModel commentmodel){                                                 // part16: 스토리지의 삭제 (13')
+        final String Comment_Uid = commentmodel.getMarket_CommentModel_Comment_Uid();
         FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
-        Firebasefirestore.collection("POSTS").document(Commentmodel.getCommentModel_Post_Uid()).collection("COMMENT").document(Comment_Uid)
+        Firebasefirestore.collection("POSTS").document(commentmodel.getMarket_CommentModel_Post_Uid()).collection("COMMENT").document(Comment_Uid)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         showToast(Activity, "댓글을 삭제하였습니다.");
-                        Onpostlistener.oncommentDelete(Commentmodel);
+                        Onpostlistener.oncommentDelete(commentmodel);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

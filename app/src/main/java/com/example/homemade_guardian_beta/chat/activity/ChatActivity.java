@@ -19,7 +19,7 @@ import com.example.homemade_guardian_beta.chat.fragment.Guest_Chat_PostInfoFragm
 import com.example.homemade_guardian_beta.chat.fragment.Host_Chat_PostInfoFragment;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
-import com.example.homemade_guardian_beta.model.post.PostModel;
+import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,7 +44,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
     private MessageModel MessageModel;                    //UserModel 참조 선언
     FirebaseUser firebaseCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
     public static Context mcontext;
-    PostModel postModel;
+    MarketModel marketModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +82,9 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         docRef_USERS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                postModel = documentSnapshot.toObject(PostModel.class);
+                marketModel = documentSnapshot.toObject(MarketModel.class);
                 //currentUser_Uid == PostModel_Host_Uid 일 경우 Host_Chat_PostInfoFragment를 띄우고 아니라면 guest_Chat_PostInfoFragment를 띄운다.
-                if(currentUser_Uid.equals(postModel.getPostModel_Host_Uid())){
+                if(currentUser_Uid.equals(marketModel.getPostModel_Host_Uid())){
 
                     hostChat_postInfoFragment = new Host_Chat_PostInfoFragment();
                     getSupportFragmentManager().beginTransaction().add(R.id.postinfoFragment, hostChat_postInfoFragment).commit();

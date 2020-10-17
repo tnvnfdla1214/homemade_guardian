@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.post.common.view;
+package com.example.homemade_guardian_beta.market.common.view;
 
 import android.content.Context;
 import androidx.annotation.Nullable;
@@ -9,11 +9,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
-import com.example.homemade_guardian_beta.model.post.PostModel;
+import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.R;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Locale;
 
 //MainFragment에서 이미지를 썸네일로써 한장만 보여주고 2장 이상일경우 "더보기"로 구현
 
@@ -45,11 +44,11 @@ public class ThumbnailImageView extends LinearLayout {
     public void setMoreIndex(int moreIndex){ this.moreIndex = moreIndex;}                                                                          // part19 : 어댑터에서도 쓸 수 있게 (46'50") }
 
     //구체적으로 썸네일을 설정하는 부분 i가 moreIndex 같다면 "더보기"를 게시물하단부에 출력시키고 종료한다.
-    public void Set_Post_Thumbnail(PostModel postModel){
+    public void Set_Post_Thumbnail(MarketModel marketModel){
 
         LinearLayout Thumbnail_Layout = findViewById(R.id.contentsLayout);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        ArrayList<String> ArrayList_ImageList = postModel.getPostModel_ImageList();
+        ArrayList<String> ArrayList_ImageList = marketModel.getPostModel_ImageList();
         if(ArrayList_ImageList != null) {
             for (int i = 0; i < ArrayList_ImageList.size(); i++) {                                                 // part17 : 더보기기능 추가
                 if (i == moreIndex) {

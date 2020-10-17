@@ -6,9 +6,10 @@
     xmlns:card_view="http://schemas.android.com/tools">
 
     <include
-        layout="@layout/view_toolbar"
+        layout="@layout/toolbar_memberinit"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="50dp" />
 
 
     <ScrollView
@@ -49,24 +50,24 @@
                     android:orientation="vertical">
 
                     <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="17dp"
-                        android:text="닉네임"
-                        android:textStyle="bold"
-                        />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="15dp"
-                        android:text="(선택)"
-                        android:paddingLeft="10dp"
-                        />
-                </LinearLayout>
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="17dp"
+                            android:text="닉네임"
+                            android:textStyle="bold"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:text="(선택)"
+                            android:paddingLeft="10dp"
+                            />
+                    </LinearLayout>
 
                     <EditText
                         android:id="@+id/Nickname"
@@ -127,13 +128,13 @@
                     android:paddingTop="4dp"
                     >
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="17dp"
-                            android:text="학교"
-                            android:textStyle="bold"
-                            />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="17dp"
+                        android:text="학교"
+                        android:textStyle="bold"
+                        />
 
                     <Spinner
                         android:id="@+id/University"
@@ -142,52 +143,12 @@
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/Users_Info_Send_Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="확인" />
+
 
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-    <RelativeLayout
-        android:id="@+id/ButtonsBackground_Layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#91646464"
-        android:visibility="gone">
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:elevation="10dp"
-            app:cardCornerRadius="15dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="5dp">
-
-                <Button
-                    android:id="@+id/picture"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="사진촬영" />
-
-                <Button
-                    android:id="@+id/Photo_Directory_Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="갤러리" />
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-    </RelativeLayout>
 
     <include
         layout="@layout/view_loader"

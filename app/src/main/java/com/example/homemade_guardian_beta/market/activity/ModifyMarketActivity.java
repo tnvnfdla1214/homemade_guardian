@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.post.activity;
+package com.example.homemade_guardian_beta.market.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,20 +12,17 @@ import androidx.viewpager.widget.ViewPager;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
 import com.example.homemade_guardian_beta.photo.activity.PhotoPickerActivity;
-import com.example.homemade_guardian_beta.model.post.PostModel;
+import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.post.common.view.ViewPagerAdapter;
+import com.example.homemade_guardian_beta.market.common.view.ViewPagerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,16 +40,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import static com.example.homemade_guardian_beta.post.PostUtil.GALLERY_IMAGE;
-import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_MEDIA;
-import static com.example.homemade_guardian_beta.post.PostUtil.isStorageUrl;
+
+import static com.example.homemade_guardian_beta.market.MarketUtil.INTENT_MEDIA;
 
 //게시물의 수정을 위한 액티비티 이다. 형태는 WritePostFragment와 비슷하지만, 수정은 Activity라는 차이가 있다.
 //      Ex) 게시물에서 수정을 눌렀을 때 실행되는 액티비티이다.
 // +++수정을 추가해야함, 추가한 사진이 보이게 해주는 기능 추가해야함
 
-public class ModifyPostActivity extends BasicActivity {
-    private PostModel Postmodel;                                        //UserModel 참조 선언
+public class ModifyMarketActivity extends BasicActivity {
+    private MarketModel Marketmodel;                                        //UserModel 참조 선언
 
     private int PathCount;                                              //이미지 리스트 중 몇번째인지 나타내는 변수
     public  ArrayList<String> ArrayList_SelectedPhoto = new ArrayList<>();       //선택한 이미지들이 담기는 리스트
@@ -61,10 +57,10 @@ public class ModifyPostActivity extends BasicActivity {
     private RelativeLayout LoaderLayout;                                //로딩중을 나타내는 layout 선언
     private EditText Selected_EditText;                                  ////뭔지 모르겠음
     private EditText Title_EditText;                                     //수정하려는 게시물의 제목
-    private ImageView FoodPostbtn;
-    private ImageView LifePostbtn;
-    private ImageView BorrowPostbtn;
-    private ImageView WorkPostbtn;
+    private ImageView FoodMarketbtn;
+    private ImageView LifeMarketbtn;
+    private ImageView BorrowMarketbtn;
+    private ImageView WorkMarketbtn;
     private String Category;
 
     private FirebaseUser CurrentUser;                                   //파이어베이스 데이터 상의 현재 사용자
@@ -75,7 +71,7 @@ public class ModifyPostActivity extends BasicActivity {
 
 
     private ImageView Selected_ImageView;
-    private Button Select_Post_Image_Button;
+    private Button Select_Market_Image_Button;
     private ArrayList<String> ImageList;            //게시물의 이미지 리스트
     private ArrayList<String> ModifyImageList;
     private ViewPager Viewpager;                    //이미지들을 보여주기 위한 ViewPager 선언
@@ -83,7 +79,7 @@ public class ModifyPostActivity extends BasicActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modify_post);
+        setContentView(R.layout.activity_modify_market);
         setToolbarTitle("");
 
 
@@ -91,21 +87,21 @@ public class ModifyPostActivity extends BasicActivity {
         LoaderLayout = findViewById(R.id.Loader_Lyaout);
         Title_EditText = findViewById(R.id.Post_Title_EditText);
         Selected_EditText = findViewById(R.id.contentsEditText);
-        Select_Post_Image_Button = findViewById(R.id.Select_Post_Image_Button);
+        Select_Market_Image_Button = findViewById(R.id.Select_Post_Image_Button);
         Viewpager = findViewById(R.id.ViewPager);
         findViewById(R.id.Post_Write_Button).setOnClickListener(onClickListener);
         findViewById(R.id.Select_Post_Image_Button).setOnClickListener(onClickListener);
         findViewById(R.id.imageModify).setOnClickListener(onClickListener);
         findViewById(R.id.Comment_Delete_Button).setOnClickListener(onClickListener);
 
-        FoodPostbtn = (ImageView) findViewById(R.id.FoodPostbtn);
-        FoodPostbtn.setOnClickListener(onClickListener);
-        LifePostbtn = (ImageView) findViewById(R.id.LifePostbtn);
-        LifePostbtn.setOnClickListener(onClickListener);
-        BorrowPostbtn = (ImageView) findViewById(R.id.BorrowPostbtn);
-        BorrowPostbtn.setOnClickListener(onClickListener);
-        WorkPostbtn = (ImageView) findViewById(R.id.WorkPostbtn);
-        WorkPostbtn.setOnClickListener(onClickListener);
+        FoodMarketbtn = (ImageView) findViewById(R.id.FoodPostbtn);
+        FoodMarketbtn.setOnClickListener(onClickListener);
+        LifeMarketbtn = (ImageView) findViewById(R.id.LifePostbtn);
+        LifeMarketbtn.setOnClickListener(onClickListener);
+        BorrowMarketbtn = (ImageView) findViewById(R.id.BorrowPostbtn);
+        BorrowMarketbtn.setOnClickListener(onClickListener);
+        WorkMarketbtn = (ImageView) findViewById(R.id.WorkPostbtn);
+        WorkMarketbtn.setOnClickListener(onClickListener);
 
         ButtonsBackgroundLayout.setOnClickListener(onClickListener);
         Title_EditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -119,7 +115,7 @@ public class ModifyPostActivity extends BasicActivity {
 
         FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();
         Storagereference = Firebasestorage.getReference();
-        Postmodel = (PostModel) getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
+        Marketmodel = (MarketModel) getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
         postInit();
     }
 
@@ -139,7 +135,7 @@ public class ModifyPostActivity extends BasicActivity {
                     String ViewpagerState = "Disable";
                     Viewpager.setAdapter(new ViewPagerAdapter(getApplicationContext(), ModifyImageList, ViewpagerState));
                 }
-                Select_Post_Image_Button.setText(Html.fromHtml(ArrayList_SelectedPhoto.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
+                Select_Market_Image_Button.setText(Html.fromHtml(ArrayList_SelectedPhoto.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
             }
         }
     }
@@ -155,7 +151,7 @@ public class ModifyPostActivity extends BasicActivity {
                     break;
                 case R.id.Select_Post_Image_Button:
                     ArrayList_SelectedPhoto = new ArrayList<>();
-                    PhotoUtil intent = new PhotoUtil(ModifyPostActivity.this);
+                    PhotoUtil intent = new PhotoUtil(ModifyMarketActivity.this);
                     intent.setMaxSelectCount(5);
                     intent.setShowCamera(true);
                     intent.setShowGif(true);
@@ -164,31 +160,31 @@ public class ModifyPostActivity extends BasicActivity {
                     startActivityForResult(intent, REQUEST_CODE);
                 break;
                 case R.id.FoodPostbtn:
-                    FoodPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    LifePostbtn.setColorFilter(null);
-                    BorrowPostbtn.setColorFilter(null);
-                    WorkPostbtn.setColorFilter(null);
+                    FoodMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    LifeMarketbtn.setColorFilter(null);
+                    BorrowMarketbtn.setColorFilter(null);
+                    WorkMarketbtn.setColorFilter(null);
                     Category = "음식";
                     break;
                 case R.id.LifePostbtn:
-                    LifePostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    FoodPostbtn.setColorFilter(null);
-                    BorrowPostbtn.setColorFilter(null);
-                    WorkPostbtn.setColorFilter(null);
+                    LifeMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    FoodMarketbtn.setColorFilter(null);
+                    BorrowMarketbtn.setColorFilter(null);
+                    WorkMarketbtn.setColorFilter(null);
                     Category = "생필품";
                     break;
                 case R.id.BorrowPostbtn:
-                    BorrowPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    FoodPostbtn.setColorFilter(null);
-                    LifePostbtn.setColorFilter(null);
-                    WorkPostbtn.setColorFilter(null);
+                    BorrowMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    FoodMarketbtn.setColorFilter(null);
+                    LifeMarketbtn.setColorFilter(null);
+                    WorkMarketbtn.setColorFilter(null);
                     Category = "대여";
                     break;
                 case R.id.WorkPostbtn:
-                    WorkPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    FoodPostbtn.setColorFilter(null);
-                    LifePostbtn.setColorFilter(null);
-                    BorrowPostbtn.setColorFilter(null);
+                    WorkMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    FoodMarketbtn.setColorFilter(null);
+                    LifeMarketbtn.setColorFilter(null);
+                    BorrowMarketbtn.setColorFilter(null);
                     Category = "용역";
                     break;
             }
@@ -209,11 +205,11 @@ public class ModifyPostActivity extends BasicActivity {
     private void Modify_Storage_Upload() {
         final String Title = ((EditText) findViewById(R.id.Post_Title_EditText)).getText().toString();
         final String TextContents = ((EditText) findViewById(R.id.contentsEditText)).getText().toString();
-        String Post_Uid = Postmodel.getPostModel_Post_Uid();
-        final ArrayList<String> LikeList = Postmodel.getPostModel_LikeList();
-        final String HotPost = Postmodel.getPostModel_HotPost();
-        final String PostModel_reservation = Postmodel.getPostModel_reservation();
-        final String PostModel_deal = Postmodel.getPostModel_deal();
+        String Post_Uid = Marketmodel.getPostModel_Post_Uid();
+        final ArrayList<String> LikeList = Marketmodel.getPostModel_LikeList();
+        final String HotPost = Marketmodel.getPostModel_HotPost();
+        final String PostModel_reservation = Marketmodel.getPostModel_reservation();
+        final String PostModel_deal = Marketmodel.getPostModel_deal();
         if (Title.length() > 0 && Category != null) {
             LoaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
             CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -221,14 +217,14 @@ public class ModifyPostActivity extends BasicActivity {
             Storagereference = Firebasestorage.getReference();
             FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
             final DocumentReference docRef_POSTS_PostUid = Firebasefirestore.collection("POSTS").document(Post_Uid);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
-            final Date DateOfManufacture = Postmodel.getPostModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
+            final Date DateOfManufacture = Marketmodel.getPostModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             final ArrayList<String> contentsList = new ArrayList<>();
 
             if (ImageList!=null){
-                Postmodel.setPostModel_Title(Title);
-                Postmodel.setPostModel_Text(TextContents);
-                Postmodel.setPostModel_Category(Category);
-                Modify_Store_Upload(docRef_POSTS_PostUid, Postmodel);
+                Marketmodel.setPostModel_Title(Title);
+                Marketmodel.setPostModel_Text(TextContents);
+                Marketmodel.setPostModel_Category(Category);
+                Modify_Store_Upload(docRef_POSTS_PostUid, Marketmodel);
             }else{
                 for (int i = 0; i < ArrayList_SelectedPhoto.size(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
                     String path = ArrayList_SelectedPhoto.get(PathCount);
@@ -241,7 +237,7 @@ public class ModifyPostActivity extends BasicActivity {
                         UploadTask Uploadtask = ImagesRef_POSTS_Uid_PathCount.putStream(Stream, Metadata);
                         final String Get_PostUid = Post_Uid;
 
-                        Postmodel.setPostModel_ImageList(new ArrayList<String>());
+                        Marketmodel.setPostModel_ImageList(new ArrayList<String>());
                         Uploadtask.addOnFailureListener(new OnFailureListener() {                               // part11 :
                             @Override
                             public void onFailure(@NonNull Exception exception) {
@@ -254,9 +250,9 @@ public class ModifyPostActivity extends BasicActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {                                             // part11 : SUCCEESSCOUNT 개의 사진 (37')
                                         contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                        PostModel Postmodel = new PostModel(Title, TextContents, contentsList,  DateOfManufacture, CurrentUser.getUid(), Get_PostUid, Category, LikeList, HotPost,PostModel_reservation,PostModel_deal);
-                                        Postmodel.setPostModel_Post_Uid(Get_PostUid);
-                                        Modify_Store_Upload(docRef_POSTS_PostUid, Postmodel);
+                                        MarketModel postmodel = new MarketModel(Title, TextContents, contentsList,  DateOfManufacture, CurrentUser.getUid(), Get_PostUid, Category, LikeList, HotPost,PostModel_reservation,PostModel_deal);
+                                        postmodel.setPostModel_Post_Uid(Get_PostUid);
+                                        Modify_Store_Upload(docRef_POSTS_PostUid, postmodel);
                                     }
                                 });
                             }
@@ -267,9 +263,9 @@ public class ModifyPostActivity extends BasicActivity {
                     PathCount++;
                 }
                 if (ArrayList_SelectedPhoto.size() == 0) {
-                    PostModel Postmodel = new PostModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Post_Uid, Category, LikeList, HotPost,PostModel_reservation,PostModel_deal);
-                    Postmodel.setPostModel_Post_Uid(Post_Uid);
-                    Modify_Store_Upload(docRef_POSTS_PostUid,Postmodel);
+                    MarketModel postmodel = new MarketModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Post_Uid, Category, LikeList, HotPost,PostModel_reservation,PostModel_deal);
+                    postmodel.setPostModel_Post_Uid(Post_Uid);
+                    Modify_Store_Upload(docRef_POSTS_PostUid, postmodel);
                 }
             }
         } else {
@@ -282,14 +278,14 @@ public class ModifyPostActivity extends BasicActivity {
     }
 
     // 파이어스토어에 바뀐 정보들을 POSTS에 넣는다. WritePostFragment에 있는 것과는 차이가 없다.
-    private void Modify_Store_Upload(DocumentReference docRef_POSTS_PostUid, final PostModel Postmodel) {
-        docRef_POSTS_PostUid.set(Postmodel.getPostInfo())
+    private void Modify_Store_Upload(DocumentReference docRef_POSTS_PostUid, final MarketModel postmodel) {
+        docRef_POSTS_PostUid.set(postmodel.getPostInfo())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         LoaderLayout.setVisibility(View.GONE);
                         Intent Resultintent = new Intent();
-                        Resultintent.putExtra("postInfo", Postmodel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
+                        Resultintent.putExtra("postInfo", postmodel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                         setResult(Activity.RESULT_OK, Resultintent);
                         finish();
                     }
@@ -308,24 +304,24 @@ public class ModifyPostActivity extends BasicActivity {
         startActivityForResult(intent, requestCode);
     }
     private void postInit() {                                                                               // part17 : (33')
-        if (Postmodel != null) {                                                                             //수정 버튼을 눌러서 들어왔을 때 null이 아니면 == 나 수정 하러 왔음 >> 화면에는 수정하고자하는 게시물의 정보들이 띄워져있음
-            Title_EditText.setText(Postmodel.getPostModel_Title());
-            Selected_EditText.setText(Postmodel.getPostModel_Text());
-            ImageList = Postmodel.getPostModel_ImageList();
+        if (Marketmodel != null) {                                                                             //수정 버튼을 눌러서 들어왔을 때 null이 아니면 == 나 수정 하러 왔음 >> 화면에는 수정하고자하는 게시물의 정보들이 띄워져있음
+            Title_EditText.setText(Marketmodel.getPostModel_Title());
+            Selected_EditText.setText(Marketmodel.getPostModel_Text());
+            ImageList = Marketmodel.getPostModel_ImageList();
             if(ImageList != null ){
                 String ViewpagerState = "Disable";
                 Viewpager.setAdapter(new ViewPagerAdapter(getApplicationContext(), ImageList, ViewpagerState));
-                Select_Post_Image_Button.setText(Html.fromHtml(ImageList.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
+                Select_Market_Image_Button.setText(Html.fromHtml(ImageList.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
             }
-            Category = Postmodel.getPostModel_Category();
+            Category = Marketmodel.getPostModel_Category();
             if(Category.equals("음식")){
-                FoodPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                FoodMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
             }else if(Category.equals("생필품")){
-                LifePostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                LifeMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
             }else if(Category.equals("대여")){
-                BorrowPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                BorrowMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
             }else if(Category.equals("용역")){
-                WorkPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                WorkMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
             }
         }
     }

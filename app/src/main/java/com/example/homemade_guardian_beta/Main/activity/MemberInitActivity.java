@@ -18,8 +18,8 @@ import android.widget.Spinner;
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.user.UserModel;
-import com.example.homemade_guardian_beta.post.activity.BasicActivity;
-import com.example.homemade_guardian_beta.post.activity.GalleryActivity;
+import com.example.homemade_guardian_beta.market.activity.BasicActivity;
+import com.example.homemade_guardian_beta.market.activity.GalleryActivity;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,19 +37,21 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
-import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_PATH;
-import static com.example.homemade_guardian_beta.post.PostUtil.showToast;
+
+import static com.example.homemade_guardian_beta.market.MarketUtil.INTENT_PATH;
+import static com.example.homemade_guardian_beta.market.MarketUtil.INTENT_PATH;
+import static com.example.homemade_guardian_beta.market.MarketUtil.showToast;
 
 //앱이 실행되고나면 로그인 후에 가장 먼저 보게 되는 액티비티로서, 사용자의 정보를 입력 받는다.
 //      Ex) 메인프레그먼트에서는 이 MemberInitActivity가 실행되지 않으면, 계속 MemberInitActivity를 실행하게 된다.
 
 public class MemberInitActivity extends BasicActivity {
     private String SelectedImagePath;                       //프로필 이미지로선택한 이미지
-    
+
     private ImageView Profile_ImageView;                     //xml에서 선택한 이미지를 넣은 ImageView
     private RelativeLayout LoaderLayout;                     //로딩중을 나타내는 layout 선언
     private RelativeLayout ButtonBackgroundLayout;          //사진을 넣을 때 앨범으로 가기 위한 버튼을 생성해주는 layout
-    
+
     private FirebaseUser CurrentUser=FirebaseAuth.getInstance().getCurrentUser();;                       //파이어베이스 데이터 상의 현재 사용자
     private String BirthDay;
     private Spinner University;
@@ -60,19 +62,16 @@ public class MemberInitActivity extends BasicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_init);
-        setToolbarTitle("프로필 입력");
+        setToolbarTitle("");
 
         LoaderLayout = findViewById(R.id.Loader_Lyaout);
         Profile_ImageView = findViewById(R.id.Users_Profile_ImageView);
         ButtonBackgroundLayout = findViewById(R.id.ButtonsBackground_Layout);
         DatePicker BirthDay_Picker = (DatePicker)findViewById(R.id.BirthDay_Picker);
         Nickname = ((EditText) findViewById(R.id.Nickname));
-        ButtonBackgroundLayout.setOnClickListener(onClickListener);
         Profile_ImageView.setOnClickListener(onClickListener);
 
         findViewById(R.id.Users_Info_Send_Button).setOnClickListener(onClickListener);
-        findViewById(R.id.picture).setOnClickListener(onClickListener);
-        findViewById(R.id.Photo_Directory_Button).setOnClickListener(onClickListener);
 
         Nickname.setHint(extractIDFromEmail(CurrentUser.getEmail()));
 
@@ -117,7 +116,6 @@ public class MemberInitActivity extends BasicActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     SelectedImagePath = data.getStringExtra(INTENT_PATH);
                     Glide.with(this).load(SelectedImagePath).centerCrop().override(500).into(Profile_ImageView);
-                    ButtonBackgroundLayout.setVisibility(View.GONE);
                 }
                 break;
             }
@@ -134,16 +132,7 @@ public class MemberInitActivity extends BasicActivity {
                     MemberInit_Storage_Uploader();
                     break;
                 case R.id.Users_Profile_ImageView:
-                    ButtonBackgroundLayout.setVisibility(View.VISIBLE);                                 // part8 : 처음에는 안보이다가 이미지그림 누르면 나타나게함 (11'30")
-                    break;
-                case R.id.ButtonsBackground_Layout:                                                      // part20 : 다른데 누르면 buttonBackgroundLayout 사라지게 해줌 (48')
-                    ButtonBackgroundLayout.setVisibility(View.GONE);
-                    break;
-                case R.id.picture:                                                                      // part7 : 프로필 사진 등록시 카메라 기능으로 사진을 찍을 시
-                    //myStartActivity(CameraActivity.class);
-                    break;
-                case R.id.Photo_Directory_Button:                                                                      // part7 : 프로필 사진 등록시 앨범에서 고를 시
-                    myStartActivity(GalleryActivity.class);
+                    myStartActivity(GalleryActivity.class);                                // part8 : 처음에는 안보이다가 이미지그림 누르면 나타나게함 (11'30")
                     break;
             }
         }

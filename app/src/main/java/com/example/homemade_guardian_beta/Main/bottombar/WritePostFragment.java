@@ -31,8 +31,8 @@ import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.photo.activity.PhotoPickerActivity;
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.model.post.PostModel;
-import com.example.homemade_guardian_beta.post.common.view.ViewPagerAdapter;
+import com.example.homemade_guardian_beta.model.market.MarketModel;
+import com.example.homemade_guardian_beta.market.common.view.ViewPagerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,7 +52,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import static android.app.Activity.RESULT_OK;
-import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_MEDIA;
+import static com.example.homemade_guardian_beta.market.MarketUtil.INTENT_MEDIA;
 
 public class WritePostFragment extends Fragment {
     private FirebaseUser currentUser;
@@ -61,7 +61,7 @@ public class WritePostFragment extends Fragment {
     private RelativeLayout loaderLayout;
     private EditText selectedEditText;
     private EditText titleEditText;
-    private PostModel postModel;
+    private MarketModel marketModel;
     private int pathCount;
     public final static int REQUEST_CODE = 1;
     public  ArrayList<String> selectedPhotos = new ArrayList<>();
@@ -140,7 +140,7 @@ public class WritePostFragment extends Fragment {
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
-        postModel = (PostModel) getActivity().getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
+        marketModel = (MarketModel) getActivity().getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
 
 
         /////////////////////////////////////////////////
@@ -303,7 +303,7 @@ public class WritePostFragment extends Fragment {
             ///
             postID = firebaseFirestore.collection("POSTS").document().getId();
             final DocumentReference documentReference =firebaseFirestore.collection("POSTS").document(postID);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
-            final Date date = postModel == null ? new Date() : postModel.getPostModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
+            final Date date = marketModel == null ? new Date() : marketModel.getPostModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             Log.d("로그","111");
             for (int i = 0; i < selectedPhotos.size(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
                 String path = selectedPhotos.get(pathCount);
@@ -329,9 +329,9 @@ public class WritePostFragment extends Fragment {
                                         public void onSuccess(Uri uri) {
                                             contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
                                             Log.e("로그", "카테고리 11111111111: " + Category);
-                                            PostModel postModel = new PostModel(title, textcontents, contentsList,  date, currentUser.getUid(), newPostID, Category, LikeList, HotPost,PostModel_reservation,PostModel_deal);
-                                            postModel.setPostModel_Post_Uid(newPostID);
-                                            storeUpload(documentReference, postModel);
+                                            MarketModel marketModel = new MarketModel(title, textcontents, contentsList,  date, currentUser.getUid(), newPostID, Category, LikeList, HotPost,PostModel_reservation,PostModel_deal);
+                                            marketModel.setPostModel_Post_Uid(newPostID);
+                                            storeUpload(documentReference, marketModel);
                                         }
                                     });
                                 }
@@ -343,9 +343,9 @@ public class WritePostFragment extends Fragment {
             }
             if (selectedPhotos.size() == 0) {
                 Log.e("로그", "카테고리 22222222222222222222 : " + Category);
-                PostModel postModel = new PostModel(title, textcontents, date, currentUser.getUid(), postID, Category, LikeList, HotPost,PostModel_reservation,PostModel_deal);
-                postModel.setPostModel_Post_Uid(postID);
-                storeUpload(documentReference,postModel);
+                MarketModel marketModel = new MarketModel(title, textcontents, date, currentUser.getUid(), postID, Category, LikeList, HotPost,PostModel_reservation,PostModel_deal);
+                marketModel.setPostModel_Post_Uid(postID);
+                storeUpload(documentReference, marketModel);
             }
         } else {
             if(title.length() == 0){
@@ -357,14 +357,14 @@ public class WritePostFragment extends Fragment {
         }
     }
 
-    private void storeUpload(DocumentReference documentReference, final PostModel postModel) {
-        documentReference.set(postModel.getPostInfo())
+    private void storeUpload(DocumentReference documentReference, final MarketModel marketModel) {
+        documentReference.set(marketModel.getPostInfo())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         loaderLayout.setVisibility(View.GONE);
                         Intent resultIntent = new Intent();
-                        resultIntent.putExtra("postinfo", postModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
+                        resultIntent.putExtra("postinfo", marketModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                         getActivity().setResult(RESULT_OK, resultIntent);
                         Intent intentpage = new Intent(getActivity(), MainActivity.class);
                         startActivity(intentpage);

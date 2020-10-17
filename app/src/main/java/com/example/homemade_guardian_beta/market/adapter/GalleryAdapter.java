@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.post.adapter;
+package com.example.homemade_guardian_beta.market.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 import java.util.ArrayList;
-import static com.example.homemade_guardian_beta.post.PostUtil.INTENT_PATH;
+import static com.example.homemade_guardian_beta.market.MarketUtil.INTENT_PATH;
 
 //GalleryActivity와 연결되어 사용되는 어댑터이다.
 

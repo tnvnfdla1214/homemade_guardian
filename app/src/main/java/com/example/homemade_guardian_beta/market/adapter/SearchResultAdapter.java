@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.post.adapter;
+package com.example.homemade_guardian_beta.market.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -14,9 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.model.post.PostModel;
-import com.example.homemade_guardian_beta.post.activity.PostActivity;
-import com.example.homemade_guardian_beta.post.common.view.ThumbnailImageView;
+import com.example.homemade_guardian_beta.model.market.MarketModel;
+import com.example.homemade_guardian_beta.market.activity.MarketActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ import java.util.Locale;
 //      Ex) MORE_INDEX를 readContentsView에서 MORE_INDEX 보다 작은 수의 사진만 SearchResultFragment에서 나타낸다.
 
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.MainViewHolder> {
-    private ArrayList<PostModel> ArrayList_PostModel;   //게시물에 담을 PostModel의 정보들을 담는다.
+    private ArrayList<MarketModel> ArrayList_MarketModel;   //게시물에 담을 PostModel의 정보들을 담는다.
     private Activity Activity;
 
     private final int MORE_INDEX = 1;                   //게시물에서 미리 표현할 사진의 개수
@@ -39,8 +38,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         }
     }
 
-    public SearchResultAdapter(Activity activity, ArrayList<PostModel> ArrayList_Postmodel) {
-        this.ArrayList_PostModel = ArrayList_Postmodel;
+    public SearchResultAdapter(Activity activity, ArrayList<MarketModel> arrayList_Postmodel) {
+        this.ArrayList_MarketModel = arrayList_Postmodel;
         this.Activity = activity;
     }
 
@@ -53,9 +52,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         Cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {                                                                   // part18 : 게시물 클릭시 게시물페이지로 이동 (36'10")
-                Intent Intent_PostActivity = new Intent(Activity, PostActivity.class);
+                Intent Intent_PostActivity = new Intent(Activity, MarketActivity.class);
                 //postInfo 안에 uid있음
-                Intent_PostActivity.putExtra("postInfo", ArrayList_PostModel.get(Mainviewholder.getAdapterPosition()));
+                Intent_PostActivity.putExtra("postInfo", ArrayList_MarketModel.get(Mainviewholder.getAdapterPosition()));
                 Activity.startActivity(Intent_PostActivity);
             }
         });
@@ -69,17 +68,17 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         TextView Contents_TextView = Contents_CardView.findViewById(R.id.Post_Contents_TextView);
         TextView Post_Category = Contents_CardView.findViewById(R.id.Post_Category);
         TextView Post_LikeCount = Contents_CardView.findViewById(R.id.Post_LikeCount);
-        PostModel Postmodel = ArrayList_PostModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
-        Title_TextView.setText(Postmodel.getPostModel_Title());
-        Contents_TextView.setText(Postmodel.getPostModel_Text());
-        Post_Category.setText(Postmodel.getPostModel_Category());
-        Post_LikeCount.setText(String.valueOf(Postmodel.getPostModel_LikeList().size()));
+        MarketModel postmodel = ArrayList_MarketModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
+        Title_TextView.setText(postmodel.getPostModel_Title());
+        Contents_TextView.setText(postmodel.getPostModel_Text());
+        Post_Category.setText(postmodel.getPostModel_Category());
+        Post_LikeCount.setText(String.valueOf(postmodel.getPostModel_LikeList().size()));
         ImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);                   //contentsLayout에다가 날짜포함
         LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);                      /////////////////////이거 대신 텍스트 만든거 보여주기로
         TextView DateOfManufacture_TextView = Contents_CardView.findViewById(R.id.Post_DateOfManufacture);
-        DateOfManufacture_TextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Postmodel.getPostModel_DateOfManufacture()));
+        DateOfManufacture_TextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(postmodel.getPostModel_DateOfManufacture()));
 
-        ArrayList<String> ArrayList_ImageList = Postmodel.getPostModel_ImageList();
+        ArrayList<String> ArrayList_ImageList = postmodel.getPostModel_ImageList();
         if(ArrayList_ImageList != null) {
             String Image = ArrayList_ImageList.get(0);
             Glide.with(Activity).load(Image).override(1000).thumbnail(0.1f).into(Thumbnail_ImageView);         // 흐릿하게 로딩하기
@@ -93,6 +92,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
 
     @Override
     public int getItemCount() {
-        return ArrayList_PostModel.size();
+        return ArrayList_MarketModel.size();
     }
 }

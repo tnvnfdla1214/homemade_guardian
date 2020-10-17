@@ -7,9 +7,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,10 +19,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
-import com.example.homemade_guardian_beta.model.post.PostModel;
+import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.post.activity.SearchActivity;
-import com.example.homemade_guardian_beta.post.adapter.HomeAdapter;
+import com.example.homemade_guardian_beta.market.activity.SearchActivity;
+import com.example.homemade_guardian_beta.market.adapter.MarketAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -40,8 +37,8 @@ import java.util.Date;
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private FirebaseFirestore firebaseFirestore;
-    private HomeAdapter homeAdapter;
-    private ArrayList<PostModel> postList;
+    private MarketAdapter marketAdapter;
+    private ArrayList<MarketModel> postList;
     private boolean updating;
     private boolean topScrolled;
     private String State;
@@ -81,7 +78,7 @@ public class HomeFragment extends Fragment {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         postList = new ArrayList<>();
-        homeAdapter = new HomeAdapter(getActivity(), postList);
+        marketAdapter = new MarketAdapter(getActivity(), postList);
         //homeAdapter.setOnPostListener(onPostListener);
 
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -107,7 +104,7 @@ public class HomeFragment extends Fragment {
         State = "전체";
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(homeAdapter);
+        recyclerView.setAdapter(marketAdapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {                          // part21 : 스크롤로 새로고침 (29'10")
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {        //part21 : 스크롤 손을 뗏을때(31')
@@ -340,7 +337,7 @@ public class HomeFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 Log.d("로그","스크롤 3333");
-                                postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
+                                postList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("PostModel_Title").toString(),
                                         document.getData().get("PostModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_ImageList"),
@@ -355,7 +352,7 @@ public class HomeFragment extends Fragment {
                                         )
                                 );
                         }
-                            homeAdapter.notifyDataSetChanged();
+                            marketAdapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());
@@ -384,7 +381,7 @@ public class HomeFragment extends Fragment {
                                 HotPostCut = ((ArrayList<String>) document.getData().get("PostModel_LikeList")).size();
                                 if(HotPostCut>0) {
                                     Log.d("로그","HotPostCut : "+HotPostCut);
-                                    postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
+                                    postList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                             document.getData().get("PostModel_Title").toString(),
                                             document.getData().get("PostModel_Text").toString(),
                                             (ArrayList<String>) document.getData().get("PostModel_ImageList"),
@@ -400,7 +397,7 @@ public class HomeFragment extends Fragment {
                                 }
                                 HotPostCut = 0;
                             }
-                            homeAdapter.notifyDataSetChanged();
+                            marketAdapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());
@@ -426,7 +423,7 @@ public class HomeFragment extends Fragment {
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
+                                postList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("PostModel_Title").toString(),
                                         document.getData().get("PostModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_ImageList"),
@@ -440,7 +437,7 @@ public class HomeFragment extends Fragment {
                                         document.getData().get("PostModel_HotPost").toString()
                                 ));
                             }
-                            homeAdapter.notifyDataSetChanged();
+                            marketAdapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());
@@ -466,7 +463,7 @@ public class HomeFragment extends Fragment {
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
+                                postList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("PostModel_Title").toString(),
                                         document.getData().get("PostModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_ImageList"),
@@ -480,7 +477,7 @@ public class HomeFragment extends Fragment {
                                         document.getData().get("PostModel_HotPost").toString()
                                 ));
                             }
-                            homeAdapter.notifyDataSetChanged();
+                            marketAdapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());
@@ -506,7 +503,7 @@ public class HomeFragment extends Fragment {
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
+                                postList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("PostModel_Title").toString(),
                                         document.getData().get("PostModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_ImageList"),
@@ -520,7 +517,7 @@ public class HomeFragment extends Fragment {
                                         document.getData().get("PostModel_HotPost").toString()
                                 ));
                             }
-                            homeAdapter.notifyDataSetChanged();
+                            marketAdapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());
@@ -546,7 +543,7 @@ public class HomeFragment extends Fragment {
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                postList.add(new PostModel(                                                          //postList로 데이터를 넣는다.
+                                postList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("PostModel_Title").toString(),
                                         document.getData().get("PostModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_ImageList"),
@@ -560,7 +557,7 @@ public class HomeFragment extends Fragment {
                                         document.getData().get("PostModel_HotPost").toString()
                                 ));
                             }
-                            homeAdapter.notifyDataSetChanged();
+                            marketAdapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());

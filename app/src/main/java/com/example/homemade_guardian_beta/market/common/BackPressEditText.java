@@ -1,9 +1,8 @@
-package com.example.homemade_guardian_beta.post.common;
+package com.example.homemade_guardian_beta.market.common;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.widget.EditText;
 
 public class BackPressEditText extends androidx.appcompat.widget.AppCompatEditText
 {

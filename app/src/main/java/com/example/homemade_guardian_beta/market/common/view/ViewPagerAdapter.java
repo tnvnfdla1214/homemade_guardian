@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.post.common.view;
+package com.example.homemade_guardian_beta.market.common.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,9 +10,8 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 import com.bumptech.glide.Glide;
-import com.example.homemade_guardian_beta.Main.activity.HostModelActivity;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.post.activity.EnlargeImageActivity;
+import com.example.homemade_guardian_beta.market.activity.EnlargeImageActivity;
 
 import java.util.ArrayList;
 

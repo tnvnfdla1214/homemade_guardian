@@ -18,7 +18,7 @@ import com.example.homemade_guardian_beta.Main.activity.ReviewActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.model.user.UserModel;
-import com.example.homemade_guardian_beta.model.post.PostModel;
+import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -33,7 +33,7 @@ public class Host_Chat_PostInfoFragment extends Fragment {
     String PostModel_Post_Uid;
     String To_User_Uid;
     String currentUser_Uid;
-    PostModel postModel;
+    MarketModel marketModel;
     UserModel userModel;
     TextView Chat_PostInfo_Title;
     TextView Chat_PostInfo_Text;
@@ -90,21 +90,21 @@ public class Host_Chat_PostInfoFragment extends Fragment {
         docRef_POSTS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                postModel = documentSnapshot.toObject(PostModel.class);
-                Chat_PostInfo_Title.setText(postModel.getPostModel_Title());
-                Chat_PostInfo_Text.setText(postModel.getPostModel_Text());
+                marketModel = documentSnapshot.toObject(MarketModel.class);
+                Chat_PostInfo_Title.setText(marketModel.getPostModel_Title());
+                Chat_PostInfo_Text.setText(marketModel.getPostModel_Text());
                 //post의 이미지 섬네일 띄우기
-                if(postModel.getPostModel_ImageList() != null){
-                    Glide.with(getContext()).load(postModel.getPostModel_ImageList().get(0)).centerCrop().override(500).into(Chat_PostInfo_Image);
+                if(marketModel.getPostModel_ImageList() != null){
+                    Glide.with(getContext()).load(marketModel.getPostModel_ImageList().get(0)).centerCrop().override(500).into(Chat_PostInfo_Image);
                 }
                 else{
                     Chat_PostInfo_Image.setVisibility(View.GONE);
                 }
-                if(postModel.getPostModel_reservation().equals("O")){
+                if(marketModel.getPostModel_reservation().equals("O")){
                     Chat_PostInfo_reservation.setChecked(true);
                 }
 
-                if(postModel.getPostModel_deal().equals("O")){
+                if(marketModel.getPostModel_deal().equals("O")){
                     Chat_PostInfo_deal.setChecked(true);
                 }
 

@@ -1,15 +1,14 @@
-package com.example.homemade_guardian_beta.post;
+package com.example.homemade_guardian_beta.market;
 
 import android.app.Activity;
 import android.util.Patterns;
 import android.widget.Toast;
-import java.net.URLConnection;
 
 //BaseActivity와 같은 개념으로 여러군데에서 사용하는 특정 함수들을 모아서 선언해 놓은 Class이다.
 //      Ex) 가장 많이 사용되는 것은 토스트를 생성하는 메소드이지만, isStorageUrl에서 파이어베이스의 스토리지 경로를 저장한 부분이 중요한 곳이다.
 
-public class PostUtil {                                                                                     // part18 :  중복되는 코드 빼기 (7'30")
-    public PostUtil(){/* */}
+public class MarketUtil {                                                                                     // part18 :  중복되는 코드 빼기 (7'30")
+    public MarketUtil(){/* */}
 
     public static final String INTENT_PATH = "path";
     public static final String INTENT_MEDIA = "media";

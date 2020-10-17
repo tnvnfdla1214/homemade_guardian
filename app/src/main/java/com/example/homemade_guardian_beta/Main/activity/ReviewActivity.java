@@ -13,10 +13,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.model.post.CommentModel;
 import com.example.homemade_guardian_beta.model.user.ReviewModel;
 import com.example.homemade_guardian_beta.model.user.UserModel;
-import com.example.homemade_guardian_beta.post.activity.BasicActivity;
+import com.example.homemade_guardian_beta.market.activity.BasicActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,13 +24,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Administrator on 2017-08-07.

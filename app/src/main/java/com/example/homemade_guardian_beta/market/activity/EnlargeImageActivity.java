@@ -1,15 +1,13 @@
-package com.example.homemade_guardian_beta.post.activity;
+package com.example.homemade_guardian_beta.market.activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.model.post.PostModel;
-import com.example.homemade_guardian_beta.post.common.view.ViewPagerAdapter;
+import com.example.homemade_guardian_beta.market.common.view.ViewPagerAdapter;
 
 import java.util.ArrayList;
 

@@ -13,7 +13,7 @@ import com.example.homemade_guardian_beta.R;
 //      Ex) 단어를 입력한 후 버튼을 누르면 SearchResultActivity로 넘어가게 된다.
 
 public class SearchActivity extends BasicActivity {
-    private EditText SearchPost;    //검색하고자 하는 단어 입력 받는 EditText
+    private EditText SearchMarket;    //검색하고자 하는 단어 입력 받는 EditText
     private Button Title_Search_Button;    //검색을 실행하는 버튼
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,7 @@ public class SearchActivity extends BasicActivity {
         setContentView(R.layout.activity_search);
         setToolbarTitle("검색");
 
-        SearchPost = findViewById(R.id.Search_PostTitle);
+        SearchMarket = findViewById(R.id.Search_PostTitle);
         Title_Search_Button = findViewById(R.id.Search_PostTitle_Button);
         Title_Search_Button.setOnClickListener(onClickListener);
     }
@@ -32,7 +32,7 @@ public class SearchActivity extends BasicActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.Search_PostTitle_Button:
-                    String Search = SearchPost.getText().toString();
+                    String Search = SearchMarket.getText().toString();
                     myStartActivity(SearchResultActivity.class,Search);
                     break;
             }

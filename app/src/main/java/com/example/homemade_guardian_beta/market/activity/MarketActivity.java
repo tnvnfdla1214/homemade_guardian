@@ -79,9 +79,9 @@ public class MarketActivity extends BasicActivity {                             
     private ArrayList<String> ImageList = new ArrayList<>();            //게시물의 이미지 리스트
 
     private ViewPager Viewpager;                    //이미지들을 보여주기 위한 ViewPager 선언
-    private Button Chat_With_PostHost_Button;                     //채팅하기 버튼
+    private Button Chat_With_MarketHost_Button;                     //채팅하기 버튼
     private Button Comment_Write_Button;            //댓글 작성 버튼
-    private TextView Post_Host_Name_TextView;       //게시물 작성자의 이름
+    private TextView Market_Host_Name_TextView;       //게시물 작성자의 이름
     private ImageButton Host_UserPage_ImageButton;      //게시물 작성자의 이미지 버튼
     private ImageButton Like_ImageButton;      //게시물 작성자의 이미지 버튼
     private BackPressEditText Comment_Input_EditText;              //댓글 내용
@@ -120,8 +120,8 @@ public class MarketActivity extends BasicActivity {                             
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
-        Chat_With_PostHost_Button = (Button) findViewById(R.id.Chat_With_PostHost_Button);
-        Chat_With_PostHost_Button.setOnClickListener(onClickListener);
+        Chat_With_MarketHost_Button = (Button) findViewById(R.id.Chat_With_PostHost_Button);
+        Chat_With_MarketHost_Button.setOnClickListener(onClickListener);
         Host_UserPage_ImageButton = (ImageButton) findViewById(R.id.Host_UserPage_ImageButton);
         Host_UserPage_ImageButton.setOnClickListener(onClickListener);
         Like_ImageButton = (ImageButton) findViewById(R.id.Like_ImageButton);
@@ -136,7 +136,7 @@ public class MarketActivity extends BasicActivity {                             
         Title_TextView = findViewById(R.id.Post_Title);
         TextContents_TextView = findViewById(R.id.Post_TextContents);
         Like_TextView = findViewById(R.id.Like_TextView);
-        TextView Post_DateOfManufacture = findViewById(R.id.Post_DateOfManufacture);
+        TextView Market_DateOfManufacture = findViewById(R.id.Post_DateOfManufacture);
         findViewById(R.id.Comment_Write_Button).setOnClickListener(onClickListener);
 
 
@@ -149,7 +149,7 @@ public class MarketActivity extends BasicActivity {                             
 
         Title_TextView.setText(marketmodel.getMarketModel_Title());
         TextContents_TextView.setText(marketmodel.getMarketModel_Text());
-        Post_DateOfManufacture.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(marketmodel.getMarketModel_DateOfManufacture()));
+        Market_DateOfManufacture.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(marketmodel.getMarketModel_DateOfManufacture()));
 
         DocRefe_USERS_CurrentUid(); //댓글을 쓰는 사람의 정보를 받는 함수
         DocRef_USERS_HostUid();     //게시물의 작성자의 정보를 받는 함수
@@ -176,7 +176,7 @@ public class MarketActivity extends BasicActivity {                             
 
         //작성자일 때 채팅버튼 비활성화
         if(CurrentUid.equals(marketmodel.getMarketModel_Host_Uid())){
-            Chat_With_PostHost_Button.setVisibility(View.GONE);
+            Chat_With_MarketHost_Button.setVisibility(View.GONE);
         }
 
         // 좋아요 버튼의 활성화 상태 결정
@@ -195,7 +195,7 @@ public class MarketActivity extends BasicActivity {                             
 
 
         //댓글 목록
-        Comment_Firestoreadapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("POSTS").document(marketmodel.getMarketModel_Post_Uid()).collection("COMMENT").orderBy("commentModel_DateOfManufacture"));
+        Comment_Firestoreadapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("POSTS").document(marketmodel.getMarketModel_Market_Uid()).collection("COMMENT").orderBy("commentModel_DateOfManufacture"));
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(MarketActivity.this));
         recyclerView.setAdapter(Comment_Firestoreadapter);
@@ -216,7 +216,7 @@ public class MarketActivity extends BasicActivity {                             
         @Override
         public void onBackPress() {
             if(!CurrentUid.equals(marketmodel.getMarketModel_Host_Uid())){
-                Chat_With_PostHost_Button.setVisibility(View.VISIBLE);
+                Chat_With_MarketHost_Button.setVisibility(View.VISIBLE);
             }
         }
     };
@@ -271,13 +271,13 @@ public class MarketActivity extends BasicActivity {                             
                 Usermodel = documentSnapshot.toObject(UserModel.class);
                 if(Usermodel.getUserModel_ProfileImage() != null){
                     Glide.with(MarketActivity.this).load(Usermodel.getUserModel_ProfileImage()).centerInside().override(500).into(Host_UserPage_ImageButton);
-                    Post_Host_Name_TextView = findViewById(R.id.Post_Host_Name);
-                    Post_Host_Name_TextView.setText(Usermodel.getUserModel_NickName());
+                    Market_Host_Name_TextView = findViewById(R.id.Post_Host_Name);
+                    Market_Host_Name_TextView.setText(Usermodel.getUserModel_NickName());
                 }
                 else{
                     Glide.with(getApplicationContext()).load(R.drawable.none_profile_user).into(Host_UserPage_ImageButton);
-                    Post_Host_Name_TextView = findViewById(R.id.Post_Host_Name);
-                    Post_Host_Name_TextView.setText(Usermodel.getUserModel_NickName());
+                    Market_Host_Name_TextView = findViewById(R.id.Post_Host_Name);
+                    Market_Host_Name_TextView.setText(Usermodel.getUserModel_NickName());
                 }
             }
         });
@@ -315,7 +315,7 @@ public class MarketActivity extends BasicActivity {                             
                 Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                 //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
                 Intent_ChatActivity.putExtra("To_User_Uid", marketmodel.getMarketModel_Host_Uid());
-                Intent_ChatActivity.putExtra("PostModel_Post_Uid", marketmodel.getMarketModel_Post_Uid());
+                Intent_ChatActivity.putExtra("PostModel_Post_Uid", marketmodel.getMarketModel_Market_Uid());
                 startActivity(Intent_ChatActivity);
                 return true;
             default:
@@ -338,7 +338,7 @@ public class MarketActivity extends BasicActivity {                             
                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                     //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
                     Intent_ChatActivity.putExtra("To_User_Uid", marketmodel.getMarketModel_Host_Uid());
-                    Intent_ChatActivity.putExtra("PostModel_Post_Uid", marketmodel.getMarketModel_Post_Uid());
+                    Intent_ChatActivity.putExtra("PostModel_Post_Uid", marketmodel.getMarketModel_Market_Uid());
                     startActivity(Intent_ChatActivity);
                     break;
                 case R.id.Comment_Write_Button:
@@ -349,11 +349,11 @@ public class MarketActivity extends BasicActivity {                             
                     InputMethodManager immhide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                     if (!CurrentUid.equals(marketmodel.getMarketModel_Host_Uid())) {
-                        Chat_With_PostHost_Button.setVisibility(View.VISIBLE);
+                        Chat_With_MarketHost_Button.setVisibility(View.VISIBLE);
                     }
                     break;
                 case R.id.Comment_Input_EditText:
-                    Chat_With_PostHost_Button.setVisibility(View.GONE);
+                    Chat_With_MarketHost_Button.setVisibility(View.GONE);
                     Comment_Input_EditText.setFocusableInTouchMode(true);
                     Comment_Input_EditText.requestFocus();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -363,7 +363,7 @@ public class MarketActivity extends BasicActivity {                             
                     InputMethodManager immHide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     immHide.hideSoftInputFromWindow(Comment_Input_EditText.getWindowToken(), 0);
                     if (!CurrentUid.equals(marketmodel.getMarketModel_Host_Uid())) {
-                        Chat_With_PostHost_Button.setVisibility(View.VISIBLE);
+                        Chat_With_MarketHost_Button.setVisibility(View.VISIBLE);
                     }
                     break;
                 case R.id.Like_ImageButton:
@@ -378,15 +378,15 @@ public class MarketActivity extends BasicActivity {                             
                         Glide.with(getApplicationContext()).load(R.drawable.heart).into(Like_ImageButton);
                         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
                         ArrayList<String> LikeList = new ArrayList<>();
-                        final DocumentReference documentReference = firebaseFirestore.collection("POSTS").document(marketmodel.getMarketModel_Post_Uid());
+                        final DocumentReference documentReference = firebaseFirestore.collection("POSTS").document(marketmodel.getMarketModel_Market_Uid());
                         LikeList = marketmodel.getMarketModel_LikeList();
                         LikeList.add(CurrentUid);
                         if (LikeList.size() > 0) {
-                            marketmodel.setMarketModel_HotPost("O");
+                            marketmodel.setMarketModel_HotMarket("O");
                         }
                         marketmodel.setMarketModel_LikeList(LikeList);
 
-                        documentReference.set(marketmodel.getPostInfo())
+                        documentReference.set(marketmodel.getMarketInfo())
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -406,10 +406,10 @@ public class MarketActivity extends BasicActivity {                             
 
     OnPostListener onPostListener = new OnPostListener() {
         @Override
-        public void onDelete(MarketModel postmodel) {
+        public void onDelete(MarketModel marketModel) {
             Log.e("로그 ","삭제 성공");
         }
-        public void oncommentDelete(Market_CommentModel commentmodel) {
+        public void oncommentDelete(Market_CommentModel market_commentModel) {
             Log.e("로그 ","댓글 삭제 성공");
         }
         @Override
@@ -418,28 +418,28 @@ public class MarketActivity extends BasicActivity {                             
         }
     };
 
-    private void myStartActivity(Class c, MarketModel postmodel) {                                          // part : 여기서는 수정 버튼을 눌렀을 때 게시물의 정보도 같이 넘겨준다.
-        Intent Intent_Post_Data = new Intent(this, c);
-        Intent_Post_Data.putExtra("postInfo", postmodel);
-        startActivityForResult(Intent_Post_Data, 0);
+    private void myStartActivity(Class c, MarketModel marketModel) {                                          // part : 여기서는 수정 버튼을 눌렀을 때 게시물의 정보도 같이 넘겨준다.
+        Intent Intent_Market_Data = new Intent(this, c);
+        Intent_Market_Data.putExtra("postInfo", marketModel);
+        startActivityForResult(Intent_Market_Data, 0);
     }
 
        // 댓글을 작성하는 함수
     private void Write_Comment(final String Comment, final String Host_Name, final String Comment_Host_Image) {
         Comment_Write_Button.setEnabled(false);
         String Comment_Uid = null;
-        Comment_Uid = FirebaseFirestore.getInstance().collection("POSTS").document(marketmodel.getMarketModel_Post_Uid()).collection("COMMENT").document().getId();
+        Comment_Uid = FirebaseFirestore.getInstance().collection("POSTS").document(marketmodel.getMarketModel_Market_Uid()).collection("COMMENT").document().getId();
 
         Date DateOfManufacture = new Date();
-        commentmodel = new Market_CommentModel(CurrentUid, Comment,  DateOfManufacture, Host_Name, Comment_Uid, marketmodel.getMarketModel_Post_Uid(),Comment_Host_Image);
+        commentmodel = new Market_CommentModel(CurrentUid, Comment,  DateOfManufacture, Host_Name, Comment_Uid, marketmodel.getMarketModel_Market_Uid(),Comment_Host_Image);
 
-        final DocumentReference docRef_POSTS_PostUid = FirebaseFirestore.getInstance().collection("POSTS").document(marketmodel.getMarketModel_Post_Uid());
+        final DocumentReference docRef_MARKETS_MarketUid = FirebaseFirestore.getInstance().collection("POSTS").document(marketmodel.getMarketModel_Market_Uid());
         final String CommentID = Comment_Uid;
-        docRef_POSTS_PostUid.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        docRef_MARKETS_MarketUid.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 WriteBatch Batch_COMMENT_CommentUid = FirebaseFirestore.getInstance().batch();
-                Batch_COMMENT_CommentUid.set(docRef_POSTS_PostUid.collection("COMMENT").document(CommentID), commentmodel);
+                Batch_COMMENT_CommentUid.set(docRef_MARKETS_MarketUid.collection("COMMENT").document(CommentID), commentmodel);
                 Batch_COMMENT_CommentUid.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -507,7 +507,7 @@ public class MarketActivity extends BasicActivity {                             
                                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                                     //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
                                     Intent_ChatActivity.putExtra("To_User_Uid", marketmodel.getMarketModel_Host_Uid());
-                                    Intent_ChatActivity.putExtra("PostModel_Post_Uid", marketmodel.getMarketModel_Post_Uid());
+                                    Intent_ChatActivity.putExtra("PostModel_Post_Uid", marketmodel.getMarketModel_Market_Uid());
                                     startActivity(Intent_ChatActivity);
                                     return true;
                                 default:
@@ -565,9 +565,9 @@ public class MarketActivity extends BasicActivity {                             
         @Override
         public void onBindViewHolder(LikeViewHolder viewHolder, int position) {
             DocumentSnapshot DocumentSnapshot = getSnapshot(position);
-            final MarketModel postmodel = DocumentSnapshot.toObject(MarketModel.class);
+            final MarketModel marketModel = DocumentSnapshot.toObject(MarketModel.class);
 
-            String LikeCount = String.valueOf(postmodel.getMarketModel_LikeList().size());
+            String LikeCount = String.valueOf(marketModel.getMarketModel_LikeList().size());
             viewHolder.Like_Count_TextView.setText(LikeCount);
             Log.d("로그","LikeCount :" + LikeCount);
             }

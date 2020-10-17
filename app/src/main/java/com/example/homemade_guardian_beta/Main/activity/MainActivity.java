@@ -9,18 +9,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.example.homemade_guardian_beta.Main.bottombar.ChatroomListFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.HomeFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.MyInfoFragment;
-import com.example.homemade_guardian_beta.Main.bottombar.WritePostFragment;
+import com.example.homemade_guardian_beta.Main.bottombar.WriteMarketFragment;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,14 +32,13 @@ public class MainActivity extends AppCompatActivity {
 
     private String LocalState = null;
     HomeFragment homeFragment;
-    WritePostFragment writepostFragment;
+    WriteMarketFragment writeMarketFragment;
     ChatroomListFragment chatroomFragment;
     MyInfoFragment myinfoFragment;
     ArrayList<String> UnReViewUserList = new ArrayList<>();
-    ArrayList<String> UnReViewPostList = new ArrayList<>();
+    ArrayList<String> UnReViewMarketList = new ArrayList<>();
 
 
-    Button Post_Write_Button;
     Button Market_Write_Button;
 
     private RelativeLayout Writen_ButtonsBackground_Layout;          //글쓰기 바텀 버튼 누를시
@@ -56,13 +52,11 @@ public class MainActivity extends AppCompatActivity {
 
         Writen_ButtonsBackground_Layout = findViewById(R.id.Writen_ButtonsBackground_Layout);
         Writen_ButtonsBackground_Layout.setOnClickListener(onClickListener);
-        Post_Write_Button = findViewById(R.id.Post_Write_Button);
-        Post_Write_Button.setOnClickListener(onClickListener);
-        Market_Write_Button = findViewById(R.id.Market_Write_Button);
+        Market_Write_Button = findViewById(R.id.Post_Write_Button);
         Market_Write_Button.setOnClickListener(onClickListener);
 
         homeFragment = new HomeFragment();
-        writepostFragment = new WritePostFragment();
+        writeMarketFragment = new WriteMarketFragment();
         chatroomFragment = new ChatroomListFragment();
         myinfoFragment = new MyInfoFragment();
 
@@ -115,10 +109,10 @@ public class MainActivity extends AppCompatActivity {
                             if (document.exists()) {
                                 userModel = document.toObject(UserModel.class);
                                 UnReViewUserList = userModel.getUserModel_UnReViewUserList();
-                                UnReViewPostList = userModel.getUserModel_UnReViewPostList();
+                                UnReViewMarketList = userModel.getUserModel_UnReViewPostList();
                                 if(UnReViewUserList.size()>0){
                                     ReviewActivity reviewActivity = new ReviewActivity(MainActivity.this);
-                                    reviewActivity.callFunction(UnReViewUserList.get(0),UnReViewPostList.get(0));
+                                    reviewActivity.callFunction(UnReViewUserList.get(0), UnReViewMarketList.get(0));
                                 }
                             }else {
                                 myStartActivity(MemberInitActivity.class);
@@ -141,8 +135,8 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
                         return true;
                     case R.id.writepost:
-                        Writen_ButtonsBackground_Layout.setVisibility(View.VISIBLE);
-                       // getSupportFragmentManager().beginTransaction().replace(R.id.container, writepostFragment).commit();
+                        //Writen_ButtonsBackground_Layout.setVisibility(View.VISIBLE);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, writeMarketFragment).commit();
                         return true;
                     case R.id.chatroomlist:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, chatroomFragment).commit();
@@ -165,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.Post_Write_Button:
                     //Intent intent = new Intent( MainActivity.this, WritePostActivity.class);
                     //startActivity(intent);
-                    myStartActivity(WritePostActivity.class);
+                    myStartActivity(WriteMarketActivity.class);
                     break;
                 case R.id.Market_Write_Button:
                     Writen_ButtonsBackground_Layout.setVisibility(View.GONE);

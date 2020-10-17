@@ -103,7 +103,7 @@ public class ChatFragment extends Fragment {
     private EditText Chat_Message_Input_EditText;                                                 //채팅 edittext
     private RecyclerView Chat_RecyclerView;                                                       //채팅 리사이클러뷰
 
-    private String PostModel_Post_Uid;
+    private String MarketModel_Market_Uid;
     private String ChatRoomListModel_RoomUid;                                                     //룸의 uid (확실 x)
     private String currentUser_Uid;                                                                         //나의 uid
     private String To_User_Uid;                                                                         //상대방의 uid
@@ -130,12 +130,12 @@ public class ChatFragment extends Fragment {
     public ChatFragment() {
     }
 
-    public static final ChatFragment getInstance(String To_User_Uid, String RoomUiD,String PostModel_Post_Uid,String currentUser_Uid) {
+    public static final ChatFragment getInstance(String To_User_Uid, String RoomUiD,String MarketModel_Market_Uid,String currentUser_Uid) {
         ChatFragment chatFragment = new ChatFragment();
         Bundle bundle = new Bundle();
         bundle.putString("To_User_Uid", To_User_Uid);
         bundle.putString("RoomUid", RoomUiD);
-        bundle.putString("PostModel_Post_Uid", PostModel_Post_Uid);
+        bundle.putString("PostModel_Post_Uid", MarketModel_Market_Uid);
         bundle.putString("currentUser_Uid", currentUser_Uid);
         chatFragment.setArguments(bundle);
         return chatFragment;
@@ -212,8 +212,8 @@ public class ChatFragment extends Fragment {
         if (getArguments() != null) {
             ChatRoomListModel_RoomUid = getArguments().getString("RoomUid");
             To_User_Uid = getArguments().getString("To_User_Uid");
-            PostModel_Post_Uid = getArguments().getString("PostModel_Post_Uid");
-            Log.d("민규123","PostModel_Post_Uid : " + PostModel_Post_Uid);
+            MarketModel_Market_Uid = getArguments().getString("PostModel_Post_Uid");
+
         }
 
         if (!"".equals(To_User_Uid) && To_User_Uid !=null) {                     // find existing room for two user ToUid가 널이 아니거나 ToUid가 ""이거가 아니면
@@ -318,7 +318,7 @@ public class ChatFragment extends Fragment {
     Button.OnClickListener Chat_Send_Button_ClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             String msg = Chat_Message_Input_EditText.getText().toString();
-            sendMessage(msg, "0", null,PostModel_Post_Uid);
+            sendMessage(msg, "0", null, MarketModel_Market_Uid);
             Chat_Message_Input_EditText.setText("");
         }
     };
@@ -381,7 +381,7 @@ public class ChatFragment extends Fragment {
         MessageModel.put("MessageModel_ImageCount","0");
 
         //해당 룸은 어떤 포스트의 경로인지 확인하는 Postuid를 만들어준다.
-        MessageModel.put("MessageModel_PostUid",PostModel_Post_Uid);
+        MessageModel.put("MessageModel_PostUid", MarketModel_Market_Uid);
 
         room.set(MessageModel).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -396,7 +396,7 @@ public class ChatFragment extends Fragment {
 
 
     //메세지 보내기 함수
-    private void sendMessage(final String MessageModel_Message, String Message_MessageType, final ChatModel.FileInfo fileinfo,final String PostModel_Post_Uid) {
+    private void sendMessage(final String MessageModel_Message, String Message_MessageType, final ChatModel.FileInfo fileinfo,final String MarketModel_Market_Uid) {
         Chat_Send_Button.setEnabled(false);
 
         //최초 룸 만들기기
@@ -442,7 +442,7 @@ public class ChatFragment extends Fragment {
                     if (!currentUser_Uid.equals(key)) users.put(key, users.get(key)+1);
                 }
                 document.getReference().update("USERS", users);
-                document.getReference().update("MessageModel_PostUid", PostModel_Post_Uid);
+                document.getReference().update("MessageModel_PostUid", MarketModel_Market_Uid);
 
                 batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -473,7 +473,7 @@ public class ChatFragment extends Fragment {
         StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_MessageModel_ImageCount).putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                sendMessage(String_MessageModel_ImageCount, Integer.toString(requestCode), fileinfo,PostModel_Post_Uid);
+                sendMessage(String_MessageModel_ImageCount, Integer.toString(requestCode), fileinfo, MarketModel_Market_Uid);
                 //추가 ()
                 DocumentReference docRefe_ROOMS_CurrentUid = FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid);
                 docRefe_ROOMS_CurrentUid.update("MessageModel_ImageCount", String_MessageModel_ImageCount).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -909,7 +909,7 @@ public class ChatFragment extends Fragment {
                 DocumentSnapshot document = task.getResult();
                 String NickName = (String)document.get("userModel_NickName");
                 String msg = "("+ NickName + ")" + "  님이 나갔습니다.";
-                sendMessage(msg, "0", null,PostModel_Post_Uid);
+                sendMessage(msg, "0", null, MarketModel_Market_Uid);
             }
         });
     }

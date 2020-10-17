@@ -57,9 +57,9 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.MainViewHo
         Cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {                                                                   // part18 : 게시물 클릭시 게시물페이지로 이동 (36'10")
-                Intent Intent_PostActivity = new Intent(Activity, MarketActivity.class);
-                Intent_PostActivity.putExtra("postInfo", arrayList_MarketModel.get(Mainviewholder.getAdapterPosition()));
-                Activity.startActivity(Intent_PostActivity);
+                Intent Intent_MarketActivity = new Intent(Activity, MarketActivity.class);
+                Intent_MarketActivity.putExtra("postInfo", arrayList_MarketModel.get(Mainviewholder.getAdapterPosition()));
+                Activity.startActivity(Intent_MarketActivity);
             }
         });
         return Mainviewholder;
@@ -72,19 +72,19 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.MainViewHo
         CardView Contents_CardView = holder.Cardview;
         TextView Title_TextView = Contents_CardView.findViewById(R.id.Post_Title_TextView);
         TextView Contents_TextView = Contents_CardView.findViewById(R.id.Post_Contents_TextView);
-        TextView Post_Category = Contents_CardView.findViewById(R.id.Post_Category);
-        TextView Post_LikeCount = Contents_CardView.findViewById(R.id.Post_LikeCount);
-        MarketModel postmodel = arrayList_MarketModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
-        Title_TextView.setText(postmodel.getMarketModel_Title());
-        Contents_TextView.setText(postmodel.getMarketModel_Text());
-        Post_Category.setText(postmodel.getMarketModel_Category());
-        Post_LikeCount.setText(String.valueOf(postmodel.getMarketModel_LikeList().size()));
+        TextView Market_Category = Contents_CardView.findViewById(R.id.Post_Category);
+        TextView Market_LikeCount = Contents_CardView.findViewById(R.id.Post_LikeCount);
+        MarketModel marketModel = arrayList_MarketModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
+        Title_TextView.setText(marketModel.getMarketModel_Title());
+        Contents_TextView.setText(marketModel.getMarketModel_Text());
+        Market_Category.setText(marketModel.getMarketModel_Category());
+        Market_LikeCount.setText(String.valueOf(marketModel.getMarketModel_LikeList().size()));
                          //contentsLayout에다가 날짜포함
         LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);                      /////////////////////이거 대신 텍스트 만든거 보여주기로
         TextView DateOfManufacture_TextView = Contents_CardView.findViewById(R.id.Post_DateOfManufacture);
-        DateOfManufacture_TextView.setText(new SimpleDateFormat("MM/dd hh:mm", Locale.getDefault()).format(postmodel.getMarketModel_DateOfManufacture()));
+        DateOfManufacture_TextView.setText(new SimpleDateFormat("MM/dd hh:mm", Locale.getDefault()).format(marketModel.getMarketModel_DateOfManufacture()));
 
-        ArrayList<String> ArrayList_ImageList = postmodel.getMarketModel_ImageList();
+        ArrayList<String> ArrayList_ImageList = marketModel.getMarketModel_ImageList();
         if(ArrayList_ImageList != null) {
             Log.d("로그","썸네일 있");
             ImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);

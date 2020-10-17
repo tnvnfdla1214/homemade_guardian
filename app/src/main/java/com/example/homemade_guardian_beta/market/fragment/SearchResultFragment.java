@@ -59,10 +59,10 @@ public class SearchResultFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(searchResultAdapter);
-        postsUpdate(true);
+        MarketUpdate(true);
         return  view;
     }
-    private void postsUpdate(final boolean clear) {
+    private void MarketUpdate(final boolean clear) {
         //updating = true;
 
         Date date = marketList.size() == 0 || clear ? new Date() : marketList.get(marketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")

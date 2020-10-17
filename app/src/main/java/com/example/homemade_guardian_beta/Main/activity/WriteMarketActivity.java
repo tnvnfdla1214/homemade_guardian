@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.homemade_guardian_beta.R;
 
-public class WritePostActivity extends AppCompatActivity {
+public class WriteMarketActivity extends AppCompatActivity {
     Button test_btn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +20,7 @@ public class WritePostActivity extends AppCompatActivity {
         test_btn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(WritePostActivity.this, MainActivity.class);
+                Intent intent = new Intent(WriteMarketActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }

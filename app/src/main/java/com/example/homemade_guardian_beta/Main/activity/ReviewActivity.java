@@ -49,7 +49,7 @@ public class ReviewActivity extends BasicActivity {
     }
 
     // 호출할 다이얼로그 함수를 정의한다.
-    public void callFunction(final String To_User_Uid, final String PostModel_Post_Uid) {
+    public void callFunction(final String To_User_Uid, final String MarketModel_Market_Uid) {
 
         // 커스텀 다이얼로그를 정의하기위해 Dialog클래스를 생성한다.
         final Dialog dlg = new Dialog(context);
@@ -131,7 +131,7 @@ public class ReviewActivity extends BasicActivity {
                 ReviewModel_Uid = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid).collection("REVIEW").document().getId();
 
                 Date DateOfManufacture = new Date();
-                ReviewModel = new ReviewModel(ReviewModel_Uid, PostModel_Post_Uid,  To_User_Uid, Writen_Review_TextView.getText().toString(), ReviewModel_Selected_Review, DateOfManufacture);
+                ReviewModel = new ReviewModel(ReviewModel_Uid, MarketModel_Market_Uid,  To_User_Uid, Writen_Review_TextView.getText().toString(), ReviewModel_Selected_Review, DateOfManufacture);
 
                 final DocumentReference docRef_Users_ReviewUid = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
                 final String Reviewmodel_Uid = ReviewModel_Uid;

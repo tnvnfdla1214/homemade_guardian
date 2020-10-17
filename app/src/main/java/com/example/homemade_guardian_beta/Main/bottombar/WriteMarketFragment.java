@@ -54,7 +54,7 @@ import java.util.List;
 import static android.app.Activity.RESULT_OK;
 import static com.example.homemade_guardian_beta.market.MarketUtil.INTENT_MEDIA;
 
-public class WritePostFragment extends Fragment {
+public class WriteMarketFragment extends Fragment {
     private FirebaseUser currentUser;
     private StorageReference storageRef;
     private RelativeLayout buttonsBackgroundLayout;
@@ -67,13 +67,13 @@ public class WritePostFragment extends Fragment {
     public  ArrayList<String> selectedPhotos = new ArrayList<>();
 ////////////////////////
     private ImageView Selected_ImageView;
-    private Button Select_Post_Image_Button;
+    private Button Select_Market_Image_Button;
     private ArrayList<String> ImageList;            //게시물의 이미지 리스트
     private ViewPager Viewpager;                    //이미지들을 보여주기 위한 ViewPager 선언
-    private ImageView FoodPostbtn;
-    private ImageView LifePostbtn;
-    private ImageView BorrowPostbtn;
-    private ImageView WorkPostbtn;
+    private ImageView FoodMarketbtn;
+    private ImageView LifeMarketbtn;
+    private ImageView BorrowMarketbtn;
+    private ImageView WorkMarketbtn;
     private String Category = null;
 
     private String title;
@@ -106,20 +106,20 @@ public class WritePostFragment extends Fragment {
         //////////////////
         //Selected_ImageView = view.findViewById(R.id.Selected_ImageView);
         view.findViewById(R.id.Post_Write_Button).setOnClickListener(onClickListener);
-        Select_Post_Image_Button = view.findViewById(R.id.Select_Post_Image_Button);
-        Select_Post_Image_Button.setOnClickListener(onClickListener);
+        Select_Market_Image_Button = view.findViewById(R.id.Select_Post_Image_Button);
+        Select_Market_Image_Button.setOnClickListener(onClickListener);
 //        Select_Post_Image_Button.setBackground(drawable);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //            Select_Post_Image_Button.setClipToOutline(true);
 //        }
-        FoodPostbtn = (ImageView) view.findViewById(R.id.FoodPostbtn);
-        FoodPostbtn.setOnClickListener(onClickListener);
-        LifePostbtn = (ImageView) view.findViewById(R.id.LifePostbtn);
-        LifePostbtn.setOnClickListener(onClickListener);
-        BorrowPostbtn = (ImageView) view.findViewById(R.id.BorrowPostbtn);
-        BorrowPostbtn.setOnClickListener(onClickListener);
-        WorkPostbtn = (ImageView) view.findViewById(R.id.WorkPostbtn);
-        WorkPostbtn.setOnClickListener(onClickListener);
+        FoodMarketbtn = (ImageView) view.findViewById(R.id.FoodPostbtn);
+        FoodMarketbtn.setOnClickListener(onClickListener);
+        LifeMarketbtn = (ImageView) view.findViewById(R.id.LifePostbtn);
+        LifeMarketbtn.setOnClickListener(onClickListener);
+        BorrowMarketbtn = (ImageView) view.findViewById(R.id.BorrowPostbtn);
+        BorrowMarketbtn.setOnClickListener(onClickListener);
+        WorkMarketbtn = (ImageView) view.findViewById(R.id.WorkPostbtn);
+        WorkMarketbtn.setOnClickListener(onClickListener);
         ////////
         Viewpager = view.findViewById(R.id.ViewPager);
         Viewpager.setBackground(drawable);
@@ -190,7 +190,7 @@ public class WritePostFragment extends Fragment {
                     String ViewpagerState = "Disable";
                     Viewpager.setAdapter(new ViewPagerAdapter(getContext(), ImageList, ViewpagerState));
                 }
-                Select_Post_Image_Button.setText(Html.fromHtml(selectedPhotos.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
+                Select_Market_Image_Button.setText(Html.fromHtml(selectedPhotos.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
 
                 for(int i=0;i<photos.size();i++){
                     switch (i){
@@ -238,31 +238,31 @@ public class WritePostFragment extends Fragment {
                     break;
                 case R.id.FoodPostbtn:
                     //ImageView FoodPostbtn = (ImageView) view.findViewById(R.id.FoodPostbtn);
-                    FoodPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    LifePostbtn.setColorFilter(null);
-                    BorrowPostbtn.setColorFilter(null);
-                    WorkPostbtn.setColorFilter(null);
+                    FoodMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    LifeMarketbtn.setColorFilter(null);
+                    BorrowMarketbtn.setColorFilter(null);
+                    WorkMarketbtn.setColorFilter(null);
                     Category = "음식";
                     break;
                 case R.id.LifePostbtn:
-                    LifePostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    FoodPostbtn.setColorFilter(null);
-                    BorrowPostbtn.setColorFilter(null);
-                    WorkPostbtn.setColorFilter(null);
+                    LifeMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    FoodMarketbtn.setColorFilter(null);
+                    BorrowMarketbtn.setColorFilter(null);
+                    WorkMarketbtn.setColorFilter(null);
                     Category = "생필품";
                     break;
                 case R.id.BorrowPostbtn:
-                    BorrowPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    FoodPostbtn.setColorFilter(null);
-                    LifePostbtn.setColorFilter(null);
-                    WorkPostbtn.setColorFilter(null);
+                    BorrowMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    FoodMarketbtn.setColorFilter(null);
+                    LifeMarketbtn.setColorFilter(null);
+                    WorkMarketbtn.setColorFilter(null);
                     Category = "대여";
                     break;
                 case R.id.WorkPostbtn:
-                    WorkPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    FoodPostbtn.setColorFilter(null);
-                    LifePostbtn.setColorFilter(null);
-                    BorrowPostbtn.setColorFilter(null);
+                    WorkMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    FoodMarketbtn.setColorFilter(null);
+                    LifeMarketbtn.setColorFilter(null);
+                    BorrowMarketbtn.setColorFilter(null);
                     Category = "용역";
                     break;
                 case R.id.ButtonsBackground_Layout:
@@ -287,13 +287,13 @@ public class WritePostFragment extends Fragment {
         title = ((EditText) getView().findViewById(R.id.Post_Title_EditText)).getText().toString();
         textcontents = ((EditText) getView().findViewById(R.id.contentsEditText)).getText().toString();
         final ArrayList<String> LikeList = new ArrayList<>();
-        final String HotPost = "X";
-        final String PostModel_reservation = "X";
-        final String PostModel_deal = "X";
+        final String HotMarket = "X";
+        final String MarketModel_reservation = "X";
+        final String MarketModel_deal = "X";
 
         Log.e("로그", "카테고리 : " + Category);
         if (title.length() > 0 && Category != null) {
-            String postID = null;
+            String MarketID = null;
             loaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
             final ArrayList<String> contentsList = new ArrayList<>();                                   // part11 : contentsList에는 컨텐츠 내용이
             currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -301,8 +301,8 @@ public class WritePostFragment extends Fragment {
             StorageReference storageRef = storage.getReference();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
             ///
-            postID = firebaseFirestore.collection("POSTS").document().getId();
-            final DocumentReference documentReference =firebaseFirestore.collection("POSTS").document(postID);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
+            MarketID = firebaseFirestore.collection("POSTS").document().getId();
+            final DocumentReference documentReference =firebaseFirestore.collection("POSTS").document(MarketID);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
             final Date date = marketModel == null ? new Date() : marketModel.getMarketModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             Log.d("로그","111");
             for (int i = 0; i < selectedPhotos.size(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
@@ -315,7 +315,7 @@ public class WritePostFragment extends Fragment {
                     InputStream stream = new FileInputStream(new File(selectedPhotos.get(pathCount)));            // part11 : 경로 설정 (27'20")
                     StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (contentsList.size() - 1)).build();
                     UploadTask uploadTask = mountainImagesRef.putStream(stream, metadata);
-                    final String newPostID = postID;
+                    final String newMarketID = MarketID;
                     uploadTask.addOnFailureListener(new OnFailureListener() {                               // part11 :
                         @Override
                         public void onFailure(@NonNull Exception exception) {
@@ -329,8 +329,8 @@ public class WritePostFragment extends Fragment {
                                         public void onSuccess(Uri uri) {
                                             contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
                                             Log.e("로그", "카테고리 11111111111: " + Category);
-                                            MarketModel marketModel = new MarketModel(title, textcontents, contentsList,  date, currentUser.getUid(), newPostID, Category, LikeList, HotPost,PostModel_reservation,PostModel_deal);
-                                            marketModel.setMarketModel_Post_Uid(newPostID);
+                                            MarketModel marketModel = new MarketModel(title, textcontents, contentsList,  date, currentUser.getUid(), newMarketID, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal);
+                                            marketModel.setMarketModel_Market_Uid(newMarketID);
                                             storeUpload(documentReference, marketModel);
                                         }
                                     });
@@ -343,8 +343,8 @@ public class WritePostFragment extends Fragment {
             }
             if (selectedPhotos.size() == 0) {
                 Log.e("로그", "카테고리 22222222222222222222 : " + Category);
-                MarketModel marketModel = new MarketModel(title, textcontents, date, currentUser.getUid(), postID, Category, LikeList, HotPost,PostModel_reservation,PostModel_deal);
-                marketModel.setMarketModel_Post_Uid(postID);
+                MarketModel marketModel = new MarketModel(title, textcontents, date, currentUser.getUid(), MarketID, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal);
+                marketModel.setMarketModel_Market_Uid(MarketID);
                 storeUpload(documentReference, marketModel);
             }
         } else {
@@ -358,7 +358,7 @@ public class WritePostFragment extends Fragment {
     }
 
     private void storeUpload(DocumentReference documentReference, final MarketModel marketModel) {
-        documentReference.set(marketModel.getPostInfo())
+        documentReference.set(marketModel.getMarketInfo())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

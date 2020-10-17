@@ -38,21 +38,21 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private FirebaseFirestore firebaseFirestore;
     private MarketAdapter marketAdapter;
-    private ArrayList<MarketModel> postList;
+    private ArrayList<MarketModel> MarketList;
     private boolean updating;
     private boolean topScrolled;
     private String State;
     private RecyclerView recyclerView;
-    private ImageView FoodPostbtn;
-    private ImageView LifePostbtn;
-    private ImageView BorrowPostbtn;
-    private ImageView WorkPostbtn;
-    private ImageView HotPostbtn;
-    private String FoodPostbtn_State = "unSelected";
-    private String LifePostbtn_State = "unSelected";
-    private String BorrowPostbtn_State = "unSelected";
-    private String WorkPostbtn_State = "unSelected";
-    private String HotPostbtn_State = "unSelected";
+    private ImageView FoodMarketbtn;
+    private ImageView LifeMarketbtn;
+    private ImageView BorrowMarketbtn;
+    private ImageView WorkMarketbtn;
+    private ImageView HotMarketbtn;
+    private String FoodMarketbtn_State = "unSelected";
+    private String LifeMarketbtn_State = "unSelected";
+    private String BorrowMarketbtn_State = "unSelected";
+    private String WorkMarketbtn_State = "unSelected";
+    private String HotMarketbtn_State = "unSelected";
     private ImageView searchbtn;
 
     public HomeFragment() {                                                                                 // part22 : 프레그먼트로 내용 이전 (21'40")
@@ -71,14 +71,14 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         //지역선택
-        Spinner Post_Category_Spinner = (Spinner)view.findViewById(R.id.Local_Spinner);
-        ArrayAdapter Post_Category_Adapter = ArrayAdapter.createFromResource(getContext(), R.array.Local, android.R.layout.simple_spinner_item);
-        Post_Category_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Post_Category_Spinner.setAdapter(Post_Category_Adapter);
+        Spinner Market_Category_Spinner = (Spinner)view.findViewById(R.id.Local_Spinner);
+        ArrayAdapter Market_Category_Adapter = ArrayAdapter.createFromResource(getContext(), R.array.Local, android.R.layout.simple_spinner_item);
+        Market_Category_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Market_Category_Spinner.setAdapter(Market_Category_Adapter);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
-        postList = new ArrayList<>();
-        marketAdapter = new MarketAdapter(getActivity(), postList);
+        MarketList = new ArrayList<>();
+        marketAdapter = new MarketAdapter(getActivity(), MarketList);
         //homeAdapter.setOnPostListener(onPostListener);
 
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -87,16 +87,16 @@ public class HomeFragment extends Fragment {
         view.findViewById(R.id.searchbtn).setOnClickListener(onClickListener);
 
         //view.findViewById(R.id.AllPostbtn).setOnClickListener(onClickListener);
-        HotPostbtn = (ImageView) view.findViewById(R.id.HotPostbtn);
-        HotPostbtn.setOnClickListener(onClickListener);
-        FoodPostbtn = (ImageView) view.findViewById(R.id.FoodPostbtn);
-        FoodPostbtn.setOnClickListener(onClickListener);
-        LifePostbtn = (ImageView) view.findViewById(R.id.LifePostbtn);
-        LifePostbtn.setOnClickListener(onClickListener);
-        BorrowPostbtn = (ImageView) view.findViewById(R.id.BorrowPostbtn);
-        BorrowPostbtn.setOnClickListener(onClickListener);
-        WorkPostbtn = (ImageView) view.findViewById(R.id.WorkPostbtn);
-        WorkPostbtn.setOnClickListener(onClickListener);
+        HotMarketbtn = (ImageView) view.findViewById(R.id.HotPostbtn);
+        HotMarketbtn.setOnClickListener(onClickListener);
+        FoodMarketbtn = (ImageView) view.findViewById(R.id.FoodPostbtn);
+        FoodMarketbtn.setOnClickListener(onClickListener);
+        LifeMarketbtn = (ImageView) view.findViewById(R.id.LifePostbtn);
+        LifeMarketbtn.setOnClickListener(onClickListener);
+        BorrowMarketbtn = (ImageView) view.findViewById(R.id.BorrowPostbtn);
+        BorrowMarketbtn.setOnClickListener(onClickListener);
+        WorkMarketbtn = (ImageView) view.findViewById(R.id.WorkPostbtn);
+        WorkMarketbtn.setOnClickListener(onClickListener);
         searchbtn = (ImageView) view.findViewById(R.id.searchbtn);
         searchbtn.setOnClickListener(onClickListener);
         searchbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
@@ -144,7 +144,7 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-        All_postsUpdate(false);
+        All_MarketUpdate(false);
 
         return view;
     }
@@ -167,18 +167,18 @@ public class HomeFragment extends Fragment {
 
     public void JudgeState(Boolean clear){
         if(State == "전체"){
-            All_postsUpdate(clear);
+            All_MarketUpdate(clear);
 
         }else if(State == "핫게시판"){
-            Hot_postsUpdate(clear);
+            Hot_MarketUpdate(clear);
         }else if(State == "음식"){
-            Food_postsUpdate(clear);
+            Food_MarketUpdate(clear);
         }else if(State == "생필품"){
-            Thing_postsUpdate(clear);
+            Thing_MarketUpdate(clear);
         }else if(State == "대여"){
-            Borrow_postsUpdate(clear);
+            Borrow_MarketUpdate(clear);
         }else if(State == "용역"){
-            Work_postsUpdate(clear);
+            Work_MarketUpdate(clear);
         }
     }
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -190,26 +190,26 @@ public class HomeFragment extends Fragment {
                     myStartActivity(SearchActivity.class);
                     break;
                 case R.id.HotPostbtn:
-                    if(HotPostbtn_State.equals("unSelected")){
-                    HotPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    FoodPostbtn.setColorFilter(null);
-                    LifePostbtn.setColorFilter(null);
-                    BorrowPostbtn.setColorFilter(null);
-                    WorkPostbtn.setColorFilter(null);
-                    postList.clear();
-                    Hot_postsUpdate(true);
+                    if(HotMarketbtn_State.equals("unSelected")){
+                    HotMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    FoodMarketbtn.setColorFilter(null);
+                    LifeMarketbtn.setColorFilter(null);
+                    BorrowMarketbtn.setColorFilter(null);
+                    WorkMarketbtn.setColorFilter(null);
+                    MarketList.clear();
+                    Hot_MarketUpdate(true);
                     State = "핫게시판";
-                        HotPostbtn_State = "Selected";
-                    }else if(HotPostbtn_State.equals("Selected")){
-                        FoodPostbtn.setColorFilter(null);
-                        LifePostbtn.setColorFilter(null);
-                        BorrowPostbtn.setColorFilter(null);
-                        WorkPostbtn.setColorFilter(null);
-                        HotPostbtn.setColorFilter(null);
-                        postList.clear();
-                        All_postsUpdate(true);
+                        HotMarketbtn_State = "Selected";
+                    }else if(HotMarketbtn_State.equals("Selected")){
+                        FoodMarketbtn.setColorFilter(null);
+                        LifeMarketbtn.setColorFilter(null);
+                        BorrowMarketbtn.setColorFilter(null);
+                        WorkMarketbtn.setColorFilter(null);
+                        HotMarketbtn.setColorFilter(null);
+                        MarketList.clear();
+                        All_MarketUpdate(true);
                         State = "전체";
-                        HotPostbtn_State = "unSelected";
+                        HotMarketbtn_State = "unSelected";
                     }
                     break;
 //                case R.id.AllPostbtn:
@@ -224,105 +224,105 @@ public class HomeFragment extends Fragment {
 //                    break;
                 case R.id.FoodPostbtn:
                     //ImageView FoodPostbtn = (ImageView) view.findViewById(R.id.FoodPostbtn);
-                    if(FoodPostbtn_State.equals("unSelected")){
-                        FoodPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                        LifePostbtn.setColorFilter(null);
-                        BorrowPostbtn.setColorFilter(null);
-                        WorkPostbtn.setColorFilter(null);
-                        HotPostbtn.setColorFilter(null);
-                        postList.clear();
-                        Food_postsUpdate(true);
+                    if(FoodMarketbtn_State.equals("unSelected")){
+                        FoodMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                        LifeMarketbtn.setColorFilter(null);
+                        BorrowMarketbtn.setColorFilter(null);
+                        WorkMarketbtn.setColorFilter(null);
+                        HotMarketbtn.setColorFilter(null);
+                        MarketList.clear();
+                        Food_MarketUpdate(true);
                         State = "음식";
-                        FoodPostbtn_State = "Selected";
-                    }else if(FoodPostbtn_State.equals("Selected")){
-                        FoodPostbtn.setColorFilter(null);
-                        LifePostbtn.setColorFilter(null);
-                        BorrowPostbtn.setColorFilter(null);
-                        WorkPostbtn.setColorFilter(null);
-                        HotPostbtn.setColorFilter(null);
-                        postList.clear();
-                        All_postsUpdate(true);
+                        FoodMarketbtn_State = "Selected";
+                    }else if(FoodMarketbtn_State.equals("Selected")){
+                        FoodMarketbtn.setColorFilter(null);
+                        LifeMarketbtn.setColorFilter(null);
+                        BorrowMarketbtn.setColorFilter(null);
+                        WorkMarketbtn.setColorFilter(null);
+                        HotMarketbtn.setColorFilter(null);
+                        MarketList.clear();
+                        All_MarketUpdate(true);
                         State = "전체";
-                        FoodPostbtn_State = "unSelected";
+                        FoodMarketbtn_State = "unSelected";
                     }
 
                     break;
                 case R.id.LifePostbtn:
-                    if(LifePostbtn_State.equals("unSelected")){
-                    LifePostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    FoodPostbtn.setColorFilter(null);
-                    BorrowPostbtn.setColorFilter(null);
-                    WorkPostbtn.setColorFilter(null);
-                    HotPostbtn.setColorFilter(null);
-                    postList.clear();
-                    Thing_postsUpdate(true);
+                    if(LifeMarketbtn_State.equals("unSelected")){
+                    LifeMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    FoodMarketbtn.setColorFilter(null);
+                    BorrowMarketbtn.setColorFilter(null);
+                    WorkMarketbtn.setColorFilter(null);
+                    HotMarketbtn.setColorFilter(null);
+                    MarketList.clear();
+                    Thing_MarketUpdate(true);
                     State = "생필품";
-                    LifePostbtn_State = "Selected";
-                    } else if(LifePostbtn_State.equals("Selected")){
-                        FoodPostbtn.setColorFilter(null);
-                        LifePostbtn.setColorFilter(null);
-                        BorrowPostbtn.setColorFilter(null);
-                        WorkPostbtn.setColorFilter(null);
-                        HotPostbtn.setColorFilter(null);
-                        postList.clear();
-                        All_postsUpdate(true);
+                    LifeMarketbtn_State = "Selected";
+                    } else if(LifeMarketbtn_State.equals("Selected")){
+                        FoodMarketbtn.setColorFilter(null);
+                        LifeMarketbtn.setColorFilter(null);
+                        BorrowMarketbtn.setColorFilter(null);
+                        WorkMarketbtn.setColorFilter(null);
+                        HotMarketbtn.setColorFilter(null);
+                        MarketList.clear();
+                        All_MarketUpdate(true);
                         State = "전체";
-                        LifePostbtn_State = "unSelected";
+                        LifeMarketbtn_State = "unSelected";
                     }
                     break;
                 case R.id.BorrowPostbtn:
-                    if(BorrowPostbtn_State.equals("unSelected")){
-                    BorrowPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    FoodPostbtn.setColorFilter(null);
-                    LifePostbtn.setColorFilter(null);
-                    WorkPostbtn.setColorFilter(null);
-                    HotPostbtn.setColorFilter(null);
-                    postList.clear();
-                    Borrow_postsUpdate(true);
+                    if(BorrowMarketbtn_State.equals("unSelected")){
+                    BorrowMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    FoodMarketbtn.setColorFilter(null);
+                    LifeMarketbtn.setColorFilter(null);
+                    WorkMarketbtn.setColorFilter(null);
+                    HotMarketbtn.setColorFilter(null);
+                    MarketList.clear();
+                    Borrow_MarketUpdate(true);
                     State = "대여";
-                    BorrowPostbtn_State = "Selected";
-                    } else if(BorrowPostbtn_State.equals("Selected")){
-                        FoodPostbtn.setColorFilter(null);
-                        LifePostbtn.setColorFilter(null);
-                        BorrowPostbtn.setColorFilter(null);
-                        WorkPostbtn.setColorFilter(null);
-                        HotPostbtn.setColorFilter(null);
-                        postList.clear();
-                        All_postsUpdate(true);
+                    BorrowMarketbtn_State = "Selected";
+                    } else if(BorrowMarketbtn_State.equals("Selected")){
+                        FoodMarketbtn.setColorFilter(null);
+                        LifeMarketbtn.setColorFilter(null);
+                        BorrowMarketbtn.setColorFilter(null);
+                        WorkMarketbtn.setColorFilter(null);
+                        HotMarketbtn.setColorFilter(null);
+                        MarketList.clear();
+                        All_MarketUpdate(true);
                         State = "전체";
-                        BorrowPostbtn_State = "unSelected";
+                        BorrowMarketbtn_State = "unSelected";
                     }
                     break;
                 case R.id.WorkPostbtn:
-                    if(WorkPostbtn_State.equals("unSelected")){
-                    WorkPostbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    FoodPostbtn.setColorFilter(null);
-                    LifePostbtn.setColorFilter(null);
-                    BorrowPostbtn.setColorFilter(null);
-                    HotPostbtn.setColorFilter(null);
-                    postList.clear();
-                    Work_postsUpdate(true);
+                    if(WorkMarketbtn_State.equals("unSelected")){
+                    WorkMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    FoodMarketbtn.setColorFilter(null);
+                    LifeMarketbtn.setColorFilter(null);
+                    BorrowMarketbtn.setColorFilter(null);
+                    HotMarketbtn.setColorFilter(null);
+                    MarketList.clear();
+                    Work_MarketUpdate(true);
                     State = "용역";
-                    WorkPostbtn_State = "Selected";
-                    } else if(WorkPostbtn_State.equals("Selected")){
-                        FoodPostbtn.setColorFilter(null);
-                        LifePostbtn.setColorFilter(null);
-                        BorrowPostbtn.setColorFilter(null);
-                        WorkPostbtn.setColorFilter(null);
-                        HotPostbtn.setColorFilter(null);
-                        postList.clear();
-                        All_postsUpdate(true);
+                    WorkMarketbtn_State = "Selected";
+                    } else if(WorkMarketbtn_State.equals("Selected")){
+                        FoodMarketbtn.setColorFilter(null);
+                        LifeMarketbtn.setColorFilter(null);
+                        BorrowMarketbtn.setColorFilter(null);
+                        WorkMarketbtn.setColorFilter(null);
+                        HotMarketbtn.setColorFilter(null);
+                        MarketList.clear();
+                        All_MarketUpdate(true);
                         State = "전체";
-                        WorkPostbtn_State = "unSelected";
+                        WorkMarketbtn_State = "unSelected";
                     }
                     break;
             }
         }
     };
 
-    private void All_postsUpdate(final boolean clear) {
+    private void All_MarketUpdate(final boolean clear) {
         updating = true;
-        Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
         Log.d("로그","스크롤 333");
         collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).limit(10).get()        // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개
@@ -331,13 +331,13 @@ public class HomeFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                postList.clear();                                                           // part16 : List 안의 데이터 초기화
+                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             Log.d("로그","스크롤 555");
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 Log.d("로그","스크롤 3333");
-                                postList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+                                MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("PostModel_Title").toString(),
                                         document.getData().get("PostModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_ImageList"),
@@ -362,26 +362,25 @@ public class HomeFragment extends Fragment {
                 });
     }
 
-    private void Hot_postsUpdate(final boolean clear) {
+    private void Hot_MarketUpdate(final boolean clear) {
         updating = true;
 
-        Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
         collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_HotPost","O").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        int HotPostCut;
+                        int HotMarketCut;
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                postList.clear();                                                           // part16 : List 안의 데이터 초기화
+                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                HotPostCut = ((ArrayList<String>) document.getData().get("PostModel_LikeList")).size();
-                                if(HotPostCut>0) {
-                                    Log.d("로그","HotPostCut : "+HotPostCut);
-                                    postList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+                                HotMarketCut = ((ArrayList<String>) document.getData().get("PostModel_LikeList")).size();
+                                if(HotMarketCut>0) {
+                                    MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                             document.getData().get("PostModel_Title").toString(),
                                             document.getData().get("PostModel_Text").toString(),
                                             (ArrayList<String>) document.getData().get("PostModel_ImageList"),
@@ -395,7 +394,7 @@ public class HomeFragment extends Fragment {
                                             document.getData().get("PostModel_HotPost").toString()
                                     ));
                                 }
-                                HotPostCut = 0;
+                                HotMarketCut = 0;
                             }
                             marketAdapter.notifyDataSetChanged();
                         } else {
@@ -407,10 +406,10 @@ public class HomeFragment extends Fragment {
                 });
     }
 
-    private void Food_postsUpdate(final boolean clear) {
+    private void Food_MarketUpdate(final boolean clear) {
         updating = true;
 
-        Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
         collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_Category","음식").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -419,11 +418,11 @@ public class HomeFragment extends Fragment {
 
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                postList.clear();                                                           // part16 : List 안의 데이터 초기화
+                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                postList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+                                MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("PostModel_Title").toString(),
                                         document.getData().get("PostModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_ImageList"),
@@ -447,10 +446,10 @@ public class HomeFragment extends Fragment {
                 });
     }
 
-    private void Thing_postsUpdate(final boolean clear) {
+    private void Thing_MarketUpdate(final boolean clear) {
         updating = true;
 
-        Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
         collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_Category","생필품").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -459,11 +458,11 @@ public class HomeFragment extends Fragment {
                         String Thing;
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                postList.clear();                                                           // part16 : List 안의 데이터 초기화
+                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                postList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+                                MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("PostModel_Title").toString(),
                                         document.getData().get("PostModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_ImageList"),
@@ -487,10 +486,10 @@ public class HomeFragment extends Fragment {
                 });
     }
 
-    private void Borrow_postsUpdate(final boolean clear) {
+    private void Borrow_MarketUpdate(final boolean clear) {
         updating = true;
 
-        Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
         collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_Category","대여").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -499,11 +498,11 @@ public class HomeFragment extends Fragment {
                         String Borrow;
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                postList.clear();                                                           // part16 : List 안의 데이터 초기화
+                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                postList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+                                MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("PostModel_Title").toString(),
                                         document.getData().get("PostModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_ImageList"),
@@ -527,10 +526,10 @@ public class HomeFragment extends Fragment {
                 });
     }
 
-    private void Work_postsUpdate(final boolean clear) {
+    private void Work_MarketUpdate(final boolean clear) {
         updating = true;
 
-        Date date = postList.size() == 0 || clear ? new Date() : postList.get(postList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
         collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_Category","용역").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -539,11 +538,11 @@ public class HomeFragment extends Fragment {
                         String Work;
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                postList.clear();                                                           // part16 : List 안의 데이터 초기화
+                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                postList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+                                MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("PostModel_Title").toString(),
                                         document.getData().get("PostModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("PostModel_ImageList"),

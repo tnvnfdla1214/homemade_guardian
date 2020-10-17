@@ -116,7 +116,7 @@ public class ModifyMarketActivity extends BasicActivity {
         FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();
         Storagereference = Firebasestorage.getReference();
         Marketmodel = (MarketModel) getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
-        postInit();
+        MarketInit();
     }
 
     @Override
@@ -205,18 +205,18 @@ public class ModifyMarketActivity extends BasicActivity {
     private void Modify_Storage_Upload() {
         final String Title = ((EditText) findViewById(R.id.Post_Title_EditText)).getText().toString();
         final String TextContents = ((EditText) findViewById(R.id.contentsEditText)).getText().toString();
-        String Post_Uid = Marketmodel.getMarketModel_Post_Uid();
+        String Market_Uid = Marketmodel.getMarketModel_Market_Uid();
         final ArrayList<String> LikeList = Marketmodel.getMarketModel_LikeList();
-        final String HotPost = Marketmodel.getMarketModel_HotPost();
-        final String PostModel_reservation = Marketmodel.getMarketModel_reservation();
-        final String PostModel_deal = Marketmodel.getMarketModel_deal();
+        final String HotMarket = Marketmodel.getMarketModel_HotMarket();
+        final String MarketModel_reservation = Marketmodel.getMarketModel_reservation();
+        final String MarketModel_deal = Marketmodel.getMarketModel_deal();
         if (Title.length() > 0 && Category != null) {
             LoaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
             CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();                                    // part12 :
             Storagereference = Firebasestorage.getReference();
             FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
-            final DocumentReference docRef_POSTS_PostUid = Firebasefirestore.collection("POSTS").document(Post_Uid);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
+            final DocumentReference docRef_MARKETS_MarketUid = Firebasefirestore.collection("POSTS").document(Market_Uid);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
             final Date DateOfManufacture = Marketmodel.getMarketModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             final ArrayList<String> contentsList = new ArrayList<>();
 
@@ -224,18 +224,18 @@ public class ModifyMarketActivity extends BasicActivity {
                 Marketmodel.setMarketModel_Title(Title);
                 Marketmodel.setMarketModel_Text(TextContents);
                 Marketmodel.setMarketModel_Category(Category);
-                Modify_Store_Upload(docRef_POSTS_PostUid, Marketmodel);
+                Modify_Store_Upload(docRef_MARKETS_MarketUid, Marketmodel);
             }else{
                 for (int i = 0; i < ArrayList_SelectedPhoto.size(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
                     String path = ArrayList_SelectedPhoto.get(PathCount);
                     contentsList.add(path);
                     String[] pathArray = path.split("\\.");                                         // part14 : 이미지의 확장자를 주어진대로 (2'40")
-                    final StorageReference ImagesRef_POSTS_Uid_PathCount = Storagereference.child("POSTS/" + docRef_POSTS_PostUid.getId() + "/" + PathCount + "." + pathArray[pathArray.length - 1]);
+                    final StorageReference ImagesRef_MARKETS_Uid_PathCount = Storagereference.child("POSTS/" + docRef_MARKETS_MarketUid.getId() + "/" + PathCount + "." + pathArray[pathArray.length - 1]);
                     try {
                         InputStream Stream = new FileInputStream(new File(ArrayList_SelectedPhoto.get(PathCount)));            // part11 : 경로 설정 (27'20")
                         StorageMetadata Metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (contentsList.size() - 1)).build();
-                        UploadTask Uploadtask = ImagesRef_POSTS_Uid_PathCount.putStream(Stream, Metadata);
-                        final String Get_PostUid = Post_Uid;
+                        UploadTask Uploadtask = ImagesRef_MARKETS_Uid_PathCount.putStream(Stream, Metadata);
+                        final String Get_MarketUid = Market_Uid;
 
                         Marketmodel.setMarketModel_ImageList(new ArrayList<String>());
                         Uploadtask.addOnFailureListener(new OnFailureListener() {                               // part11 :
@@ -246,13 +246,13 @@ public class ModifyMarketActivity extends BasicActivity {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                 final int index = Integer.parseInt(taskSnapshot.getMetadata().getCustomMetadata("index"));  // part11 : 메타 데이터를 index에 받아온다.
-                                ImagesRef_POSTS_Uid_PathCount.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                ImagesRef_MARKETS_Uid_PathCount.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {                                             // part11 : SUCCEESSCOUNT 개의 사진 (37')
                                         contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                        MarketModel postmodel = new MarketModel(Title, TextContents, contentsList,  DateOfManufacture, CurrentUser.getUid(), Get_PostUid, Category, LikeList, HotPost,PostModel_reservation,PostModel_deal);
-                                        postmodel.setMarketModel_Post_Uid(Get_PostUid);
-                                        Modify_Store_Upload(docRef_POSTS_PostUid, postmodel);
+                                        MarketModel marketModel = new MarketModel(Title, TextContents, contentsList,  DateOfManufacture, CurrentUser.getUid(), Get_MarketUid, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal);
+                                        marketModel.setMarketModel_Market_Uid(Get_MarketUid);
+                                        Modify_Store_Upload(docRef_MARKETS_MarketUid, marketModel);
                                     }
                                 });
                             }
@@ -263,9 +263,9 @@ public class ModifyMarketActivity extends BasicActivity {
                     PathCount++;
                 }
                 if (ArrayList_SelectedPhoto.size() == 0) {
-                    MarketModel postmodel = new MarketModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Post_Uid, Category, LikeList, HotPost,PostModel_reservation,PostModel_deal);
-                    postmodel.setMarketModel_Post_Uid(Post_Uid);
-                    Modify_Store_Upload(docRef_POSTS_PostUid, postmodel);
+                    MarketModel marketModel = new MarketModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Market_Uid, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal);
+                    marketModel.setMarketModel_Market_Uid(Market_Uid);
+                    Modify_Store_Upload(docRef_MARKETS_MarketUid, marketModel);
                 }
             }
         } else {
@@ -278,14 +278,14 @@ public class ModifyMarketActivity extends BasicActivity {
     }
 
     // 파이어스토어에 바뀐 정보들을 POSTS에 넣는다. WritePostFragment에 있는 것과는 차이가 없다.
-    private void Modify_Store_Upload(DocumentReference docRef_POSTS_PostUid, final MarketModel postmodel) {
-        docRef_POSTS_PostUid.set(postmodel.getPostInfo())
+    private void Modify_Store_Upload(DocumentReference docRef_MARKETS_MarketUid, final MarketModel marketmodel) {
+        docRef_MARKETS_MarketUid.set(marketmodel.getMarketInfo())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         LoaderLayout.setVisibility(View.GONE);
                         Intent Resultintent = new Intent();
-                        Resultintent.putExtra("postInfo", postmodel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
+                        Resultintent.putExtra("postInfo", marketmodel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                         setResult(Activity.RESULT_OK, Resultintent);
                         finish();
                     }
@@ -303,7 +303,7 @@ public class ModifyMarketActivity extends BasicActivity {
         intent.putExtra(INTENT_MEDIA, media);
         startActivityForResult(intent, requestCode);
     }
-    private void postInit() {                                                                               // part17 : (33')
+    private void MarketInit() {                                                                               // part17 : (33')
         if (Marketmodel != null) {                                                                             //수정 버튼을 눌러서 들어왔을 때 null이 아니면 == 나 수정 하러 왔음 >> 화면에는 수정하고자하는 게시물의 정보들이 띄워져있음
             Title_EditText.setText(Marketmodel.getMarketModel_Title());
             Selected_EditText.setText(Marketmodel.getMarketModel_Text());

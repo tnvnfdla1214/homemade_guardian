@@ -90,7 +90,7 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".market.activity.EnlargeImageActivity">
         </activity>
-        <activity android:name=".Main.activity.WritePostActivity">
+        <activity android:name=".Main.activity.WriteMarketActivity">
         </activity>
 
 

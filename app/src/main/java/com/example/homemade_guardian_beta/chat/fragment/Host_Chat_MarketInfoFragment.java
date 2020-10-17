@@ -78,7 +78,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
 
         Chat_MarketInfo_deal.setEnabled(false);
         Bundle Marketbundle = getArguments();
-        MarketModel_Market_Uid = Marketbundle.getString("PostModel_Post_Uid");
+        MarketModel_Market_Uid = Marketbundle.getString("MarketModel_Market_Uid");
         To_User_Uid = Marketbundle.getString("To_User_Uid");
         currentUser_Uid = Marketbundle.getString("currentUser_Uid");
 
@@ -86,7 +86,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
         selected_review = (TextView) View.findViewById(R.id.selected_review);
 
 
-        DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("POSTS").document(MarketModel_Market_Uid);
+        DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
         docRef_MARKETS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -116,9 +116,9 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // 스위치 버튼이 체크되었는지 검사하여 텍스트뷰에 각 경우에 맞게 출력합니다.
                 if (isChecked){
-                    DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("POSTS").document(MarketModel_Market_Uid);
+                    DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
                     docRef_MARKETS_HostUid
-                            .update("PostModel_reservation", "O")
+                            .update("MarketModel_reservation", "O")
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -132,9 +132,9 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                             });
 
                 }else{
-                    DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("POSTS").document(MarketModel_Market_Uid);
+                    DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
                     docRef_MARKETS_HostUid
-                            .update("PostModel_reservation", "X")
+                            .update("MarketModel_reservation", "X")
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -155,9 +155,9 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked){
-                    DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("POSTS").document(MarketModel_Market_Uid);
+                    DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
                     docRef_MARKETS_HostUid
-                            .update("PostModel_deal", "O")
+                            .update("MarketModel_deal", "O")
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -198,9 +198,9 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                     reviewActivity.callFunction(To_User_Uid, MarketModel_Market_Uid);
 
                 }else{
-                    DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("POSTS").document(MarketModel_Market_Uid);
+                    DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
                     docRef_MARKETS_HostUid
-                            .update("PostModel_deal", "X")
+                            .update("MarketModel_deal", "X")
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {

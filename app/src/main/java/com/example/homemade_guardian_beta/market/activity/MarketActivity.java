@@ -140,7 +140,7 @@ public class MarketActivity extends BasicActivity {                             
         findViewById(R.id.Comment_Write_Button).setOnClickListener(onClickListener);
 
 
-        marketmodel = (MarketModel) getIntent().getSerializableExtra("postInfo");
+        marketmodel = (MarketModel) getIntent().getSerializableExtra("marketInfo");
         CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         CurrentUid =CurrentUser.getUid();
 
@@ -195,7 +195,7 @@ public class MarketActivity extends BasicActivity {                             
 
 
         //댓글 목록
-        Comment_Firestoreadapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("POSTS").document(marketmodel.getMarketModel_Market_Uid()).collection("COMMENT").orderBy("commentModel_DateOfManufacture"));
+        Comment_Firestoreadapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("MARKETS").document(marketmodel.getMarketModel_Market_Uid()).collection("COMMENT").orderBy("market_CommentModel_DateOfManufacture"));
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(MarketActivity.this));
         recyclerView.setAdapter(Comment_Firestoreadapter);
@@ -227,7 +227,7 @@ public class MarketActivity extends BasicActivity {                             
         switch (requestCode) {
             case 0:
                 if (resultCode == Activity.RESULT_OK) {
-                    marketmodel = (MarketModel)data.getSerializableExtra("postInfo");
+                    marketmodel = (MarketModel)data.getSerializableExtra("marketInfo");
                     Title_TextView.setText(marketmodel.getMarketModel_Title());
                     TextContents_TextView.setText(marketmodel.getMarketModel_Text());
                     ImageList = marketmodel.getMarketModel_ImageList();
@@ -299,7 +299,7 @@ public class MarketActivity extends BasicActivity {                             
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.Post_Delete_Button:
-                Firebasehelper.Post_Storagedelete(marketmodel);
+                Firebasehelper.Market_Storagedelete(marketmodel);
                 Intent Intent_MainActivity = new Intent(MarketActivity.this, MainActivity.class);
                 startActivity(Intent_MainActivity);
                 return true;
@@ -315,7 +315,7 @@ public class MarketActivity extends BasicActivity {                             
                 Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                 //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
                 Intent_ChatActivity.putExtra("To_User_Uid", marketmodel.getMarketModel_Host_Uid());
-                Intent_ChatActivity.putExtra("PostModel_Post_Uid", marketmodel.getMarketModel_Market_Uid());
+                Intent_ChatActivity.putExtra("MarketModel_Market_Uid", marketmodel.getMarketModel_Market_Uid());
                 startActivity(Intent_ChatActivity);
                 return true;
             default:
@@ -338,7 +338,7 @@ public class MarketActivity extends BasicActivity {                             
                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                     //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
                     Intent_ChatActivity.putExtra("To_User_Uid", marketmodel.getMarketModel_Host_Uid());
-                    Intent_ChatActivity.putExtra("PostModel_Post_Uid", marketmodel.getMarketModel_Market_Uid());
+                    Intent_ChatActivity.putExtra("MarketModel_Market_Uid", marketmodel.getMarketModel_Market_Uid());
                     startActivity(Intent_ChatActivity);
                     break;
                 case R.id.Comment_Write_Button:
@@ -378,7 +378,7 @@ public class MarketActivity extends BasicActivity {                             
                         Glide.with(getApplicationContext()).load(R.drawable.heart).into(Like_ImageButton);
                         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
                         ArrayList<String> LikeList = new ArrayList<>();
-                        final DocumentReference documentReference = firebaseFirestore.collection("POSTS").document(marketmodel.getMarketModel_Market_Uid());
+                        final DocumentReference documentReference = firebaseFirestore.collection("MARKETS").document(marketmodel.getMarketModel_Market_Uid());
                         LikeList = marketmodel.getMarketModel_LikeList();
                         LikeList.add(CurrentUid);
                         if (LikeList.size() > 0) {
@@ -420,7 +420,7 @@ public class MarketActivity extends BasicActivity {                             
 
     private void myStartActivity(Class c, MarketModel marketModel) {                                          // part : 여기서는 수정 버튼을 눌렀을 때 게시물의 정보도 같이 넘겨준다.
         Intent Intent_Market_Data = new Intent(this, c);
-        Intent_Market_Data.putExtra("postInfo", marketModel);
+        Intent_Market_Data.putExtra("marketInfo", marketModel);
         startActivityForResult(Intent_Market_Data, 0);
     }
 
@@ -428,12 +428,12 @@ public class MarketActivity extends BasicActivity {                             
     private void Write_Comment(final String Comment, final String Host_Name, final String Comment_Host_Image) {
         Comment_Write_Button.setEnabled(false);
         String Comment_Uid = null;
-        Comment_Uid = FirebaseFirestore.getInstance().collection("POSTS").document(marketmodel.getMarketModel_Market_Uid()).collection("COMMENT").document().getId();
+        Comment_Uid = FirebaseFirestore.getInstance().collection("MARKETS").document(marketmodel.getMarketModel_Market_Uid()).collection("COMMENT").document().getId();
 
         Date DateOfManufacture = new Date();
         commentmodel = new Market_CommentModel(CurrentUid, Comment,  DateOfManufacture, Host_Name, Comment_Uid, marketmodel.getMarketModel_Market_Uid(),Comment_Host_Image);
 
-        final DocumentReference docRef_MARKETS_MarketUid = FirebaseFirestore.getInstance().collection("POSTS").document(marketmodel.getMarketModel_Market_Uid());
+        final DocumentReference docRef_MARKETS_MarketUid = FirebaseFirestore.getInstance().collection("MARKETS").document(marketmodel.getMarketModel_Market_Uid());
         final String CommentID = Comment_Uid;
         docRef_MARKETS_MarketUid.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -475,13 +475,13 @@ public class MarketActivity extends BasicActivity {                             
         @Override
         public void onBindViewHolder(CustomViewHolder viewHolder, int position) {
             DocumentSnapshot DocumentSnapshot = getSnapshot(position);
-            final Market_CommentModel commentmodel = DocumentSnapshot.toObject(Market_CommentModel.class);
-            Log.d("로그","Commentmodel : "+ commentmodel);
-            viewHolder.Comment_UserName_TextView.setText(commentmodel.getMarket_CommentModel_Host_Name());
-            viewHolder.Comment_UserComment_TextView.setText(commentmodel.getMarket_CommentModel_Comment());
+            final Market_CommentModel market_commentModel = DocumentSnapshot.toObject(Market_CommentModel.class);
+            Log.d("로그","Commentmodel : "+ market_commentModel);
+            viewHolder.Comment_UserName_TextView.setText(market_commentModel.getMarket_CommentModel_Host_Name());
+            viewHolder.Comment_UserComment_TextView.setText(market_commentModel.getMarket_CommentModel_Comment());
 
-            if (commentmodel.getMarket_CommentModel_Host_Image()!=null) {
-                Glide.with(MarketActivity.this).load(commentmodel.getMarket_CommentModel_Host_Image()).centerInside().override(500).into(viewHolder.Comment_UserProfile_ImageView);
+            if (market_commentModel.getMarket_CommentModel_Host_Image()!=null) {
+                Glide.with(MarketActivity.this).load(market_commentModel.getMarket_CommentModel_Host_Image()).centerInside().override(500).into(viewHolder.Comment_UserProfile_ImageView);
             } else{
                 Glide.with(MarketActivity.this).load(R.drawable.none_profile_user).centerInside().override(500).into(viewHolder.Comment_UserProfile_ImageView);
             }
@@ -496,7 +496,7 @@ public class MarketActivity extends BasicActivity {                             
                             switch (menuItem.getItemId()) {
 
                                 case R.id.Comment_Delete_Button:
-                                    Firebasehelper.Comment_Storedelete(commentmodel);
+                                    Firebasehelper.Comment_Storedelete(market_commentModel);
                                     return true;
                                 case R.id.Comment_Report_Button:
                                     Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
@@ -507,7 +507,7 @@ public class MarketActivity extends BasicActivity {                             
                                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                                     //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
                                     Intent_ChatActivity.putExtra("To_User_Uid", marketmodel.getMarketModel_Host_Uid());
-                                    Intent_ChatActivity.putExtra("PostModel_Post_Uid", marketmodel.getMarketModel_Market_Uid());
+                                    Intent_ChatActivity.putExtra("MarketModel_Market_Uid", marketmodel.getMarketModel_Market_Uid());
                                     startActivity(Intent_ChatActivity);
                                     return true;
                                 default:
@@ -517,7 +517,7 @@ public class MarketActivity extends BasicActivity {                             
                     });
 
                     MenuInflater Menu_Inflater = Menu_Popup.getMenuInflater();
-                    if(CurrentUser.getUid().equals(commentmodel.getMarket_CommentModel_Host_Uid())){
+                    if(CurrentUser.getUid().equals(market_commentModel.getMarket_CommentModel_Host_Uid())){
                         Menu_Inflater.inflate(R.menu.comment_host, Menu_Popup.getMenu());
                     }
                     else{

@@ -17,7 +17,7 @@ public class MarketUtil {                                                       
 
     public static void showToast(Activity Activity, String Msg){ Toast.makeText(Activity, Msg, Toast.LENGTH_SHORT).show(); }
 
-    public static boolean isStorageUrl(String URL){ return Patterns.WEB_URL.matcher(URL).matches() && URL.contains("https://firebasestorage.googleapis.com/v0/b/homemade-guardian-beta.appspot.com/o/POSTS"); }
+    public static boolean isStorageUrl(String URL){ return Patterns.WEB_URL.matcher(URL).matches() && URL.contains("https://firebasestorage.googleapis.com/v0/b/homemade-guardian-beta.appspot.com/o/MARKETS"); }
     // part17 : 스토리지 주소에 대한 등록 [SHA1코드같은..] (16'45")
 
     public static String storageUrlToName(String URL){ return URL.split("\\?")[0].split("%2F")[URL.split("\\?")[0].split("%2F").length - 1]; }

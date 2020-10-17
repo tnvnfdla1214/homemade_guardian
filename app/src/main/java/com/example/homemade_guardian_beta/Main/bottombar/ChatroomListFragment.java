@@ -261,7 +261,7 @@ public class ChatroomListFragment extends Fragment {
                     intent.putExtra("RoomUid", chatRoomListModel.getChatRoomListModel_RoomUid());
                     intent.putExtra("To_User_Uid", chatRoomListModel.getChatRoomListModel_ToUserUid());
                     intent.putExtra("ChatRoomListModel_Title", chatRoomListModel.getChatRoomListModel_Title());
-                    intent.putExtra("PostModel_Post_Uid", chatRoomListModel.getChatRoomListModel_PostUid());
+                    intent.putExtra("MarketModel_Market_Uid", chatRoomListModel.getChatRoomListModel_PostUid());
                     startActivity(intent);
                 }
             });

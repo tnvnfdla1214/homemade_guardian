@@ -46,22 +46,22 @@ public class FirebaseHelper {                                                   
     public void setOnpostlistener(OnPostListener Onpostlistener){ this.Onpostlistener = Onpostlistener; }
 
     //게시물의 경우에는 이미지가 파이어스토리지에 있기 때문에 파이어스토리지 또한 삭제해주어야한다.
-    public void Post_Storagedelete(final MarketModel marketModel){                                                 // part16: 스토리지의 삭제 (13')
+    public void Market_Storagedelete(final MarketModel marketModel){                                                 // part16: 스토리지의 삭제 (13')
         FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();                                        // part17 : 스토리지 삭제 (문서) (19'50")
         StorageReference Storagereference = Firebasestorage.getReference();
-        final String Post_Uid = marketModel.getMarketModel_Market_Uid();
-        ArrayList<String> Post_ImageList = marketModel.getMarketModel_ImageList();
-        if(Post_ImageList != null) {
-            for (int i = 0; i < Post_ImageList.size(); i++) {
-                String Image = Post_ImageList.get(i);
+        final String Market_Uid = marketModel.getMarketModel_Market_Uid();
+        ArrayList<String> Market_ImageList = marketModel.getMarketModel_ImageList();
+        if(Market_ImageList != null) {
+            for (int i = 0; i < Market_ImageList.size(); i++) {
+                String Image = Market_ImageList.get(i);
                 if (isStorageUrl(Image)) {
                     SuccessCount++;                                                                             // part17 : 사진의 개수가 여러개인 게시물의 경우 (23'35")
-                    StorageReference desertRef_POSTS_PostUid = Storagereference.child("POSTS/" + Post_Uid + "/" + storageUrlToName(Image));    // part17: (((파이어베이스에서 삭제))) 파이에베이스 스토리지는 폴더가 없다, 하나하나가 객체로서 저장 (13'30")
-                    desertRef_POSTS_PostUid.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    StorageReference desertRef_MARKETS_MarketUid = Storagereference.child("MARKETS/" + Market_Uid + "/" + storageUrlToName(Image));    // part17: (((파이어베이스에서 삭제))) 파이에베이스 스토리지는 폴더가 없다, 하나하나가 객체로서 저장 (13'30")
+                    desertRef_MARKETS_MarketUid.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             SuccessCount--;
-                            Post_Storedelete(Post_Uid, marketModel);
+                            Market_Storedelete(Market_Uid, marketModel);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -72,15 +72,15 @@ public class FirebaseHelper {                                                   
                 }
             }
         }
-        Post_Storedelete(Post_Uid, marketModel);
+        Market_Storedelete(Market_Uid, marketModel);
     }
 
     //파이어스토리지에서의 삭제가 끝난 후 파이어스토어에 있는 게시물의 데이터를 삭제한다., 댓글은 하위 컬렉션이기 때문에 미리삭제하고 게시물 삭제로 이동한다.
-    private void Post_Storedelete(final String Post_Uid, final MarketModel postmodel) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
+    private void Market_Storedelete(final String Market_Uid, final MarketModel marketModel) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
         final FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
         final ArrayList<String> CommentList = new ArrayList<>();
         if(SuccessCount == 0){
-            FirebaseFirestore.getInstance().collection("POSTS").document(postmodel.getMarketModel_Market_Uid()).collection("COMMENT")
+            FirebaseFirestore.getInstance().collection("MARKETS").document(marketModel.getMarketModel_Market_Uid()).collection("COMMENT")
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -93,7 +93,7 @@ public class FirebaseHelper {                                                   
                         Log.d("태그", "Error getting documents: ", task.getException());
                     }
                     for(int i = 0; i < CommentList.size(); i++){
-                        Firebasefirestore.collection("POSTS").document(Post_Uid).collection("COMMENT").document(CommentList.get(i))
+                        Firebasefirestore.collection("MARKETS").document(Market_Uid).collection("COMMENT").document(CommentList.get(i))
                                 .delete()
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
@@ -107,13 +107,13 @@ public class FirebaseHelper {                                                   
                 }
             });
 
-            Firebasefirestore.collection("POSTS").document(Post_Uid)
+            Firebasefirestore.collection("MARKETS").document(Market_Uid)
                     .delete()
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             showToast(Activity, "게시글을 삭제하였습니다.");
-                            Onpostlistener.onDelete(postmodel);
+                            Onpostlistener.onDelete(marketModel);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -271,7 +271,7 @@ public class FirebaseHelper {                                                   
     public void Comment_Storedelete(final Market_CommentModel commentmodel){                                                 // part16: 스토리지의 삭제 (13')
         final String Comment_Uid = commentmodel.getMarket_CommentModel_Comment_Uid();
         FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
-        Firebasefirestore.collection("POSTS").document(commentmodel.getMarket_CommentModel_Post_Uid()).collection("COMMENT").document(Comment_Uid)
+        Firebasefirestore.collection("MARKETS").document(commentmodel.getMarket_CommentModel_Market_Uid()).collection("COMMENT").document(Comment_Uid)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

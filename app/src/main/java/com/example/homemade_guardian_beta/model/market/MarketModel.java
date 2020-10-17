@@ -80,7 +80,7 @@ public class MarketModel implements Serializable {                              
         docData.put("MarketModel_Post_Uid", MarketModel_Market_Uid);
         docData.put("MarketModel_Category", MarketModel_Category);
         docData.put("MarketModel_LikeList", MarketModel_LikeList);
-        docData.put("MarketModel_HotPost", MarketModel_HotMarket);
+        docData.put("MarketModel_HotMarket", MarketModel_HotMarket);
         docData.put("MarketModel_reservation", MarketModel_reservation);
         docData.put("MarketModel_deal", MarketModel_deal);
 

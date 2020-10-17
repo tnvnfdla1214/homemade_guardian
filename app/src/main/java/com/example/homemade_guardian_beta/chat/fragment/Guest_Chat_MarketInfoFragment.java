@@ -67,8 +67,8 @@ public class Guest_Chat_MarketInfoFragment extends Fragment {
         CurrentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         Bundle Marketbundle = getArguments();
-        MarketModel_Market_Uid = Marketbundle.getString("PostModel_Post_Uid");
-        DocumentReference docRef_USERS_HostUid = FirebaseFirestore.getInstance().collection("POSTS").document(MarketModel_Market_Uid);
+        MarketModel_Market_Uid = Marketbundle.getString("MarketModel_Market_Uid");
+        DocumentReference docRef_USERS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
         docRef_USERS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {

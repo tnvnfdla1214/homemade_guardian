@@ -140,7 +140,7 @@ public class WriteMarketFragment extends Fragment {
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
-        marketModel = (MarketModel) getActivity().getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
+        marketModel = (MarketModel) getActivity().getIntent().getSerializableExtra("marketInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
 
 
         /////////////////////////////////////////////////
@@ -301,8 +301,8 @@ public class WriteMarketFragment extends Fragment {
             StorageReference storageRef = storage.getReference();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
             ///
-            MarketID = firebaseFirestore.collection("POSTS").document().getId();
-            final DocumentReference documentReference =firebaseFirestore.collection("POSTS").document(MarketID);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
+            MarketID = firebaseFirestore.collection("MARKETS").document().getId();
+            final DocumentReference documentReference =firebaseFirestore.collection("MARKETS").document(MarketID);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
             final Date date = marketModel == null ? new Date() : marketModel.getMarketModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             Log.d("로그","111");
             for (int i = 0; i < selectedPhotos.size(); i++) {                                              // part11 : 안의 자식뷰만큼 반복 (21'15")
@@ -310,7 +310,7 @@ public class WriteMarketFragment extends Fragment {
                 contentsList.add(path);
 
                 String[] pathArray = path.split("\\.");                                         // part14 : 이미지의 확장자를 주어진대로 (2'40")
-                final StorageReference mountainImagesRef = storageRef.child("POSTS/" + documentReference.getId() + "/" + pathCount + "." + pathArray[pathArray.length - 1]);
+                final StorageReference mountainImagesRef = storageRef.child("MARKETS/" + documentReference.getId() + "/" + pathCount + "." + pathArray[pathArray.length - 1]);
                 try {
                     InputStream stream = new FileInputStream(new File(selectedPhotos.get(pathCount)));            // part11 : 경로 설정 (27'20")
                     StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (contentsList.size() - 1)).build();
@@ -364,7 +364,7 @@ public class WriteMarketFragment extends Fragment {
                     public void onSuccess(Void aVoid) {
                         loaderLayout.setVisibility(View.GONE);
                         Intent resultIntent = new Intent();
-                        resultIntent.putExtra("postinfo", marketModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
+                        resultIntent.putExtra("marketinfo", marketModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                         getActivity().setResult(RESULT_OK, resultIntent);
                         Intent intentpage = new Intent(getActivity(), MainActivity.class);
                         startActivity(intentpage);

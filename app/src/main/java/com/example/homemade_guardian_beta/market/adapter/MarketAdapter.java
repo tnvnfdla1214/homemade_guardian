@@ -58,7 +58,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.MainViewHo
             @Override
             public void onClick(View v) {                                                                   // part18 : 게시물 클릭시 게시물페이지로 이동 (36'10")
                 Intent Intent_MarketActivity = new Intent(Activity, MarketActivity.class);
-                Intent_MarketActivity.putExtra("postInfo", arrayList_MarketModel.get(Mainviewholder.getAdapterPosition()));
+                Intent_MarketActivity.putExtra("marketInfo", arrayList_MarketModel.get(Mainviewholder.getAdapterPosition()));
                 Activity.startActivity(Intent_MarketActivity);
             }
         });

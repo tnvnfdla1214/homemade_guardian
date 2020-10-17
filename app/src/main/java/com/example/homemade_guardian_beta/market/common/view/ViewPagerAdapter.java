@@ -42,14 +42,14 @@ public class ViewPagerAdapter extends PagerAdapter {
                 Log.d("민규","ㅁ");
                 if(ViewpagerState.equals("Enable")){
                     Intent Intent_ViewPagerViewer = new Intent(Context, EnlargeImageActivity.class);
-                    Intent_ViewPagerViewer.putExtra("postImage",ArrayList_ImageList);
+                    Intent_ViewPagerViewer.putExtra("marketImage",ArrayList_ImageList);
                     Context.startActivity(Intent_ViewPagerViewer);
                 }
             }
         });
-        ImageView Post_ImageView = view.findViewById(R.id.PostActivity_Post_ImageView);
+        ImageView Market_ImageView = view.findViewById(R.id.PostActivity_Post_ImageView);
         //Glide.with(view).load(ArrayList_ImageList.get(position)).into(Post_ImageView);
-        Glide.with(view).load(ArrayList_ImageList.get(position)).centerCrop().override(500).thumbnail(0.1f).into(Post_ImageView);
+        Glide.with(view).load(ArrayList_ImageList.get(position)).centerCrop().override(500).thumbnail(0.1f).into(Market_ImageView);
         container.addView(view);
         return view;
     }

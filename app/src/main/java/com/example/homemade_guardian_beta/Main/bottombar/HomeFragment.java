@@ -323,9 +323,9 @@ public class HomeFragment extends Fragment {
     private void All_MarketUpdate(final boolean clear) {
         updating = true;
         Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
+        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
         Log.d("로그","스크롤 333");
-        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).limit(10).get()        // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개
+        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).limit(10).get()        // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -338,17 +338,17 @@ public class HomeFragment extends Fragment {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 Log.d("로그","스크롤 3333");
                                 MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
-                                        document.getData().get("PostModel_Title").toString(),
-                                        document.getData().get("PostModel_Text").toString(),
-                                        (ArrayList<String>) document.getData().get("PostModel_ImageList"),
-                                        new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
-                                        document.getData().get("PostModel_Host_Uid").toString(),
+                                        document.getData().get("MarketModel_Title").toString(),
+                                        document.getData().get("MarketModel_Text").toString(),
+                                        (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
+                                        new Date(document.getDate("MarketModel_DateOfManufacture").getTime()),
+                                        document.getData().get("MarketModel_Host_Uid").toString(),
                                         document.getId(),
-                                        document.getData().get("PostModel_Category").toString(),
-                                        (ArrayList<String>) document.getData().get("PostModel_LikeList"),
-                                        document.getData().get("PostModel_HotPost").toString(),
-                                        document.getData().get("PostModel_HotPost").toString(),
-                                        document.getData().get("PostModel_HotPost").toString()
+                                        document.getData().get("MarketModel_Category").toString(),
+                                        (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
+                                        document.getData().get("MarketModel_HotMarket").toString(),
+                                        document.getData().get("MarketModel_reservation").toString(),
+                                        document.getData().get("MarketModel_deal").toString()
                                         )
                                 );
                         }
@@ -366,8 +366,8 @@ public class HomeFragment extends Fragment {
         updating = true;
 
         Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_HotPost","O").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
+        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_HotMarket","O").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -378,20 +378,20 @@ public class HomeFragment extends Fragment {
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                HotMarketCut = ((ArrayList<String>) document.getData().get("PostModel_LikeList")).size();
+                                HotMarketCut = ((ArrayList<String>) document.getData().get("MarketModel_LikeList")).size();
                                 if(HotMarketCut>0) {
                                     MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
-                                            document.getData().get("PostModel_Title").toString(),
-                                            document.getData().get("PostModel_Text").toString(),
-                                            (ArrayList<String>) document.getData().get("PostModel_ImageList"),
-                                            new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
-                                            document.getData().get("PostModel_Host_Uid").toString(),
+                                            document.getData().get("MarketModel_Title").toString(),
+                                            document.getData().get("MarketModel_Text").toString(),
+                                            (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
+                                            new Date(document.getDate("MarketModel_DateOfManufacture").getTime()),
+                                            document.getData().get("MarketModel_Host_Uid").toString(),
                                             document.getId(),
-                                            document.getData().get("PostModel_Category").toString(),
-                                            (ArrayList<String>) document.getData().get("PostModel_LikeList"),
-                                            document.getData().get("PostModel_HotPost").toString(),
-                                            document.getData().get("PostModel_HotPost").toString(),
-                                            document.getData().get("PostModel_HotPost").toString()
+                                            document.getData().get("MarketModel_Category").toString(),
+                                            (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
+                                            document.getData().get("MarketModel_HotMarket").toString(),
+                                            document.getData().get("MarketModel_reservation").toString(),
+                                            document.getData().get("MarketModel_deal").toString()
                                     ));
                                 }
                                 HotMarketCut = 0;
@@ -410,8 +410,8 @@ public class HomeFragment extends Fragment {
         updating = true;
 
         Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_Category","음식").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
+        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","음식").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -423,17 +423,17 @@ public class HomeFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
-                                        document.getData().get("PostModel_Title").toString(),
-                                        document.getData().get("PostModel_Text").toString(),
-                                        (ArrayList<String>) document.getData().get("PostModel_ImageList"),
-                                        new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
-                                        document.getData().get("PostModel_Host_Uid").toString(),
+                                        document.getData().get("MarketModel_Title").toString(),
+                                        document.getData().get("MarketModel_Text").toString(),
+                                        (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
+                                        new Date(document.getDate("MarketModel_DateOfManufacture").getTime()),
+                                        document.getData().get("MarketModel_Host_Uid").toString(),
                                         document.getId(),
-                                        document.getData().get("PostModel_Category").toString(),
-                                        (ArrayList<String>) document.getData().get("PostModel_LikeList"),
-                                        document.getData().get("PostModel_HotPost").toString(),
-                                        document.getData().get("PostModel_HotPost").toString(),
-                                        document.getData().get("PostModel_HotPost").toString()
+                                        document.getData().get("MarketModel_Category").toString(),
+                                        (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
+                                        document.getData().get("MarketModel_HotMarket").toString(),
+                                        document.getData().get("MarketModel_reservation").toString(),
+                                        document.getData().get("MarketModel_deal").toString()
                                 ));
                             }
                             marketAdapter.notifyDataSetChanged();
@@ -450,8 +450,8 @@ public class HomeFragment extends Fragment {
         updating = true;
 
         Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_Category","생필품").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
+        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","생필품").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -463,17 +463,17 @@ public class HomeFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
-                                        document.getData().get("PostModel_Title").toString(),
-                                        document.getData().get("PostModel_Text").toString(),
-                                        (ArrayList<String>) document.getData().get("PostModel_ImageList"),
-                                        new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
-                                        document.getData().get("PostModel_Host_Uid").toString(),
+                                        document.getData().get("MarketModel_Title").toString(),
+                                        document.getData().get("MarketModel_Text").toString(),
+                                        (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
+                                        new Date(document.getDate("MarketModel_DateOfManufacture").getTime()),
+                                        document.getData().get("MarketModel_Host_Uid").toString(),
                                         document.getId(),
-                                        document.getData().get("PostModel_Category").toString(),
-                                        (ArrayList<String>) document.getData().get("PostModel_LikeList"),
-                                        document.getData().get("PostModel_HotPost").toString(),
-                                        document.getData().get("PostModel_HotPost").toString(),
-                                        document.getData().get("PostModel_HotPost").toString()
+                                        document.getData().get("MarketModel_Category").toString(),
+                                        (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
+                                        document.getData().get("MarketModel_HotMarket").toString(),
+                                        document.getData().get("MarketModel_reservation").toString(),
+                                        document.getData().get("MarketModel_deal").toString()
                                 ));
                             }
                             marketAdapter.notifyDataSetChanged();
@@ -490,8 +490,8 @@ public class HomeFragment extends Fragment {
         updating = true;
 
         Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_Category","대여").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
+        collectionReference.orderBy("MarketModel_HotMarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_HotMarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_HotMarketModel_Category","대여").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -503,17 +503,17 @@ public class HomeFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
-                                        document.getData().get("PostModel_Title").toString(),
-                                        document.getData().get("PostModel_Text").toString(),
-                                        (ArrayList<String>) document.getData().get("PostModel_ImageList"),
-                                        new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
-                                        document.getData().get("PostModel_Host_Uid").toString(),
+                                        document.getData().get("MarketModel_Title").toString(),
+                                        document.getData().get("MarketModel_Text").toString(),
+                                        (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
+                                        new Date(document.getDate("MarketModel_DateOfManufacture").getTime()),
+                                        document.getData().get("MarketModel_Host_Uid").toString(),
                                         document.getId(),
-                                        document.getData().get("PostModel_Category").toString(),
-                                        (ArrayList<String>) document.getData().get("PostModel_LikeList"),
-                                        document.getData().get("PostModel_HotPost").toString(),
-                                        document.getData().get("PostModel_HotPost").toString(),
-                                        document.getData().get("PostModel_HotPost").toString()
+                                        document.getData().get("MarketModel_Category").toString(),
+                                        (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
+                                        document.getData().get("MarketModel_HotMarket").toString(),
+                                        document.getData().get("MarketModel_reservation").toString(),
+                                        document.getData().get("MarketModel_deal").toString()
                                 ));
                             }
                             marketAdapter.notifyDataSetChanged();
@@ -530,8 +530,8 @@ public class HomeFragment extends Fragment {
         updating = true;
 
         Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).whereEqualTo("PostModel_Category","용역").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
+        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","용역").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -543,17 +543,17 @@ public class HomeFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
-                                        document.getData().get("PostModel_Title").toString(),
-                                        document.getData().get("PostModel_Text").toString(),
-                                        (ArrayList<String>) document.getData().get("PostModel_ImageList"),
-                                        new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
-                                        document.getData().get("PostModel_Host_Uid").toString(),
+                                        document.getData().get("MarketModel_Title").toString(),
+                                        document.getData().get("MarketModel_Text").toString(),
+                                        (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
+                                        new Date(document.getDate("MarketModel_DateOfManufacture").getTime()),
+                                        document.getData().get("MarketModel_Host_Uid").toString(),
                                         document.getId(),
-                                        document.getData().get("PostModel_Category").toString(),
-                                        (ArrayList<String>) document.getData().get("PostModel_LikeList"),
-                                        document.getData().get("PostModel_HotPost").toString(),
-                                        document.getData().get("PostModel_HotPost").toString(),
-                                        document.getData().get("PostModel_HotPost").toString()
+                                        document.getData().get("MarketModel_Category").toString(),
+                                        (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
+                                        document.getData().get("MarketModel_HotMarket").toString(),
+                                        document.getData().get("MarketModel_reservation").toString(),
+                                        document.getData().get("MarketModel_deal").toString()
                                 ));
                             }
                             marketAdapter.notifyDataSetChanged();

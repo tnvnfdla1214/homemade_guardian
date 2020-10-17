@@ -23,7 +23,7 @@ public class EnlargeImageActivity extends BasicActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enlarge_imagelist);
 
-        ImageList = (ArrayList<String>) getIntent().getSerializableExtra("postImage");
+        ImageList = (ArrayList<String>) getIntent().getSerializableExtra("marketImage");
 
         String ViewpagerState = "Disable";
         if(ImageList != null) {

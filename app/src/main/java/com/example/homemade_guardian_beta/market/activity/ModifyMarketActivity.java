@@ -115,7 +115,7 @@ public class ModifyMarketActivity extends BasicActivity {
 
         FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();
         Storagereference = Firebasestorage.getReference();
-        Marketmodel = (MarketModel) getIntent().getSerializableExtra("postInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
+        Marketmodel = (MarketModel) getIntent().getSerializableExtra("marketInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
         MarketInit();
     }
 
@@ -216,7 +216,7 @@ public class ModifyMarketActivity extends BasicActivity {
             FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();                                    // part12 :
             Storagereference = Firebasestorage.getReference();
             FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
-            final DocumentReference docRef_MARKETS_MarketUid = Firebasefirestore.collection("POSTS").document(Market_Uid);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
+            final DocumentReference docRef_MARKETS_MarketUid = Firebasefirestore.collection("MARKETS").document(Market_Uid);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
             final Date DateOfManufacture = Marketmodel.getMarketModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             final ArrayList<String> contentsList = new ArrayList<>();
 
@@ -230,7 +230,7 @@ public class ModifyMarketActivity extends BasicActivity {
                     String path = ArrayList_SelectedPhoto.get(PathCount);
                     contentsList.add(path);
                     String[] pathArray = path.split("\\.");                                         // part14 : 이미지의 확장자를 주어진대로 (2'40")
-                    final StorageReference ImagesRef_MARKETS_Uid_PathCount = Storagereference.child("POSTS/" + docRef_MARKETS_MarketUid.getId() + "/" + PathCount + "." + pathArray[pathArray.length - 1]);
+                    final StorageReference ImagesRef_MARKETS_Uid_PathCount = Storagereference.child("MARKETS/" + docRef_MARKETS_MarketUid.getId() + "/" + PathCount + "." + pathArray[pathArray.length - 1]);
                     try {
                         InputStream Stream = new FileInputStream(new File(ArrayList_SelectedPhoto.get(PathCount)));            // part11 : 경로 설정 (27'20")
                         StorageMetadata Metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (contentsList.size() - 1)).build();
@@ -285,7 +285,7 @@ public class ModifyMarketActivity extends BasicActivity {
                     public void onSuccess(Void aVoid) {
                         LoaderLayout.setVisibility(View.GONE);
                         Intent Resultintent = new Intent();
-                        Resultintent.putExtra("postInfo", marketmodel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
+                        Resultintent.putExtra("marketInfo", marketmodel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                         setResult(Activity.RESULT_OK, Resultintent);
                         finish();
                     }

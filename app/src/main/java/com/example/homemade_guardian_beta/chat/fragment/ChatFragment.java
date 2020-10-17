@@ -135,7 +135,7 @@ public class ChatFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString("To_User_Uid", To_User_Uid);
         bundle.putString("RoomUid", RoomUiD);
-        bundle.putString("PostModel_Post_Uid", MarketModel_Market_Uid);
+        bundle.putString("MarketModel_Market_Uid", MarketModel_Market_Uid);
         bundle.putString("currentUser_Uid", currentUser_Uid);
         chatFragment.setArguments(bundle);
         return chatFragment;
@@ -212,7 +212,7 @@ public class ChatFragment extends Fragment {
         if (getArguments() != null) {
             ChatRoomListModel_RoomUid = getArguments().getString("RoomUid");
             To_User_Uid = getArguments().getString("To_User_Uid");
-            MarketModel_Market_Uid = getArguments().getString("PostModel_Post_Uid");
+            MarketModel_Market_Uid = getArguments().getString("MarketModel_Market_Uid");
 
         }
 

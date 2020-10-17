@@ -66,8 +66,8 @@ public class SearchResultFragment extends Fragment {
         //updating = true;
 
         Date date = marketList.size() == 0 || clear ? new Date() : marketList.get(marketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("POSTS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("PostModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("PostModel_DateOfManufacture", date).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
+        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -77,20 +77,21 @@ public class SearchResultFragment extends Fragment {
                                 marketList.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                title = document.getData().get("PostModel_Title").toString();
+                                title = document.getData().get("MarketModel_Title").toString();
                                 if(title.toLowerCase().contains(search.toLowerCase())) {
                                     marketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
-                                            document.getData().get("PostModel_Title").toString(),
-                                            document.getData().get("PostModel_Text").toString(),
-                                            (ArrayList<String>) document.getData().get("PostModel_ImageList"),
-                                            new Date(document.getDate("PostModel_DateOfManufacture").getTime()),
-                                            document.getData().get("PostModel_Host_Uid").toString(),
+                                            document.getData().get("MarketModel_Title").toString(),
+                                            document.getData().get("MarketModel_Text").toString(),
+                                            (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
+                                            new Date(document.getDate("MarketModel_DateOfManufacture").getTime()),
+                                            document.getData().get("MarketModel_Host_Uid").toString(),
                                             document.getId(),
-                                            document.getData().get("PostModel_Category").toString(),
-                                            (ArrayList<String>) document.getData().get("PostModel_LikeList"),
-                                            document.getData().get("PostModel_HotPost").toString(),
-                                            document.getData().get("PostModel_HotPost").toString(),
-                                            document.getData().get("PostModel_HotPost").toString()));
+                                            document.getData().get("MarketModel_Category").toString(),
+                                            (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
+                                            document.getData().get("MarketModel_HotMarket").toString(),
+                                            document.getData().get("MarketModel_reservation").toString(),
+                                            document.getData().get("MarketModel_deal").toString()
+                                    ));
                                 }
                                 title = null;
                             }

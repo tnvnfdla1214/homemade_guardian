@@ -54,7 +54,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             public void onClick(View v) {                                                                   // part18 : 게시물 클릭시 게시물페이지로 이동 (36'10")
                 Intent Intent_MarketActivity = new Intent(Activity, MarketActivity.class);
                 //postInfo 안에 uid있음
-                Intent_MarketActivity.putExtra("postInfo", ArrayList_MarketModel.get(Mainviewholder.getAdapterPosition()));
+                Intent_MarketActivity.putExtra("marketInfo", ArrayList_MarketModel.get(Mainviewholder.getAdapterPosition()));
                 Activity.startActivity(Intent_MarketActivity);
             }
         });

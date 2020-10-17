@@ -118,7 +118,7 @@ public class MarketActivity extends BasicActivity {                             
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        setContentView(R.layout.activity_market);
 
         Chat_With_MarketHost_Button = (Button) findViewById(R.id.Chat_With_PostHost_Button);
         Chat_With_MarketHost_Button.setOnClickListener(onClickListener);

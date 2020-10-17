@@ -57,7 +57,7 @@ public class Guest_Chat_MarketInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //프래그먼트 메인을 인플레이트해주고 컨테이너에 붙여달라는 뜻임
-        final ViewGroup View = (ViewGroup) inflater.inflate(R.layout.fragment_guest_chat_postinfo, container, false);
+        final ViewGroup View = (ViewGroup) inflater.inflate(R.layout.fragment_guest_chat_marketinfo, container, false);
         Chat_MarketInfo_Title = (TextView)View.findViewById(R.id.Chat_PostInfo_Title);
         Chat_MarketInfo_Text = (TextView)View.findViewById(R.id.Chat_PostInfo_Text);
         Chat_MarketInfo_Image = (ImageView) View.findViewById(R.id.Chat_PostInfo_Image);

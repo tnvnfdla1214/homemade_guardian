@@ -6,7 +6,7 @@
 
 
     <include
-        layout="@layout/toolbar_writepost"
+        layout="@layout/toolbar_writemarket"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar"/>

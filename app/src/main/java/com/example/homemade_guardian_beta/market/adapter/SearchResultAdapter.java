@@ -47,7 +47,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     @NonNull
     @Override
     public SearchResultAdapter.MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {             // part : 게시물을 눌렀을 떄
-        CardView Cardview = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post, parent, false);
+        CardView Cardview = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_market, parent, false);
         final MainViewHolder Mainviewholder = new MainViewHolder(Cardview);
         Cardview.setOnClickListener(new View.OnClickListener() {
             @Override

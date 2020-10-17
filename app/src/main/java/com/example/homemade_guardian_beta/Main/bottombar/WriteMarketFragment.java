@@ -93,7 +93,7 @@ public class WriteMarketFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_writepost, container, false);
+        View view = inflater.inflate(R.layout.fragment_writemarket, container, false);
         Toolbar myToolbar = view.findViewById(R.id.toolbar_title_write);
         ((AppCompatActivity) getActivity()).setSupportActionBar(myToolbar);
         GradientDrawable drawable= (GradientDrawable) ContextCompat.getDrawable(getContext(), R.drawable.image_round);

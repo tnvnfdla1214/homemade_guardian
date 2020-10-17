@@ -38,7 +38,7 @@ public class ThumbnailImageView extends LinearLayout {
         setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         setOrientation(LinearLayout.VERTICAL);
         Layoutinflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        Layoutinflater.inflate(R.layout.view_post, this, true);                                                 // part19 : view_post는 게시물 클릭시 페이지, item_post는 메인에서 나열된 게시물
+        Layoutinflater.inflate(R.layout.view_market, this, true);                                                 // part19 : view_post는 게시물 클릭시 페이지, item_post는 메인에서 나열된 게시물
     }
 
     public void setMoreIndex(int moreIndex){ this.moreIndex = moreIndex;}                                                                          // part19 : 어댑터에서도 쓸 수 있게 (46'50") }

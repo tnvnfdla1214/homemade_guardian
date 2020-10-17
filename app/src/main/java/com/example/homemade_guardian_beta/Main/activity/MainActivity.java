@@ -141,8 +141,8 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
                         return true;
                     case R.id.writepost:
-                        //Writen_ButtonsBackground_Layout.setVisibility(View.VISIBLE);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, writepostFragment).commit();
+                        Writen_ButtonsBackground_Layout.setVisibility(View.VISIBLE);
+                       // getSupportFragmentManager().beginTransaction().replace(R.id.container, writepostFragment).commit();
                         return true;
                     case R.id.chatroomlist:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, chatroomFragment).commit();

@@ -91,20 +91,20 @@ public class Host_Chat_PostInfoFragment extends Fragment {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 marketModel = documentSnapshot.toObject(MarketModel.class);
-                Chat_PostInfo_Title.setText(marketModel.getPostModel_Title());
-                Chat_PostInfo_Text.setText(marketModel.getPostModel_Text());
+                Chat_PostInfo_Title.setText(marketModel.getMarketModel_Title());
+                Chat_PostInfo_Text.setText(marketModel.getMarketModel_Text());
                 //post의 이미지 섬네일 띄우기
-                if(marketModel.getPostModel_ImageList() != null){
-                    Glide.with(getContext()).load(marketModel.getPostModel_ImageList().get(0)).centerCrop().override(500).into(Chat_PostInfo_Image);
+                if(marketModel.getMarketModel_ImageList() != null){
+                    Glide.with(getContext()).load(marketModel.getMarketModel_ImageList().get(0)).centerCrop().override(500).into(Chat_PostInfo_Image);
                 }
                 else{
                     Chat_PostInfo_Image.setVisibility(View.GONE);
                 }
-                if(marketModel.getPostModel_reservation().equals("O")){
+                if(marketModel.getMarketModel_reservation().equals("O")){
                     Chat_PostInfo_reservation.setChecked(true);
                 }
 
-                if(marketModel.getPostModel_deal().equals("O")){
+                if(marketModel.getMarketModel_deal().equals("O")){
                     Chat_PostInfo_deal.setChecked(true);
                 }
 

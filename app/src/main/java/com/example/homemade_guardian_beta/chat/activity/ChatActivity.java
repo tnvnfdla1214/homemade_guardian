@@ -84,7 +84,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 marketModel = documentSnapshot.toObject(MarketModel.class);
                 //currentUser_Uid == PostModel_Host_Uid 일 경우 Host_Chat_PostInfoFragment를 띄우고 아니라면 guest_Chat_PostInfoFragment를 띄운다.
-                if(currentUser_Uid.equals(marketModel.getPostModel_Host_Uid())){
+                if(currentUser_Uid.equals(marketModel.getMarketModel_Host_Uid())){
 
                     hostChat_postInfoFragment = new Host_Chat_PostInfoFragment();
                     getSupportFragmentManager().beginTransaction().add(R.id.postinfoFragment, hostChat_postInfoFragment).commit();

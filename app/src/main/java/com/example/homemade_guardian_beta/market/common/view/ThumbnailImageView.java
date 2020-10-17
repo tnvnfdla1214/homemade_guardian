@@ -48,7 +48,7 @@ public class ThumbnailImageView extends LinearLayout {
 
         LinearLayout Thumbnail_Layout = findViewById(R.id.contentsLayout);
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        ArrayList<String> ArrayList_ImageList = marketModel.getPostModel_ImageList();
+        ArrayList<String> ArrayList_ImageList = marketModel.getMarketModel_ImageList();
         if(ArrayList_ImageList != null) {
             for (int i = 0; i < ArrayList_ImageList.size(); i++) {                                                 // part17 : 더보기기능 추가
                 if (i == moreIndex) {

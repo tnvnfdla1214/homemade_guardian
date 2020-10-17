@@ -32,7 +32,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="110dp"
             android:layout_alignParentBottom="true"
             android:elevation="10dp"
             app:cardCornerRadius="15dp">
@@ -40,20 +40,22 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:padding="5dp">
 
                 <Button
                     android:id="@+id/Post_Write_Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="포스트" />
+                    android:text="포스트"
+                    android:layout_weight="1"/>
 
                 <Button
                     android:id="@+id/Market_Write_Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="마켓" />
+                    android:text="마켓"
+                    android:layout_weight="1"/>
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>

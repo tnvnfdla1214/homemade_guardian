@@ -49,8 +49,8 @@ public class FirebaseHelper {                                                   
     public void Post_Storagedelete(final MarketModel marketModel){                                                 // part16: 스토리지의 삭제 (13')
         FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();                                        // part17 : 스토리지 삭제 (문서) (19'50")
         StorageReference Storagereference = Firebasestorage.getReference();
-        final String Post_Uid = marketModel.getPostModel_Post_Uid();
-        ArrayList<String> Post_ImageList = marketModel.getPostModel_ImageList();
+        final String Post_Uid = marketModel.getMarketModel_Post_Uid();
+        ArrayList<String> Post_ImageList = marketModel.getMarketModel_ImageList();
         if(Post_ImageList != null) {
             for (int i = 0; i < Post_ImageList.size(); i++) {
                 String Image = Post_ImageList.get(i);
@@ -80,7 +80,7 @@ public class FirebaseHelper {                                                   
         final FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
         final ArrayList<String> CommentList = new ArrayList<>();
         if(SuccessCount == 0){
-            FirebaseFirestore.getInstance().collection("POSTS").document(postmodel.getPostModel_Post_Uid()).collection("COMMENT")
+            FirebaseFirestore.getInstance().collection("POSTS").document(postmodel.getMarketModel_Post_Uid()).collection("COMMENT")
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {

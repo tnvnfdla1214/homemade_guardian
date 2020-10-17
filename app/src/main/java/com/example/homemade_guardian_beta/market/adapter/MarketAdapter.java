@@ -75,16 +75,16 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.MainViewHo
         TextView Post_Category = Contents_CardView.findViewById(R.id.Post_Category);
         TextView Post_LikeCount = Contents_CardView.findViewById(R.id.Post_LikeCount);
         MarketModel postmodel = arrayList_MarketModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
-        Title_TextView.setText(postmodel.getPostModel_Title());
-        Contents_TextView.setText(postmodel.getPostModel_Text());
-        Post_Category.setText(postmodel.getPostModel_Category());
-        Post_LikeCount.setText(String.valueOf(postmodel.getPostModel_LikeList().size()));
+        Title_TextView.setText(postmodel.getMarketModel_Title());
+        Contents_TextView.setText(postmodel.getMarketModel_Text());
+        Post_Category.setText(postmodel.getMarketModel_Category());
+        Post_LikeCount.setText(String.valueOf(postmodel.getMarketModel_LikeList().size()));
                          //contentsLayout에다가 날짜포함
         LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);                      /////////////////////이거 대신 텍스트 만든거 보여주기로
         TextView DateOfManufacture_TextView = Contents_CardView.findViewById(R.id.Post_DateOfManufacture);
-        DateOfManufacture_TextView.setText(new SimpleDateFormat("MM/dd hh:mm", Locale.getDefault()).format(postmodel.getPostModel_DateOfManufacture()));
+        DateOfManufacture_TextView.setText(new SimpleDateFormat("MM/dd hh:mm", Locale.getDefault()).format(postmodel.getMarketModel_DateOfManufacture()));
 
-        ArrayList<String> ArrayList_ImageList = postmodel.getPostModel_ImageList();
+        ArrayList<String> ArrayList_ImageList = postmodel.getMarketModel_ImageList();
         if(ArrayList_ImageList != null) {
             Log.d("로그","썸네일 있");
             ImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);

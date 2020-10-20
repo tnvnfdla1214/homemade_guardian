@@ -44,17 +44,17 @@
                 android:padding="5dp">
 
                 <Button
-                    android:id="@+id/Post_Write_Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="포스트"
-                    android:layout_weight="1"/>
-
-                <Button
                     android:id="@+id/Market_Write_Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="마켓"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/Community_Write_Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="커뮤니티"
                     android:layout_weight="1"/>
             </LinearLayout>
 

@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 
 import com.example.homemade_guardian_beta.Main.bottombar.ChatroomListFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.CommunityFragment;
-import com.example.homemade_guardian_beta.Main.bottombar.HomeFragment;
+import com.example.homemade_guardian_beta.Main.bottombar.MarketFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.MyInfoFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.WriteMarketFragment;
 import com.example.homemade_guardian_beta.R;
@@ -32,16 +32,17 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private String LocalState = null;
-    HomeFragment homeFragment;
+    MarketFragment marketFragment;
     WriteMarketFragment writeMarketFragment;
     ChatroomListFragment chatroomFragment;
     MyInfoFragment myinfoFragment;
-    CommunityFragment communityFragment;
     ArrayList<String> UnReViewUserList = new ArrayList<>();
     ArrayList<String> UnReViewMarketList = new ArrayList<>();
+    CommunityFragment communityFragment;
 
 
     Button Market_Write_Button;
+    Button Community_Write_Button;
 
     private RelativeLayout Writen_ButtonsBackground_Layout;          //글쓰기 바텀 버튼 누를시
 
@@ -54,14 +55,16 @@ public class MainActivity extends AppCompatActivity {
 
         Writen_ButtonsBackground_Layout = findViewById(R.id.Writen_ButtonsBackground_Layout);
         Writen_ButtonsBackground_Layout.setOnClickListener(onClickListener);
-        Market_Write_Button = findViewById(R.id.Post_Write_Button);
+        Market_Write_Button = findViewById(R.id.Market_Write_Button);
         Market_Write_Button.setOnClickListener(onClickListener);
+        Community_Write_Button = findViewById(R.id.Community_Write_Button);
+        Community_Write_Button.setOnClickListener(onClickListener);
 
-        homeFragment = new HomeFragment();
-        communityFragment = new CommunityFragment();
+        marketFragment = new MarketFragment();
         writeMarketFragment = new WriteMarketFragment();
         chatroomFragment = new ChatroomListFragment();
         myinfoFragment = new MyInfoFragment();
+        communityFragment = new CommunityFragment();
 
         init();
     }
@@ -126,28 +129,29 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, homeFragment)
+                .replace(R.id.container, marketFragment)
                 .commit();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);            // part22 : 바텀 네비게이션바  설정 (47'20")
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.home:
-                        HomeFragment homeFragment = new HomeFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
+                    case R.id.Market:
+                        MarketFragment marketFragment = new MarketFragment();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, marketFragment).commit();
                         return true;
-                    case R.id.writemarket:
+                    case R.id.Community:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, communityFragment).commit();
                         return true;
-                    case R.id.writepost:
+
+                    case R.id.Writepost:
                         Writen_ButtonsBackground_Layout.setVisibility(View.VISIBLE);
                         //getSupportFragmentManager().beginTransaction().replace(R.id.container, writeMarketFragment).commit();
                         return true;
-                    case R.id.chatroomlist:
+                    case R.id.Chatroomlist:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, chatroomFragment).commit();
                         return true;
-                    case R.id.myinfo:
+                    case R.id.Myinfo:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, myinfoFragment).commit();
                         return true;
                 }
@@ -162,13 +166,11 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.Writen_ButtonsBackground_Layout:
                     Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
                     break;
-                case R.id.Post_Write_Button:
-                    //Intent intent = new Intent( MainActivity.this, WritePostActivity.class);
-                    //startActivity(intent);
+                case R.id.Market_Write_Button:
                     myStartActivity(WriteMarketActivity.class);
                     break;
-                case R.id.Market_Write_Button:
-                    Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
+                case R.id.Community_Write_Button:
+                    myStartActivity(WriteCommunityActivity.class);
                     break;
             }
         }

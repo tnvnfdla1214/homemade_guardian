@@ -34,7 +34,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class HomeFragment extends Fragment {
+public class MarketFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private FirebaseFirestore firebaseFirestore;
     private MarketAdapter marketAdapter;
@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment {
     private String HotMarketbtn_State = "unSelected";
     private ImageView searchbtn;
 
-    public HomeFragment() {                                                                                 // part22 : 프레그먼트로 내용 이전 (21'40")
+    public MarketFragment() {                                                                                 // part22 : 프레그먼트로 내용 이전 (21'40")
         // Required empty public constructor
     }
 

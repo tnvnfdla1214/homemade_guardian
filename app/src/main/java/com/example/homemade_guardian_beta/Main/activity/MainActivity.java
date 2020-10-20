@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.example.homemade_guardian_beta.Main.bottombar.ChatroomListFragment;
+import com.example.homemade_guardian_beta.Main.bottombar.CommunityFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.HomeFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.MyInfoFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.WriteMarketFragment;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     WriteMarketFragment writeMarketFragment;
     ChatroomListFragment chatroomFragment;
     MyInfoFragment myinfoFragment;
+    CommunityFragment communityFragment;
     ArrayList<String> UnReViewUserList = new ArrayList<>();
     ArrayList<String> UnReViewMarketList = new ArrayList<>();
 
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         Market_Write_Button.setOnClickListener(onClickListener);
 
         homeFragment = new HomeFragment();
+        communityFragment = new CommunityFragment();
         writeMarketFragment = new WriteMarketFragment();
         chatroomFragment = new ChatroomListFragment();
         myinfoFragment = new MyInfoFragment();
@@ -133,6 +136,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.home:
                         HomeFragment homeFragment = new HomeFragment();
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
+                        return true;
+                    case R.id.writemarket:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, communityFragment).commit();
                         return true;
                     case R.id.writepost:
                         Writen_ButtonsBackground_Layout.setVisibility(View.VISIBLE);

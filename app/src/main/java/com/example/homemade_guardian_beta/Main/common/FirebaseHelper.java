@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
+import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.model.market.Market_CommentModel;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
-import com.example.homemade_guardian_beta.market.common.listener.OnPostListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -286,4 +286,84 @@ public class FirebaseHelper {                                                   
                     }
                 });
     }
+
+
+    public void Community_Storagedelete(final CommunityModel communityModel){                                                 // part16: 스토리지의 삭제 (13')
+        FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();                                        // part17 : 스토리지 삭제 (문서) (19'50")
+        StorageReference Storagereference = Firebasestorage.getReference();
+        final String Market_Uid = communityModel.getCommunityModel_Community_Uid();
+        ArrayList<String> Market_ImageList = communityModel.getCommunityModel_ImageList();
+        if(Market_ImageList != null) {
+            for (int i = 0; i < Market_ImageList.size(); i++) {
+                String Image = Market_ImageList.get(i);
+                if (isStorageUrl(Image)) {
+                    SuccessCount++;                                                                             // part17 : 사진의 개수가 여러개인 게시물의 경우 (23'35")
+                    StorageReference desertRef_MARKETS_MarketUid = Storagereference.child("MARKETS/" + Market_Uid + "/" + storageUrlToName(Image));    // part17: (((파이어베이스에서 삭제))) 파이에베이스 스토리지는 폴더가 없다, 하나하나가 객체로서 저장 (13'30")
+                    desertRef_MARKETS_MarketUid.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            SuccessCount--;
+                            Community_Storedelete(Market_Uid, communityModel);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            showToast(Activity, "Error");
+                        }
+                    });
+                }
+            }
+        }
+        Community_Storedelete(Market_Uid, communityModel);
+    }
+
+    //파이어스토리지에서의 삭제가 끝난 후 파이어스토어에 있는 게시물의 데이터를 삭제한다., 댓글은 하위 컬렉션이기 때문에 미리삭제하고 게시물 삭제로 이동한다.
+    private void Community_Storedelete(final String Market_Uid, final CommunityModel communityModel) {                                     // part15 : (((DB에서 삭제))) 스토리지에서는 삭제 x
+        final FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
+        final ArrayList<String> CommentList = new ArrayList<>();
+        if(SuccessCount == 0){
+            FirebaseFirestore.getInstance().collection("MARKETS").document(communityModel.getCommunityModel_Community_Uid()).collection("COMMENT")
+                    .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            CommentList.add(document.getId());
+                        }
+                    }
+                    else {
+                        Log.d("태그", "Error getting documents: ", task.getException());
+                    }
+                    for(int i = 0; i < CommentList.size(); i++){
+                        Firebasefirestore.collection("MARKETS").document(Market_Uid).collection("COMMENT").document(CommentList.get(i))
+                                .delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {}
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {}
+                                });
+                    }
+                }
+            });
+
+            Firebasefirestore.collection("MARKETS").document(Market_Uid)
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            showToast(Activity, "게시글을 삭제하였습니다.");
+                            Onpostlistener.oncommunityDelete(communityModel);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) { showToast(Activity, "게시글을 삭제하지 못하였습니다.");
+                        }
+                    });
+        }
+    }
+
 }

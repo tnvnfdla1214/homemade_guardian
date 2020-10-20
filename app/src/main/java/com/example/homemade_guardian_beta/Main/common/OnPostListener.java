@@ -1,5 +1,7 @@
-package com.example.homemade_guardian_beta.market.common.listener;
+package com.example.homemade_guardian_beta.Main.common;
 
+import com.example.homemade_guardian_beta.model.community.CommunityModel;
+import com.example.homemade_guardian_beta.model.community.Community_CommentModel;
 import com.example.homemade_guardian_beta.model.market.Market_CommentModel;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 
@@ -8,6 +10,8 @@ import com.example.homemade_guardian_beta.model.market.MarketModel;
 public interface OnPostListener {
     void onDelete(MarketModel marketModel);
     void oncommentDelete(Market_CommentModel market_commentModel);
+    void oncommunityDelete(CommunityModel communityModel);
+    void oncommnitycommentDelete(Community_CommentModel community_commentModel);
     public void onModify();
 
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Main.bottombar.HomeFragment"
+
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/search_setting"
+        android:paddingTop="5dp">
+        <Spinner
+            android:layout_width="170dp"
+            android:layout_height="32dp"
+            android:id="@+id/Local_Spinner"
+            android:textStyle="bold"
+            />
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="20"/>
+
+        <ImageView
+        android:id="@+id/HotPostbtn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/category_hot"
+        android:background="@drawable/category_border"/>
+        <ImageView
+            android:id="@+id/searchbtn"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:paddingTop="5dp"
+            android:src="@drawable/search" />
+
+
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search_setting"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        >
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+
+</RelativeLayout>

@@ -20,9 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.community.activity.SearchCommunityActivity;
-import com.example.homemade_guardian_beta.market.activity.SearchActivity;
-import com.example.homemade_guardian_beta.market.adapter.MarketAdapter;
-import com.example.homemade_guardian_beta.model.market.MarketModel;
+import com.example.homemade_guardian_beta.community.adapter.CommunityAdapter;
+import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -37,14 +36,14 @@ import java.util.Date;
 public class CommunityFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private FirebaseFirestore firebaseFirestore;
-    private MarketAdapter marketAdapter;
-    private ArrayList<MarketModel> MarketList;
+    private CommunityAdapter CommunityAdapter;
+    private ArrayList<CommunityModel> CommunityList;
     private boolean updating;
     private boolean topScrolled;
     private String State;
     private RecyclerView recyclerView;
-    private ImageView HotMarketbtn;
-    private String HotMarketbtn_State = "unSelected";
+    private ImageView HotCommunitybtn;
+    private String HotCommunitybtn_State = "unSelected";
     private ImageView searchbtn;
 
     public CommunityFragment() {                                                                                 // part22 : 프레그먼트로 내용 이전 (21'40")
@@ -63,14 +62,14 @@ public class CommunityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_community, container, false);
 
         //지역선택
-        Spinner Market_Category_Spinner = (Spinner)view.findViewById(R.id.Local_Spinner);
-        ArrayAdapter Market_Category_Adapter = ArrayAdapter.createFromResource(getContext(), R.array.Local, android.R.layout.simple_spinner_item);
-        Market_Category_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Market_Category_Spinner.setAdapter(Market_Category_Adapter);
+        Spinner Community_Category_Spinner = (Spinner)view.findViewById(R.id.Local_Spinner);
+        ArrayAdapter Community_Category_Adapter = ArrayAdapter.createFromResource(getContext(), R.array.Local, android.R.layout.simple_spinner_item);
+        Community_Category_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Community_Category_Spinner.setAdapter(Community_Category_Adapter);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
-        MarketList = new ArrayList<>();
-        marketAdapter = new MarketAdapter(getActivity(), MarketList);
+        CommunityList = new ArrayList<>();
+        CommunityAdapter = new CommunityAdapter(getActivity(), CommunityList);
         //homeAdapter.setOnPostListener(onPostListener);
 
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -79,8 +78,8 @@ public class CommunityFragment extends Fragment {
         view.findViewById(R.id.searchbtn).setOnClickListener(onClickListener);
 
         //view.findViewById(R.id.AllPostbtn).setOnClickListener(onClickListener);
-        HotMarketbtn = (ImageView) view.findViewById(R.id.HotPostbtn);
-        HotMarketbtn.setOnClickListener(onClickListener);
+        HotCommunitybtn = (ImageView) view.findViewById(R.id.HotPostbtn);
+        HotCommunitybtn.setOnClickListener(onClickListener);
         searchbtn = (ImageView) view.findViewById(R.id.searchbtn);
         searchbtn.setOnClickListener(onClickListener);
         searchbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
@@ -88,7 +87,7 @@ public class CommunityFragment extends Fragment {
         State = "전체";
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(marketAdapter);
+        recyclerView.setAdapter(CommunityAdapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {                          // part21 : 스크롤로 새로고침 (29'10")
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {        //part21 : 스크롤 손을 뗏을때(31')
@@ -128,7 +127,7 @@ public class CommunityFragment extends Fragment {
                 }
             }
         });
-        All_MarketUpdate(false);
+        All_CommunityUpdate(false);
 
         return view;
     }
@@ -151,10 +150,10 @@ public class CommunityFragment extends Fragment {
 
     public void JudgeState(Boolean clear){
         if(State == "전체"){
-            All_MarketUpdate(clear);
+            All_CommunityUpdate(clear);
 
         }else if(State == "핫게시판"){
-            Hot_MarketUpdate(clear);
+            Hot_CommunityUpdate(clear);
         }
     }
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -166,57 +165,54 @@ public class CommunityFragment extends Fragment {
                     myStartActivity(SearchCommunityActivity.class);
                     break;
                 case R.id.HotPostbtn:
-                    if(HotMarketbtn_State.equals("unSelected")){
-                    HotMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    MarketList.clear();
-                    Hot_MarketUpdate(true);
+                    if(HotCommunitybtn_State.equals("unSelected")){
+                    HotCommunitybtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                        CommunityList.clear();
+                    Hot_CommunityUpdate(true);
                     State = "핫게시판";
-                        HotMarketbtn_State = "Selected";
-                    }else if(HotMarketbtn_State.equals("Selected")){
-                        HotMarketbtn.setColorFilter(null);
-                        MarketList.clear();
-                        All_MarketUpdate(true);
+                        HotCommunitybtn_State = "Selected";
+                    }else if(HotCommunitybtn_State.equals("Selected")){
+                        HotCommunitybtn.setColorFilter(null);
+                        CommunityList.clear();
+                        All_CommunityUpdate(true);
                         State = "전체";
-                        HotMarketbtn_State = "unSelected";
+                        HotCommunitybtn_State = "unSelected";
                     }
                     break;
             }
         }
     };
 
-    private void All_MarketUpdate(final boolean clear) {
+    private void All_CommunityUpdate(final boolean clear) {
         updating = true;
-        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
+        Date date = CommunityList.size() == 0 || clear ? new Date() : CommunityList.get(CommunityList.size() - 1).getCommunityModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        CollectionReference collectionReference = firebaseFirestore.collection("COMMUNITY");                // 파이어베이스의 posts에서
         Log.d("로그","스크롤 333");
-        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).limit(10).get()        // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개
+        collectionReference.orderBy("CommunityModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("CommunityModel_DateOfManufacture", date).limit(10).get()        // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
+                                CommunityList.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             Log.d("로그","스크롤 555");
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 Log.d("로그","스크롤 3333");
-                                MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
-                                        document.getData().get("MarketModel_Title").toString(),
-                                        document.getData().get("MarketModel_Text").toString(),
-                                        (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
-                                        new Date(document.getDate("MarketModel_DateOfManufacture").getTime()),
-                                        document.getData().get("MarketModel_Host_Uid").toString(),
+                                CommunityList.add(new CommunityModel(                                                          //postList로 데이터를 넣는다.
+                                        document.getData().get("CommunityModel_Title").toString(),
+                                        document.getData().get("CommunityModel_Text").toString(),
+                                        (ArrayList<String>) document.getData().get("CommunityModel_ImageList"),
+                                        new Date(document.getDate("CommunityModel_DateOfManufacture").getTime()),
+                                        document.getData().get("CommunityModel_Host_Uid").toString(),
                                         document.getId(),
-                                        document.getData().get("MarketModel_Category").toString(),
-                                        (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
-                                        document.getData().get("MarketModel_HotMarket").toString(),
-                                        document.getData().get("MarketModel_reservation").toString(),
-                                        document.getData().get("MarketModel_deal").toString()
+                                        (ArrayList<String>) document.getData().get("CommunityModel_LikeList"),
+                                        document.getData().get("CommunityModel_HotCommunity").toString()
                                         )
                                 );
                         }
-                            marketAdapter.notifyDataSetChanged();
+                            CommunityAdapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());
@@ -226,41 +222,38 @@ public class CommunityFragment extends Fragment {
                 });
     }
 
-    private void Hot_MarketUpdate(final boolean clear) {
+    private void Hot_CommunityUpdate(final boolean clear) {
         updating = true;
 
-        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_HotMarket","O").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        Date date = CommunityList.size() == 0 || clear ? new Date() : CommunityList.get(CommunityList.size() - 1).getCommunityModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        CollectionReference collectionReference = firebaseFirestore.collection("COMMUNITY");                // 파이어베이스의 posts에서
+        collectionReference.orderBy("CommunityModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("CommunityModel_DateOfManufacture", date).whereEqualTo("CommunityModel_HotCommunity","O").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        int HotMarketCut;
+                        int HotCommunityCut;
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
+                                CommunityList.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                HotMarketCut = ((ArrayList<String>) document.getData().get("MarketModel_LikeList")).size();
-                                if(HotMarketCut>0) {
-                                    MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
-                                            document.getData().get("MarketModel_Title").toString(),
-                                            document.getData().get("MarketModel_Text").toString(),
-                                            (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
-                                            new Date(document.getDate("MarketModel_DateOfManufacture").getTime()),
-                                            document.getData().get("MarketModel_Host_Uid").toString(),
+                                HotCommunityCut = ((ArrayList<String>) document.getData().get("CommunityModel_LikeList")).size();
+                                if(HotCommunityCut>0) {
+                                    CommunityList.add(new CommunityModel(                                                          //postList로 데이터를 넣는다.
+                                            document.getData().get("CommunityModel_Title").toString(),
+                                            document.getData().get("CommunityModel_Text").toString(),
+                                            (ArrayList<String>) document.getData().get("CommunityModel_ImageList"),
+                                            new Date(document.getDate("CommunityModel_DateOfManufacture").getTime()),
+                                            document.getData().get("CommunityModel_Host_Uid").toString(),
                                             document.getId(),
-                                            document.getData().get("MarketModel_Category").toString(),
-                                            (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
-                                            document.getData().get("MarketModel_HotMarket").toString(),
-                                            document.getData().get("MarketModel_reservation").toString(),
-                                            document.getData().get("MarketModel_deal").toString()
+                                            (ArrayList<String>) document.getData().get("CommunityModel_LikeList"),
+                                            document.getData().get("CommunityModel_HotCommunity").toString()
                                     ));
                                 }
-                                HotMarketCut = 0;
+                                HotCommunityCut = 0;
                             }
-                            marketAdapter.notifyDataSetChanged();
+                            CommunityAdapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());

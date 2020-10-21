@@ -1,22 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="100dp"
-        android:text="테스트"
-        >
-    </TextView>
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_writepost"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
 
-    <Button
-        android:id="@+id/test_btn"
-        android:layout_width="wrap_content"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        >
-    </Button>
-</LinearLayout>
+        android:layout_below="@+id/toolbar"
+        android:orientation = "vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/Community_Title_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="제목"
+                android:inputType="textPersonName" />
+            <LinearLayout
+                android:id="@+id/contentsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:orientation="vertical">
+                    <EditText
+                        android:id="@+id/Community_Content_EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:ems="10"
+                        android:gravity="top"
+                        android:hint="내용"
+                        android:inputType="textMultiLine" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:id="@+id/PhotoList0"
+                    android:scaleType="center"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"/>
+
+                <ImageView
+                    android:id="@+id/PhotoList1"
+                    android:scaleType="center"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"/>
+
+                <ImageView
+                    android:id="@+id/PhotoList2"
+                    android:scaleType="center"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"/>
+                <ImageView
+                    android:id="@+id/PhotoList3"
+                    android:scaleType="center"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"/>
+                <ImageView
+                    android:id="@+id/PhotoList4"
+                    android:scaleType="center"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <include
+        layout="@layout/view_loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+</RelativeLayout>

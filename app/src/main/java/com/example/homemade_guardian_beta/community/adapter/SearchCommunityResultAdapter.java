@@ -55,7 +55,7 @@ public class SearchCommunityResultAdapter extends RecyclerView.Adapter<SearchCom
             public void onClick(View v) {                                                                   // part18 : 게시물 클릭시 게시물페이지로 이동 (36'10")
                 Intent Intent_CommunityActivity = new Intent(Activity, CommunityActivity.class);
                 //postInfo 안에 uid있음
-                Intent_CommunityActivity.putExtra("marketInfo", ArrayList_CommunityModel.get(Mainviewholder.getAdapterPosition()));
+                Intent_CommunityActivity.putExtra("communityInfo", ArrayList_CommunityModel.get(Mainviewholder.getAdapterPosition()));
                 Activity.startActivity(Intent_CommunityActivity);
             }
         });

@@ -18,7 +18,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
-import com.example.homemade_guardian_beta.Main.common.ViewPagerAdapter;
+import com.example.homemade_guardian_beta.Main.common.CommunityViewPagerAdapter;
 import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
 import com.example.homemade_guardian_beta.photo.activity.PhotoPickerActivity;
@@ -61,7 +61,6 @@ public class ModifyCommunityActivity extends BasicActivity {
 //    private ImageView LifeMarketbtn;
 //    private ImageView BorrowMarketbtn;
 //    private ImageView WorkMarketbtn;
-    private String Category;
 
     private FirebaseUser CurrentUser;                                   //파이어베이스 데이터 상의 현재 사용자
     private StorageReference Storagereference;                                //파이어스토리지에 접근하기 위한 선언
@@ -115,7 +114,7 @@ public class ModifyCommunityActivity extends BasicActivity {
 
         FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();
         Storagereference = Firebasestorage.getReference();
-        communityModel = (CommunityModel) getIntent().getSerializableExtra("marketInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
+        communityModel = (CommunityModel) getIntent().getSerializableExtra("communityInfo");                       // part17 : postInfo의 정체!!!!!!!!!!!!!!!!!!(29')
         CommunityInit();
     }
 
@@ -133,7 +132,7 @@ public class ModifyCommunityActivity extends BasicActivity {
                 ImageList = null;
                 if(ModifyImageList != null) {
                     String ViewpagerState = "Disable";
-                    Viewpager.setAdapter(new ViewPagerAdapter(getApplicationContext(), ModifyImageList, ViewpagerState));
+                    Viewpager.setAdapter(new CommunityViewPagerAdapter(getApplicationContext(), ModifyImageList, ViewpagerState));
                 }
                 Select_Community_Image_Button.setText(Html.fromHtml(ArrayList_SelectedPhoto.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
             }
@@ -210,13 +209,13 @@ public class ModifyCommunityActivity extends BasicActivity {
         final String HotCommunity = communityModel.getCommunityModel_HotCommunity();
 //        final String MarketModel_reservation = communityModel.getMarketModel_reservation();
 //        final String MarketModel_deal = communityModel.getMarketModel_deal();
-        if (Title.length() > 0 && Category != null) {
+        if (Title.length() > 0) {
             LoaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
             CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();                                    // part12 :
             Storagereference = Firebasestorage.getReference();
             FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
-            final DocumentReference docRef_COMMUNITY_CommunityUid = Firebasefirestore.collection("MARKETS").document(Community_Uid);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
+            final DocumentReference docRef_COMMUNITY_CommunityUid = Firebasefirestore.collection("COMMUNITY").document(Community_Uid);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
             final Date DateOfManufacture = communityModel.getCommunityModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             final ArrayList<String> contentsList = new ArrayList<>();
 
@@ -229,7 +228,7 @@ public class ModifyCommunityActivity extends BasicActivity {
                     String path = ArrayList_SelectedPhoto.get(PathCount);
                     contentsList.add(path);
                     String[] pathArray = path.split("\\.");                                         // part14 : 이미지의 확장자를 주어진대로 (2'40")
-                    final StorageReference ImagesRef_COMMUNITY_Uid_PathCount = Storagereference.child("MARKETS/" + docRef_COMMUNITY_CommunityUid.getId() + "/" + PathCount + "." + pathArray[pathArray.length - 1]);
+                    final StorageReference ImagesRef_COMMUNITY_Uid_PathCount = Storagereference.child("COMMUNITY/" + docRef_COMMUNITY_CommunityUid.getId() + "/" + PathCount + "." + pathArray[pathArray.length - 1]);
                     try {
                         InputStream Stream = new FileInputStream(new File(ArrayList_SelectedPhoto.get(PathCount)));            // part11 : 경로 설정 (27'20")
                         StorageMetadata Metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (contentsList.size() - 1)).build();
@@ -270,8 +269,6 @@ public class ModifyCommunityActivity extends BasicActivity {
         } else {
             if(Title.length() == 0){
                 Toast.makeText(this, "제목을 입력해주세요.",Toast.LENGTH_SHORT).show();
-            }else if(Category == null){
-                Toast.makeText(this, "카테고리를 선택해주세요.",Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -284,7 +281,7 @@ public class ModifyCommunityActivity extends BasicActivity {
                     public void onSuccess(Void aVoid) {
                         LoaderLayout.setVisibility(View.GONE);
                         Intent Resultintent = new Intent();
-                        Resultintent.putExtra("marketInfo", communityModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
+                        Resultintent.putExtra("communityInfo", communityModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                         setResult(Activity.RESULT_OK, Resultintent);
                         finish();
                     }
@@ -309,7 +306,7 @@ public class ModifyCommunityActivity extends BasicActivity {
             ImageList = communityModel.getCommunityModel_ImageList();
             if(ImageList != null ){
                 String ViewpagerState = "Disable";
-                Viewpager.setAdapter(new ViewPagerAdapter(getApplicationContext(), ImageList, ViewpagerState));
+                Viewpager.setAdapter(new CommunityViewPagerAdapter(getApplicationContext(), ImageList, ViewpagerState));
                 Select_Community_Image_Button.setText(Html.fromHtml(ImageList.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
             }
 //            Category = communityModel.getCommunityModel_Category();

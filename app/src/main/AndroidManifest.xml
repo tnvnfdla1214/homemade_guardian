@@ -94,6 +94,16 @@
         </activity>
         <activity android:name=".Main.activity.WriteCommunityActivity">
         </activity>
+        <activity android:name=".community.activity.CommunityActivity">
+        </activity>
+        <activity android:name=".community.activity.EnlargeCommunityImageActivity">
+        </activity>
+        <activity android:name=".community.activity.ModifyCommunityActivity">
+        </activity>
+        <activity android:name=".community.activity.SearchCommunityActivity">
+        </activity>
+        <activity android:name=".community.activity.SearchCommunityResultActivity">
+        </activity>
 
 
     </application>

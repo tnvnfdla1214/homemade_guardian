@@ -37,7 +37,7 @@ public class SearchCommunityResultFragment extends Fragment {
     public static final SearchCommunityResultFragment getInstance(String search) {
         SearchCommunityResultFragment f = new SearchCommunityResultFragment();
         Bundle bdl = new Bundle();
-        bdl.putString("search", search);
+        bdl.putString("Communitysearch", search);
         f.setArguments(bdl);
         return f;
     }
@@ -50,7 +50,7 @@ public class SearchCommunityResultFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_searchcommunity_result, container, false);
-        search = (String)  getActivity().getIntent().getSerializableExtra("search");
+        search = (String)  getActivity().getIntent().getSerializableExtra("Communitysearch");
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         CommunityList = new ArrayList<>();
@@ -66,8 +66,8 @@ public class SearchCommunityResultFragment extends Fragment {
         //updating = true;
 
         Date date = CommunityList.size() == 0 || clear ? new Date() : CommunityList.get(CommunityList.size() - 1).getCommunityModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        CollectionReference collectionReference = firebaseFirestore.collection("COMMUNITY");                // 파이어베이스의 posts에서
+        collectionReference.orderBy("CommunityModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("CommunityModel_DateOfManufacture", date).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -77,17 +77,17 @@ public class SearchCommunityResultFragment extends Fragment {
                                 CommunityList.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                title = document.getData().get("MarketModel_Title").toString();
+                                title = document.getData().get("CommunityModel_Title").toString();
                                 if(title.toLowerCase().contains(search.toLowerCase())) {
                                     CommunityList.add(new CommunityModel(                                                          //postList로 데이터를 넣는다.
-                                            document.getData().get("MarketModel_Title").toString(),
-                                            document.getData().get("MarketModel_Text").toString(),
-                                            (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
-                                            new Date(document.getDate("MarketModel_DateOfManufacture").getTime()),
-                                            document.getData().get("MarketModel_Host_Uid").toString(),
+                                            document.getData().get("CommunityModel_Title").toString(),
+                                            document.getData().get("CommunityModel_Text").toString(),
+                                            (ArrayList<String>) document.getData().get("CommunityModel_ImageList"),
+                                            new Date(document.getDate("CommunityModel_DateOfManufacture").getTime()),
+                                            document.getData().get("CommunityModel_Host_Uid").toString(),
                                             document.getId(),
-                                            (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
-                                            document.getData().get("MarketModel_HotMarket").toString()
+                                            (ArrayList<String>) document.getData().get("CommunityModel_LikeList"),
+                                            document.getData().get("CommunityModel_HotCommunity").toString()
                                     ));
                                 }
                                 title = null;

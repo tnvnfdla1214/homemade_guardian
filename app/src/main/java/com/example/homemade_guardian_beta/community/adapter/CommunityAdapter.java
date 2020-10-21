@@ -58,7 +58,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Main
             @Override
             public void onClick(View v) {                                                                   // part18 : 게시물 클릭시 게시물페이지로 이동 (36'10")
                 Intent Intent_CommunityActivity = new Intent(Activity, CommunityActivity.class);
-                Intent_CommunityActivity.putExtra("marketInfo", arrayList_CommunityModel.get(Mainviewholder.getAdapterPosition()));
+                Intent_CommunityActivity.putExtra("communityInfo", arrayList_CommunityModel.get(Mainviewholder.getAdapterPosition()));
                 Activity.startActivity(Intent_CommunityActivity);
             }
         });

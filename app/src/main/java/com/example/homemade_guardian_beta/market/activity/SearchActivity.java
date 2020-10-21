@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
 import com.example.homemade_guardian_beta.R;
 
 // 검색을 실행하려 하고 검색하고자 하는 단어를 입력 받는 액티비티이다.

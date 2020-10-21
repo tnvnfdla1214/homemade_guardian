@@ -18,7 +18,6 @@ import android.widget.Spinner;
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.user.UserModel;
-import com.example.homemade_guardian_beta.market.activity.BasicActivity;
 import com.example.homemade_guardian_beta.market.activity.GalleryActivity;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,9 +37,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
-import static com.example.homemade_guardian_beta.market.MarketUtil.INTENT_PATH;
-import static com.example.homemade_guardian_beta.market.MarketUtil.INTENT_PATH;
-import static com.example.homemade_guardian_beta.market.MarketUtil.showToast;
+import static com.example.homemade_guardian_beta.Main.common.Util.INTENT_PATH;
+import static com.example.homemade_guardian_beta.Main.common.Util.showToast;
 
 //앱이 실행되고나면 로그인 후에 가장 먼저 보게 되는 액티비티로서, 사용자의 정보를 입력 받는다.
 //      Ex) 메인프레그먼트에서는 이 MemberInitActivity가 실행되지 않으면, 계속 MemberInitActivity를 실행하게 된다.

@@ -18,11 +18,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
 import com.example.homemade_guardian_beta.photo.activity.PhotoPickerActivity;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.market.common.view.ViewPagerAdapter;
+import com.example.homemade_guardian_beta.Main.common.ViewPagerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,7 +42,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.homemade_guardian_beta.market.MarketUtil.INTENT_MEDIA;
+import static com.example.homemade_guardian_beta.Main.common.Util.INTENT_MEDIA;
 
 //게시물의 수정을 위한 액티비티 이다. 형태는 WritePostFragment와 비슷하지만, 수정은 Activity라는 차이가 있다.
 //      Ex) 게시물에서 수정을 눌렀을 때 실행되는 액티비티이다.

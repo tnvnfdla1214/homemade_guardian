@@ -163,7 +163,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="horizontal">
-        <com.example.homemade_guardian_beta.market.common.BackPressEditText
+        <com.example.homemade_guardian_beta.Main.common.BackPressEditText
             android:id="@+id/Comment_Input_EditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

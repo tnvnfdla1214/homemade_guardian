@@ -168,7 +168,7 @@
             android:layout_height="wrap_content"
             android:text="채팅하기"
             android:id="@+id/Chat_With_PostHost_Button"/>
-        <com.example.homemade_guardian_beta.market.common.BackPressEditText
+        <com.example.homemade_guardian_beta.Main.common.BackPressEditText
             android:id="@+id/Comment_Input_EditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

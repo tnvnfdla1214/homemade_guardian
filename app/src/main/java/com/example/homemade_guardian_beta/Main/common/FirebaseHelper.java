@@ -5,9 +5,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.homemade_guardian_beta.Main.common.listener.OnPostListener;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.model.community.CommunityModel;
+import com.example.homemade_guardian_beta.model.community.Community_CommentModel;
 import com.example.homemade_guardian_beta.model.market.Market_CommentModel;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,9 +26,11 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static com.example.homemade_guardian_beta.market.MarketUtil.isStorageUrl;
-import static com.example.homemade_guardian_beta.market.MarketUtil.showToast;
-import static com.example.homemade_guardian_beta.market.MarketUtil.storageUrlToName;
+import static com.example.homemade_guardian_beta.Main.common.Util.isCommunityStorageUrl;
+import static com.example.homemade_guardian_beta.Main.common.Util.isMarketStorageUrl;
+import static com.example.homemade_guardian_beta.Main.common.Util.showCommunityToast;
+import static com.example.homemade_guardian_beta.Main.common.Util.showMarketToast;
+import static com.example.homemade_guardian_beta.Main.common.Util.storageUrlToName;
 
 //파이어베이스에서 파이어스토어,파이어스토리지의 삭제에 관여한다.
 
@@ -54,7 +58,7 @@ public class FirebaseHelper {                                                   
         if(Market_ImageList != null) {
             for (int i = 0; i < Market_ImageList.size(); i++) {
                 String Image = Market_ImageList.get(i);
-                if (isStorageUrl(Image)) {
+                if (isMarketStorageUrl(Image)) {
                     SuccessCount++;                                                                             // part17 : 사진의 개수가 여러개인 게시물의 경우 (23'35")
                     StorageReference desertRef_MARKETS_MarketUid = Storagereference.child("MARKETS/" + Market_Uid + "/" + storageUrlToName(Image));    // part17: (((파이어베이스에서 삭제))) 파이에베이스 스토리지는 폴더가 없다, 하나하나가 객체로서 저장 (13'30")
                     desertRef_MARKETS_MarketUid.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -66,7 +70,7 @@ public class FirebaseHelper {                                                   
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
-                            showToast(Activity, "Error");
+                            showMarketToast(Activity, "Error");
                         }
                     });
                 }
@@ -112,13 +116,13 @@ public class FirebaseHelper {                                                   
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            showToast(Activity, "게시글을 삭제하였습니다.");
+                            showMarketToast(Activity, "게시글을 삭제하였습니다.");
                             Onpostlistener.onDelete(marketModel);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public void onFailure(@NonNull Exception e) { showToast(Activity, "게시글을 삭제하지 못하였습니다.");
+                        public void onFailure(@NonNull Exception e) { showMarketToast(Activity, "게시글을 삭제하지 못하였습니다.");
                         }
                     });
         }
@@ -268,7 +272,7 @@ public class FirebaseHelper {                                                   
 
 
     //댓글은 파이어스토리지를 이용하지 않으므로 파이어스토어 삭제만 진행한다.
-    public void Comment_Storedelete(final Market_CommentModel commentmodel){                                                 // part16: 스토리지의 삭제 (13')
+    public void Market_Comment_Storedelete(final Market_CommentModel commentmodel){                                                 // part16: 스토리지의 삭제 (13')
         final String Comment_Uid = commentmodel.getMarket_CommentModel_Comment_Uid();
         FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
         Firebasefirestore.collection("MARKETS").document(commentmodel.getMarket_CommentModel_Market_Uid()).collection("COMMENT").document(Comment_Uid)
@@ -276,13 +280,13 @@ public class FirebaseHelper {                                                   
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        showToast(Activity, "댓글을 삭제하였습니다.");
+                        showMarketToast(Activity, "댓글을 삭제하였습니다.");
                         Onpostlistener.oncommentDelete(commentmodel);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onFailure(@NonNull Exception e) { showToast(Activity, "댓글을 삭제하지 못하였습니다.");
+                    public void onFailure(@NonNull Exception e) { showMarketToast(Activity, "댓글을 삭제하지 못하였습니다.");
                     }
                 });
     }
@@ -296,7 +300,7 @@ public class FirebaseHelper {                                                   
         if(Market_ImageList != null) {
             for (int i = 0; i < Market_ImageList.size(); i++) {
                 String Image = Market_ImageList.get(i);
-                if (isStorageUrl(Image)) {
+                if (isCommunityStorageUrl(Image)) {
                     SuccessCount++;                                                                             // part17 : 사진의 개수가 여러개인 게시물의 경우 (23'35")
                     StorageReference desertRef_MARKETS_MarketUid = Storagereference.child("MARKETS/" + Market_Uid + "/" + storageUrlToName(Image));    // part17: (((파이어베이스에서 삭제))) 파이에베이스 스토리지는 폴더가 없다, 하나하나가 객체로서 저장 (13'30")
                     desertRef_MARKETS_MarketUid.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -308,7 +312,7 @@ public class FirebaseHelper {                                                   
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
-                            showToast(Activity, "Error");
+                            showCommunityToast(Activity, "Error");
                         }
                     });
                 }
@@ -354,16 +358,35 @@ public class FirebaseHelper {                                                   
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            showToast(Activity, "게시글을 삭제하였습니다.");
+                            showCommunityToast(Activity, "게시글을 삭제하였습니다.");
                             Onpostlistener.oncommunityDelete(communityModel);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public void onFailure(@NonNull Exception e) { showToast(Activity, "게시글을 삭제하지 못하였습니다.");
+                        public void onFailure(@NonNull Exception e) { showCommunityToast(Activity, "게시글을 삭제하지 못하였습니다.");
                         }
                     });
         }
+    }
+
+    public void Community_Comment_Storedelete(final Community_CommentModel commentmodel){                                                 // part16: 스토리지의 삭제 (13')
+        final String Comment_Uid = commentmodel.getCommunity_CommentModel_Comment_Uid();
+        FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
+        Firebasefirestore.collection("MARKETS").document(commentmodel.getCommunity_CommentModel_Market_Uid()).collection("COMMENT").document(Comment_Uid)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showCommunityToast(Activity, "댓글을 삭제하였습니다.");
+                        Onpostlistener.oncommnitycommentDelete(commentmodel);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) { showCommunityToast(Activity, "댓글을 삭제하지 못하였습니다.");
+                    }
+                });
     }
 
 }

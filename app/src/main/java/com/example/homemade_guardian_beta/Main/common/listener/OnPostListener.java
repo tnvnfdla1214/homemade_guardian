@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.Main.common;
+package com.example.homemade_guardian_beta.Main.common.listener;
 
 import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.model.community.Community_CommentModel;

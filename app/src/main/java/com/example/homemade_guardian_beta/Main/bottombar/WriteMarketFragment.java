@@ -32,7 +32,7 @@ import com.example.homemade_guardian_beta.photo.activity.PhotoPickerActivity;
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
-import com.example.homemade_guardian_beta.market.common.view.ViewPagerAdapter;
+import com.example.homemade_guardian_beta.Main.common.ViewPagerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,7 +52,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import static android.app.Activity.RESULT_OK;
-import static com.example.homemade_guardian_beta.market.MarketUtil.INTENT_MEDIA;
+import static com.example.homemade_guardian_beta.Main.common.Util.INTENT_MEDIA;
 
 public class WriteMarketFragment extends Fragment {
     private FirebaseUser currentUser;

@@ -14,28 +14,25 @@ public class CommunityModel implements Serializable {                           
     private Date CommunityModel_DateOfManufacture;       //게시물의 작성 시간
     private ArrayList<String> CommunityModel_ImageList;  //게시물의 사진 리스트
     private String CommunityModel_Text;                //게시물의 글
-    private String CommunityModel_Category;            //게시물의 카테고리
     private ArrayList<String> CommunityModel_LikeList;  //게시물의 좋아요 리스트
     private String CommunityModel_HotCommunity;
 
-    public CommunityModel(String CommunityModel_Title, String CommunityModel_Text, ArrayList<String> CommunityModel_ImageList, Date CommunityModel_DateOfManufacture, String CommunityModel_Host_Uid, String CommunityModel_Community_Uid, String CommunityModel_Category, ArrayList<String> CommunityModel_LikeList, String CommunityModel_HotCommunity){
+    public CommunityModel(String CommunityModel_Title, String CommunityModel_Text, ArrayList<String> CommunityModel_ImageList, Date CommunityModel_DateOfManufacture, String CommunityModel_Host_Uid, String CommunityModel_Community_Uid, ArrayList<String> CommunityModel_LikeList, String CommunityModel_HotCommunity){
         this.CommunityModel_Title = CommunityModel_Title;
         this.CommunityModel_Text = CommunityModel_Text;
         this.CommunityModel_ImageList = CommunityModel_ImageList;
         this.CommunityModel_DateOfManufacture = CommunityModel_DateOfManufacture;
         this.CommunityModel_Host_Uid = CommunityModel_Host_Uid;
         this.CommunityModel_Community_Uid = CommunityModel_Community_Uid;
-        this.CommunityModel_Category = CommunityModel_Category;
         this.CommunityModel_LikeList = CommunityModel_LikeList;
         this.CommunityModel_HotCommunity = CommunityModel_HotCommunity;
     }
-    public CommunityModel(String CommunityModel_Title, String CommunityModel_Text, Date CommunityModel_DateOfManufacture, String CommunityModel_Host_Uid, String CommunityModel_Community_Uid, String CommunityModel_Category, ArrayList<String> CommunityModel_LikeList, String CommunityModel_HotCommunity){
+    public CommunityModel(String CommunityModel_Title, String CommunityModel_Text, Date CommunityModel_DateOfManufacture, String CommunityModel_Host_Uid, String CommunityModel_Community_Uid, ArrayList<String> CommunityModel_LikeList, String CommunityModel_HotCommunity){
         this.CommunityModel_Title = CommunityModel_Title;
         this.CommunityModel_Text = CommunityModel_Text;
         this.CommunityModel_DateOfManufacture = CommunityModel_DateOfManufacture;
         this.CommunityModel_Host_Uid = CommunityModel_Host_Uid;
         this.CommunityModel_Community_Uid = CommunityModel_Community_Uid;
-        this.CommunityModel_Category = CommunityModel_Category;
         this.CommunityModel_LikeList = CommunityModel_LikeList;
         this.CommunityModel_HotCommunity = CommunityModel_HotCommunity;
     }
@@ -48,7 +45,6 @@ public class CommunityModel implements Serializable {                           
         docData.put("CommunityModel_Host_Uid", CommunityModel_Host_Uid);
         docData.put("CommunityModel_DateOfManufacture", CommunityModel_DateOfManufacture);
         docData.put("CommunityModel_Community_Uid", CommunityModel_Community_Uid);
-        docData.put("CommunityModel_Category", CommunityModel_Category);
         docData.put("CommunityModel_LikeList", CommunityModel_LikeList);
         docData.put("CommunityModel_HotCommunity", CommunityModel_HotCommunity);
 
@@ -76,8 +72,6 @@ public class CommunityModel implements Serializable {                           
     public void setCommunityModel_Community_Uid(String CommunityModel_Community_Uid){ this.CommunityModel_Community_Uid = CommunityModel_Community_Uid; }
     public String getCommunityModel_Text(){return this.CommunityModel_Text;}
     public void setCommunityModel_Text(String CommunityModel_Text){this.CommunityModel_Text = CommunityModel_Text;}
-    public String getCommunityModel_Category(){return this.CommunityModel_Category;}
-    public void setCommunityModel_Category(String CommunityModel_Category){this.CommunityModel_Category = CommunityModel_Category;}
     public ArrayList<String> getCommunityModel_LikeList(){
         return this.CommunityModel_LikeList;
     }

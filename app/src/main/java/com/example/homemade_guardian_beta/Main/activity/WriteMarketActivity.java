@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.market.activity.BasicActivity;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
 import com.example.homemade_guardian_beta.photo.activity.PhotoPickerActivity;

@@ -13,13 +13,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.market.adapter.GalleryAdapter;
 import java.util.ArrayList;
-import static com.example.homemade_guardian_beta.market.MarketUtil.GALLERY_IMAGE;
-import static com.example.homemade_guardian_beta.market.MarketUtil.GALLERY_VIDEO;
-import static com.example.homemade_guardian_beta.market.MarketUtil.INTENT_MEDIA;
-import static com.example.homemade_guardian_beta.market.MarketUtil.showToast;
+import static com.example.homemade_guardian_beta.Main.common.Util.GALLERY_IMAGE;
+import static com.example.homemade_guardian_beta.Main.common.Util.GALLERY_VIDEO;
+import static com.example.homemade_guardian_beta.Main.common.Util.INTENT_MEDIA;
+import static com.example.homemade_guardian_beta.Main.common.Util.showToast;
 
 //이미지 리스트에 넣을 때와는 달리 이미지의 다중 선택을 불허하고, 사용자의 프로필 사진의 선택을 할 때에 실행되는 액티비티이다.
 //      Ex) MemberInitActivity에서 사진을 고를 때에 사용된다. <-> GalleryAdapter와 연결된다.

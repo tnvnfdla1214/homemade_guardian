@@ -2,6 +2,8 @@ package com.example.homemade_guardian_beta.market.activity;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.market.fragment.SearchResultFragment;
 

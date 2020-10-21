@@ -12,7 +12,7 @@
 
 
     <FrameLayout
-        android:id="@+id/SearchResultFragment"
+        android:id="@+id/SearchCommunityResultFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </FrameLayout>

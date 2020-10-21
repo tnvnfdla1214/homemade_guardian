@@ -29,6 +29,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
 import com.example.homemade_guardian_beta.Main.activity.HostModelActivity;
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
@@ -37,12 +38,12 @@ import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.model.community.Community_CommentModel;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.example.homemade_guardian_beta.model.market.Market_CommentModel;
-import com.example.homemade_guardian_beta.market.common.BackPressEditText;
+import com.example.homemade_guardian_beta.Main.common.BackPressEditText;
 import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.Main.common.OnPostListener;
-import com.example.homemade_guardian_beta.market.common.view.ViewPagerAdapter;
+import com.example.homemade_guardian_beta.Main.common.listener.OnPostListener;
+import com.example.homemade_guardian_beta.Main.common.ViewPagerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -509,7 +510,7 @@ public class MarketActivity extends BasicActivity {                             
                             switch (menuItem.getItemId()) {
 
                                 case R.id.Comment_Delete_Button:
-                                    Firebasehelper.Comment_Storedelete(market_commentModel);
+                                    Firebasehelper.Market_Comment_Storedelete(market_commentModel);
                                     return true;
                                 case R.id.Comment_Report_Button:
                                     Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();

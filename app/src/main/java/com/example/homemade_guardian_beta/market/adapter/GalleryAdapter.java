@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 import java.util.ArrayList;
-import static com.example.homemade_guardian_beta.market.MarketUtil.INTENT_PATH;
+import static com.example.homemade_guardian_beta.Main.common.Util.INTENT_PATH;
 
 //GalleryActivity와 연결되어 사용되는 어댑터이다.
 

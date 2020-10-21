@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.market.activity.MarketActivity;
-import com.example.homemade_guardian_beta.model.market.MarketModel;
+import com.example.homemade_guardian_beta.community.activity.CommunityActivity;
+import com.example.homemade_guardian_beta.model.community.CommunityModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ import java.util.Locale;
 //      Ex) MORE_INDEX를 readContentsView에서 MORE_INDEX 보다 작은 수의 사진만 MainFragment에서 나타낸다.
 
 public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.MainViewHolder> {
-    private ArrayList<MarketModel> arrayList_MarketModel;       //게시물에 담을 PostModel의 정보들을 담는다.
+    private ArrayList<CommunityModel> arrayList_CommunityModel;       //게시물에 담을 PostModel의 정보들을 담는다.
     private Activity Activity;
 
     private final int MORE_INDEX = 1;                       //게시물에서 미리 표현할 사진의 개수
@@ -43,8 +43,8 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Main
         }
     }
 
-    public CommunityAdapter(Activity activity, ArrayList<MarketModel> arrayList_MarketModel) {
-        this.arrayList_MarketModel = arrayList_MarketModel;
+    public CommunityAdapter(Activity activity, ArrayList<CommunityModel> arrayList_CommunityModel) {
+        this.arrayList_CommunityModel = arrayList_CommunityModel;
         this.Activity = activity;
     }
 
@@ -57,9 +57,9 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Main
         Cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {                                                                   // part18 : 게시물 클릭시 게시물페이지로 이동 (36'10")
-                Intent Intent_MarketActivity = new Intent(Activity, MarketActivity.class);
-                Intent_MarketActivity.putExtra("marketInfo", arrayList_MarketModel.get(Mainviewholder.getAdapterPosition()));
-                Activity.startActivity(Intent_MarketActivity);
+                Intent Intent_CommunityActivity = new Intent(Activity, CommunityActivity.class);
+                Intent_CommunityActivity.putExtra("marketInfo", arrayList_CommunityModel.get(Mainviewholder.getAdapterPosition()));
+                Activity.startActivity(Intent_CommunityActivity);
             }
         });
         return Mainviewholder;
@@ -72,17 +72,17 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Main
         CardView Contents_CardView = holder.Cardview;
         TextView Title_TextView = Contents_CardView.findViewById(R.id.Post_Title_TextView);
         TextView Contents_TextView = Contents_CardView.findViewById(R.id.Post_Contents_TextView);
-        TextView Market_LikeCount = Contents_CardView.findViewById(R.id.Post_LikeCount);
-        MarketModel marketModel = arrayList_MarketModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
-        Title_TextView.setText(marketModel.getMarketModel_Title());
-        Contents_TextView.setText(marketModel.getMarketModel_Text());
-        Market_LikeCount.setText(String.valueOf(marketModel.getMarketModel_LikeList().size()));
+        TextView Community_LikeCount = Contents_CardView.findViewById(R.id.Post_LikeCount);
+        CommunityModel communityModel = arrayList_CommunityModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
+        Title_TextView.setText(communityModel.getCommunityModel_Title());
+        Contents_TextView.setText(communityModel.getCommunityModel_Text());
+        Community_LikeCount.setText(String.valueOf(communityModel.getCommunityModel_LikeList().size()));
                          //contentsLayout에다가 날짜포함
         LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);                      /////////////////////이거 대신 텍스트 만든거 보여주기로
         TextView DateOfManufacture_TextView = Contents_CardView.findViewById(R.id.Post_DateOfManufacture);
-        DateOfManufacture_TextView.setText(new SimpleDateFormat("MM/dd hh:mm", Locale.getDefault()).format(marketModel.getMarketModel_DateOfManufacture()));
+        DateOfManufacture_TextView.setText(new SimpleDateFormat("MM/dd hh:mm", Locale.getDefault()).format(communityModel.getCommunityModel_DateOfManufacture()));
 
-        ArrayList<String> ArrayList_ImageList = marketModel.getMarketModel_ImageList();
+        ArrayList<String> ArrayList_ImageList = communityModel.getCommunityModel_ImageList();
         if(ArrayList_ImageList != null) {
             Log.d("로그","썸네일 있");
             ImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);
@@ -117,6 +117,6 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Main
 
     @Override
     public int getItemCount() {
-        return arrayList_MarketModel.size();
+        return arrayList_CommunityModel.size();
     }
 }

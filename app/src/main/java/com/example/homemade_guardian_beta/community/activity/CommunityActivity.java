@@ -37,11 +37,10 @@ import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.chat.common.FirestoreAdapter;
-import com.example.homemade_guardian_beta.market.activity.BasicActivity;
-import com.example.homemade_guardian_beta.market.activity.ModifyMarketActivity;
-import com.example.homemade_guardian_beta.market.common.BackPressEditText;
-import com.example.homemade_guardian_beta.Main.common.OnPostListener;
-import com.example.homemade_guardian_beta.market.common.view.ViewPagerAdapter;
+import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
+import com.example.homemade_guardian_beta.Main.common.BackPressEditText;
+import com.example.homemade_guardian_beta.Main.common.listener.OnPostListener;
+import com.example.homemade_guardian_beta.Main.common.ViewPagerAdapter;
 import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.model.community.Community_CommentModel;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
@@ -281,7 +280,7 @@ public class CommunityActivity extends BasicActivity {                          
                 startActivity(Intent_MainActivity);
                 return true;
             case R.id.Post_Modify_Button:
-                myStartActivity(ModifyMarketActivity.class, communityModel);
+                myStartActivity(ModifyCommunityActivity.class, communityModel);
                 return true;
 
             case R.id.Post_Report_Button:
@@ -383,9 +382,9 @@ public class CommunityActivity extends BasicActivity {                          
     };
 
     private void myStartActivity(Class c, CommunityModel communityModel) {                                          // part : 여기서는 수정 버튼을 눌렀을 때 게시물의 정보도 같이 넘겨준다.
-        Intent Intent_Market_Data = new Intent(this, c);
-        Intent_Market_Data.putExtra("marketInfo", communityModel);
-        startActivityForResult(Intent_Market_Data, 0);
+        Intent Intent_Community_Data = new Intent(this, c);
+        Intent_Community_Data.putExtra("marketInfo", communityModel);
+        startActivityForResult(Intent_Community_Data, 0);
     }
 
        // 댓글을 작성하는 함수
@@ -397,13 +396,13 @@ public class CommunityActivity extends BasicActivity {                          
         Date DateOfManufacture = new Date();
         community_commentModel = new Community_CommentModel(CurrentUid, Comment,  DateOfManufacture, Host_Name, Comment_Uid, communityModel.getCommunityModel_Community_Uid(),Comment_Host_Image);
 
-        final DocumentReference docRef_MARKETS_MarketUid = FirebaseFirestore.getInstance().collection("MARKETS").document(communityModel.getCommunityModel_Community_Uid());
+        final DocumentReference docRef_COMMUNITY_CommunityUid = FirebaseFirestore.getInstance().collection("MARKETS").document(communityModel.getCommunityModel_Community_Uid());
         final String CommentID = Comment_Uid;
-        docRef_MARKETS_MarketUid.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        docRef_COMMUNITY_CommunityUid.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 WriteBatch Batch_COMMENT_CommentUid = FirebaseFirestore.getInstance().batch();
-                Batch_COMMENT_CommentUid.set(docRef_MARKETS_MarketUid.collection("COMMENT").document(CommentID), community_commentModel);
+                Batch_COMMENT_CommentUid.set(docRef_COMMUNITY_CommunityUid.collection("COMMENT").document(CommentID), community_commentModel);
                 Batch_COMMENT_CommentUid.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -439,13 +438,13 @@ public class CommunityActivity extends BasicActivity {                          
         @Override
         public void onBindViewHolder(CustomViewHolder viewHolder, int position) {
             DocumentSnapshot DocumentSnapshot = getSnapshot(position);
-            final Market_CommentModel market_commentModel = DocumentSnapshot.toObject(Market_CommentModel.class);
-            Log.d("로그","Commentmodel : "+ market_commentModel);
-            viewHolder.Comment_UserName_TextView.setText(market_commentModel.getMarket_CommentModel_Host_Name());
-            viewHolder.Comment_UserComment_TextView.setText(market_commentModel.getMarket_CommentModel_Comment());
+            final Community_CommentModel community_commentModel = DocumentSnapshot.toObject(Community_CommentModel.class);
+            Log.d("로그","Commentmodel : "+ community_commentModel);
+            viewHolder.Comment_UserName_TextView.setText(community_commentModel.getCommunity_CommentModel_Host_Name());
+            viewHolder.Comment_UserComment_TextView.setText(community_commentModel.getCommunity_CommentModel_Comment());
 
-            if (market_commentModel.getMarket_CommentModel_Host_Image()!=null) {
-                Glide.with(CommunityActivity.this).load(market_commentModel.getMarket_CommentModel_Host_Image()).centerInside().override(500).into(viewHolder.Comment_UserProfile_ImageView);
+            if (community_commentModel.getCommunity_CommentModel_Host_Image()!=null) {
+                Glide.with(CommunityActivity.this).load(community_commentModel.getCommunity_CommentModel_Host_Image()).centerInside().override(500).into(viewHolder.Comment_UserProfile_ImageView);
             } else{
                 Glide.with(CommunityActivity.this).load(R.drawable.none_profile_user).centerInside().override(500).into(viewHolder.Comment_UserProfile_ImageView);
             }
@@ -460,7 +459,7 @@ public class CommunityActivity extends BasicActivity {                          
                             switch (menuItem.getItemId()) {
 
                                 case R.id.Comment_Delete_Button:
-                                    Firebasehelper.Comment_Storedelete(market_commentModel);
+                                    Firebasehelper.Community_Comment_Storedelete(community_commentModel);
                                     return true;
                                 case R.id.Comment_Report_Button:
                                     Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
@@ -481,7 +480,7 @@ public class CommunityActivity extends BasicActivity {                          
                     });
 
                     MenuInflater Menu_Inflater = Menu_Popup.getMenuInflater();
-                    if(CurrentUser.getUid().equals(market_commentModel.getMarket_CommentModel_Host_Uid())){
+                    if(CurrentUser.getUid().equals(community_commentModel.getCommunity_CommentModel_Host_Uid())){
                         Menu_Inflater.inflate(R.menu.comment_host, Menu_Popup.getMenu());
                     }
                     else{
@@ -516,33 +515,33 @@ public class CommunityActivity extends BasicActivity {                          
 
 
 
-    //좋아요를 화면에 생성해주는 RecyclerView
-    class Like_RecyclerViewAdapter extends FirestoreAdapter<LikeViewHolder> {
-        Like_RecyclerViewAdapter(Query query) {
-            super(query);
-        }
-        @Override
-        public LikeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new LikeViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_like, parent, false));
-        }
-        @Override
-        public void onBindViewHolder(LikeViewHolder viewHolder, int position) {
-            DocumentSnapshot DocumentSnapshot = getSnapshot(position);
-            final MarketModel marketModel = DocumentSnapshot.toObject(MarketModel.class);
-
-            String LikeCount = String.valueOf(marketModel.getMarketModel_LikeList().size());
-            viewHolder.Like_Count_TextView.setText(LikeCount);
-            Log.d("로그","LikeCount :" + LikeCount);
-            }
-    }
-    // 댓글의 Data
-    private class LikeViewHolder extends RecyclerView.ViewHolder {
-        public TextView Like_Count_TextView;
-        LikeViewHolder(View view) {
-            super(view);
-            Like_Count_TextView = view.findViewById(R.id.Like_Count_TextView);
-        }
-    }
+//    //좋아요를 화면에 생성해주는 RecyclerView
+//    class Like_RecyclerViewAdapter extends FirestoreAdapter<LikeViewHolder> {
+//        Like_RecyclerViewAdapter(Query query) {
+//            super(query);
+//        }
+//        @Override
+//        public LikeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//            return new LikeViewHolder(LayoutInflater.from(parent.getContext())
+//                    .inflate(R.layout.item_like, parent, false));
+//        }
+//        @Override
+//        public void onBindViewHolder(LikeViewHolder viewHolder, int position) {
+//            DocumentSnapshot DocumentSnapshot = getSnapshot(position);
+//            final MarketModel marketModel = DocumentSnapshot.toObject(MarketModel.class);
+//
+//            String LikeCount = String.valueOf(marketModel.getMarketModel_LikeList().size());
+//            viewHolder.Like_Count_TextView.setText(LikeCount);
+//            Log.d("로그","LikeCount :" + LikeCount);
+//            }
+//    }
+//    // 댓글의 Data
+//    private class LikeViewHolder extends RecyclerView.ViewHolder {
+//        public TextView Like_Count_TextView;
+//        LikeViewHolder(View view) {
+//            super(view);
+//            Like_Count_TextView = view.findViewById(R.id.Like_Count_TextView);
+//        }
+//    }
 
 }

@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.user.ReviewModel;
 import com.example.homemade_guardian_beta.model.user.UserModel;
-import com.example.homemade_guardian_beta.market.activity.BasicActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

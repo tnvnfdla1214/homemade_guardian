@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.market.activity.BasicActivity;
 
 public class WriteReviewActivity extends BasicActivity {
     private Context context;

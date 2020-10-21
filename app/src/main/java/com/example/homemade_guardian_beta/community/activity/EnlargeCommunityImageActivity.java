@@ -7,8 +7,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.market.activity.BasicActivity;
-import com.example.homemade_guardian_beta.market.common.view.ViewPagerAdapter;
+import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
+import com.example.homemade_guardian_beta.Main.common.ViewPagerAdapter;
 
 import java.util.ArrayList;
 

@@ -25,7 +25,8 @@
 
         <activity android:name=".Main.activity.LoginActivity">
         </activity>
-        <activity android:name=".Main.activity.MainActivity">
+        <activity android:name=".Main.activity.MainActivity" >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -94,7 +95,7 @@
         </activity>
         <activity android:name=".Main.activity.WriteCommunityActivity">
         </activity>
-        <activity android:name=".community.activity.CommunityActivity">
+        <activity android:name=".community.activity.CommunityActivity" >
         </activity>
         <activity android:name=".community.activity.EnlargeCommunityImageActivity">
         </activity>

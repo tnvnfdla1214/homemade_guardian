@@ -41,6 +41,8 @@ import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
 import com.example.homemade_guardian_beta.Main.common.BackPressEditText;
 import com.example.homemade_guardian_beta.Main.common.listener.OnPostListener;
 import com.example.homemade_guardian_beta.Main.common.CommunityViewPagerAdapter;
+import com.example.homemade_guardian_beta.market.activity.MarketActivity;
+import com.example.homemade_guardian_beta.market.activity.ModifyMarketActivity;
 import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.model.community.Community_CommentModel;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
@@ -87,7 +89,7 @@ public class CommunityActivity extends BasicActivity {                          
     private ViewPager Viewpager;                    //이미지들을 보여주기 위한 ViewPager 선언
     private Button Comment_Write_Button;            //댓글 작성 버튼
     private TextView Community_Host_Name_TextView;       //게시물 작성자의 이름
-    private ImageButton Host_UserPage_ImageButton;      //게시물 작성자의 이미지 버튼
+    private ImageView Host_UserPage_ImageButton;      //게시물 작성자의 이미지 버튼
     private ImageButton Like_ImageButton;      //게시물 작성자의 이미지 버튼
     private BackPressEditText Comment_Input_EditText;              //댓글 내용
     private TextView Title_TextView;                //게시물의 제목
@@ -125,7 +127,7 @@ public class CommunityActivity extends BasicActivity {                          
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community);
 
-        Host_UserPage_ImageButton = (ImageButton) findViewById(R.id.Host_UserPage_ImageButton);
+        Host_UserPage_ImageButton = (ImageView) findViewById(R.id.Host_UserPage_ImageButton);
         Host_UserPage_ImageButton.setOnClickListener(onClickListener);
         Like_ImageButton = (ImageButton) findViewById(R.id.Like_ImageButton);
         Like_ImageButton.setOnClickListener(onClickListener);
@@ -140,6 +142,7 @@ public class CommunityActivity extends BasicActivity {                          
         Like_TextView = findViewById(R.id.Like_TextView);
         TextView Community_DateOfManufacture = findViewById(R.id.Post_DateOfManufacture);
         findViewById(R.id.Comment_Write_Button).setOnClickListener(onClickListener);
+        findViewById(R.id.menu).setOnClickListener(onClickListener);
 
 
         communityModel = (CommunityModel) getIntent().getSerializableExtra("communityInfo");
@@ -251,7 +254,7 @@ public class CommunityActivity extends BasicActivity {                          
                     Community_Host_Name_TextView.setText(Usermodel.getUserModel_NickName());
                 }
                 else{
-                    Glide.with(getApplicationContext()).load(R.drawable.none_profile_user).into(Host_UserPage_ImageButton);
+                    Glide.with(getApplicationContext()).load(R.drawable.none_profile_user).centerCrop().override(500).into(Host_UserPage_ImageButton);
                     Community_Host_Name_TextView = findViewById(R.id.Post_Host_Name);
                     Community_Host_Name_TextView.setText(Usermodel.getUserModel_NickName());
                 }
@@ -259,37 +262,38 @@ public class CommunityActivity extends BasicActivity {                          
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {                                                         // part19 : 게시물 안에서의 수정 삭제 (58')
+    private void showPopup(View v) {                                                // part15 : 오른쪽 상단의 점3개 (수정 삭제) (23'25")
+        PopupMenu popup = new PopupMenu(CommunityActivity.this, v);
         if(CurrentUser.getUid().equals(communityModel.getCommunityModel_Host_Uid())){
-            getMenuInflater().inflate(R.menu.post_host, menu);
+            getMenuInflater().inflate(R.menu.post_host, popup.getMenu());
         }
         else{
-            getMenuInflater().inflate(R.menu.post_guest, menu);
+            getMenuInflater().inflate(R.menu.community_comment_guest, popup.getMenu());
         }
-        return super.onCreateOptionsMenu(menu);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.Post_Delete_Button:
+                        Firebasehelper.Community_Storagedelete(communityModel);
+                        Intent Intent_MainActivity = new Intent(CommunityActivity.this, MainActivity.class);
+                        startActivity(Intent_MainActivity);
+                        return true;
+                    case R.id.Post_Modify_Button:
+                        myStartActivity(ModifyCommunityActivity.class, communityModel);
+                        return true;
+
+                    case R.id.Comment_Report_Button:
+                        Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popup.show();
     }
 
-    //메뉴 안에 있는 버튼들의 이벤트
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.Post_Delete_Button:
-                Firebasehelper.Community_Storagedelete(communityModel);
-                Intent Intent_MainActivity = new Intent(CommunityActivity.this, MainActivity.class);
-                startActivity(Intent_MainActivity);
-                return true;
-            case R.id.Post_Modify_Button:
-                myStartActivity(ModifyCommunityActivity.class, communityModel);
-                return true;
-
-            case R.id.Post_Report_Button:
-                Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     //Activity에서 사용하는 버튼들의 OnClickListener
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -352,6 +356,9 @@ public class CommunityActivity extends BasicActivity {                          
                                 });
                         Like_TextView.setText(String.valueOf(communityModel.getCommunityModel_LikeList().size()));
                     }
+                    break;
+                case R.id.menu:
+                    showPopup(v);
                     break;
             }
         }
@@ -438,7 +445,7 @@ public class CommunityActivity extends BasicActivity {                          
             if (community_commentModel.getCommunity_CommentModel_Host_Image()!=null) {
                 Glide.with(CommunityActivity.this).load(community_commentModel.getCommunity_CommentModel_Host_Image()).centerInside().override(500).into(viewHolder.Comment_UserProfile_ImageView);
             } else{
-                Glide.with(CommunityActivity.this).load(R.drawable.none_profile_user).centerInside().override(500).into(viewHolder.Comment_UserProfile_ImageView);
+                Glide.with(CommunityActivity.this).load(R.drawable.none_profile_user).centerCrop().override(500).into(viewHolder.Comment_UserProfile_ImageView);
             }
 
             viewHolder.Comment_Menu_CardView.setOnClickListener(new View.OnClickListener() {

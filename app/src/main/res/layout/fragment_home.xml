@@ -24,20 +24,13 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:layout_weight="20"/>
+            android:layout_weight="18"/>
         <ImageView
             android:id="@+id/searchbtn"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:paddingTop="5dp"
-            android:src="@drawable/search" />
-
-        <ImageView
-            android:id="@+id/settingbtn"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/setting"
-            android:paddingTop="5dp"/>
+            android:src="@drawable/search"
+            android:paddingRight="15dp"/>
 
     </LinearLayout>
     <LinearLayout

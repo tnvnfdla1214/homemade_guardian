@@ -27,17 +27,18 @@
             android:layout_weight="20"/>
 
         <ImageView
-        android:id="@+id/HotPostbtn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/category_hot"
-        android:background="@drawable/category_border"/>
+            android:id="@+id/HotPostbtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/category_border"
+            android:src="@drawable/category_hot"/>
+
         <ImageView
             android:id="@+id/searchbtn"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:paddingTop="5dp"
-            android:src="@drawable/search" />
+            android:src="@drawable/search"
+            android:paddingRight="15dp"/>
 
 
     </LinearLayout>

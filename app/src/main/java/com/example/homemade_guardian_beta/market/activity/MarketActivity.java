@@ -85,7 +85,7 @@ public class MarketActivity extends BasicActivity {                             
     private Button Chat_With_MarketHost_Button;                     //채팅하기 버튼
     private Button Comment_Write_Button;            //댓글 작성 버튼
     private TextView Market_Host_Name_TextView;       //게시물 작성자의 이름
-    private ImageButton Host_UserPage_ImageButton;      //게시물 작성자의 이미지 버튼
+    private ImageView Host_UserPage_ImageButton;      //게시물 작성자의 이미지 버튼
     private ImageButton Like_ImageButton;      //게시물 작성자의 이미지 버튼
     private BackPressEditText Comment_Input_EditText;              //댓글 내용
     private TextView Title_TextView;                //게시물의 제목
@@ -125,7 +125,7 @@ public class MarketActivity extends BasicActivity {                             
 
         Chat_With_MarketHost_Button = (Button) findViewById(R.id.Chat_With_PostHost_Button);
         Chat_With_MarketHost_Button.setOnClickListener(onClickListener);
-        Host_UserPage_ImageButton = (ImageButton) findViewById(R.id.Host_UserPage_ImageButton);
+        Host_UserPage_ImageButton = (ImageView) findViewById(R.id.Host_UserPage_ImageButton);
         Host_UserPage_ImageButton.setOnClickListener(onClickListener);
         Like_ImageButton = (ImageButton) findViewById(R.id.Like_ImageButton);
         Like_ImageButton.setOnClickListener(onClickListener);
@@ -141,6 +141,8 @@ public class MarketActivity extends BasicActivity {                             
         Like_TextView = findViewById(R.id.Like_TextView);
         TextView Market_DateOfManufacture = findViewById(R.id.Post_DateOfManufacture);
         findViewById(R.id.Comment_Write_Button).setOnClickListener(onClickListener);
+
+        findViewById(R.id.menu).setOnClickListener(onClickListener);
 
 
         marketmodel = (MarketModel) getIntent().getSerializableExtra("marketInfo");
@@ -286,45 +288,46 @@ public class MarketActivity extends BasicActivity {                             
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {                                                         // part19 : 게시물 안에서의 수정 삭제 (58')
+    private void showPopup(View v) {                                                // part15 : 오른쪽 상단의 점3개 (수정 삭제) (23'25")
+        PopupMenu popup = new PopupMenu(MarketActivity.this, v);
         if(CurrentUser.getUid().equals(marketmodel.getMarketModel_Host_Uid())){
-            getMenuInflater().inflate(R.menu.post_host, menu);
+            getMenuInflater().inflate(R.menu.post_host, popup.getMenu());
         }
         else{
-            getMenuInflater().inflate(R.menu.post_guest, menu);
+            getMenuInflater().inflate(R.menu.post_guest, popup.getMenu());
         }
-        return super.onCreateOptionsMenu(menu);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.Post_Delete_Button:
+                        Firebasehelper.Market_Storagedelete(marketmodel);
+                        Intent Intent_MainActivity = new Intent(MarketActivity.this, MainActivity.class);
+                        startActivity(Intent_MainActivity);
+                        return true;
+                    case R.id.Post_Modify_Button:
+                        myStartActivity(ModifyMarketActivity.class, marketmodel);
+                        return true;
+
+                    case R.id.Post_Report_Button:
+                        Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.Chat_With_PostHost_Button:
+                        //버튼 눌러짐
+                        Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
+                        //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
+                        Intent_ChatActivity.putExtra("To_User_Uid", marketmodel.getMarketModel_Host_Uid());
+                        Intent_ChatActivity.putExtra("MarketModel_Market_Uid", marketmodel.getMarketModel_Market_Uid());
+                        startActivity(Intent_ChatActivity);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popup.show();
     }
 
-    //메뉴 안에 있는 버튼들의 이벤트
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.Post_Delete_Button:
-                Firebasehelper.Market_Storagedelete(marketmodel);
-                Intent Intent_MainActivity = new Intent(MarketActivity.this, MainActivity.class);
-                startActivity(Intent_MainActivity);
-                return true;
-            case R.id.Post_Modify_Button:
-                myStartActivity(ModifyMarketActivity.class, marketmodel);
-                return true;
-
-            case R.id.Post_Report_Button:
-                Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.Chat_With_PostHost_Button:
-                //버튼 눌러짐
-                Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
-                //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
-                Intent_ChatActivity.putExtra("To_User_Uid", marketmodel.getMarketModel_Host_Uid());
-                Intent_ChatActivity.putExtra("MarketModel_Market_Uid", marketmodel.getMarketModel_Market_Uid());
-                startActivity(Intent_ChatActivity);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     //Activity에서 사용하는 버튼들의 OnClickListener
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -403,6 +406,9 @@ public class MarketActivity extends BasicActivity {                             
                         Like_TextView.setText(String.valueOf(marketmodel.getMarketModel_LikeList().size()));
                     }
                     break;
+                case R.id.menu:
+                    showPopup(v);
+                    break;
             }
         }
     };
@@ -412,20 +418,11 @@ public class MarketActivity extends BasicActivity {                             
         public void onDelete(MarketModel marketModel) {
             Log.e("로그 ","삭제 성공");
         }
-        public void oncommentDelete(Market_CommentModel market_commentModel) {
-            Log.e("로그 ","댓글 삭제 성공");
-        }
-
+        public void oncommentDelete(Market_CommentModel market_commentModel) { Log.e("로그 ","댓글 삭제 성공"); }
         @Override
-        public void oncommunityDelete(CommunityModel communityModel) {
-            
-        }
-
+        public void oncommunityDelete(CommunityModel communityModel) { }
         @Override
-        public void oncommnitycommentDelete(Community_CommentModel community_commentModel) {
-
-        }
-
+        public void oncommnitycommentDelete(Community_CommentModel community_commentModel) { }
         @Override
         public void onModify() {
             Log.e("로그 ","수정 성공");
@@ -497,7 +494,7 @@ public class MarketActivity extends BasicActivity {                             
             if (market_commentModel.getMarket_CommentModel_Host_Image()!=null) {
                 Glide.with(MarketActivity.this).load(market_commentModel.getMarket_CommentModel_Host_Image()).centerInside().override(500).into(viewHolder.Comment_UserProfile_ImageView);
             } else{
-                Glide.with(MarketActivity.this).load(R.drawable.none_profile_user).centerInside().override(500).into(viewHolder.Comment_UserProfile_ImageView);
+                Glide.with(MarketActivity.this).load(R.drawable.none_profile_user).centerCrop().override(500).into(viewHolder.Comment_UserProfile_ImageView);
             }
 
             viewHolder.Comment_Menu_CardView.setOnClickListener(new View.OnClickListener() {

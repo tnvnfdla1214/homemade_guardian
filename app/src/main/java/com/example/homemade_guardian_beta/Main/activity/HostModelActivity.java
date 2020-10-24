@@ -58,12 +58,14 @@ public class HostModelActivity extends BasicActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Usermodel = documentSnapshot.toObject(UserModel.class);
-                Users_Address_TextView.setText(Usermodel.getUserModel_University());
+//                if (Usermodel.getUserModel_University() != 0) {
+//                    Users_Address_TextView.setText(Usermodel.getUserModel_University());
+//                }
                 Users_BirthDay_TextView.setText(Usermodel.getUserModel_BirthDay());
                 Users_Name_TextView.setText(Usermodel.getUserModel_NickName());
                 Users_Usernm_TextView.setText(Usermodel.getUserModel_NickName());
                 if(Usermodel.getUserModel_ProfileImage() != null){ Glide.with(HostModelActivity.this).load(Usermodel.getUserModel_ProfileImage()).centerCrop().override(500).into(Users_Profile_ImageView); }
-                else{ Glide.with(getApplicationContext()).load(R.drawable.user).into(Users_Profile_ImageView); }
+                else{ Glide.with(getApplicationContext()).load(R.drawable.none_profile_user).into(Users_Profile_ImageView); }
             }
         });
     }

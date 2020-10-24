@@ -6,11 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/view_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -70,11 +65,10 @@
                     android:layout_height="50dp"
                     app:cardCornerRadius="20dp">
 
-                    <ImageButton
+                    <ImageView
                         android:id="@+id/Host_UserPage_ImageButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/user" />
+                        android:layout_height="wrap_content" />
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout
@@ -104,16 +98,17 @@
                     android:layout_weight="1" />
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:background="#00000000"
                     app:cardBackgroundColor="@android:color/transparent"
-                    app:cardElevation="0dp">
+                    app:cardElevation="0dp"
+                    android:layout_gravity="center_vertical">
 
                     <ImageButton
                         android:id="@+id/Like_ImageButton"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:src="@drawable/empty_heart"
                         android:background="#00000000"
                         style="?android:attr/borderlessButtonStyle"/>
@@ -127,6 +122,12 @@
                     android:layout_gravity="right">
 
                 </TextView>
+                <ImageView
+                    android:id="@+id/menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_margin="3dp"
+                    android:src="@drawable/ic_more_vert_black_24dp" />
             </LinearLayout>
 
             <TextView

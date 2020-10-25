@@ -307,11 +307,17 @@ public class CommunityActivity extends BasicActivity {                          
                     break;
                 case R.id.Comment_Write_Button:
                     String Comment = CommunityActivity.this.Comment_Input_EditText.getText().toString();
-                    Write_Comment(Comment, Host_Name, Comment_Host_Image);
-                    CommunityActivity.this.Comment_Input_EditText.setText("");
-                    //비행기 보양 눌렀을 때 사라졌던 채팅버튼
-                    InputMethodManager immhide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    if(Comment.equals("")){
+                        Toast.makeText(getApplicationContext(), "댓글을 입력하십시오.", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Write_Comment(Comment, Host_Name, Comment_Host_Image);
+                        CommunityActivity.this.Comment_Input_EditText.setText("");
+
+                        //비행기 보양 눌렀을 때 사라졌던 채팅버튼
+                        InputMethodManager immhide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    }
+
                     break;
                 case R.id.Comment_Input_EditText:
                     Comment_Input_EditText.setFocusableInTouchMode(true);
@@ -334,7 +340,7 @@ public class CommunityActivity extends BasicActivity {                          
                     if (Check_Like == 0) {
                         Glide.with(getApplicationContext()).load(R.drawable.heart).into(Like_ImageButton);
                         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-                        ArrayList<String> LikeList = new ArrayList<>();
+                        ArrayList<String> LikeList = new ArrayList<String>();
                         final DocumentReference documentReference = firebaseFirestore.collection("COMMUNITY").document(communityModel.getCommunityModel_Community_Uid());
                         LikeList = communityModel.getCommunityModel_LikeList();
                         LikeList.add(CurrentUid);
@@ -408,6 +414,26 @@ public class CommunityActivity extends BasicActivity {                          
                         if (task.isSuccessful()) {
                             //sendGCM();
                             Comment_Write_Button.setEnabled(true);
+
+                            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                            int commentcount;
+                            final DocumentReference documentReference = firebaseFirestore.collection("COMMUNITY").document(communityModel.getCommunityModel_Community_Uid());
+                            commentcount = Integer.parseInt(String.valueOf(communityModel.getCommunityModel_CommentCount()));
+                            Log.d("민규","commentcount : "+ commentcount);
+                            commentcount++;
+                            Log.d("민규","commentcount : "+ commentcount);
+                            communityModel.setCommunityModel_CommentCount(commentcount);
+                            documentReference.set(communityModel.getCommunityInfo())
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                        }
+                                    });
                         }
                     }
                 });
@@ -458,7 +484,7 @@ public class CommunityActivity extends BasicActivity {                          
                             switch (menuItem.getItemId()) {
 
                                 case R.id.Comment_Delete_Button:
-                                    Firebasehelper.Community_Comment_Storedelete(community_commentModel);
+                                    Firebasehelper.Community_Comment_Storedelete(community_commentModel,communityModel);
                                     return true;
                                 case R.id.Comment_Report_Button:
                                     Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();

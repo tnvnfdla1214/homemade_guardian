@@ -218,6 +218,7 @@ public class ModifyCommunityActivity extends BasicActivity {
             final DocumentReference docRef_COMMUNITY_CommunityUid = Firebasefirestore.collection("COMMUNITY").document(Community_Uid);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
             final Date DateOfManufacture = communityModel.getCommunityModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             final ArrayList<String> contentsList = new ArrayList<>();
+            final int commentcount = communityModel.getCommunityModel_CommentCount();
 
             if (ImageList!=null){
                 communityModel.setCommunityModel_Title(Title);
@@ -235,6 +236,7 @@ public class ModifyCommunityActivity extends BasicActivity {
                         UploadTask Uploadtask = ImagesRef_COMMUNITY_Uid_PathCount.putStream(Stream, Metadata);
                         final String Get_CommunityUid = Community_Uid;
 
+
                         communityModel.setCommunityModel_ImageList(new ArrayList<String>());
                         Uploadtask.addOnFailureListener(new OnFailureListener() {                               // part11 :
                             @Override
@@ -248,7 +250,7 @@ public class ModifyCommunityActivity extends BasicActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {                                             // part11 : SUCCEESSCOUNT 개의 사진 (37')
                                         contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                        CommunityModel communityModel = new CommunityModel(Title, TextContents, contentsList,  DateOfManufacture, CurrentUser.getUid(), Get_CommunityUid,  LikeList, HotCommunity);
+                                        CommunityModel communityModel = new CommunityModel(Title, TextContents, contentsList,  DateOfManufacture, CurrentUser.getUid(), Get_CommunityUid,  LikeList, HotCommunity, commentcount);
                                         communityModel.setCommunityModel_Community_Uid(Get_CommunityUid);
                                         Modify_Store_Upload(docRef_COMMUNITY_CommunityUid, communityModel);
                                     }
@@ -261,7 +263,7 @@ public class ModifyCommunityActivity extends BasicActivity {
                     PathCount++;
                 }
                 if (ArrayList_SelectedPhoto.size() == 0) {
-                    CommunityModel communityModel = new CommunityModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Community_Uid,  LikeList, HotCommunity);
+                    CommunityModel communityModel = new CommunityModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Community_Uid,  LikeList, HotCommunity, commentcount);
                     communityModel.setCommunityModel_Community_Uid(Community_Uid);
                     Modify_Store_Upload(docRef_COMMUNITY_CommunityUid, communityModel);
                 }

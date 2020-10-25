@@ -401,8 +401,8 @@ public class MarketFragment extends Fragment {
                                         (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
                                         document.getData().get("MarketModel_HotMarket").toString(),
                                         document.getData().get("MarketModel_reservation").toString(),
-                                        document.getData().get("MarketModel_deal").toString()
-                                        )
+                                        document.getData().get("MarketModel_deal").toString(),
+                                        Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))                                        )
                                 );
                         }
                             marketAdapter.notifyDataSetChanged();
@@ -444,8 +444,8 @@ public class MarketFragment extends Fragment {
                                             (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
                                             document.getData().get("MarketModel_HotMarket").toString(),
                                             document.getData().get("MarketModel_reservation").toString(),
-                                            document.getData().get("MarketModel_deal").toString()
-                                    ));
+                                            document.getData().get("MarketModel_deal").toString(),
+                                            Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))                                    ));
                                 }
                                 HotMarketCut = 0;
                             }
@@ -486,8 +486,8 @@ public class MarketFragment extends Fragment {
                                         (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
                                         document.getData().get("MarketModel_HotMarket").toString(),
                                         document.getData().get("MarketModel_reservation").toString(),
-                                        document.getData().get("MarketModel_deal").toString()
-                                ));
+                                        document.getData().get("MarketModel_deal").toString(),
+                                        Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))                                ));
                             }
                             marketAdapter.notifyDataSetChanged();
                         } else {
@@ -526,8 +526,8 @@ public class MarketFragment extends Fragment {
                                         (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
                                         document.getData().get("MarketModel_HotMarket").toString(),
                                         document.getData().get("MarketModel_reservation").toString(),
-                                        document.getData().get("MarketModel_deal").toString()
-                                ));
+                                        document.getData().get("MarketModel_deal").toString(),
+                                        Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))                                ));
                             }
                             marketAdapter.notifyDataSetChanged();
                         } else {
@@ -566,8 +566,8 @@ public class MarketFragment extends Fragment {
                                         (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
                                         document.getData().get("MarketModel_HotMarket").toString(),
                                         document.getData().get("MarketModel_reservation").toString(),
-                                        document.getData().get("MarketModel_deal").toString()
-                                ));
+                                        document.getData().get("MarketModel_deal").toString(),
+                                        Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))                                ));
                             }
                             marketAdapter.notifyDataSetChanged();
                         } else {
@@ -606,8 +606,8 @@ public class MarketFragment extends Fragment {
                                         (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
                                         document.getData().get("MarketModel_HotMarket").toString(),
                                         document.getData().get("MarketModel_reservation").toString(),
-                                        document.getData().get("MarketModel_deal").toString()
-                                ));
+                                        document.getData().get("MarketModel_deal").toString(),
+                                        Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))                                ));
                             }
                             marketAdapter.notifyDataSetChanged();
                         } else {

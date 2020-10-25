@@ -272,7 +272,7 @@ public class FirebaseHelper {                                                   
 
 
     //댓글은 파이어스토리지를 이용하지 않으므로 파이어스토어 삭제만 진행한다.
-    public void Market_Comment_Storedelete(final Market_CommentModel commentmodel){                                                 // part16: 스토리지의 삭제 (13')
+    public void Market_Comment_Storedelete(final Market_CommentModel commentmodel,final MarketModel marketmodel){                                                 // part16: 스토리지의 삭제 (13')
         final String Comment_Uid = commentmodel.getMarket_CommentModel_Comment_Uid();
         FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
         Firebasefirestore.collection("MARKETS").document(commentmodel.getMarket_CommentModel_Market_Uid()).collection("COMMENT").document(Comment_Uid)
@@ -282,6 +282,24 @@ public class FirebaseHelper {                                                   
                     public void onSuccess(Void aVoid) {
                         showMarketToast(Activity, "댓글을 삭제하였습니다.");
                         Onpostlistener.oncommentDelete(commentmodel);
+
+                        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                        int commentcount;
+                        final DocumentReference documentReference = firebaseFirestore.collection("MARKETS").document(marketmodel.getMarketModel_Market_Uid());
+                        commentcount = marketmodel.getMarketModel_CommentCount();
+                        commentcount--;
+                        marketmodel.setMarketModel_CommentCount(commentcount);
+                        documentReference.set(marketmodel.getMarketInfo())
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -370,7 +388,7 @@ public class FirebaseHelper {                                                   
         }
     }
 
-    public void Community_Comment_Storedelete(final Community_CommentModel commentmodel){                                                 // part16: 스토리지의 삭제 (13')
+    public void Community_Comment_Storedelete(final Community_CommentModel commentmodel,final CommunityModel communityModel){                                                 // part16: 스토리지의 삭제 (13')
         final String Comment_Uid = commentmodel.getCommunity_CommentModel_Comment_Uid();
         FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
         Firebasefirestore.collection("COMMUNITY").document(commentmodel.getCommunity_CommentModel_Market_Uid()).collection("COMMENT").document(Comment_Uid)
@@ -380,6 +398,23 @@ public class FirebaseHelper {                                                   
                     public void onSuccess(Void aVoid) {
                         showCommunityToast(Activity, "댓글을 삭제하였습니다.");
                         Onpostlistener.oncommnitycommentDelete(commentmodel);
+                        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                        int commentcount;
+                        final DocumentReference documentReference = firebaseFirestore.collection("COMMUNITY").document(communityModel.getCommunityModel_Community_Uid());
+                        commentcount = communityModel.getCommunityModel_CommentCount();
+                        commentcount--;
+                        communityModel.setCommunityModel_CommentCount(commentcount);
+                        documentReference.set(communityModel.getCommunityInfo())
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

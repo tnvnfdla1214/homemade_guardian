@@ -220,6 +220,7 @@ public class ModifyMarketActivity extends BasicActivity {
             final DocumentReference docRef_MARKETS_MarketUid = Firebasefirestore.collection("MARKETS").document(Market_Uid);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
             final Date DateOfManufacture = Marketmodel.getMarketModel_DateOfManufacture();          // part17 : null이면 = 새 날짜 / 아니면 = getCreatedAt 날짜 이거 해줘야 수정한게 제일 위로 가지 않음 ((31')
             final ArrayList<String> contentsList = new ArrayList<>();
+            final int commentcount = Marketmodel.getMarketModel_CommentCount();
 
             if (ImageList!=null){
                 Marketmodel.setMarketModel_Title(Title);
@@ -251,7 +252,7 @@ public class ModifyMarketActivity extends BasicActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {                                             // part11 : SUCCEESSCOUNT 개의 사진 (37')
                                         contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                        MarketModel marketModel = new MarketModel(Title, TextContents, contentsList,  DateOfManufacture, CurrentUser.getUid(), Get_MarketUid, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal);
+                                        MarketModel marketModel = new MarketModel(Title, TextContents, contentsList,  DateOfManufacture, CurrentUser.getUid(), Get_MarketUid, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal, commentcount);
                                         marketModel.setMarketModel_Market_Uid(Get_MarketUid);
                                         Modify_Store_Upload(docRef_MARKETS_MarketUid, marketModel);
                                     }
@@ -264,7 +265,7 @@ public class ModifyMarketActivity extends BasicActivity {
                     PathCount++;
                 }
                 if (ArrayList_SelectedPhoto.size() == 0) {
-                    MarketModel marketModel = new MarketModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Market_Uid, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal);
+                    MarketModel marketModel = new MarketModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Market_Uid, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal, commentcount);
                     marketModel.setMarketModel_Market_Uid(Market_Uid);
                     Modify_Store_Upload(docRef_MARKETS_MarketUid, marketModel);
                 }

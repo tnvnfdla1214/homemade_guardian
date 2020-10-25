@@ -43,8 +43,9 @@ public class MarketModel implements Serializable {                              
     private String MarketModel_HotMarket;
     private String MarketModel_reservation;             //게시자가 예약을 할때 안했을때는 0 했다면 1
     private String MarketModel_deal;                    //게시물이 거래 안했을때 0, 했으면 1
+    private int MarketModel_CommentCount;
 
-    public MarketModel(String MarketModel_Title, String MarketModel_Text, ArrayList<String> MarketModel_ImageList, Date MarketModel_DateOfManufacture, String MarketModel_Host_Uid, String MarketModel_Market_Uid, String MarketModel_Category, ArrayList<String> MarketModel_LikeList, String MarketModel_HotMarket, String MarketModel_reservation, String MarketModel_deal){
+    public MarketModel(String MarketModel_Title, String MarketModel_Text, ArrayList<String> MarketModel_ImageList, Date MarketModel_DateOfManufacture, String MarketModel_Host_Uid, String MarketModel_Market_Uid, String MarketModel_Category, ArrayList<String> MarketModel_LikeList, String MarketModel_HotMarket, String MarketModel_reservation, String MarketModel_deal, int MarketModel_CommentCount){
         this.MarketModel_Title = MarketModel_Title;
         this.MarketModel_Text = MarketModel_Text;
         this.MarketModel_ImageList = MarketModel_ImageList;
@@ -56,8 +57,9 @@ public class MarketModel implements Serializable {                              
         this.MarketModel_HotMarket = MarketModel_HotMarket;
         this.MarketModel_reservation = MarketModel_reservation;
         this.MarketModel_deal = MarketModel_deal;
+        this.MarketModel_CommentCount = MarketModel_CommentCount;
     }
-    public MarketModel(String MarketModel_Title, String MarketModel_Text, Date MarketModel_DateOfManufacture, String MarketModel_Host_Uid, String MarketModel_Market_Uid, String MarketModel_Category, ArrayList<String> MarketModel_LikeList, String MarketModel_HotMarket, String MarketModel_reservation, String MarketModel_deal){
+    public MarketModel(String MarketModel_Title, String MarketModel_Text, Date MarketModel_DateOfManufacture, String MarketModel_Host_Uid, String MarketModel_Market_Uid, String MarketModel_Category, ArrayList<String> MarketModel_LikeList, String MarketModel_HotMarket, String MarketModel_reservation, String MarketModel_deal, int MarketModel_CommentCount){
         this.MarketModel_Title = MarketModel_Title;
         this.MarketModel_Text = MarketModel_Text;
         this.MarketModel_DateOfManufacture = MarketModel_DateOfManufacture;
@@ -68,6 +70,7 @@ public class MarketModel implements Serializable {                              
         this.MarketModel_HotMarket = MarketModel_HotMarket;
         this.MarketModel_reservation = MarketModel_reservation;
         this.MarketModel_deal = MarketModel_deal;
+        this.MarketModel_CommentCount = MarketModel_CommentCount;
     }
 
     public Map<String, Object> getMarketInfo(){
@@ -83,7 +86,7 @@ public class MarketModel implements Serializable {                              
         docData.put("MarketModel_HotMarket", MarketModel_HotMarket);
         docData.put("MarketModel_reservation", MarketModel_reservation);
         docData.put("MarketModel_deal", MarketModel_deal);
-
+        docData.put("MarketModel_CommentCount", MarketModel_CommentCount);
         return  docData;
     }
 
@@ -128,4 +131,6 @@ public class MarketModel implements Serializable {                              
         return this.MarketModel_deal;
     }
     public void setMarketModel_deal(String MarketModel_deal){ this.MarketModel_deal = MarketModel_deal; }
+    public int getMarketModel_CommentCount() { return MarketModel_CommentCount; }
+    public void setMarketModel_CommentCount(int MarketModel_CommentCount) { this.MarketModel_CommentCount = MarketModel_CommentCount; }
 }

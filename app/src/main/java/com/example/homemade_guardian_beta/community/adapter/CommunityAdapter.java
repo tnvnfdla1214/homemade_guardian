@@ -73,10 +73,12 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.Main
         TextView Title_TextView = Contents_CardView.findViewById(R.id.Post_Title_TextView);
         TextView Contents_TextView = Contents_CardView.findViewById(R.id.Post_Contents_TextView);
         TextView Community_LikeCount = Contents_CardView.findViewById(R.id.Post_LikeCount);
+        TextView Community_CommentCount = Contents_CardView.findViewById(R.id.comment_count_text);
         CommunityModel communityModel = arrayList_CommunityModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
         Title_TextView.setText(communityModel.getCommunityModel_Title());
         Contents_TextView.setText(communityModel.getCommunityModel_Text());
         Community_LikeCount.setText(String.valueOf(communityModel.getCommunityModel_LikeList().size()));
+        Community_CommentCount.setText(String.valueOf(communityModel.getCommunityModel_CommentCount()));
                          //contentsLayout에다가 날짜포함
         LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);                      /////////////////////이거 대신 텍스트 만든거 보여주기로
         TextView DateOfManufacture_TextView = Contents_CardView.findViewById(R.id.Post_DateOfManufacture);

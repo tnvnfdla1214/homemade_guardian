@@ -204,12 +204,6 @@ public class MarketActivity extends BasicActivity {                             
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(MarketActivity.this));
         recyclerView.setAdapter(Comment_Firestoreadapter);
-        ////////
-//        Like_Firestoreadapter = new Like_RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("POSTS"));
-//        final RecyclerView Like_recyclerView = findViewById(R.id.Like_recyclerView);
-//        Like_recyclerView.setLayoutManager(new LinearLayoutManager(PostActivity.this));
-//        Like_recyclerView.setAdapter(Like_Firestoreadapter);
-///////////////////////////////////////////Postmodel.setPostModel_LikeList(LikeList);
     }
 
     @Override
@@ -349,11 +343,15 @@ public class MarketActivity extends BasicActivity {                             
                     break;
                 case R.id.Comment_Write_Button:
                     String Comment = MarketActivity.this.Comment_Input_EditText.getText().toString();
-                    Write_Comment(Comment, Host_Name, Comment_Host_Image);
-                    MarketActivity.this.Comment_Input_EditText.setText("");
-                    //비행기 보양 눌렀을 때 사라졌던 채팅버튼
-                    InputMethodManager immhide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    if(Comment.equals("")){
+                        Toast.makeText(getApplicationContext(), "댓글을 입력하십시오.", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Write_Comment(Comment, Host_Name, Comment_Host_Image);
+                        MarketActivity.this.Comment_Input_EditText.setText("");
+                        //비행기 보양 눌렀을 때 사라졌던 채팅버튼
+                        InputMethodManager immhide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    }
                     if (!CurrentUid.equals(marketmodel.getMarketModel_Host_Uid())) {
                         Chat_With_MarketHost_Button.setVisibility(View.VISIBLE);
                     }
@@ -457,6 +455,26 @@ public class MarketActivity extends BasicActivity {                             
                         if (task.isSuccessful()) {
                             //sendGCM();
                             Comment_Write_Button.setEnabled(true);
+
+                            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                            int commentcount;
+                            final DocumentReference documentReference = firebaseFirestore.collection("MARKETS").document(marketmodel.getMarketModel_Market_Uid());
+                            commentcount = Integer.parseInt(String.valueOf(marketmodel.getMarketModel_CommentCount()));
+                            Log.d("민규","commentcount : "+ commentcount);
+                            commentcount++;
+                            Log.d("민규","commentcount : "+ commentcount);
+                            marketmodel.setMarketModel_CommentCount(commentcount);
+                            documentReference.set(marketmodel.getMarketInfo())
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                        }
+                                    });
                         }
                     }
                 });
@@ -507,7 +525,7 @@ public class MarketActivity extends BasicActivity {                             
                             switch (menuItem.getItemId()) {
 
                                 case R.id.Comment_Delete_Button:
-                                    Firebasehelper.Market_Comment_Storedelete(market_commentModel);
+                                    Firebasehelper.Market_Comment_Storedelete(market_commentModel,marketmodel);
                                     return true;
                                 case R.id.Comment_Report_Button:
                                     Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
@@ -555,40 +573,6 @@ public class MarketActivity extends BasicActivity {                             
             Comment_UserComment_TextView = view.findViewById(R.id.Comment_UserComment);
             Comment_Menu_CardView = view.findViewById(R.id.Comment_Menu);
 
-        }
-    }
-
-
-
-
-
-
-    //좋아요를 화면에 생성해주는 RecyclerView
-    class Like_RecyclerViewAdapter extends FirestoreAdapter<LikeViewHolder> {
-        Like_RecyclerViewAdapter(Query query) {
-            super(query);
-        }
-        @Override
-        public LikeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new LikeViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_like, parent, false));
-        }
-        @Override
-        public void onBindViewHolder(LikeViewHolder viewHolder, int position) {
-            DocumentSnapshot DocumentSnapshot = getSnapshot(position);
-            final MarketModel marketModel = DocumentSnapshot.toObject(MarketModel.class);
-
-            String LikeCount = String.valueOf(marketModel.getMarketModel_LikeList().size());
-            viewHolder.Like_Count_TextView.setText(LikeCount);
-            Log.d("로그","LikeCount :" + LikeCount);
-            }
-    }
-    // 댓글의 Data
-    private class LikeViewHolder extends RecyclerView.ViewHolder {
-        public TextView Like_Count_TextView;
-        LikeViewHolder(View view) {
-            super(view);
-            Like_Count_TextView = view.findViewById(R.id.Like_Count_TextView);
         }
     }
 

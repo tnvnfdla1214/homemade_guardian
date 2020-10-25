@@ -290,6 +290,7 @@ public class WriteMarketFragment extends Fragment {
         final String HotMarket = "X";
         final String MarketModel_reservation = "X";
         final String MarketModel_deal = "X";
+        final int market_commentcount = 0;
 
         Log.e("로그", "카테고리 : " + Category);
         if (title.length() > 0 && Category != null) {
@@ -329,7 +330,7 @@ public class WriteMarketFragment extends Fragment {
                                         public void onSuccess(Uri uri) {
                                             contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
                                             Log.e("로그", "카테고리 11111111111: " + Category);
-                                            MarketModel marketModel = new MarketModel(title, textcontents, contentsList,  date, currentUser.getUid(), newMarketID, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal);
+                                            MarketModel marketModel = new MarketModel(title, textcontents, contentsList,  date, currentUser.getUid(), newMarketID, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal, market_commentcount);
                                             marketModel.setMarketModel_Market_Uid(newMarketID);
                                             storeUpload(documentReference, marketModel);
                                         }
@@ -343,7 +344,7 @@ public class WriteMarketFragment extends Fragment {
             }
             if (selectedPhotos.size() == 0) {
                 Log.e("로그", "카테고리 22222222222222222222 : " + Category);
-                MarketModel marketModel = new MarketModel(title, textcontents, date, currentUser.getUid(), MarketID, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal);
+                MarketModel marketModel = new MarketModel(title, textcontents, date, currentUser.getUid(), MarketID, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal, market_commentcount);
                 marketModel.setMarketModel_Market_Uid(MarketID);
                 storeUpload(documentReference, marketModel);
             }

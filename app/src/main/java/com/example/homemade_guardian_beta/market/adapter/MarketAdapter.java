@@ -74,11 +74,14 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.MainViewHo
         TextView Contents_TextView = Contents_CardView.findViewById(R.id.Post_Contents_TextView);
         TextView Market_Category = Contents_CardView.findViewById(R.id.Post_Category);
         TextView Market_LikeCount = Contents_CardView.findViewById(R.id.Post_LikeCount);
+        TextView Market_CommentCount = Contents_CardView.findViewById(R.id.comment_count_text);
         MarketModel marketModel = arrayList_MarketModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
         Title_TextView.setText(marketModel.getMarketModel_Title());
         Contents_TextView.setText(marketModel.getMarketModel_Text());
         Market_Category.setText(marketModel.getMarketModel_Category());
         Market_LikeCount.setText(String.valueOf(marketModel.getMarketModel_LikeList().size()));
+        Market_CommentCount.setText(String.valueOf(marketModel.getMarketModel_CommentCount()));
+
                          //contentsLayout에다가 날짜포함
         LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);                      /////////////////////이거 대신 텍스트 만든거 보여주기로
         TextView DateOfManufacture_TextView = Contents_CardView.findViewById(R.id.Post_DateOfManufacture);
@@ -86,7 +89,6 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.MainViewHo
 
         ArrayList<String> ArrayList_ImageList = marketModel.getMarketModel_ImageList();
         if(ArrayList_ImageList != null) {
-            Log.d("로그","썸네일 있");
             ImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);
             Thumbnail_ImageView.setVisibility(View.VISIBLE);
             Thumbnail_ImageView.setBackground(drawable);
@@ -96,22 +98,9 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.MainViewHo
             String Image = ArrayList_ImageList.get(0);
             Glide.with(Activity).load(Image).centerCrop().override(500).thumbnail(0.1f).into(Thumbnail_ImageView);
         }else {
-            Log.d("로그","썸네일 없");
             ImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);
-            Log.d("로그","썸네일 없");
             Thumbnail_ImageView.setVisibility(View.GONE);
-            Log.d("로그","썸네일 없");
         }
-
-
-
-//        if (Contentslayout.getTag() == null || !Contentslayout.getTag().equals(Postmodel)) {                 // part16 : 게시물 개수에 변화가 있을 때만 실행..? (26'40")
-//            Contentslayout.setTag(Postmodel);
-//            Contentslayout.removeAllViews();                                                                // part14: 다 지웠다가 다시 생성
-//            Thumbnail_ImageView.setMoreIndex(MORE_INDEX);
-//            Thumbnail_ImageView.Set_Post_Thumbnail(Postmodel);
-//        }
-
     }
 
     @Override

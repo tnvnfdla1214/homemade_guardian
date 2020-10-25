@@ -90,7 +90,8 @@ public class SearchResultFragment extends Fragment {
                                             (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
                                             document.getData().get("MarketModel_HotMarket").toString(),
                                             document.getData().get("MarketModel_reservation").toString(),
-                                            document.getData().get("MarketModel_deal").toString()
+                                            document.getData().get("MarketModel_deal").toString(),
+                                            Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))
                                     ));
                                 }
                                 title = null;

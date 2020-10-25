@@ -128,6 +128,28 @@
                     android:layout_height="wrap_content"
                     android:textSize="13sp"
                     tools:text="2" />
+                <androidx.cardview.widget.CardView
+                    android:layout_width="32dp"
+                    android:layout_height="16dp"
+                    android:background="#00000000"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    app:cardElevation="0dp">
+
+                    <ImageButton
+                        android:id="@+id/comment_count"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="16dp"
+                        android:background="#00000000"
+                        app:srcCompat="@drawable/ic_baseline_chat_bubble_24" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/comment_count_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    tools:text="3" />
 
                 <TextView
                     android:id="@+id/Post_DateOfManufacture"

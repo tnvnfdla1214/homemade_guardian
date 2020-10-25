@@ -208,9 +208,9 @@ public class CommunityFragment extends Fragment {
                                         document.getData().get("CommunityModel_Host_Uid").toString(),
                                         document.getId(),
                                         (ArrayList<String>) document.getData().get("CommunityModel_LikeList"),
-                                        document.getData().get("CommunityModel_HotCommunity").toString()
-                                        )
-                                );
+                                        document.getData().get("CommunityModel_HotCommunity").toString(),
+                                        Integer.parseInt(String.valueOf(document.getData().get("CommunityModel_CommentCount")))
+                                        ));
                         }
                             CommunityAdapter.notifyDataSetChanged();
                         } else {
@@ -248,7 +248,8 @@ public class CommunityFragment extends Fragment {
                                             document.getData().get("CommunityModel_Host_Uid").toString(),
                                             document.getId(),
                                             (ArrayList<String>) document.getData().get("CommunityModel_LikeList"),
-                                            document.getData().get("CommunityModel_HotCommunity").toString()
+                                            document.getData().get("CommunityModel_HotCommunity").toString(),
+                                            Integer.parseInt(String.valueOf(document.getData().get("CommunityModel_CommentCount")))
                                     ));
                                 }
                                 HotCommunityCut = 0;

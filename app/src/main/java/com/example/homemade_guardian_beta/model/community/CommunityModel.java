@@ -16,8 +16,9 @@ public class CommunityModel implements Serializable {                           
     private String CommunityModel_Text;                //게시물의 글
     private ArrayList<String> CommunityModel_LikeList;  //게시물의 좋아요 리스트
     private String CommunityModel_HotCommunity;
+    private int CommunityModel_CommentCount;
 
-    public CommunityModel(String CommunityModel_Title, String CommunityModel_Text, ArrayList<String> CommunityModel_ImageList, Date CommunityModel_DateOfManufacture, String CommunityModel_Host_Uid, String CommunityModel_Community_Uid, ArrayList<String> CommunityModel_LikeList, String CommunityModel_HotCommunity){
+    public CommunityModel(String CommunityModel_Title, String CommunityModel_Text, ArrayList<String> CommunityModel_ImageList, Date CommunityModel_DateOfManufacture, String CommunityModel_Host_Uid, String CommunityModel_Community_Uid, ArrayList<String> CommunityModel_LikeList, String CommunityModel_HotCommunity, int CommunityModel_CommentCount){
         this.CommunityModel_Title = CommunityModel_Title;
         this.CommunityModel_Text = CommunityModel_Text;
         this.CommunityModel_ImageList = CommunityModel_ImageList;
@@ -26,8 +27,9 @@ public class CommunityModel implements Serializable {                           
         this.CommunityModel_Community_Uid = CommunityModel_Community_Uid;
         this.CommunityModel_LikeList = CommunityModel_LikeList;
         this.CommunityModel_HotCommunity = CommunityModel_HotCommunity;
+        this.CommunityModel_CommentCount = CommunityModel_CommentCount;
     }
-    public CommunityModel(String CommunityModel_Title, String CommunityModel_Text, Date CommunityModel_DateOfManufacture, String CommunityModel_Host_Uid, String CommunityModel_Community_Uid, ArrayList<String> CommunityModel_LikeList, String CommunityModel_HotCommunity){
+    public CommunityModel(String CommunityModel_Title, String CommunityModel_Text, Date CommunityModel_DateOfManufacture, String CommunityModel_Host_Uid, String CommunityModel_Community_Uid, ArrayList<String> CommunityModel_LikeList, String CommunityModel_HotCommunity, int CommunityModel_CommentCount){
         this.CommunityModel_Title = CommunityModel_Title;
         this.CommunityModel_Text = CommunityModel_Text;
         this.CommunityModel_DateOfManufacture = CommunityModel_DateOfManufacture;
@@ -35,6 +37,7 @@ public class CommunityModel implements Serializable {                           
         this.CommunityModel_Community_Uid = CommunityModel_Community_Uid;
         this.CommunityModel_LikeList = CommunityModel_LikeList;
         this.CommunityModel_HotCommunity = CommunityModel_HotCommunity;
+        this.CommunityModel_CommentCount = CommunityModel_CommentCount;
     }
 
     public Map<String, Object> getCommunityInfo(){
@@ -47,7 +50,7 @@ public class CommunityModel implements Serializable {                           
         docData.put("CommunityModel_Community_Uid", CommunityModel_Community_Uid);
         docData.put("CommunityModel_LikeList", CommunityModel_LikeList);
         docData.put("CommunityModel_HotCommunity", CommunityModel_HotCommunity);
-
+        docData.put("CommunityModel_CommentCount", CommunityModel_CommentCount);
         return  docData;
     }
 
@@ -80,4 +83,6 @@ public class CommunityModel implements Serializable {                           
         return this.CommunityModel_HotCommunity;
     }
     public void setCommunityModel_HotCommunity(String CommunityModel_HotCommunity){ this.CommunityModel_HotCommunity = CommunityModel_HotCommunity; }
+    public int getCommunityModel_CommentCount() { return CommunityModel_CommentCount; }
+    public void setCommunityModel_CommentCount(int CommunityModel_CommentCount) { this.CommunityModel_CommentCount = CommunityModel_CommentCount; }
 }

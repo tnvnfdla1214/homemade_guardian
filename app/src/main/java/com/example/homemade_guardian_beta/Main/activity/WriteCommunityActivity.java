@@ -136,6 +136,7 @@ public class WriteCommunityActivity extends BasicActivity {
             FirebaseStorage storage = FirebaseStorage.getInstance();                                    // part12 :
             StorageReference storageRef = storage.getReference();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+            final int community_commentcount = 0;
             ///
             CommunityID = firebaseFirestore.collection("COMMUNITY").document().getId();
             final DocumentReference documentReference =firebaseFirestore.collection("COMMUNITY").document(CommunityID);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
@@ -163,7 +164,7 @@ public class WriteCommunityActivity extends BasicActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                    CommunityModel communityModel = new CommunityModel(Community_Title_EditText, Community_Content_EditText, contentsList,  date, currentUser.getUid(), newCommunityID, LikeList, HotCommunity);
+                                    CommunityModel communityModel = new CommunityModel(Community_Title_EditText, Community_Content_EditText, contentsList,  date, currentUser.getUid(), newCommunityID, LikeList, HotCommunity, community_commentcount);
                                     communityModel.setCommunityModel_Community_Uid(newCommunityID);
                                     storeUpload(documentReference, communityModel);
                                 }
@@ -175,7 +176,7 @@ public class WriteCommunityActivity extends BasicActivity {
                 pathCount++;
             }
             if (selectedPhotos.size() == 0) {
-                CommunityModel communityModel = new CommunityModel(Community_Title_EditText, Community_Content_EditText,  date, currentUser.getUid(), CommunityID, LikeList, HotCommunity);
+                CommunityModel communityModel = new CommunityModel(Community_Title_EditText, Community_Content_EditText,  date, currentUser.getUid(), CommunityID, LikeList, HotCommunity, community_commentcount);
                 communityModel.setCommunityModel_Community_Uid(CommunityID);
                 storeUpload(documentReference, communityModel);
             }

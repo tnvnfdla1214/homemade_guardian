@@ -139,6 +139,7 @@ public class WriteMarketActivity extends BasicActivity {
         final String HotMarket = "X";
         final String MarketModel_reservation = "X";
         final String MarketModel_deal = "X";
+        final int market_commentcount = 0;
 
         if (Market_Title_EditText.length() > 0 && Category != null) {
             String MarketID = null;
@@ -148,6 +149,7 @@ public class WriteMarketActivity extends BasicActivity {
             FirebaseStorage storage = FirebaseStorage.getInstance();                                    // part12 :
             StorageReference storageRef = storage.getReference();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+
             ///
             MarketID = firebaseFirestore.collection("MARKETS").document().getId();
             final DocumentReference documentReference =firebaseFirestore.collection("MARKETS").document(MarketID);     //postInfo가 null이면 그냥 추가 되고 아니면 해당 아게시물 아이디에 해당하는 것으로 추가
@@ -175,7 +177,7 @@ public class WriteMarketActivity extends BasicActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {
                                     contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
-                                    MarketModel marketModel = new MarketModel(Market_Title_EditText, Market_Content_EditText, contentsList,  date, currentUser.getUid(), newMarketID, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal);
+                                    MarketModel marketModel = new MarketModel(Market_Title_EditText, Market_Content_EditText, contentsList,  date, currentUser.getUid(), newMarketID, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal, market_commentcount);
                                     marketModel.setMarketModel_Market_Uid(newMarketID);
                                     storeUpload(documentReference, marketModel);
                                 }
@@ -187,7 +189,7 @@ public class WriteMarketActivity extends BasicActivity {
                 pathCount++;
             }
             if (selectedPhotos.size() == 0) {
-                MarketModel marketModel = new MarketModel(Market_Title_EditText, Market_Content_EditText, date, currentUser.getUid(), MarketID, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal);
+                MarketModel marketModel = new MarketModel(Market_Title_EditText, Market_Content_EditText, date, currentUser.getUid(), MarketID, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal, market_commentcount);
                 marketModel.setMarketModel_Market_Uid(MarketID);
                 storeUpload(documentReference, marketModel);
             }

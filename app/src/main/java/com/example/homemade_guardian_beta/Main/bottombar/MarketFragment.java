@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.R;
@@ -53,6 +54,12 @@ public class MarketFragment extends Fragment {
     private String BorrowMarketbtn_State = "unSelected";
     private String WorkMarketbtn_State = "unSelected";
     private String HotMarketbtn_State = "unSelected";
+    private TextView FoodText;
+    private TextView LifeText;
+    private TextView BorrowText;
+    private TextView WorkText;
+    private TextView HotText;
+
     private ImageView searchbtn;
 
     public MarketFragment() {                                                                                 // part22 : 프레그먼트로 내용 이전 (21'40")
@@ -99,7 +106,13 @@ public class MarketFragment extends Fragment {
         WorkMarketbtn.setOnClickListener(onClickListener);
         searchbtn = (ImageView) view.findViewById(R.id.searchbtn);
         searchbtn.setOnClickListener(onClickListener);
-        searchbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+        //searchbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+        FoodText = view.findViewById(R.id.FoodPostText);
+        LifeText = view.findViewById(R.id.LifePostText);
+        BorrowText = view.findViewById(R.id.BorrowPostText);
+        WorkText = view.findViewById(R.id.WorkPostText);
+        HotText = view.findViewById(R.id.HotPostText);
+
 
         State = "전체";
         recyclerView.setHasFixedSize(true);
@@ -192,54 +205,64 @@ public class MarketFragment extends Fragment {
                 case R.id.HotPostbtn:
                     if(HotMarketbtn_State.equals("unSelected")){
                     HotMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    HotText.setTextColor(Color.parseColor("#2fd8df"));
                     FoodMarketbtn.setColorFilter(null);
+                    FoodText.setTextColor(Color.parseColor("#000000"));
                     LifeMarketbtn.setColorFilter(null);
+                    LifeText.setTextColor(Color.parseColor("#000000"));
                     BorrowMarketbtn.setColorFilter(null);
+                    BorrowText.setTextColor(Color.parseColor("#000000"));
                     WorkMarketbtn.setColorFilter(null);
+                    WorkText.setTextColor(Color.parseColor("#000000"));
                     MarketList.clear();
                     Hot_MarketUpdate(true);
                     State = "핫게시판";
-                        HotMarketbtn_State = "Selected";
+                    HotMarketbtn_State = "Selected";
                     }else if(HotMarketbtn_State.equals("Selected")){
                         FoodMarketbtn.setColorFilter(null);
+                        FoodText.setTextColor(Color.parseColor("#000000"));
                         LifeMarketbtn.setColorFilter(null);
+                        LifeText.setTextColor(Color.parseColor("#000000"));
                         BorrowMarketbtn.setColorFilter(null);
+                        BorrowText.setTextColor(Color.parseColor("#000000"));
                         WorkMarketbtn.setColorFilter(null);
+                        WorkText.setTextColor(Color.parseColor("#000000"));
                         HotMarketbtn.setColorFilter(null);
+                        HotText.setTextColor(Color.parseColor("#000000"));
                         MarketList.clear();
                         All_MarketUpdate(true);
                         State = "전체";
                         HotMarketbtn_State = "unSelected";
                     }
                     break;
-//                case R.id.AllPostbtn:
-//                    FoodPostbtn.setColorFilter(null);
-//                    LifePostbtn.setColorFilter(null);
-//                    BorrowPostbtn.setColorFilter(null);
-//                    WorkPostbtn.setColorFilter(null);
-//                    HotPostbtn.setColorFilter(null);
-//                    postList.clear();
-//                    All_postsUpdate(true);
-//                    State = "전체";
-//                    break;
                 case R.id.FoodPostbtn:
                     //ImageView FoodPostbtn = (ImageView) view.findViewById(R.id.FoodPostbtn);
                     if(FoodMarketbtn_State.equals("unSelected")){
                         FoodMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                        FoodText.setTextColor(Color.parseColor("#2fd8df"));
                         LifeMarketbtn.setColorFilter(null);
+                        LifeText.setTextColor(Color.parseColor("#000000"));
                         BorrowMarketbtn.setColorFilter(null);
+                        BorrowText.setTextColor(Color.parseColor("#000000"));
                         WorkMarketbtn.setColorFilter(null);
+                        WorkText.setTextColor(Color.parseColor("#000000"));
                         HotMarketbtn.setColorFilter(null);
+                        HotText.setTextColor(Color.parseColor("#000000"));
                         MarketList.clear();
                         Food_MarketUpdate(true);
                         State = "음식";
                         FoodMarketbtn_State = "Selected";
                     }else if(FoodMarketbtn_State.equals("Selected")){
                         FoodMarketbtn.setColorFilter(null);
+                        FoodText.setTextColor(Color.parseColor("#000000"));
                         LifeMarketbtn.setColorFilter(null);
+                        LifeText.setTextColor(Color.parseColor("#000000"));
                         BorrowMarketbtn.setColorFilter(null);
+                        BorrowText.setTextColor(Color.parseColor("#000000"));
                         WorkMarketbtn.setColorFilter(null);
+                        WorkText.setTextColor(Color.parseColor("#000000"));
                         HotMarketbtn.setColorFilter(null);
+                        HotText.setTextColor(Color.parseColor("#000000"));
                         MarketList.clear();
                         All_MarketUpdate(true);
                         State = "전체";
@@ -250,20 +273,30 @@ public class MarketFragment extends Fragment {
                 case R.id.LifePostbtn:
                     if(LifeMarketbtn_State.equals("unSelected")){
                     LifeMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    LifeText.setTextColor(Color.parseColor("#2fd8df"));
                     FoodMarketbtn.setColorFilter(null);
+                    FoodText.setTextColor(Color.parseColor("#000000"));
                     BorrowMarketbtn.setColorFilter(null);
+                    BorrowText.setTextColor(Color.parseColor("#000000"));
                     WorkMarketbtn.setColorFilter(null);
+                    WorkText.setTextColor(Color.parseColor("#000000"));
                     HotMarketbtn.setColorFilter(null);
+                    HotText.setTextColor(Color.parseColor("#000000"));
                     MarketList.clear();
                     Thing_MarketUpdate(true);
                     State = "생필품";
                     LifeMarketbtn_State = "Selected";
                     } else if(LifeMarketbtn_State.equals("Selected")){
                         FoodMarketbtn.setColorFilter(null);
+                        FoodText.setTextColor(Color.parseColor("#000000"));
                         LifeMarketbtn.setColorFilter(null);
+                        LifeText.setTextColor(Color.parseColor("#000000"));
                         BorrowMarketbtn.setColorFilter(null);
+                        BorrowText.setTextColor(Color.parseColor("#000000"));
                         WorkMarketbtn.setColorFilter(null);
+                        WorkText.setTextColor(Color.parseColor("#000000"));
                         HotMarketbtn.setColorFilter(null);
+                        HotText.setTextColor(Color.parseColor("#000000"));
                         MarketList.clear();
                         All_MarketUpdate(true);
                         State = "전체";
@@ -273,20 +306,30 @@ public class MarketFragment extends Fragment {
                 case R.id.BorrowPostbtn:
                     if(BorrowMarketbtn_State.equals("unSelected")){
                     BorrowMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    BorrowText.setTextColor(Color.parseColor("#2fd8df"));
                     FoodMarketbtn.setColorFilter(null);
+                    FoodText.setTextColor(Color.parseColor("#000000"));
                     LifeMarketbtn.setColorFilter(null);
+                    LifeText.setTextColor(Color.parseColor("#000000"));
                     WorkMarketbtn.setColorFilter(null);
+                    WorkText.setTextColor(Color.parseColor("#000000"));
                     HotMarketbtn.setColorFilter(null);
+                    HotText.setTextColor(Color.parseColor("#000000"));
                     MarketList.clear();
                     Borrow_MarketUpdate(true);
                     State = "대여";
                     BorrowMarketbtn_State = "Selected";
                     } else if(BorrowMarketbtn_State.equals("Selected")){
                         FoodMarketbtn.setColorFilter(null);
+                        FoodText.setTextColor(Color.parseColor("#000000"));
                         LifeMarketbtn.setColorFilter(null);
+                        LifeText.setTextColor(Color.parseColor("#000000"));
                         BorrowMarketbtn.setColorFilter(null);
+                        BorrowText.setTextColor(Color.parseColor("#000000"));
                         WorkMarketbtn.setColorFilter(null);
+                        WorkText.setTextColor(Color.parseColor("#000000"));
                         HotMarketbtn.setColorFilter(null);
+                        HotText.setTextColor(Color.parseColor("#000000"));
                         MarketList.clear();
                         All_MarketUpdate(true);
                         State = "전체";
@@ -296,20 +339,30 @@ public class MarketFragment extends Fragment {
                 case R.id.WorkPostbtn:
                     if(WorkMarketbtn_State.equals("unSelected")){
                     WorkMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    WorkText.setTextColor(Color.parseColor("#2fd8df"));
                     FoodMarketbtn.setColorFilter(null);
+                    FoodText.setTextColor(Color.parseColor("#000000"));
                     LifeMarketbtn.setColorFilter(null);
+                    LifeText.setTextColor(Color.parseColor("#000000"));
                     BorrowMarketbtn.setColorFilter(null);
+                    BorrowText.setTextColor(Color.parseColor("#000000"));
                     HotMarketbtn.setColorFilter(null);
+                    HotText.setTextColor(Color.parseColor("#000000"));
                     MarketList.clear();
                     Work_MarketUpdate(true);
                     State = "용역";
                     WorkMarketbtn_State = "Selected";
                     } else if(WorkMarketbtn_State.equals("Selected")){
                         FoodMarketbtn.setColorFilter(null);
+                        FoodText.setTextColor(Color.parseColor("#000000"));
                         LifeMarketbtn.setColorFilter(null);
+                        LifeText.setTextColor(Color.parseColor("#000000"));
                         BorrowMarketbtn.setColorFilter(null);
+                        BorrowText.setTextColor(Color.parseColor("#000000"));
                         WorkMarketbtn.setColorFilter(null);
+                        WorkText.setTextColor(Color.parseColor("#000000"));
                         HotMarketbtn.setColorFilter(null);
+                        HotText.setTextColor(Color.parseColor("#000000"));
                         MarketList.clear();
                         All_MarketUpdate(true);
                         State = "전체";

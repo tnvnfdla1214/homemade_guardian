@@ -19,8 +19,9 @@ public class UserModel {
     private ArrayList<String> UserModel_correctReviewList;  //리뷰를 작성하지 않은 포스트리스트
     private ArrayList<String> UserModel_completeReviewList;  //리뷰를 작성하지 않은 유저리스트
     private ArrayList<String> UserModel_badReviewList;  //리뷰를 작성하지 않은 유저리스트
+    private ArrayList<String> UserModel_WritenReviewList;  //리뷰를 작성한 유저리스트
 
-    public UserModel(String UserModel_NickName, String UserModel_BirthDay, Date UserModel_DateOfManufacture, int UserModel_University , String UserModel_ProfileImage, ArrayList<String> UserModel_UnReViewUserList, ArrayList<String> UserModel_UnReViewPostList,ArrayList<String> UserModel_kindReviewList,ArrayList<String> UserModel_correctReviewList,ArrayList<String> UserModel_completeReviewList,ArrayList<String> UserModel_badReviewList){     // part5 : 생성자 초기화 (7')
+    public UserModel(String UserModel_NickName, String UserModel_BirthDay, Date UserModel_DateOfManufacture, int UserModel_University , String UserModel_ProfileImage, ArrayList<String> UserModel_UnReViewUserList, ArrayList<String> UserModel_UnReViewPostList,ArrayList<String> UserModel_kindReviewList,ArrayList<String> UserModel_correctReviewList,ArrayList<String> UserModel_completeReviewList,ArrayList<String> UserModel_badReviewList,ArrayList<String> UserModel_WritenReviewList){     // part5 : 생성자 초기화 (7')
         this.UserModel_NickName = UserModel_NickName;
         this.UserModel_BirthDay = UserModel_BirthDay;
         this.UserModel_University = UserModel_University;
@@ -32,9 +33,10 @@ public class UserModel {
         this.UserModel_correctReviewList = UserModel_correctReviewList;
         this.UserModel_completeReviewList = UserModel_completeReviewList;
         this.UserModel_badReviewList = UserModel_badReviewList;
+        this.UserModel_WritenReviewList = UserModel_WritenReviewList;
     }
 
-    public UserModel(String UserModel_NickName,String UserModel_BirthDay, Date UserModel_DateOfManufacture, int UserModel_University, ArrayList<String> UserModel_UnReViewUserList, ArrayList<String> UserModel_UnReViewPostList,ArrayList<String> UserModel_kindReviewList,ArrayList<String> UserModel_correctReviewList,ArrayList<String> UserModel_completeReviewList,ArrayList<String> UserModel_badReviewList){      // + : 사용자 리스트 수정(날짜 정보 추가)
+    public UserModel(String UserModel_NickName,String UserModel_BirthDay, Date UserModel_DateOfManufacture, int UserModel_University, ArrayList<String> UserModel_UnReViewUserList, ArrayList<String> UserModel_UnReViewPostList,ArrayList<String> UserModel_kindReviewList,ArrayList<String> UserModel_correctReviewList,ArrayList<String> UserModel_completeReviewList,ArrayList<String> UserModel_badReviewList,ArrayList<String> UserModel_WritenReviewList){      // + : 사용자 리스트 수정(날짜 정보 추가)
         this.UserModel_NickName = UserModel_NickName;
         this.UserModel_BirthDay = UserModel_BirthDay;
         this.UserModel_DateOfManufacture = UserModel_DateOfManufacture;
@@ -45,6 +47,7 @@ public class UserModel {
         this.UserModel_correctReviewList = UserModel_correctReviewList;
         this.UserModel_completeReviewList = UserModel_completeReviewList;
         this.UserModel_badReviewList = UserModel_badReviewList;
+        this.UserModel_WritenReviewList = UserModel_WritenReviewList;
     }
 
     public UserModel(){
@@ -57,7 +60,7 @@ public class UserModel {
         docData.put("UserModel_Uid", UserModel_Uid);
         docData.put("UserModel_NickName", UserModel_NickName);
         docData.put("UserModel_BirthDay", UserModel_BirthDay);
-        docData.put("UserModel_Address", UserModel_University);
+        docData.put("UserModel_University", UserModel_University);
         docData.put("UserModel_ProfileImage", UserModel_ProfileImage);
         docData.put("UserModel_DateOfManufacture", UserModel_DateOfManufacture);
         docData.put("UserModel_UnReViewUserList", UserModel_UnReViewUserList);
@@ -66,6 +69,7 @@ public class UserModel {
         docData.put("UserModel_correctReviewList", UserModel_correctReviewList);
         docData.put("UserModel_completeReviewList", UserModel_completeReviewList);
         docData.put("UserModel_badReviewList", UserModel_badReviewList);
+        docData.put("UserModel_WritenReviewList", UserModel_WritenReviewList);
         return  docData;
     }
 
@@ -117,7 +121,7 @@ public class UserModel {
     public void setUserModel_ProfileImage(String photoUrl){
         this.UserModel_ProfileImage = photoUrl;
     }
-    
+
     public Date getUserModel_DateOfManufacture() { return UserModel_DateOfManufacture; }
 
     public void setUserModel_DateOfManufacture(Date userModel_DateOfManufacture) { this.UserModel_DateOfManufacture = userModel_DateOfManufacture; }
@@ -164,5 +168,13 @@ public class UserModel {
 
     public void setUserModel_badReviewList(ArrayList<String> UserModel_badReviewList) {
         UserModel_badReviewList = UserModel_badReviewList;
+    }
+
+    public ArrayList<String> getUserModel_WritenReviewList() {
+        return UserModel_WritenReviewList;
+    }
+
+    public void setUserModel_WritenReviewList(ArrayList<String> UserModel_WritenReviewList) {
+        UserModel_WritenReviewList = UserModel_WritenReviewList;
     }
 }

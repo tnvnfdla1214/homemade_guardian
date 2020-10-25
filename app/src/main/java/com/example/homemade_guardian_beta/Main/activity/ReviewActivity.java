@@ -38,10 +38,13 @@ public class ReviewActivity extends BasicActivity {
     private FirebaseFirestore Firestore =null;
     private ReviewModel ReviewModel;
     private int ReviewModel_Selected_Review;
+    String CurrentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
     UserModel userModel;
     ArrayList<String> UnReViewUserList = new ArrayList<>();
     ArrayList<String> UnReViewPostList = new ArrayList<>();
     ArrayList<String> ReViewList = new ArrayList<>();
+    ArrayList<String> UserModel_WritenReviewList = new ArrayList<>();
+
 
     public ReviewActivity(Context context) {
         this.context = context;
@@ -126,6 +129,10 @@ public class ReviewActivity extends BasicActivity {
 
 
 
+                //최소글자 만들기!!
+
+
+
                 String ReviewModel_Uid = null;
                 ReviewModel_Uid = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid).collection("REVIEW").document().getId();
 
@@ -142,8 +149,7 @@ public class ReviewActivity extends BasicActivity {
                         Batch_REVIEW_ReviewUid.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                final String User_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                                final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(User_Uid);
+                                final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUserUid);
                                 documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                     @Override
                                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -159,7 +165,7 @@ public class ReviewActivity extends BasicActivity {
                                                         UnReViewPostList.remove(0);
                                                         userModel.setUserModel_UnReViewUserList(UnReViewUserList);
                                                         userModel.setUserModel_UnReViewPostList(UnReViewPostList);
-                                                        final DocumentReference documentReferencesetCurrentUser = FirebaseFirestore.getInstance().collection("USERS").document(User_Uid);
+                                                        final DocumentReference documentReferencesetCurrentUser = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUserUid);
                                                         documentReferencesetCurrentUser.set(userModel.getUserInfo())
                                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                     @Override
@@ -269,6 +275,30 @@ public class ReviewActivity extends BasicActivity {
 
                         }
 
+
+                    }
+                });
+
+                //내꺼에 내가 누구한테 리뷰를 적었는지 상대의 uid가 적힌다.
+                final DocumentReference docRef_Review_WritenToUid = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUserUid);
+                docRef_Review_WritenToUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        userModel = documentSnapshot.toObject(UserModel.class);
+                        UserModel_WritenReviewList = userModel.getUserModel_WritenReviewList();
+                        UserModel_WritenReviewList.add(To_User_Uid);
+                        docRef_Review_WritenToUid.set(userModel.getUserInfo())
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                    }
+                                });
 
                     }
                 });

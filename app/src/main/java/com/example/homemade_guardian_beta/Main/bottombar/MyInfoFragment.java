@@ -1,11 +1,11 @@
 package com.example.homemade_guardian_beta.Main.bottombar;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,52 +14,30 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 
-import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
-import com.example.homemade_guardian_beta.chat.common.FirestoreAdapter;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-//지금은 임시로 우리앱에 들어간 유저들의 정보들이 나옴 -> 해당 유저를 누르면 그사람과 채팅 액티비티가 켜짐
-//임시 : (채팅앱 : UserListFragment)
-//MyInfoFragment -> ChatActivity -> ChatFragment ->
 public class MyInfoFragment extends Fragment {
-    private FirestoreAdapter firestoreAdapter;
-    private FirebaseHelper Firebasehelper;          //FirebaseHelper 참조 선언
+    ImageView Myinfo_profileImage;
+    TextView Myinfo_profileNickName, Myinfo_profileUniversity;
+    Button Proceeding_Post,Deal_Complete_Post,My_Writen_Post;
+    TextView Kind_Count,Complete_Count,Correct_Count,Bad_Count;
+    Button My_Reviews_written,To_Reviews_written;
 
-    public MyInfoFragment() {
-    }
+    private String CurrentUid;
+    private FirebaseUser CurrentUser;
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (firestoreAdapter != null) {
-            firestoreAdapter.startListening();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (firestoreAdapter != null) {
-            firestoreAdapter.stopListening();
-        }
-    }
+    UserModel Usermodel;
 
     @Nullable
     @Override
@@ -69,79 +47,105 @@ public class MyInfoFragment extends Fragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(myToolbar);
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if(actionBar != null){
-            actionBar.setTitle("유저 목록 (내 정보)");
+            actionBar.setTitle("");
         }
-        firestoreAdapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("USERS").orderBy("userModel_NickName"));
+        Myinfo_profileImage = (ImageView) view.findViewById(R.id.Myinfo_profileImage);
+        Myinfo_profileNickName = (TextView) view.findViewById(R.id.Myinfo_profileNickName);
+        Myinfo_profileUniversity = (TextView) view.findViewById(R.id.Myinfo_profileUniversity);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager( new LinearLayoutManager((inflater.getContext())));
-        recyclerView.setAdapter(firestoreAdapter);
+        Proceeding_Post = (Button) view.findViewById(R.id.Proceeding_Post);
+        Proceeding_Post.setOnClickListener(onClickListener);
+        Deal_Complete_Post = (Button) view.findViewById(R.id.Deal_Complete_Post);
+        Deal_Complete_Post.setOnClickListener(onClickListener);
+        My_Writen_Post = (Button) view.findViewById(R.id.My_Writen_Post);
+        My_Writen_Post.setOnClickListener(onClickListener);
 
-        Firebasehelper = new FirebaseHelper(getActivity());
+        Kind_Count = (TextView) view.findViewById(R.id.Kind_Count);
+        Complete_Count = (TextView) view.findViewById(R.id.Complete_Count);
+        Correct_Count = (TextView) view.findViewById(R.id.Correct_Count);
+        Bad_Count = (TextView) view.findViewById(R.id.Bad_Count);
+
+        My_Reviews_written = (Button) view.findViewById(R.id.My_Reviews_written);
+        My_Reviews_written.setOnClickListener(onClickListener);
+        To_Reviews_written = (Button) view.findViewById(R.id.To_Reviews_written);
+        To_Reviews_written.setOnClickListener(onClickListener);
+
+        CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        CurrentUid =CurrentUser.getUid();
+
+        Profile_Info();
+        Review_Count_Info();
+
+
+
+
         return view;
     }
 
-    class RecyclerViewAdapter extends FirestoreAdapter<CustomViewHolder> {
-        final private RequestOptions requestOptions = new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(90));
-        private StorageReference storageReference;
-        //현재 들어와 있는 유저 uid 가져오기
-        private String CurrentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        RecyclerViewAdapter(Query query) {
-            super(query);
-            storageReference  = FirebaseStorage.getInstance().getReference();
-        }
-
+    View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
-        public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new CustomViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_user, parent, false));
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.Proceeding_Post:
+                    break;
+                case R.id.Deal_Complete_Post:
+                    break;
+                case R.id.My_Writen_Post:
+                    break;
+                case R.id.My_Reviews_written:
+                    break;
+                case R.id.To_Reviews_written:
+                    break;
+
+
+            }
         }
+    };
 
-        @Override
-        public void onBindViewHolder(CustomViewHolder viewHolder, int position) {
-            DocumentSnapshot documentSnapshot = getSnapshot(position);
-            final UserModel user = documentSnapshot.toObject(UserModel.class);
+    public void Profile_Info(){
+        DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
+        docRef_MARKETS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-            if (CurrentUserUid.equals(user.getUserModel_Uid())) {
-                viewHolder.itemView.setVisibility(View.INVISIBLE);
-                viewHolder.itemView.getLayoutParams().height = 0;
-                return;
-            }
-            Log.d("태그1","viewHolder.user_name"+user.getUserModel_NickName());
-            viewHolder.user_name.setText(user.getUserModel_NickName());
+                Usermodel = documentSnapshot.toObject(UserModel.class);
 
-            if (user.getUserModel_ProfileImage()!=null) {
-                Glide.with(getActivity()).load(user.getUserModel_ProfileImage()).centerCrop().override(500).into(viewHolder.user_photo);
-            } else{
-                Glide.with(getActivity()).load(R.drawable.user).into(viewHolder.user_photo);
-            }
-
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //chatactivity는 해당 고유uid를 가진 사람을 찾아 그사람과의 채팅방을 들어감
-                    Firebasehelper.ROOMS_Re_Entry(CurrentUserUid, user.getUserModel_Uid());
-                    Intent intent = new Intent(getView().getContext(), ChatActivity.class);
-                    intent.putExtra("To_User_Uid", user.getUserModel_Uid());
-                    startActivity(intent);
+                Myinfo_profileNickName.setText(Usermodel.getUserModel_NickName());
+                //Myinfo_profileUniversity.setText(Usermodel.getUserModel_University());
+                if(Usermodel.getUserModel_University() == 0){
+                    Myinfo_profileUniversity.setText("홍익대학교");
                 }
-            });
+                else {
+                    Myinfo_profileUniversity.setText("고려대학교");
+                }
+                //post의 이미지 섬네일 띄우기
+                if(Usermodel.getUserModel_ProfileImage() != null){
+                    Glide.with(getContext()).load(Usermodel.getUserModel_ProfileImage()).centerInside().into(Myinfo_profileImage);
+                }
+                else{
+                    Glide.with(getContext()).load(R.drawable.none_profile_user).centerCrop().into(Myinfo_profileImage);
+                }
+            }
+        });
 
-        }
     }
+    public void Review_Count_Info(){
 
-    private class CustomViewHolder extends RecyclerView.ViewHolder {
-        public ImageView user_photo;
-        public TextView user_name;
-        public TextView user_msg;
 
-        CustomViewHolder(View view) {
-            super(view);
-            user_photo = view.findViewById(R.id.User_Profile_Imalge);
-            user_name = view.findViewById(R.id.user_name);
-            user_msg = view.findViewById(R.id.user_msg);
-        }
+        DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
+        docRef_MARKETS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Usermodel = documentSnapshot.toObject(UserModel.class);
+
+                Kind_Count.setText("X"+Usermodel.getUserModel_kindReviewList().size());
+                Complete_Count.setText("X"+Usermodel.getUserModel_completeReviewList().size());
+                Correct_Count.setText("X"+Usermodel.getUserModel_correctReviewList().size());
+                Bad_Count.setText("X"+Usermodel.getUserModel_badReviewList().size());
+
+            }
+        });
+
     }
 
 }

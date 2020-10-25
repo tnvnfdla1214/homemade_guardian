@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/black</item> //바텀네비게이션 바 색깔 관여
+        <item name="colorPrimaryDark">@color/color_Mint</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/color_505050</item> //제일위의 statusbar관여
+    </style>
+</resources>

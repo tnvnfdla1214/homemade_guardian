@@ -82,7 +82,7 @@ public class CommunityFragment extends Fragment {
         HotCommunitybtn.setOnClickListener(onClickListener);
         searchbtn = (ImageView) view.findViewById(R.id.searchbtn);
         searchbtn.setOnClickListener(onClickListener);
-        searchbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+        //searchbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
 
         State = "전체";
         recyclerView.setHasFixedSize(true);

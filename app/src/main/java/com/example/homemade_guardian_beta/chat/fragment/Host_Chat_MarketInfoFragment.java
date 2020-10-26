@@ -237,7 +237,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             userModel = documentSnapshot.toObject(UserModel.class);
                             Market_reservationList = userModel.getUserModel_Market_reservationList();
-                            Market_reservationList.add(MarketModel_Market_Uid);
+                            Market_reservationList.remove(MarketModel_Market_Uid);
                             userModel.setUserModel_Market_reservationList(Market_reservationList);
 
                             final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);

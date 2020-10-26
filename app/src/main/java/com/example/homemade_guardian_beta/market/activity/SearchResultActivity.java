@@ -24,7 +24,7 @@ public class SearchResultActivity extends BasicActivity {
         SearchResultFragment = SearchResultFragment.getInstance(Search);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.SearchResultFragment, SearchResultFragment)
+                .replace(R.id.MyInfo_Post_Fragment, SearchResultFragment)
                 .commit();
     }
 

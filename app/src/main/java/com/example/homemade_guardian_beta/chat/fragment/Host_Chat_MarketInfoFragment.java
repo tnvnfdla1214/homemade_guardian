@@ -47,6 +47,8 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
     ArrayList<String> UnReViewUserList = new ArrayList<>();
     ArrayList<String> UnReViewMarketList = new ArrayList<>();
 
+    ArrayList<String> Market_reservationList = new ArrayList<>();
+    ArrayList<String> Market_dealList = new ArrayList<>();
 
     TextView main_label;
     TextView selected_review;
@@ -131,6 +133,59 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                                 }
                             });
 
+
+                    //currentuseruid에 거래 완료된 포스틔의 uid 삽입
+                    final DocumentReference documentReferenceMyUser = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
+                    documentReferenceMyUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            userModel = documentSnapshot.toObject(UserModel.class);
+                            Market_reservationList = userModel.getUserModel_Market_reservationList();
+                            Market_reservationList.add(MarketModel_Market_Uid);
+                            userModel.setUserModel_Market_reservationList(Market_reservationList);
+
+                            final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
+                            documentReferencesetToUser.set(userModel.getUserInfo())
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                        }
+                                    });
+                        }
+                    });
+
+                    //To_User_Uid에 거래 완료된 포스틔의 uid 삽입
+                    final DocumentReference documentReferenceToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
+                    documentReferenceToUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            userModel = documentSnapshot.toObject(UserModel.class);
+                            Market_reservationList = userModel.getUserModel_Market_reservationList();
+                            Market_reservationList.add(MarketModel_Market_Uid);
+                            userModel.setUserModel_Market_reservationList(Market_reservationList);
+
+                            final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
+                            documentReferencesetToUser.set(userModel.getUserInfo())
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                        }
+                                    });
+                        }
+                    });
+
                 }else{
                     DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
                     docRef_MARKETS_HostUid
@@ -146,6 +201,61 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                                 public void onFailure(@NonNull Exception e) {
                                 }
                             });
+
+
+
+                    //currentuseruid에 거래 완료된 포스틔의 uid 삽입
+                    final DocumentReference documentReferenceMyUser = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
+                    documentReferenceMyUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            userModel = documentSnapshot.toObject(UserModel.class);
+                            Market_reservationList = userModel.getUserModel_Market_reservationList();
+                            //int index = Market_reservationList.indexOf(MarketModel_Market_Uid);
+                            Market_reservationList.remove(MarketModel_Market_Uid);
+                            userModel.setUserModel_Market_reservationList(Market_reservationList);
+                            final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
+                            documentReferencesetToUser.set(userModel.getUserInfo())
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                        }
+                                    });
+                        }
+                    });
+
+                    //To_User_Uid에 거래 완료된 포스틔의 uid 삽입
+                    final DocumentReference documentReferenceToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
+                    documentReferenceToUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            userModel = documentSnapshot.toObject(UserModel.class);
+                            Market_reservationList = userModel.getUserModel_Market_reservationList();
+                            Market_reservationList.add(MarketModel_Market_Uid);
+                            userModel.setUserModel_Market_reservationList(Market_reservationList);
+
+                            final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
+                            documentReferencesetToUser.set(userModel.getUserInfo())
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                        }
+                                    });
+                        }
+                    });
+
                 }
             }
         });
@@ -155,6 +265,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked){
+                    //마켓에 있는 deal X -> o 바꾸기
                     DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
                     docRef_MARKETS_HostUid
                             .update("MarketModel_deal", "O")
@@ -194,6 +305,60 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                                 public void onFailure(@NonNull Exception e) {
                                 }
                             });
+
+                    //currentuseruid에 거래 완료된 포스틔의 uid 삽입
+                    final DocumentReference documentReferenceMyUser = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
+                    documentReferenceMyUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            userModel = documentSnapshot.toObject(UserModel.class);
+                            Market_dealList = userModel.getUserModel_Market_dealList();
+                            Market_dealList.add(MarketModel_Market_Uid);
+                            userModel.setUserModel_Market_dealList(Market_dealList);
+
+                            final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
+                            documentReferencesetToUser.set(userModel.getUserInfo())
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                        }
+                                    });
+                        }
+                    });
+
+                    //To_User_Uid에 거래 완료된 포스틔의 uid 삽입
+                    final DocumentReference documentReferenceToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
+                    documentReferenceToUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            userModel = documentSnapshot.toObject(UserModel.class);
+                            Market_dealList = userModel.getUserModel_Market_dealList();
+                            Market_dealList.add(MarketModel_Market_Uid);
+                            userModel.setUserModel_Market_dealList(Market_dealList);
+
+                            final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
+                            documentReferencesetToUser.set(userModel.getUserInfo())
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                        }
+                                    });
+                        }
+                    });
+
+
                     ReviewActivity reviewActivity = new ReviewActivity(getContext());
                     reviewActivity.callFunction(To_User_Uid, MarketModel_Market_Uid);
 

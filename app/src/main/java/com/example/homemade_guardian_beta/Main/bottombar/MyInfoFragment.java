@@ -1,5 +1,6 @@
 package com.example.homemade_guardian_beta.Main.bottombar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 
+import com.example.homemade_guardian_beta.Main.activity.MyInfoPostActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 
@@ -86,15 +88,20 @@ public class MyInfoFragment extends Fragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.Proceeding_Post:
-                    break;
                 case R.id.Deal_Complete_Post:
-                    break;
-                case R.id.My_Writen_Post:
+                    myStartActivity(MyInfoPostActivity.class,"0");
                     break;
                 case R.id.My_Reviews_written:
+                    myStartActivity(MyInfoPostActivity.class,"1");
+                    break;
+                case R.id.My_Writen_Post:
+                    myStartActivity(MyInfoPostActivity.class,"2");
+                    break;
+                case R.id.Proceeding_Post:
+                    myStartActivity(MyInfoPostActivity.class,"3");
                     break;
                 case R.id.To_Reviews_written:
+                    myStartActivity(MyInfoPostActivity.class,"4");
                     break;
 
 
@@ -147,5 +154,12 @@ public class MyInfoFragment extends Fragment {
         });
 
     }
+
+    private void myStartActivity(Class c,String Info) {
+        Intent intent = new Intent(getActivity(), c);
+        intent.putExtra("Info",Info);
+        startActivityForResult(intent, 0);
+    }
+
 
 }

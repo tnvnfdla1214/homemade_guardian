@@ -66,6 +66,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
 
         if (ChatRoomListModel_Title!=null) { actionBar.setTitle(ChatRoomListModel_Title); }
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         // chatting area
         chatFragment = ChatFragment.getInstance(To_User_Uid, ChatRoomListModel_RoomUid, MarketModel_Market_Uid,currentUser_Uid);
         getSupportFragmentManager()

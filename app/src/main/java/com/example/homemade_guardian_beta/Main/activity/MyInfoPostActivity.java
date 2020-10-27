@@ -1,6 +1,7 @@
 package com.example.homemade_guardian_beta.Main.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.homemade_guardian_beta.Main.Fragment.Deal_Complete_Post_Fragment;
@@ -10,6 +11,8 @@ import com.example.homemade_guardian_beta.Main.Fragment.Proceeding_Post_Fragment
 import com.example.homemade_guardian_beta.Main.Fragment.To_Review_Writen_Fragment;
 
 import com.example.homemade_guardian_beta.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 //SearchActivity에서 버튼을 눌러 넘어 온 액티비티이다.
 //      Ex) SearchResultFragment에서 Fragment를 이용하여 결과물을 출력한다. <-> SearchResultAdapter와 연결된다.
@@ -21,16 +24,22 @@ public class MyInfoPostActivity extends BasicActivity {
     private Proceeding_Post_Fragment Proceeding_Post_Fragment;
     private To_Review_Writen_Fragment To_Review_Writen_Fragment;
 
+    private String CurrentUid;
+    private FirebaseUser CurrentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchresult);
         String Info = getIntent().getStringExtra("Info");
 
+        CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        CurrentUid =CurrentUser.getUid();
+
         if(Info.equals("0")) {
             // Deal_Complete_Post_Fragment
             setToolbarTitle("거래 완료");
-            Deal_Complete_Post_Fragment = Deal_Complete_Post_Fragment.getInstance(Info);
+            Deal_Complete_Post_Fragment = Deal_Complete_Post_Fragment.getInstance(CurrentUid);
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.MyInfo_Post_Fragment, Deal_Complete_Post_Fragment)

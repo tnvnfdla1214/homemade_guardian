@@ -88,13 +88,17 @@ public class Deal_Complete_Post_Fragment extends Fragment {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             marketModel = documentSnapshot.toObject(MarketModel.class);
+                            Log.d("민규","marketModel :" + marketModel.getMarketModel_Title());
+
                             MarketList.add(marketModel);
+                            searchResultAdapter.notifyDataSetChanged();
                         }
                     });
                 }
+                //searchResultAdapter.notifyDataSetChanged();
 
             }
         });
-        
+
     }
 }

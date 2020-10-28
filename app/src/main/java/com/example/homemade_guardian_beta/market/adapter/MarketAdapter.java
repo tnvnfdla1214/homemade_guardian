@@ -7,6 +7,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.util.Log;
@@ -75,6 +76,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.MainViewHo
         TextView Market_Category = Contents_CardView.findViewById(R.id.Post_Category);
         TextView Market_LikeCount = Contents_CardView.findViewById(R.id.Post_LikeCount);
         TextView Market_CommentCount = Contents_CardView.findViewById(R.id.comment_count_text);
+
         MarketModel marketModel = arrayList_MarketModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
         Title_TextView.setText(marketModel.getMarketModel_Title());
         Contents_TextView.setText(marketModel.getMarketModel_Text());
@@ -101,6 +103,23 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.MainViewHo
             ImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);
             Thumbnail_ImageView.setVisibility(View.GONE);
         }
+
+        TextView market_state = Contents_CardView.findViewById(R.id.market_state);
+        market_state.setText("");
+        GradientDrawable state_none= (GradientDrawable) ContextCompat.getDrawable(this.Activity, R.drawable.state_none);
+        market_state.setBackground(state_none);
+        if(marketModel.getMarketModel_reservation().equals("O")){
+            if(marketModel.getMarketModel_deal().equals("O")){
+                market_state.setText("거래완료");
+                GradientDrawable state_deal= (GradientDrawable) ContextCompat.getDrawable(this.Activity, R.drawable.state_deal);
+                market_state.setBackground(state_deal);
+            }else{
+                market_state.setText("예약중");
+                GradientDrawable state_reserved= (GradientDrawable) ContextCompat.getDrawable(this.Activity, R.drawable.state_reserved);
+                market_state.setBackground(state_reserved);
+            }
+        }
+
     }
 
     @Override

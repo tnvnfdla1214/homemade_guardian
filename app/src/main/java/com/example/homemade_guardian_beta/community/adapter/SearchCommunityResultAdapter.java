@@ -80,7 +80,7 @@ public class SearchCommunityResultAdapter extends RecyclerView.Adapter<SearchCom
         ArrayList<String> ArrayList_ImageList = communityModel.getCommunityModel_ImageList();
         if(ArrayList_ImageList != null) {
             String Image = ArrayList_ImageList.get(0);
-            Glide.with(Activity).load(Image).override(1000).thumbnail(0.1f).into(Thumbnail_ImageView);         // 흐릿하게 로딩하기
+            Glide.with(Activity).load(Image).centerCrop().override(500).thumbnail(0.1f).into(Thumbnail_ImageView);         // 흐릿하게 로딩하기
         }else {
             Thumbnail_ImageView.setVisibility(View.GONE);
         }

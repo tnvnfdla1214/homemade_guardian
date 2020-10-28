@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.Main.common;
+package com.example.homemade_guardian_beta.community.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +13,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.community.activity.EnlargeCommunityImageActivity;
 import com.example.homemade_guardian_beta.market.activity.EnlargeImageActivity;
 
 import java.util.ArrayList;
@@ -21,12 +22,14 @@ public class CommunityViewPagerAdapter extends PagerAdapter {
     private ArrayList<String> ArrayList_ImageList = new ArrayList<String>();      //받아온 이미지리스트
     private android.content.Context Context;
     private String ViewpagerState;
+    private String uses;
 
-    public CommunityViewPagerAdapter(Context Context, ArrayList<String> ArrayList_ImageList,String ViewpagerState)
+    public CommunityViewPagerAdapter(Context Context, ArrayList<String> ArrayList_ImageList,String ViewpagerState, String uses)
     {
         this.Context = Context;
         this.ArrayList_ImageList = ArrayList_ImageList;
         this.ViewpagerState = ViewpagerState;
+        this.uses = uses;
 
     }
 
@@ -40,7 +43,7 @@ public class CommunityViewPagerAdapter extends PagerAdapter {
             public void onClick(View m) {
                 Log.d("민규","ㅁ");
                 if(ViewpagerState.equals("Enable")){
-                    Intent Intent_ViewPagerViewer = new Intent(Context, EnlargeImageActivity.class);
+                    Intent Intent_ViewPagerViewer = new Intent(Context, EnlargeCommunityImageActivity.class);
                     Intent_ViewPagerViewer.putExtra("communityImage",ArrayList_ImageList);
                     Context.startActivity(Intent_ViewPagerViewer);
                 }
@@ -48,7 +51,11 @@ public class CommunityViewPagerAdapter extends PagerAdapter {
         });
         ImageView Market_ImageView = view.findViewById(R.id.PostActivity_Post_ImageView);
         //Glide.with(view).load(ArrayList_ImageList.get(position)).into(Post_ImageView);
-        Glide.with(view).load(ArrayList_ImageList.get(position)).centerCrop().override(500).thumbnail(0.1f).into(Market_ImageView);
+        if(uses.equals("Enlarge")){
+            Glide.with(view).load(ArrayList_ImageList.get(position)).override(1000).thumbnail(0.1f).into(Market_ImageView);
+        }else{
+            Glide.with(view).load(ArrayList_ImageList.get(position)).centerCrop().override(1000).thumbnail(0.1f).into(Market_ImageView);
+        }
         container.addView(view);
         return view;
     }

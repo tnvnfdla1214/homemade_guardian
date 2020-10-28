@@ -2,23 +2,26 @@ package com.example.homemade_guardian_beta.community.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
-import com.example.homemade_guardian_beta.Main.common.CommunityViewPagerAdapter;
 import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
 import com.example.homemade_guardian_beta.photo.activity.PhotoPickerActivity;
@@ -41,8 +44,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.example.homemade_guardian_beta.Main.common.Util.INTENT_MEDIA;
-
 //게시물의 수정을 위한 액티비티 이다. 형태는 WritePostFragment와 비슷하지만, 수정은 Activity라는 차이가 있다.
 //      Ex) 게시물에서 수정을 눌렀을 때 실행되는 액티비티이다.
 // +++수정을 추가해야함, 추가한 사진이 보이게 해주는 기능 추가해야함
@@ -53,14 +54,9 @@ public class ModifyCommunityActivity extends BasicActivity {
     private int PathCount;                                              //이미지 리스트 중 몇번째인지 나타내는 변수
     public  ArrayList<String> ArrayList_SelectedPhoto = new ArrayList<>();       //선택한 이미지들이 담기는 리스트
 
-    private RelativeLayout ButtonsBackgroundLayout;                     ////결과적으로는 안쓸 버튼
     private RelativeLayout LoaderLayout;                                //로딩중을 나타내는 layout 선언
     private EditText Selected_EditText;                                  ////뭔지 모르겠음
     private EditText Title_EditText;                                     //수정하려는 게시물의 제목
-//    private ImageView FoodMarketbtn;
-//    private ImageView LifeMarketbtn;
-//    private ImageView BorrowMarketbtn;
-//    private ImageView WorkMarketbtn;
 
     private FirebaseUser CurrentUser;                                   //파이어베이스 데이터 상의 현재 사용자
     private StorageReference Storagereference;                                //파이어스토리지에 접근하기 위한 선언
@@ -68,6 +64,8 @@ public class ModifyCommunityActivity extends BasicActivity {
     public final static int REQUEST_CODE = 1;                           //REQUEST_CODE 초기화
 
 
+    private ImageView PhotoList0, PhotoList1, PhotoList2, PhotoList3, PhotoList4;
+    private TextView camera_Select_Text;
 
     private ImageView Selected_ImageView;
     private Button Select_Community_Image_Button;
@@ -82,35 +80,21 @@ public class ModifyCommunityActivity extends BasicActivity {
         setToolbarTitle("");
 
 
-        ButtonsBackgroundLayout = findViewById(R.id.ButtonsBackground_Layout);
         LoaderLayout = findViewById(R.id.Loader_Lyaout);
         Title_EditText = findViewById(R.id.Post_Title_EditText);
-        Selected_EditText = findViewById(R.id.contentsEditText);
-        Select_Community_Image_Button = findViewById(R.id.Select_Post_Image_Button);
-        Viewpager = findViewById(R.id.ViewPager);
-        findViewById(R.id.Post_Write_Button).setOnClickListener(onClickListener);
-        findViewById(R.id.Select_Post_Image_Button).setOnClickListener(onClickListener);
-        findViewById(R.id.imageModify).setOnClickListener(onClickListener);
-        findViewById(R.id.Comment_Delete_Button).setOnClickListener(onClickListener);
+        Selected_EditText = findViewById(R.id.Community_Content_EditText);
 
-//        FoodMarketbtn = (ImageView) findViewById(R.id.FoodPostbtn);
-//        FoodMarketbtn.setOnClickListener(onClickListener);
-//        LifeMarketbtn = (ImageView) findViewById(R.id.LifePostbtn);
-//        LifeMarketbtn.setOnClickListener(onClickListener);
-//        BorrowMarketbtn = (ImageView) findViewById(R.id.BorrowPostbtn);
-//        BorrowMarketbtn.setOnClickListener(onClickListener);
-//        WorkMarketbtn = (ImageView) findViewById(R.id.WorkPostbtn);
-//        WorkMarketbtn.setOnClickListener(onClickListener);
+        PhotoList0 = (ImageView)findViewById(R.id.PhotoList0);
+        PhotoList1 = (ImageView)findViewById(R.id.PhotoList1);
+        PhotoList2 = (ImageView)findViewById(R.id.PhotoList2);
+        PhotoList3 = (ImageView)findViewById(R.id.PhotoList3);
+        PhotoList4 = (ImageView)findViewById(R.id.PhotoList4);
 
-        ButtonsBackgroundLayout.setOnClickListener(onClickListener);
-        Title_EditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    Selected_EditText = null;
-                }
-            }
-        });
+        findViewById(R.id.back_Button).setOnClickListener(onClickListener);
+        findViewById(R.id.camera_Button_Layout).setOnClickListener(onClickListener);
+        findViewById(R.id.Write_Register_Button).setOnClickListener(onClickListener);
+        camera_Select_Text = (TextView) findViewById(R.id.camera_Select_Text);
+
 
         FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();
         Storagereference = Firebasestorage.getReference();
@@ -122,19 +106,62 @@ public class ModifyCommunityActivity extends BasicActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {                        // part12 : parents 안에 ContentsItemView가 있고 ContentsItemView안에 imageView가 있는 구조 (11')
         super.onActivityResult(requestCode, resultCode, data);
         List<String> photos = null;
+        GradientDrawable drawable= (GradientDrawable) ContextCompat.getDrawable(getApplicationContext(), R.drawable.round);
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            //기존 이미지 지우기
+            PhotoList0.setImageResource(0);
+            PhotoList1.setImageResource(0);
+            PhotoList2.setImageResource(0);
+            PhotoList3.setImageResource(0);
+            PhotoList4.setImageResource(0);
+
             if (data != null) {
                 photos = data.getStringArrayListExtra(PhotoPickerActivity.KEY_SELECTED_PHOTOS);
             }
             if (photos != null) {
-                ArrayList_SelectedPhoto.addAll(photos);
-                ModifyImageList = ArrayList_SelectedPhoto;
                 ImageList = null;
-                if(ModifyImageList != null) {
-                    String ViewpagerState = "Disable";
-                    Viewpager.setAdapter(new CommunityViewPagerAdapter(getApplicationContext(), ModifyImageList, ViewpagerState));
+                ArrayList_SelectedPhoto.addAll(photos);
+                for(int i=0;i<photos.size();i++){
+                    switch (i){
+                        case 0 :
+                            PhotoList0.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList0.setClipToOutline(true);
+                            }
+                            Glide.with(getApplicationContext()).load(photos.get(0)).centerInside().override(500).into(PhotoList0);
+                            break;
+                        case 1 :
+                            PhotoList1.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList1.setClipToOutline(true);
+                            }
+                            Glide.with(getApplicationContext()).load(photos.get(1)).centerInside().override(500).into(PhotoList1);
+                            break;
+                        case 2 :
+                            PhotoList2.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList2.setClipToOutline(true);
+                            }
+                            Glide.with(getApplicationContext()).load(photos.get(2)).centerInside().override(500).into(PhotoList2);
+                            break;
+                        case 3 :
+                            PhotoList3.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList3.setClipToOutline(true);
+                            }
+                            Glide.with(getApplicationContext()).load(photos.get(3)).centerInside().override(500).into(PhotoList3);
+                            break;
+                        case 4 :
+                            PhotoList4.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList4.setClipToOutline(true);
+                            }
+                            Glide.with(getApplicationContext()).load(photos.get(4)).centerInside().override(500).into(PhotoList4);
+                            break;
+
+                    }
                 }
-                Select_Community_Image_Button.setText(Html.fromHtml(ArrayList_SelectedPhoto.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
+                camera_Select_Text.setText(photos.size()+"/5");
             }
         }
     }
@@ -144,71 +171,34 @@ public class ModifyCommunityActivity extends BasicActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.Post_Write_Button:
-                    Modify_Storage_Upload();
-                    Toast.makeText(getApplicationContext(), "수정 성공", Toast.LENGTH_SHORT).show();
+                case R.id.back_Button:
+                    myStartActivity(CommunityActivity.class, communityModel);
                     break;
-                case R.id.Select_Post_Image_Button:
+                case R.id.camera_Button_Layout:
                     ArrayList_SelectedPhoto = new ArrayList<>();
-                    PhotoUtil intent = new PhotoUtil(ModifyCommunityActivity.this);
-                    intent.setMaxSelectCount(5);
-                    intent.setShowCamera(true);
-                    intent.setShowGif(true);
-                    intent.setSelectCheckBox(false);
-                    intent.setMaxGrideItemCount(3);
-                    startActivityForResult(intent, REQUEST_CODE);
-                break;
-//                case R.id.FoodPostbtn:
-//                    FoodMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-//                    LifeMarketbtn.setColorFilter(null);
-//                    BorrowMarketbtn.setColorFilter(null);
-//                    WorkMarketbtn.setColorFilter(null);
-//                    Category = "음식";
-//                    break;
-//                case R.id.LifePostbtn:
-//                    LifeMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-//                    FoodMarketbtn.setColorFilter(null);
-//                    BorrowMarketbtn.setColorFilter(null);
-//                    WorkMarketbtn.setColorFilter(null);
-//                    Category = "생필품";
-//                    break;
-//                case R.id.BorrowPostbtn:
-//                    BorrowMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-//                    FoodMarketbtn.setColorFilter(null);
-//                    LifeMarketbtn.setColorFilter(null);
-//                    WorkMarketbtn.setColorFilter(null);
-//                    Category = "대여";
-//                    break;
-//                case R.id.WorkPostbtn:
-//                    WorkMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-//                    FoodMarketbtn.setColorFilter(null);
-//                    LifeMarketbtn.setColorFilter(null);
-//                    BorrowMarketbtn.setColorFilter(null);
-//                    Category = "용역";
-//                    break;
+                    PhotoUtil intent2 = new PhotoUtil(getApplicationContext());
+                    intent2.setMaxSelectCount(5);
+                    intent2.setShowCamera(true);
+                    intent2.setShowGif(true);
+                    intent2.setSelectCheckBox(false);
+                    intent2.setMaxGrideItemCount(3);
+                    startActivityForResult(intent2, REQUEST_CODE);
+                    break;
+                case R.id.Write_Register_Button:
+                    Modify_Storage_Upload();
+                    break;
             }
         }
     };
 
-    //////아마 안 쓸듯
-    View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {               // part12 : 설정 (16'10")
-        @Override
-        public void onFocusChange(View v, boolean hasFocus) {
-            if (hasFocus) {
-                Selected_EditText = (EditText) v;
-            }
-        }
-    };
 
     //WritePostFragment와 비슷한 형태로 차이점이 있다면, docRef_POSTS_PostUid에 새로운 Uid를 생성 받는 것이 아니라 수정하고자하는 게시물의 Uid를 받아서 쓴다.
     private void Modify_Storage_Upload() {
         final String Title = ((EditText) findViewById(R.id.Post_Title_EditText)).getText().toString();
-        final String TextContents = ((EditText) findViewById(R.id.contentsEditText)).getText().toString();
+        final String TextContents = ((EditText) findViewById(R.id.Community_Content_EditText)).getText().toString();
         String Community_Uid = communityModel.getCommunityModel_Community_Uid();
         final ArrayList<String> LikeList = communityModel.getCommunityModel_LikeList();
         final String HotCommunity = communityModel.getCommunityModel_HotCommunity();
-//        final String MarketModel_reservation = communityModel.getMarketModel_reservation();
-//        final String MarketModel_deal = communityModel.getMarketModel_deal();
         if (Title.length() > 0) {
             LoaderLayout.setVisibility(View.VISIBLE);                                                   // part13 : 로딩 화면 (2')
             CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -238,6 +228,7 @@ public class ModifyCommunityActivity extends BasicActivity {
 
 
                         communityModel.setCommunityModel_ImageList(new ArrayList<String>());
+                        final int finalI = i;
                         Uploadtask.addOnFailureListener(new OnFailureListener() {                               // part11 :
                             @Override
                             public void onFailure(@NonNull Exception exception) {
@@ -252,7 +243,9 @@ public class ModifyCommunityActivity extends BasicActivity {
                                         contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
                                         CommunityModel communityModel = new CommunityModel(Title, TextContents, contentsList,  DateOfManufacture, CurrentUser.getUid(), Get_CommunityUid,  LikeList, HotCommunity, commentcount);
                                         communityModel.setCommunityModel_Community_Uid(Get_CommunityUid);
-                                        Modify_Store_Upload(docRef_COMMUNITY_CommunityUid, communityModel);
+                                        if(finalI == ArrayList_SelectedPhoto.size()-1) {
+                                            Modify_Store_Upload(docRef_COMMUNITY_CommunityUid, communityModel);
+                                        }
                                     }
                                 });
                             }
@@ -296,31 +289,61 @@ public class ModifyCommunityActivity extends BasicActivity {
                 });
     }
 
-    private void myStartActivity(Class c, int media, int requestCode) {
-        Intent intent = new Intent(this, c);
-        intent.putExtra(INTENT_MEDIA, media);
-        startActivityForResult(intent, requestCode);
+    private void myStartActivity(Class c, CommunityModel communityModel) {
+        Intent Intent_Market_Data = new Intent(this, c);
+        Intent_Market_Data.putExtra("communityInfo", communityModel);
+        startActivityForResult(Intent_Market_Data, 0);
+        finish();
     }
     private void CommunityInit() {                                                                               // part17 : (33')
         if (communityModel != null) {                                                                             //수정 버튼을 눌러서 들어왔을 때 null이 아니면 == 나 수정 하러 왔음 >> 화면에는 수정하고자하는 게시물의 정보들이 띄워져있음
             Title_EditText.setText(communityModel.getCommunityModel_Title());
             Selected_EditText.setText(communityModel.getCommunityModel_Text());
             ImageList = communityModel.getCommunityModel_ImageList();
-            if(ImageList != null ){
-                String ViewpagerState = "Disable";
-                Viewpager.setAdapter(new CommunityViewPagerAdapter(getApplicationContext(), ImageList, ViewpagerState));
-                Select_Community_Image_Button.setText(Html.fromHtml(ImageList.size()+"/5"+"<br/>"+"클릭시 이미지 재선택"));
+            GradientDrawable drawable= (GradientDrawable) ContextCompat.getDrawable(getApplicationContext(), R.drawable.round);
+            if (ImageList != null) {
+                ArrayList_SelectedPhoto.addAll(ImageList);
+                for(int i=0;i<ImageList.size();i++){
+                    switch (i){
+                        case 0 :
+                            PhotoList0.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList0.setClipToOutline(true);
+                            }
+                            Glide.with(getApplicationContext()).load(ImageList.get(0)).centerInside().override(500).into(PhotoList0);
+                            break;
+                        case 1 :
+                            PhotoList1.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList1.setClipToOutline(true);
+                            }
+                            Glide.with(getApplicationContext()).load(ImageList.get(1)).centerInside().override(500).into(PhotoList1);
+                            break;
+                        case 2 :
+                            PhotoList2.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList2.setClipToOutline(true);
+                            }
+                            Glide.with(getApplicationContext()).load(ImageList.get(2)).centerInside().override(500).into(PhotoList2);
+                            break;
+                        case 3 :
+                            PhotoList3.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList3.setClipToOutline(true);
+                            }
+                            Glide.with(getApplicationContext()).load(ImageList.get(3)).centerInside().override(500).into(PhotoList3);
+                            break;
+                        case 4 :
+                            PhotoList4.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList4.setClipToOutline(true);
+                            }
+                            Glide.with(getApplicationContext()).load(ImageList.get(4)).centerInside().override(500).into(PhotoList4);
+                            break;
+                    }
+                }
+                camera_Select_Text.setText(ImageList.size()+"/5");
             }
-//            Category = communityModel.getCommunityModel_Category();
-//            if(Category.equals("음식")){
-//                FoodMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-//            }else if(Category.equals("생필품")){
-//                LifeMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-//            }else if(Category.equals("대여")){
-//                BorrowMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-//            }else if(Category.equals("용역")){
-//                WorkMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-//            }
         }
     }
 }

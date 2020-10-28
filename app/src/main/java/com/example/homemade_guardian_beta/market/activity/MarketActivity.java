@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,7 +42,7 @@ import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.Main.common.listener.OnPostListener;
-import com.example.homemade_guardian_beta.Main.common.ViewPagerAdapter;
+import com.example.homemade_guardian_beta.market.adapter.ViewPagerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -164,7 +163,7 @@ public class MarketActivity extends BasicActivity {                             
         if(ImageList != null) {
             String ViewpagerState = "Enable";
             Viewpager = findViewById(R.id.ViewPager);
-            Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList, ViewpagerState));
+            Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList, ViewpagerState,"Market"));
 
             CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
             indicator.setViewPager(Viewpager);
@@ -233,7 +232,7 @@ public class MarketActivity extends BasicActivity {                             
                     if(ImageList != null) {
                         String ViewpagerState = "Enable";
                         Viewpager = findViewById(R.id.ViewPager);
-                        Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList, ViewpagerState));
+                        Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList, ViewpagerState,"Market"));
                         CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
                         indicator.setViewPager(Viewpager);
                     }else{
@@ -374,7 +373,7 @@ public class MarketActivity extends BasicActivity {                             
                     int Check_Like = 0;
                     for (int count = 0; count < marketmodel.getMarketModel_LikeList().size(); count++) {
                         if (CurrentUid.equals(marketmodel.getMarketModel_LikeList().get(count))) {
-                            Toast.makeText(getApplicationContext(), "이미 좋아요를 누르셨습니다.", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), "이미 좋아요를 누르셨습니다.", Toast.LENGTH_SHORT).show();
                             Check_Like++;
                         }
                     }
@@ -385,6 +384,31 @@ public class MarketActivity extends BasicActivity {                             
                         final DocumentReference documentReference = firebaseFirestore.collection("MARKETS").document(marketmodel.getMarketModel_Market_Uid());
                         LikeList = marketmodel.getMarketModel_LikeList();
                         LikeList.add(CurrentUid);
+                        if (LikeList.size() > 0) {
+                            marketmodel.setMarketModel_HotMarket("O");
+                        }
+                        marketmodel.setMarketModel_LikeList(LikeList);
+
+                        documentReference.set(marketmodel.getMarketInfo())
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                    }
+                                });
+                        Like_TextView.setText(String.valueOf(marketmodel.getMarketModel_LikeList().size()));
+                    }
+                    if(Check_Like == 1){
+                        Glide.with(getApplicationContext()).load(R.drawable.empty_heart).into(Like_ImageButton);
+                        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                        ArrayList<String> LikeList = new ArrayList<String>();
+                        final DocumentReference documentReference = firebaseFirestore.collection("MARKETS").document(marketmodel.getMarketModel_Market_Uid());
+                        LikeList = marketmodel.getMarketModel_LikeList();
+                        LikeList.remove(CurrentUid);
                         if (LikeList.size() > 0) {
                             marketmodel.setMarketModel_HotMarket("O");
                         }
@@ -431,6 +455,7 @@ public class MarketActivity extends BasicActivity {                             
         Intent Intent_Market_Data = new Intent(this, c);
         Intent_Market_Data.putExtra("marketInfo", marketModel);
         startActivityForResult(Intent_Market_Data, 0);
+        finish();
     }
 
        // 댓글을 작성하는 함수

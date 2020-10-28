@@ -64,7 +64,6 @@ public class MemberInitActivity extends BasicActivity {
 
         LoaderLayout = findViewById(R.id.Loader_Lyaout);
         Profile_ImageView = findViewById(R.id.Users_Profile_ImageView);
-        ButtonBackgroundLayout = findViewById(R.id.ButtonsBackground_Layout);
         DatePicker BirthDay_Picker = (DatePicker)findViewById(R.id.BirthDay_Picker);
         Nickname = ((EditText) findViewById(R.id.Nickname));
         Profile_ImageView.setOnClickListener(onClickListener);

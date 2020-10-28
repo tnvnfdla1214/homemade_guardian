@@ -56,11 +56,20 @@
                 android:layout_height="100dp"
                 android:orientation="horizontal"
                 >
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"/>
                 <ImageView
                     android:id="@+id/PhotoList0"
                     android:scaleType="center"
                     android:layout_width="70dp"
                     android:layout_height="70dp"/>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"/>
 
                 <ImageView
                     android:id="@+id/PhotoList1"
@@ -68,21 +77,39 @@
                     android:layout_width="70dp"
                     android:layout_height="70dp"/>
 
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"/>
                 <ImageView
                     android:id="@+id/PhotoList2"
                     android:scaleType="center"
                     android:layout_width="70dp"
                     android:layout_height="70dp"/>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"/>
                 <ImageView
                     android:id="@+id/PhotoList3"
                     android:scaleType="center"
                     android:layout_width="70dp"
                     android:layout_height="70dp"/>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"/>
                 <ImageView
                     android:id="@+id/PhotoList4"
                     android:scaleType="center"
                     android:layout_width="70dp"
                     android:layout_height="70dp"/>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"/>
 
             </LinearLayout>
         </LinearLayout>

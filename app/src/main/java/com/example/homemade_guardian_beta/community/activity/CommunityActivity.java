@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,14 +34,11 @@ import com.example.homemade_guardian_beta.Main.activity.HostModelActivity;
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.chat.common.FirestoreAdapter;
 import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
 import com.example.homemade_guardian_beta.Main.common.BackPressEditText;
 import com.example.homemade_guardian_beta.Main.common.listener.OnPostListener;
-import com.example.homemade_guardian_beta.Main.common.CommunityViewPagerAdapter;
-import com.example.homemade_guardian_beta.market.activity.MarketActivity;
-import com.example.homemade_guardian_beta.market.activity.ModifyMarketActivity;
+import com.example.homemade_guardian_beta.community.adapter.CommunityViewPagerAdapter;
 import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.model.community.Community_CommentModel;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
@@ -164,7 +160,7 @@ public class CommunityActivity extends BasicActivity {                          
         if(ImageList != null) {
             String ViewpagerState = "Enable";
             Viewpager = findViewById(R.id.ViewPager);
-            Viewpager.setAdapter(new CommunityViewPagerAdapter(this, ImageList, ViewpagerState));
+            Viewpager.setAdapter(new CommunityViewPagerAdapter(this, ImageList, ViewpagerState, "Community"));
 
             CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
             indicator.setViewPager(Viewpager);
@@ -213,7 +209,7 @@ public class CommunityActivity extends BasicActivity {                          
                     if(ImageList != null) {
                         String ViewpagerState = "Enable";
                         Viewpager = findViewById(R.id.ViewPager);
-                        Viewpager.setAdapter(new CommunityViewPagerAdapter(this, ImageList, ViewpagerState));
+                        Viewpager.setAdapter(new CommunityViewPagerAdapter(this, ImageList, ViewpagerState,"Community"));
                         CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
                         indicator.setViewPager(Viewpager);
                     }else{
@@ -333,7 +329,7 @@ public class CommunityActivity extends BasicActivity {                          
                     int Check_Like = 0;
                     for (int count = 0; count < communityModel.getCommunityModel_LikeList().size(); count++) {
                         if (CurrentUid.equals(communityModel.getCommunityModel_LikeList().get(count))) {
-                            Toast.makeText(getApplicationContext(), "이미 좋아요를 누르셨습니다.", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), "이미 좋아요를 누르셨습니다.", Toast.LENGTH_SHORT).show();
                             Check_Like++;
                         }
                     }
@@ -344,6 +340,31 @@ public class CommunityActivity extends BasicActivity {                          
                         final DocumentReference documentReference = firebaseFirestore.collection("COMMUNITY").document(communityModel.getCommunityModel_Community_Uid());
                         LikeList = communityModel.getCommunityModel_LikeList();
                         LikeList.add(CurrentUid);
+                        if (LikeList.size() > 0) {
+                            communityModel.setCommunityModel_HotCommunity("O");
+                        }
+                        communityModel.setCommunityModel_LikeList(LikeList);
+
+                        documentReference.set(communityModel.getCommunityInfo())
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                    }
+                                });
+                        Like_TextView.setText(String.valueOf(communityModel.getCommunityModel_LikeList().size()));
+                    }
+                    if(Check_Like == 1){
+                        Glide.with(getApplicationContext()).load(R.drawable.empty_heart).into(Like_ImageButton);
+                        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                        ArrayList<String> LikeList = new ArrayList<String>();
+                        final DocumentReference documentReference = firebaseFirestore.collection("COMMUNITY").document(communityModel.getCommunityModel_Community_Uid());
+                        LikeList = communityModel.getCommunityModel_LikeList();
+                        LikeList.remove(CurrentUid);
                         if (LikeList.size() > 0) {
                             communityModel.setCommunityModel_HotCommunity("O");
                         }
@@ -390,6 +411,7 @@ public class CommunityActivity extends BasicActivity {                          
         Intent Intent_Community_Data = new Intent(this, c);
         Intent_Community_Data.putExtra("communityInfo", communityModel);
         startActivityForResult(Intent_Community_Data, 0);
+        finish();
     }
 
        // 댓글을 작성하는 함수

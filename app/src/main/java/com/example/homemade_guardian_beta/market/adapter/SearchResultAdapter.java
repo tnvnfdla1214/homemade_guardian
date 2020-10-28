@@ -2,6 +2,7 @@ package com.example.homemade_guardian_beta.market.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -81,9 +83,24 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         ArrayList<String> ArrayList_ImageList = marketModel.getMarketModel_ImageList();
         if(ArrayList_ImageList != null) {
             String Image = ArrayList_ImageList.get(0);
-            Glide.with(Activity).load(Image).override(1000).thumbnail(0.1f).into(Thumbnail_ImageView);         // 흐릿하게 로딩하기
+            Glide.with(Activity).load(Image).centerCrop().override(500).thumbnail(0.1f).into(Thumbnail_ImageView);         // 흐릿하게 로딩하기
         }else {
             Thumbnail_ImageView.setVisibility(View.GONE);
+        }
+        TextView market_state = Contents_CardView.findViewById(R.id.market_state);
+        market_state.setText("");
+        GradientDrawable state_none= (GradientDrawable) ContextCompat.getDrawable(this.Activity, R.drawable.state_none);
+        market_state.setBackground(state_none);
+        if(marketModel.getMarketModel_reservation().equals("O")){
+            if(marketModel.getMarketModel_deal().equals("O")){
+                market_state.setText("거래완료");
+                GradientDrawable state_deal= (GradientDrawable) ContextCompat.getDrawable(this.Activity, R.drawable.state_deal);
+                market_state.setBackground(state_deal);
+            }else{
+                market_state.setText("예약중");
+                GradientDrawable state_reserved= (GradientDrawable) ContextCompat.getDrawable(this.Activity, R.drawable.state_reserved);
+                market_state.setBackground(state_reserved);
+            }
         }
     }
 

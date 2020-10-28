@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -14,8 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.homemade_guardian_beta.Main.bottombar.WriteMarketFragment;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
@@ -58,6 +63,10 @@ public class WriteMarketActivity extends BasicActivity {
     private int pathCount;
 
     public final static int REQUEST_CODE = 1;
+    private TextView FoodText;
+    private TextView LifeText;
+    private TextView BorrowText;
+    private TextView WorkText;
 
 
     @Override
@@ -86,6 +95,12 @@ public class WriteMarketActivity extends BasicActivity {
         WorkMarketbtn.setOnClickListener(onClickListener);
         loaderLayout = (RelativeLayout)findViewById(R.id.Loader_Lyaout);
 
+        FoodText = findViewById(R.id.FoodPostText);
+        LifeText = findViewById(R.id.LifePostText);
+        BorrowText = findViewById(R.id.BorrowPostText);
+        WorkText = findViewById(R.id.WorkPostText);
+
+
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     }
@@ -94,6 +109,7 @@ public class WriteMarketActivity extends BasicActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {                        // part12 : parents 안에 ContentsItemView가 있고 ContentsItemView안에 imageView가 있는 구조 (11')
         super.onActivityResult(requestCode, resultCode, data);
         List<String> photos = null;
+        GradientDrawable drawable= (GradientDrawable) ContextCompat.getDrawable(getApplicationContext(), R.drawable.round);
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             //기존 이미지 지우기
             PhotoList0.setImageResource(0);
@@ -110,18 +126,38 @@ public class WriteMarketActivity extends BasicActivity {
                 for(int i=0;i<photos.size();i++){
                     switch (i){
                         case 0 :
+                            PhotoList0.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList0.setClipToOutline(true);
+                            }
                             Glide.with(getApplicationContext()).load(photos.get(0)).centerInside().override(500).into(PhotoList0);
                             break;
                         case 1 :
+                            PhotoList1.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList1.setClipToOutline(true);
+                            }
                             Glide.with(getApplicationContext()).load(photos.get(1)).centerInside().override(500).into(PhotoList1);
                             break;
                         case 2 :
+                            PhotoList2.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList2.setClipToOutline(true);
+                            }
                             Glide.with(getApplicationContext()).load(photos.get(2)).centerInside().override(500).into(PhotoList2);
                             break;
                         case 3 :
+                            PhotoList3.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList3.setClipToOutline(true);
+                            }
                             Glide.with(getApplicationContext()).load(photos.get(3)).centerInside().override(500).into(PhotoList3);
                             break;
                         case 4 :
+                            PhotoList4.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList4.setClipToOutline(true);
+                            }
                             Glide.with(getApplicationContext()).load(photos.get(4)).centerInside().override(500).into(PhotoList4);
                             break;
 
@@ -165,6 +201,7 @@ public class WriteMarketActivity extends BasicActivity {
                     StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (contentsList.size() - 1)).build();
                     UploadTask uploadTask = mountainImagesRef.putStream(stream, metadata);
                     final String newMarketID = MarketID;
+                    final int finalI = i;
                     uploadTask.addOnFailureListener(new OnFailureListener() {                               // part11 :
                         @Override
                         public void onFailure(@NonNull Exception exception) {
@@ -179,7 +216,9 @@ public class WriteMarketActivity extends BasicActivity {
                                     contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
                                     MarketModel marketModel = new MarketModel(Market_Title_EditText, Market_Content_EditText, contentsList,  date, currentUser.getUid(), newMarketID, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal, market_commentcount);
                                     marketModel.setMarketModel_Market_Uid(newMarketID);
-                                    storeUpload(documentReference, marketModel);
+                                    if(finalI == selectedPhotos.size()-1){
+                                        storeUpload(documentReference, marketModel);
+                                    }
                                 }
                             });
                         }
@@ -215,6 +254,7 @@ public class WriteMarketActivity extends BasicActivity {
                         setResult(Activity.RESULT_OK, resultIntent);
                         Intent intentpage = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intentpage);
+                        finish();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -236,6 +276,10 @@ public class WriteMarketActivity extends BasicActivity {
                     LifeMarketbtn.setColorFilter(null);
                     BorrowMarketbtn.setColorFilter(null);
                     WorkMarketbtn.setColorFilter(null);
+                    FoodText.setTextColor(Color.parseColor("#2fd8df"));
+                    LifeText.setTextColor(Color.parseColor("#000000"));
+                    BorrowText.setTextColor(Color.parseColor("#000000"));
+                    WorkText.setTextColor(Color.parseColor("#000000"));
                     Category = "음식";
                     break;
 
@@ -244,6 +288,10 @@ public class WriteMarketActivity extends BasicActivity {
                     FoodMarketbtn.setColorFilter(null);
                     BorrowMarketbtn.setColorFilter(null);
                     WorkMarketbtn.setColorFilter(null);
+                    FoodText.setTextColor(Color.parseColor("#000000"));
+                    LifeText.setTextColor(Color.parseColor("#2fd8df"));
+                    BorrowText.setTextColor(Color.parseColor("#000000"));
+                    WorkText.setTextColor(Color.parseColor("#000000"));
                     Category = "생필품";
                     break;
 
@@ -252,6 +300,10 @@ public class WriteMarketActivity extends BasicActivity {
                     FoodMarketbtn.setColorFilter(null);
                     LifeMarketbtn.setColorFilter(null);
                     WorkMarketbtn.setColorFilter(null);
+                    FoodText.setTextColor(Color.parseColor("#000000"));
+                    LifeText.setTextColor(Color.parseColor("#000000"));
+                    BorrowText.setTextColor(Color.parseColor("#2fd8df"));
+                    WorkText.setTextColor(Color.parseColor("#000000"));
                     Category = "대여";
                     break;
 
@@ -260,18 +312,19 @@ public class WriteMarketActivity extends BasicActivity {
                     FoodMarketbtn.setColorFilter(null);
                     LifeMarketbtn.setColorFilter(null);
                     BorrowMarketbtn.setColorFilter(null);
+                    FoodText.setTextColor(Color.parseColor("#000000"));
+                    LifeText.setTextColor(Color.parseColor("#000000"));
+                    BorrowText.setTextColor(Color.parseColor("#000000"));
+                    WorkText.setTextColor(Color.parseColor("#2fd8df"));
                     Category = "용역";
                     break;
-
                 case R.id.back_Button:
                     Intent intent3 = new Intent(WriteMarketActivity.this, MainActivity.class);
                     startActivity(intent3);
                     finish();
                     break;
-
                 case R.id.camera_Button_Layout:
                     selectedPhotos = new ArrayList<>();
-
                     PhotoUtil intent2 = new PhotoUtil(getApplicationContext());
                     intent2.setMaxSelectCount(5);
                     intent2.setShowCamera(true);
@@ -280,7 +333,6 @@ public class WriteMarketActivity extends BasicActivity {
                     intent2.setMaxGrideItemCount(3);
                     startActivityForResult(intent2, REQUEST_CODE);
                     break;
-
                 case R.id.Write_Register_Button:
                     storageUpload();
                     break;

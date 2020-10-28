@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
@@ -84,6 +87,7 @@ public class WriteCommunityActivity extends BasicActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {                        // part12 : parents 안에 ContentsItemView가 있고 ContentsItemView안에 imageView가 있는 구조 (11')
         super.onActivityResult(requestCode, resultCode, data);
         List<String> photos = null;
+        GradientDrawable drawable= (GradientDrawable) ContextCompat.getDrawable(getApplicationContext(), R.drawable.round);
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
             //기존 이미지 지우기
             PhotoList0.setImageResource(0);
@@ -100,18 +104,38 @@ public class WriteCommunityActivity extends BasicActivity {
                 for(int i=0;i<photos.size();i++){
                     switch (i){
                         case 0 :
+                            PhotoList0.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList0.setClipToOutline(true);
+                            }
                             Glide.with(getApplicationContext()).load(photos.get(0)).centerInside().override(500).into(PhotoList0);
                             break;
                         case 1 :
+                            PhotoList1.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList1.setClipToOutline(true);
+                            }
                             Glide.with(getApplicationContext()).load(photos.get(1)).centerInside().override(500).into(PhotoList1);
                             break;
                         case 2 :
+                            PhotoList2.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList2.setClipToOutline(true);
+                            }
                             Glide.with(getApplicationContext()).load(photos.get(2)).centerInside().override(500).into(PhotoList2);
                             break;
                         case 3 :
+                            PhotoList3.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList3.setClipToOutline(true);
+                            }
                             Glide.with(getApplicationContext()).load(photos.get(3)).centerInside().override(500).into(PhotoList3);
                             break;
                         case 4 :
+                            PhotoList4.setBackground(drawable);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                PhotoList4.setClipToOutline(true);
+                            }
                             Glide.with(getApplicationContext()).load(photos.get(4)).centerInside().override(500).into(PhotoList4);
                             break;
 
@@ -152,6 +176,7 @@ public class WriteCommunityActivity extends BasicActivity {
                     StorageMetadata metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (contentsList.size() - 1)).build();
                     UploadTask uploadTask = mountainImagesRef.putStream(stream, metadata);
                     final String newCommunityID = CommunityID;
+                    final int finalI = i;
                     uploadTask.addOnFailureListener(new OnFailureListener() {                               // part11 :
                         @Override
                         public void onFailure(@NonNull Exception exception) {
@@ -166,7 +191,9 @@ public class WriteCommunityActivity extends BasicActivity {
                                     contentsList.set(index, uri.toString());                        // part11 : 인덱스를 받아서 URi저장 ( 36'40")
                                     CommunityModel communityModel = new CommunityModel(Community_Title_EditText, Community_Content_EditText, contentsList,  date, currentUser.getUid(), newCommunityID, LikeList, HotCommunity, community_commentcount);
                                     communityModel.setCommunityModel_Community_Uid(newCommunityID);
-                                    storeUpload(documentReference, communityModel);
+                                    if(finalI == selectedPhotos.size()-1) {
+                                        storeUpload(documentReference, communityModel);
+                                    }
                                 }
                             });
                         }

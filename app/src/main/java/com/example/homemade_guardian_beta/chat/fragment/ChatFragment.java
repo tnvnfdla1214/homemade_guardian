@@ -163,6 +163,7 @@ public class ChatFragment extends Fragment {
             }
         });
 
+
         Firestore = FirebaseFirestore.getInstance();
         StorageReference = FirebaseStorage.getInstance().getReference();
         currentUser_Uid = getArguments().getString("currentUser_Uid");
@@ -210,21 +211,26 @@ public class ChatFragment extends Fragment {
     public void Chat_User_Check(){
 
         if (getArguments() != null) {
+            Log.d("민규","1");
             ChatRoomListModel_RoomUid = getArguments().getString("RoomUid");
             To_User_Uid = getArguments().getString("To_User_Uid");
             MarketModel_Market_Uid = getArguments().getString("MarketModel_Market_Uid");
 
+
         }
 
         if (!"".equals(To_User_Uid) && To_User_Uid !=null) {                     // find existing room for two user ToUid가 널이 아니거나 ToUid가 ""이거가 아니면
+            Log.d("민규","2");
             findChatRoom(To_User_Uid);
         } else
         if (!"".equals(ChatRoomListModel_RoomUid) && ChatRoomListModel_RoomUid !=null) {                   // existing room (multi user)
+            Log.d("민규","3");
             setChatRoom(ChatRoomListModel_RoomUid);
-        };
+        }
 
         if (ChatRoomListModel_RoomUid ==null) {                                         // new room for two user
-            currentUser_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            Log.d("민규","4");
+            currentUser_Uid = getArguments().getString("currentUser_Uid");
             To_User_Uid = getArguments().getString("To_User_Uid");
             getUserInfoFromServer(currentUser_Uid);
             getUserInfoFromServer(To_User_Uid);
@@ -260,12 +266,15 @@ public class ChatFragment extends Fragment {
 
     // 사용자 ID로 채팅방을 찾은 후 룸 ID를 반환하는 함수
     void findChatRoom(final String toUid){
+        Log.d("민규","5");
+        Log.d("민규","MarketModel_Market_Uid : " + MarketModel_Market_Uid);
         Firestore = FirebaseFirestore.getInstance();
-        Firestore.collection("ROOMS").whereGreaterThanOrEqualTo("USERS."+ currentUser_Uid, 0).get()
+        Firestore.collection("ROOMS").whereEqualTo("MessageModel_PostUid",MarketModel_Market_Uid).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (!task.isSuccessful()) {return;}
+                        Log.d("민규","10");
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Map<String, Long> users = (Map<String, Long>) document.get("USERS");
@@ -280,6 +289,7 @@ public class ChatFragment extends Fragment {
 
     // 채팅방에서 사용자 목록을 가져오는 함수
     void setChatRoom(String RoomUid) {
+        Log.d("민규","6");
         ChatRoomListModel_RoomUid = RoomUid;
         Firestore = FirebaseFirestore.getInstance();
         Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -299,6 +309,7 @@ public class ChatFragment extends Fragment {
 
     //읽은 채팅창인지 아닌지 확인하는 함수 -> 이거 조금 문제 있기에 나중에 수정해야함(이름도 좀 이상함)
     void setUnread2Read() {
+        Log.d("민규","7");
         if (ChatRoomListModel_RoomUid ==null) return;
         Firestore = FirebaseFirestore.getInstance();
         Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -318,7 +329,7 @@ public class ChatFragment extends Fragment {
     Button.OnClickListener Chat_Send_Button_ClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             String msg = Chat_Message_Input_EditText.getText().toString();
-            sendMessage(msg, "0", null, MarketModel_Market_Uid);
+            sendMessage(msg, "0", null, MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
             Chat_Message_Input_EditText.setText("");
         }
     };
@@ -360,6 +371,7 @@ public class ChatFragment extends Fragment {
 
     //최초 채팅룸 만들기,1을 0으로 변경하는 함수
     public void CreateChattingRoom(final DocumentReference room) {
+        Log.d("민규","8");
         //유저의 uid와 읽었는지 않읽었는지 확인 하는 정보
         Map<String, Integer> USERS = new HashMap<>();
         for( String key : UserModel_UserList.keySet() ){
@@ -396,11 +408,13 @@ public class ChatFragment extends Fragment {
 
 
     //메세지 보내기 함수
-    private void sendMessage(final String MessageModel_Message, String Message_MessageType, final ChatModel.FileInfo fileinfo,final String MarketModel_Market_Uid) {
+    private void sendMessage(final String MessageModel_Message, String Message_MessageType, final ChatModel.FileInfo fileinfo, final String MarketModel_Market_Uid, String RoomUid) {
         Chat_Send_Button.setEnabled(false);
+        Log.d("라라라","RoomUid1 : " + RoomUid);
 
         //최초 룸 만들기기
         if(ChatRoomListModel_RoomUid ==null) {             // create chatting room for two user
+            Log.d("라라라","ChatRoomListModel_RoomUid1 : " + ChatRoomListModel_RoomUid);
             ChatRoomListModel_RoomUid = Firestore.collection("ROOMS").document().getId();
             CreateChattingRoom( Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid) );
 
@@ -421,41 +435,83 @@ public class ChatFragment extends Fragment {
         }
 
 
-        final DocumentReference docRef = Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (!task.isSuccessful()) {return;}
-                WriteBatch batch = Firestore.batch();
-                // save last message
-                batch.set(docRef, MessageModel, SetOptions.merge());
-                // save message
-                List<String> ReadUsers = new ArrayList();
-                ReadUsers.add(currentUser_Uid);
-                MessageModel.put("MessageModel_ReadUser", ReadUsers);//new String[]{myUid} );
-                batch.set(docRef.collection("MESSAGE").document(), MessageModel);
-                // inc unread message count
-                DocumentSnapshot document = task.getResult();
-                Map<String, Long> users = (Map<String, Long>) document.get("USERS");
+        if(RoomUid ==null){
+            Log.d("라라라","ChatRoomListModel_RoomUid2 : " + ChatRoomListModel_RoomUid);
+            final DocumentReference docRef = Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (!task.isSuccessful()) {return;}
+                    WriteBatch batch = Firestore.batch();
+                    // save last message
+                    batch.set(docRef, MessageModel, SetOptions.merge());
+                    // save message
+                    List<String> ReadUsers = new ArrayList();
+                    ReadUsers.add(currentUser_Uid);
+                    MessageModel.put("MessageModel_ReadUser", ReadUsers);//new String[]{myUid} );
+                    batch.set(docRef.collection("MESSAGE").document(), MessageModel);
+                    // inc unread message count
+                    DocumentSnapshot document = task.getResult();
+                    Map<String, Long> users = (Map<String, Long>) document.get("USERS");
 
-                for( String key : users.keySet() ){
-                    if (!currentUser_Uid.equals(key)) users.put(key, users.get(key)+1);
-                }
-                document.getReference().update("USERS", users);
-                document.getReference().update("MessageModel_PostUid", MarketModel_Market_Uid);
-
-                batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            //sendGCM();
-                            Chat_Send_Button.setEnabled(true);
-                        }
+                    for( String key : users.keySet() ){
+                        if (!currentUser_Uid.equals(key)) users.put(key, users.get(key)+1);
                     }
-                });
-            }
+                    document.getReference().update("USERS", users);
+                    document.getReference().update("MessageModel_PostUid", MarketModel_Market_Uid);
 
-        });
+                    batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                //sendGCM();
+                                Chat_Send_Button.setEnabled(true);
+                            }
+                        }
+                    });
+                }
+
+            });
+        }
+        else{
+            Log.d("라라라","RoomUid2 : " + RoomUid);
+            final DocumentReference docRef = Firestore.collection("ROOMS").document(RoomUid);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (!task.isSuccessful()) {return;}
+                    WriteBatch batch = Firestore.batch();
+                    // save last message
+                    batch.set(docRef, MessageModel, SetOptions.merge());
+                    // save message
+                    List<String> ReadUsers = new ArrayList();
+                    ReadUsers.add(currentUser_Uid);
+                    MessageModel.put("MessageModel_ReadUser", ReadUsers);//new String[]{myUid} );
+                    batch.set(docRef.collection("MESSAGE").document(), MessageModel);
+                    // inc unread message count
+                    DocumentSnapshot document = task.getResult();
+                    Map<String, Long> users = (Map<String, Long>) document.get("USERS");
+
+                    for( String key : users.keySet() ){
+                        if (!currentUser_Uid.equals(key)) users.put(key, users.get(key)+1);
+                    }
+                    document.getReference().update("USERS", users);
+                    document.getReference().update("MessageModel_PostUid", MarketModel_Market_Uid);
+
+                    batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                //sendGCM();
+                                Chat_Send_Button.setEnabled(true);
+                            }
+                        }
+                    });
+                }
+
+            });
+        }
+
     }
 
     // 이미지나 파일을 로딩하는 결과 함수 (대략 10초가 넘게 걸림 , 스토리지에 넣는것 9초 사진 띄우기 1초)
@@ -473,7 +529,7 @@ public class ChatFragment extends Fragment {
         StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_MessageModel_ImageCount).putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                sendMessage(String_MessageModel_ImageCount, Integer.toString(requestCode), fileinfo, MarketModel_Market_Uid);
+                sendMessage(String_MessageModel_ImageCount, Integer.toString(requestCode), fileinfo, MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
                 //추가 ()
                 DocumentReference docRefe_ROOMS_CurrentUid = FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid);
                 docRefe_ROOMS_CurrentUid.update("MessageModel_ImageCount", String_MessageModel_ImageCount).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -599,7 +655,7 @@ public class ChatFragment extends Fragment {
 
             //setUnread2Read();
             startListening();
-            setUnread2Read();
+            //setUnread2Read();
         }
 
         //시작 세팅 함수
@@ -899,19 +955,21 @@ public class ChatFragment extends Fragment {
     }
 
     //유저 나갈때 나갔습니다. 텍스트 띄우기 함수
-    public void User_GoOut(){
-        Firestore.collection("USERS").document(currentUser_Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+    public void User_GoOut(String current_Uid, final String Market_Uid,final String Room_uid){
+        Log.d("라라라","Room_uid3 : " + Room_uid);
+        Firestore.collection("USERS").document(current_Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (!task.isSuccessful()) {
                     return;
                 }
                 DocumentSnapshot document = task.getResult();
-                String NickName = (String)document.get("userModel_NickName");
+                String NickName = (String)document.get("UserModel_NickName");
                 String msg = "("+ NickName + ")" + "  님이 나갔습니다.";
-                sendMessage(msg, "0", null, MarketModel_Market_Uid);
+                sendMessage(msg, "0", null, Market_Uid,Room_uid);
             }
         });
+
     }
 
 }

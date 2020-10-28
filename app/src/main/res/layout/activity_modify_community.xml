@@ -21,46 +21,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="32dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"/>
-
-                <Button
-                    android:id="@+id/Select_Post_Image_Button"
-                    android:layout_width="118dp"
-                    android:layout_height="118dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/button_round"
-                    android:text="이미지 변경" />
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="32dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"/>
-
-                <view
-                    android:id="@+id/ViewPager"
-                    class="androidx.viewpager.widget.ViewPager"
-                    android:layout_width="162dp"
-                    android:layout_height="162dp"
-
-                    android:layout_weight="1"/>
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="32dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"/>
-            </LinearLayout>
-
 
             <EditText
                 android:id="@+id/Post_Title_EditText"
@@ -69,77 +29,90 @@
                 android:ems="10"
                 android:hint="제목"
                 android:inputType="textPersonName" />
-
-            <LinearLayout
-                android:id="@+id/contentsLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="top"
-                android:orientation="vertical">
-
                 <LinearLayout
+                    android:id="@+id/contentsLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="match_parent"
+                    android:gravity="top"
                     android:orientation="vertical">
 
-                    <include
-                        layout="@layout/view_contents_edit_text"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="400dp"
+                        android:orientation="vertical">
+                        <EditText
+                            android:id="@+id/Community_Content_EditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:ems="10"
+                            android:gravity="top"
+                            android:hint="내용"
+                            android:inputType="textMultiLine" />
+                    </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:orientation="horizontal"
+                        >
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="32dp"
+                            android:layout_weight="1"/>
+                        <ImageView
+                            android:id="@+id/PhotoList0"
+                            android:scaleType="center"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"/>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="32dp"
+                            android:layout_weight="1"/>
+
+                        <ImageView
+                            android:id="@+id/PhotoList1"
+                            android:scaleType="center"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"/>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="32dp"
+                            android:layout_weight="1"/>
+                        <ImageView
+                            android:id="@+id/PhotoList2"
+                            android:scaleType="center"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"/>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="32dp"
+                            android:layout_weight="1"/>
+                        <ImageView
+                            android:id="@+id/PhotoList3"
+                            android:scaleType="center"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"/>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="32dp"
+                            android:layout_weight="1"/>
+                        <ImageView
+                            android:id="@+id/PhotoList4"
+                            android:scaleType="center"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"/>
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="32dp"
+                            android:layout_weight="1"/>
+                    </LinearLayout>
                 </LinearLayout>
-
-            </LinearLayout>
-
-
-
-            <Button
-                android:id="@+id/Post_Write_Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="수정 완료" />
-
         </LinearLayout>
-
     </ScrollView>
-
-    <RelativeLayout
-        android:id="@+id/ButtonsBackground_Layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#91646464"
-        android:visibility="gone">
-
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:elevation="10dp"
-            app:cardCornerRadius="15dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="5dp">
-
-                <Button
-                    android:id="@+id/imageModify"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="이미지 수정" />
-
-                <Button
-                    android:id="@+id/Comment_Delete_Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="선택한 이미지 삭제" />
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
-    </RelativeLayout>
 
     <include
         layout="@layout/view_loader"

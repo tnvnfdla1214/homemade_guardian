@@ -8,7 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.Main.common.ViewPagerAdapter;
+import com.example.homemade_guardian_beta.market.adapter.ViewPagerAdapter;
 
 import java.util.ArrayList;
 
@@ -29,7 +29,7 @@ public class EnlargeImageActivity extends BasicActivity {
         String ViewpagerState = "Disable";
         if(ImageList != null) {
             Viewpager = findViewById(R.id.ViewPager);
-            Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList, ViewpagerState));
+            Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList, ViewpagerState,"Enlarge"));
             CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
             indicator.setViewPager(Viewpager);
         }else{

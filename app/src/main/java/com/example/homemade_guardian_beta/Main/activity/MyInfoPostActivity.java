@@ -69,10 +69,10 @@ public class MyInfoPostActivity extends BasicActivity {
         if(Info.equals("3")) {
             // Proceeding_Post_Fragment
             setToolbarTitle("진행중인 포스트");
-            Deal_Complete_Post_Fragment = Deal_Complete_Post_Fragment.getInstance(CurrentUid);
+            Proceeding_Post_Fragment = Proceeding_Post_Fragment.getInstance(CurrentUid);
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.MyInfo_Post_Fragment, Deal_Complete_Post_Fragment)
+                    .replace(R.id.MyInfo_Post_Fragment, Proceeding_Post_Fragment)
                     .commit();
         }
 

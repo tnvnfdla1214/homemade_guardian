@@ -97,15 +97,6 @@
                     android:textSize="13sp"
                     tools:text="카테고리"
                     android:textColor="#33CDAF"/>
-
-                <!--
-                <RelativeLayout
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
-                    android:background="#DDDDDD" />
-                    -->
-
                 <androidx.cardview.widget.CardView
                     android:layout_width="32dp"
                     android:layout_height="16dp"
@@ -152,12 +143,26 @@
                     tools:text="3" />
 
                 <TextView
+                    android:id="@+id/market_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="12sp"
+                    tools:text=""
+                    android:layout_marginLeft="8dp"
+                    android:textColor="#000000"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="8dp" />
+
+                <TextView
                     android:id="@+id/Post_DateOfManufacture"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:textSize="13sp"
                     tools:text="2019-04-25" />
+
             </LinearLayout>
         </LinearLayout>
 

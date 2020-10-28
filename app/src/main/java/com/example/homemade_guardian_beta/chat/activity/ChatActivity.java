@@ -3,6 +3,7 @@ package com.example.homemade_guardian_beta.chat.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -125,7 +126,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         switch (item.getItemId()) {
             case R.id.Chat_Delete_Button:
                 RoomUidSet(ChatRoomListModel_RoomUid,To_User_Uid);
-                chatFragment.User_GoOut();
+                chatFragment.User_GoOut(currentUser_Uid,MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
                 Firebasehelper.ROOMS_USERS_OUT_CHECK(ChatRoomListModel_RoomUid,firebaseCurrentUser.getUid(),To_User_Uid);
 
                 Intent Intent_MainActivity = new Intent(ChatActivity.this, MainActivity.class);
@@ -143,7 +144,8 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         To_User_Uid = ToUid;
     }
 
-    public void ChatFragment_User_GoOut(){
-        chatFragment.User_GoOut();
+    public void ChatFragment_User_GoOut(String Roomuid){
+        Log.d("라라라","RoomUid4 : " + Roomuid);
+        chatFragment.User_GoOut(currentUser_Uid,MarketModel_Market_Uid,Roomuid);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.Main.common;
+package com.example.homemade_guardian_beta.market.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,12 +22,15 @@ public class ViewPagerAdapter extends PagerAdapter {
     private ArrayList<String> ArrayList_ImageList = new ArrayList<String>();      //받아온 이미지리스트
     private Context Context;
     private String ViewpagerState;
+    private String uses;
 
-    public ViewPagerAdapter(Context Context, ArrayList<String> ArrayList_ImageList,String ViewpagerState)
+    public ViewPagerAdapter(Context Context, ArrayList<String> ArrayList_ImageList,String ViewpagerState, String uses)
     {
         this.Context = Context;
         this.ArrayList_ImageList = ArrayList_ImageList;
         this.ViewpagerState = ViewpagerState;
+        this.uses = uses;
+
 
     }
 
@@ -49,7 +52,12 @@ public class ViewPagerAdapter extends PagerAdapter {
         });
         ImageView Market_ImageView = view.findViewById(R.id.PostActivity_Post_ImageView);
         //Glide.with(view).load(ArrayList_ImageList.get(position)).into(Post_ImageView);
-        Glide.with(view).load(ArrayList_ImageList.get(position)).centerCrop().override(500).thumbnail(0.1f).into(Market_ImageView);
+        if(uses.equals("Enlarge")){
+            Glide.with(view).load(ArrayList_ImageList.get(position)).override(1000).thumbnail(0.1f).into(Market_ImageView);
+        }else{
+            Glide.with(view).load(ArrayList_ImageList.get(position)).centerCrop().override(1000).thumbnail(0.1f).into(Market_ImageView);
+        }
+
         container.addView(view);
         return view;
     }

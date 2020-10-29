@@ -167,10 +167,10 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.Market_Write_Button:
-                    myStartActivity(WriteMarketActivity.class);
+                    myStartFinishActivity(WriteMarketActivity.class);
                     break;
                 case R.id.Community_Write_Button:
-                    myStartActivity(WriteCommunityActivity.class);
+                    myStartFinishActivity(WriteCommunityActivity.class);
                     break;
             }
         }
@@ -179,7 +179,10 @@ public class MainActivity extends AppCompatActivity {
     private void myStartActivity(Class c) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
         Intent intent = new Intent(this, c);
         startActivityForResult(intent, 1);
+    }
+    private void myStartFinishActivity(Class c) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
+        Intent intent = new Intent(this, c);
+        startActivityForResult(intent, 1);
         finish();
     }
-
 }

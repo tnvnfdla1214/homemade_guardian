@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
@@ -71,11 +72,10 @@ public class MemberInitActivity extends BasicActivity {
         findViewById(R.id.Users_Info_Send_Button).setOnClickListener(onClickListener);
 
         Nickname.setHint(extractIDFromEmail(CurrentUser.getEmail()));
-
-        BirthDay_Picker.init(2020, 1, 1, new DatePicker.OnDateChangedListener() {
+        BirthDay_Picker.init(2020, 0, 1, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                BirthDay = year + "/" + monthOfYear + "/" + dayOfMonth;
+                BirthDay = year + "/" + (monthOfYear+1) + "/" + dayOfMonth;
             }
         });
 
@@ -203,7 +203,7 @@ public class MemberInitActivity extends BasicActivity {
                     Log.e("로그", "에러: " + e.toString());
                 }
             }
-        } else {
+        }else {
             showToast(MemberInitActivity.this, "닉네임은 최대 20자까지 가능합나다.");
         }
     }

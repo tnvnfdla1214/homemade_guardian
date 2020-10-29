@@ -2,6 +2,7 @@ package com.example.homemade_guardian_beta.chat.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
     Switch Chat_MarketInfo_reservation;                       //예약 버튼
     Switch Chat_MarketInfo_deal;                              //거래완료 버튼
 
-   ChatActivity chatActivity;
+    ChatActivity chatActivity;
 
     ArrayList<String> UnReViewUserList = new ArrayList<>();
     ArrayList<String> UnReViewMarketList = new ArrayList<>();
@@ -50,8 +51,6 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
     ArrayList<String> Market_reservationList = new ArrayList<>();
     ArrayList<String> Market_dealList = new ArrayList<>();
 
-    TextView main_label;
-    TextView selected_review;
 
     @Override
     public void onAttach(Context context) {
@@ -84,10 +83,17 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
         To_User_Uid = Marketbundle.getString("To_User_Uid");
         currentUser_Uid = Marketbundle.getString("currentUser_Uid");
 
-        main_label = (TextView) View.findViewById(R.id.main_label);
-        selected_review = (TextView) View.findViewById(R.id.selected_review);
+
+        Setting_Post_Info();
+        Switch_reservatrion();
+        Switch_deal();
 
 
+        return View;
+    }
+
+    //기본 세팅
+    void Setting_Post_Info(){
         DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
         docRef_MARKETS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -112,11 +118,13 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
 
             }
         });
+    }
 
+    //예약 버튼
+    void Switch_reservatrion(){
         Chat_MarketInfo_reservation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // 스위치 버튼이 체크되었는지 검사하여 텍스트뷰에 각 경우에 맞게 출력합니다.
                 if (isChecked){
                     DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
                     docRef_MARKETS_HostUid
@@ -134,7 +142,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                             });
 
 
-                    //currentuseruid에 거래 완료된 포스틔의 uid 삽입
+                    //currentuseruid에 예약한 포스트의 uid 삽입
                     final DocumentReference documentReferenceMyUser = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
                     documentReferenceMyUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -143,7 +151,6 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                             Market_reservationList = userModel.getUserModel_Market_reservationList();
                             Market_reservationList.add(MarketModel_Market_Uid);
                             userModel.setUserModel_Market_reservationList(Market_reservationList);
-
                             final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
                             documentReferencesetToUser.set(userModel.getUserInfo())
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -160,7 +167,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                         }
                     });
 
-                    //To_User_Uid에 거래 완료된 포스틔의 uid 삽입
+                    //To_User_Uid에 예약한 포스트의 uid 삽입
                     final DocumentReference documentReferenceToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
                     documentReferenceToUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -169,7 +176,6 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                             Market_reservationList = userModel.getUserModel_Market_reservationList();
                             Market_reservationList.add(MarketModel_Market_Uid);
                             userModel.setUserModel_Market_reservationList(Market_reservationList);
-
                             final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
                             documentReferencesetToUser.set(userModel.getUserInfo())
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -202,16 +208,13 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                                 }
                             });
 
-
-
-                    //currentuseruid에 거래 완료된 포스틔의 uid 삽입
+                    //currentuseruid에 예약한 포스트의 uid 빼기
                     final DocumentReference documentReferenceMyUser = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
                     documentReferenceMyUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             userModel = documentSnapshot.toObject(UserModel.class);
                             Market_reservationList = userModel.getUserModel_Market_reservationList();
-                            //int index = Market_reservationList.indexOf(MarketModel_Market_Uid);
                             Market_reservationList.remove(MarketModel_Market_Uid);
                             userModel.setUserModel_Market_reservationList(Market_reservationList);
                             final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
@@ -230,7 +233,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                         }
                     });
 
-                    //To_User_Uid에 거래 완료된 포스틔의 uid 삽입
+                    //To_User_Uid에 예약한 포스트의 uid 빼기
                     final DocumentReference documentReferenceToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
                     documentReferenceToUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -259,7 +262,10 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                 }
             }
         });
+    }
 
+    //딜 버튼
+    void Switch_deal(){
         Chat_MarketInfo_deal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -301,10 +307,10 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                                     });
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                }
-                            });
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                        }
+                    });
 
                     //currentuseruid에 거래 완료된 포스틔의 uid 삽입
                     final DocumentReference documentReferenceMyUser = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
@@ -313,9 +319,11 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             userModel = documentSnapshot.toObject(UserModel.class);
                             Market_dealList = userModel.getUserModel_Market_dealList();
+                            Market_reservationList = userModel.getUserModel_Market_reservationList();
                             Market_dealList.add(MarketModel_Market_Uid);
+                            Market_reservationList.remove(MarketModel_Market_Uid);
                             userModel.setUserModel_Market_dealList(Market_dealList);
-
+                            userModel.setUserModel_Market_reservationList(Market_reservationList);
                             final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
                             documentReferencesetToUser.set(userModel.getUserInfo())
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -337,17 +345,22 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                     documentReferenceToUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Log.d("민규","ㅁㄴㅇ1");
                             userModel = documentSnapshot.toObject(UserModel.class);
                             Market_dealList = userModel.getUserModel_Market_dealList();
+                            Market_reservationList = userModel.getUserModel_Market_reservationList();
                             Market_dealList.add(MarketModel_Market_Uid);
+                            Market_reservationList.remove(MarketModel_Market_Uid);
                             userModel.setUserModel_Market_dealList(Market_dealList);
-
+                            userModel.setUserModel_Market_reservationList(Market_reservationList);
                             final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
                             documentReferencesetToUser.set(userModel.getUserInfo())
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-
+                                            Chat_MarketInfo_reservation.setEnabled(false);
+                                            Chat_MarketInfo_deal.setEnabled(false);
+                                            Log.d("민규","ㅁㄴㅇ2");
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -358,27 +371,15 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                         }
                     });
 
-
+                    //리뷰 창 띄우기
                     ReviewActivity reviewActivity = new ReviewActivity(getContext());
                     reviewActivity.callFunction(To_User_Uid, MarketModel_Market_Uid);
 
                 }else{
-                    DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
-                    docRef_MARKETS_HostUid
-                            .update("MarketModel_deal", "X")
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                }
-                            });
+
                 }
             }
         });
-        return View;
     }
+
 }

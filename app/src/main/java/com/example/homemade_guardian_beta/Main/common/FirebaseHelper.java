@@ -5,7 +5,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.Main.common.listener.OnPostListener;
+import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.model.community.CommunityModel;
@@ -42,6 +44,7 @@ public class FirebaseHelper {                                                   
     private com.example.homemade_guardian_beta.model.chat.MessageModel MessageModel;                    //UserModel 참조 선언
     int Java_MessageModel_ImageCount;                         //string형을 int로 형변환
     ChatFragment chatFragment;
+    MainActivity mainActivity;
 
     public FirebaseHelper(Activity Activity) {
         this.Activity = Activity;
@@ -182,6 +185,7 @@ public class FirebaseHelper {                                                   
                 else{
                     USERS_OUT.put(Current_My_user, (long) 0);
                     document.getReference().update("USERS_OUT", USERS_OUT);
+                    ((ChatActivity)ChatActivity.mcontext).ChatFragment_User_GoOut(ChatRoomListModel_RoomUid);
                 }
             }
         });
@@ -219,6 +223,7 @@ public class FirebaseHelper {                                                   
                 ROOMS_Storedelete(ChatRoomListModel_RoomUid);
             }
         });
+        ((ChatActivity)ChatActivity.mcontext).ChatFragment_User_GoOut(ChatRoomListModel_RoomUid);
     }
 
 

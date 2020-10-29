@@ -96,10 +96,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-    //ChatRoomListFragment가 한번에 ChatActivity의 함수를 불러올수 없으므로 만든 험슈
-    public void ChatRoomListUserGoOutArtichecture(String RoomUid){
-        ((ChatActivity)ChatActivity.mcontext).ChatFragment_User_GoOut(RoomUid);
-    }
 
     private void init() {
         final FirebaseUser currentUser_Uid = FirebaseAuth.getInstance().getCurrentUser();                                // part5 : 로그인 시        // part22 : 운래는 옮길때 homeFragment로 옮겨졌으나 매번 불러오는것이 비효율적이라 여기로 옮김

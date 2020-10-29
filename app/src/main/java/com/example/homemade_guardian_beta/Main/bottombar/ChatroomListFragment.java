@@ -283,8 +283,6 @@ public class ChatroomListFragment extends Fragment {
         public void onRightClick(int position, RecyclerView.ViewHolder viewHolder) {
             RoomUid = RoomList.get(position).getChatRoomListModel_RoomUid();           // position으로 ID를 get
             ToUserUid = RoomList.get(position).getChatRoomListModel_ToUserUid();
-            Log.d("라라라","RoomUid6 : " + RoomUid);
-            ((MainActivity) getActivity()).ChatRoomListUserGoOutArtichecture(RoomUid);
             Firebasehelper.ROOMS_USERS_OUT_CHECK(RoomUid,My_User_Uid,ToUserUid);
             RoomList.remove(position);                         // 해당 position의 리스트의 데이터도 삭제한다.
             notifyItemRemoved(position);

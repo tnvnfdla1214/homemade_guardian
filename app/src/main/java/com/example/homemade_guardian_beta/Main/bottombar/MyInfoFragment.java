@@ -52,7 +52,7 @@ public class MyInfoFragment extends Fragment {
         if(actionBar != null){
             actionBar.setTitle("내 정보");
         }
-        Myinfo_profileImage = (ImageView) view.findViewById(R.id.Myinfo_profileImage);
+        //Myinfo_profileImage = (ImageView) view.findViewById(R.id.Myinfo_profileImage);
         Myinfo_profileNickName = (TextView) view.findViewById(R.id.Myinfo_profileNickName);
         Myinfo_profileUniversity = (TextView) view.findViewById(R.id.Myinfo_profileUniversity);
 
@@ -130,10 +130,10 @@ public class MyInfoFragment extends Fragment {
                 }
                 //post의 이미지 섬네일 띄우기
                 if(Usermodel.getUserModel_ProfileImage() != null){
-                    Glide.with(getContext()).load(Usermodel.getUserModel_ProfileImage()).centerCrop().into(Myinfo_profileImage);
+                    //Glide.with(getContext()).load(Usermodel.getUserModel_ProfileImage()).centerCrop().into(Myinfo_profileImage);
                 }
                 else{
-                    Glide.with(getContext()).load(R.drawable.none_profile_user).centerCrop().into(Myinfo_profileImage);
+                    //Glide.with(getContext()).load(R.drawable.none_profile_user).centerCrop().into(Myinfo_profileImage);
                 }
             }
         });

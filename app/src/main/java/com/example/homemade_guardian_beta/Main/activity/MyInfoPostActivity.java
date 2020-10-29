@@ -59,7 +59,7 @@ public class MyInfoPostActivity extends BasicActivity {
         if(Info.equals("2")) {
             // My_Writen_Post_Fragment
             setToolbarTitle("내가 쓴 게시물");
-            My_Writen_Post_Fragment = My_Writen_Post_Fragment.getInstance(Info);
+            My_Writen_Post_Fragment = My_Writen_Post_Fragment.getInstance(CurrentUid);
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.MyInfo_Post_Fragment, My_Writen_Post_Fragment)

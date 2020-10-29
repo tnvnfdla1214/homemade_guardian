@@ -9,14 +9,14 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary">
+        android:background="#505050">
 
     </androidx.appcompat.widget.Toolbar>
 
     <FrameLayout
         android:id="@+id/postinfoFragment"
         android:layout_width="match_parent"
-        android:layout_height="80dp" />
+        android:layout_height="wrap_content" />
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"

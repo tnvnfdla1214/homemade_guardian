@@ -77,6 +77,8 @@ public class SearchCommunityResultAdapter extends RecyclerView.Adapter<SearchCom
         TextView DateOfManufacture_TextView = Contents_CardView.findViewById(R.id.Post_DateOfManufacture);
         DateOfManufacture_TextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(communityModel.getCommunityModel_DateOfManufacture()));
 
+        TextView Community_CommentCount = Contents_CardView.findViewById(R.id.comment_count_text);
+        Community_CommentCount.setText(String.valueOf(communityModel.getCommunityModel_CommentCount()));
         ArrayList<String> ArrayList_ImageList = communityModel.getCommunityModel_ImageList();
         if(ArrayList_ImageList != null) {
             String Image = ArrayList_ImageList.get(0);

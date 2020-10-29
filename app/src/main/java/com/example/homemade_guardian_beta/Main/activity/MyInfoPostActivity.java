@@ -1,12 +1,12 @@
 package com.example.homemade_guardian_beta.Main.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.homemade_guardian_beta.Main.Fragment.Deal_Complete_Post_Fragment;
 import com.example.homemade_guardian_beta.Main.Fragment.My_Review_Writen_Fragment;
-import com.example.homemade_guardian_beta.Main.Fragment.My_Writen_Post_Fragment;
+import com.example.homemade_guardian_beta.Main.Fragment.My_Writen_Market_Fragment;
 import com.example.homemade_guardian_beta.Main.Fragment.Proceeding_Post_Fragment;
 import com.example.homemade_guardian_beta.Main.Fragment.To_Review_Writen_Fragment;
 
@@ -20,7 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MyInfoPostActivity extends BasicActivity {
     private Deal_Complete_Post_Fragment Deal_Complete_Post_Fragment;
     private My_Review_Writen_Fragment My_Review_Writen_Fragment;
-    private My_Writen_Post_Fragment My_Writen_Post_Fragment;
+    private My_Writen_Market_Fragment My_Writen_Market_Fragment;
     private Proceeding_Post_Fragment Proceeding_Post_Fragment;
     private To_Review_Writen_Fragment To_Review_Writen_Fragment;
 
@@ -58,12 +58,7 @@ public class MyInfoPostActivity extends BasicActivity {
 
         if(Info.equals("2")) {
             // My_Writen_Post_Fragment
-            setToolbarTitle("내가 쓴 게시물");
-            My_Writen_Post_Fragment = My_Writen_Post_Fragment.getInstance(CurrentUid);
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.MyInfo_Post_Fragment, My_Writen_Post_Fragment)
-                    .commit();
+            myStartFinishActivity(MyInfo_WritenPostActivity.class);
         }
 
         if(Info.equals("3")) {
@@ -96,5 +91,10 @@ public class MyInfoPostActivity extends BasicActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    private void myStartFinishActivity(Class c) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
+        Intent intent = new Intent(this, c);
+        startActivityForResult(intent, 1);
+        finish();
     }
 }

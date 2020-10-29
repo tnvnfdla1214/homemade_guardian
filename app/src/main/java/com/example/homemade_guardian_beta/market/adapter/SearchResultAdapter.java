@@ -79,6 +79,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);                      /////////////////////이거 대신 텍스트 만든거 보여주기로
         TextView DateOfManufacture_TextView = Contents_CardView.findViewById(R.id.Post_DateOfManufacture);
         DateOfManufacture_TextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(marketModel.getMarketModel_DateOfManufacture()));
+        TextView Market_CommentCount = Contents_CardView.findViewById(R.id.comment_count_text);
+        Market_CommentCount.setText(String.valueOf(marketModel.getMarketModel_CommentCount()));
 
         ArrayList<String> ArrayList_ImageList = marketModel.getMarketModel_ImageList();
         if(ArrayList_ImageList != null) {

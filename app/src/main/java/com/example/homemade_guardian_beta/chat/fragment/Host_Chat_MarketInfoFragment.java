@@ -12,6 +12,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -39,6 +40,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
     TextView Chat_MarketInfo_Title;
     TextView Chat_MarketInfo_Text;
     ImageView Chat_MarketInfo_Image;
+    CardView Chat_PostInfo_Card;
 
     Switch Chat_MarketInfo_reservation;                       //예약 버튼
     Switch Chat_MarketInfo_deal;                              //거래완료 버튼
@@ -76,7 +78,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
         Chat_MarketInfo_Image = (ImageView) View.findViewById(R.id.Chat_PostInfo_Image);
         Chat_MarketInfo_reservation = (Switch) View.findViewById(R.id.Chat_PostInfo_reservation);
         Chat_MarketInfo_deal = (Switch) View.findViewById(R.id.Chat_PostInfo_deal);
-
+        Chat_PostInfo_Card = View.findViewById(R.id.Chat_PostInfo_Card);
         Chat_MarketInfo_deal.setEnabled(false);
         Bundle Marketbundle = getArguments();
         MarketModel_Market_Uid = Marketbundle.getString("MarketModel_Market_Uid");
@@ -103,10 +105,8 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                 Chat_MarketInfo_Text.setText(marketModel.getMarketModel_Text());
                 //post의 이미지 섬네일 띄우기
                 if(marketModel.getMarketModel_ImageList() != null){
+                    Chat_PostInfo_Card.setVisibility(View.VISIBLE);
                     Glide.with(getContext()).load(marketModel.getMarketModel_ImageList().get(0)).centerCrop().override(500).into(Chat_MarketInfo_Image);
-                }
-                else{
-                    Chat_MarketInfo_Image.setVisibility(View.GONE);
                 }
                 if(marketModel.getMarketModel_reservation().equals("O")){
                     Chat_MarketInfo_reservation.setChecked(true);

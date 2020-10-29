@@ -15,11 +15,8 @@ import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.market.adapter.SearchResultAdapter;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -28,7 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class My_Writen_Post_Fragment extends Fragment {
+public class My_Writen_Market_Fragment extends Fragment {
     private String CurrentUid;
     private ArrayList<MarketModel> MarketList;
     private FirebaseFirestore firebaseFirestore;
@@ -36,11 +33,11 @@ public class My_Writen_Post_Fragment extends Fragment {
     private SearchResultAdapter searchResultAdapter;
     MarketModel marketModel;
 
-    public My_Writen_Post_Fragment() {
+    public My_Writen_Market_Fragment() {
 
     }
-    public static final My_Writen_Post_Fragment getInstance(String CurrentUid) {
-        My_Writen_Post_Fragment f = new My_Writen_Post_Fragment();
+    public static final My_Writen_Market_Fragment getInstance(String CurrentUid) {
+        My_Writen_Market_Fragment f = new My_Writen_Market_Fragment();
         Bundle bdl = new Bundle();
         bdl.putString("CurrentUid", CurrentUid);
         f.setArguments(bdl);

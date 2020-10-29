@@ -19,6 +19,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class Proceeding_Post_Fragment extends Fragment {
@@ -78,9 +79,21 @@ public class Proceeding_Post_Fragment extends Fragment {
                     final DocumentReference documentReferenceMyUser = FirebaseFirestore.getInstance().collection("MARKETS").document(Market_reservationList.get(i));
                     documentReferenceMyUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            marketModel = documentSnapshot.toObject(MarketModel.class);
-                            MarketList.add(marketModel);
+                        public void onSuccess(DocumentSnapshot document) {
+                            MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+                                    document.getData().get("MarketModel_Title").toString(),
+                                    document.getData().get("MarketModel_Text").toString(),
+                                    (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
+                                    new Date(document.getDate("MarketModel_DateOfManufacture").getTime()),
+                                    document.getData().get("MarketModel_Host_Uid").toString(),
+                                    document.getId(),
+                                    document.getData().get("MarketModel_Category").toString(),
+                                    (ArrayList<String>) document.getData().get("MarketModel_LikeList"),
+                                    document.getData().get("MarketModel_HotMarket").toString(),
+                                    document.getData().get("MarketModel_reservation").toString(),
+                                    document.getData().get("MarketModel_deal").toString(),
+                                    Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))
+                            ));
                             searchResultAdapter.notifyDataSetChanged();
                         }
                     });

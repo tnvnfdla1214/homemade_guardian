@@ -197,7 +197,6 @@ public class MarketActivity extends BasicActivity {                             
         }
 
 
-
         //댓글 목록
         Comment_Firestoreadapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("MARKETS").document(marketmodel.getMarketModel_Market_Uid()).collection("COMMENT").orderBy("market_CommentModel_DateOfManufacture"));
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);

@@ -74,8 +74,8 @@ public class My_Writen_Post_Fragment extends Fragment {
         Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
         //아래꺼는 색인이 없으면 안뜨는듯
-        //collectionReference.whereEqualTo("MarketModel_Host_Uid",CurrentUid).orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).limit(10).get()
-        collectionReference.whereEqualTo("MarketModel_Host_Uid",CurrentUid).limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        collectionReference.whereEqualTo("MarketModel_Host_Uid",CurrentUid).orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).limit(10).get()
+        //collectionReference.whereEqualTo("MarketModel_Host_Uid",CurrentUid).limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -85,10 +85,6 @@ public class My_Writen_Post_Fragment extends Fragment {
                                 MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                marketModel = document.toObject(MarketModel.class);
-                                MarketList.add(marketModel);
-                                searchResultAdapter.notifyDataSetChanged();
-                                /*
                                 MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("MarketModel_Title").toString(),
                                         document.getData().get("MarketModel_Text").toString(),
@@ -102,11 +98,9 @@ public class My_Writen_Post_Fragment extends Fragment {
                                         document.getData().get("MarketModel_reservation").toString(),
                                         document.getData().get("MarketModel_deal").toString(),
                                         Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))
-                                                                     ));
-
-                                 */
+                                         ));
                             }
-                            //searchResultAdapter.notifyDataSetChanged();
+                            searchResultAdapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());

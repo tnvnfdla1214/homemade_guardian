@@ -18,14 +18,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"  android:screenOrientation="portrait">
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
 
-        <activity android:name=".Main.activity.LoginActivity">
+        <activity android:name=".Main.activity.LoginActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Main.activity.MainActivity" >
+        <activity android:name=".Main.activity.MainActivity"  android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,9 +42,9 @@
                     android:host="google.com" />
             </intent-filter>
         </activity>
-        <activity android:name=".chat.activity.ChatActivity" android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".chat.activity.SelectUserActivity" />
-        <activity android:name=".chat.common.photoview.ViewPagerActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".chat.activity.ChatActivity" android:theme="@style/AppTheme.NoActionBar" android:screenOrientation="portrait"/>
+        <activity android:name=".chat.activity.SelectUserActivity"  android:screenOrientation="portrait"/>
+        <activity android:name=".chat.common.photoview.ViewPagerActivity" android:theme="@style/AppTheme.NoActionBar"  android:screenOrientation="portrait"/>
 
         <service android:name=".chat.common.MyFirebaseMessagingService">
             <intent-filter>
@@ -71,43 +71,43 @@
                 android:resource="@xml/provider_paths"/>
         </provider>
 
-        <activity android:name=".market.activity.MarketActivity">
+        <activity android:name=".market.activity.MarketActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".market.activity.ModifyMarketActivity">
+        <activity android:name=".market.activity.ModifyMarketActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Main.activity.BasicActivity">
+        <activity android:name=".Main.activity.BasicActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".market.activity.GalleryActivity">
+        <activity android:name=".market.activity.GalleryActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Main.activity.MemberInitActivity">
+        <activity android:name=".Main.activity.MemberInitActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Main.activity.HostModelActivity">
+        <activity android:name=".Main.activity.HostModelActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".market.activity.SearchActivity">
+        <activity android:name=".market.activity.SearchActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".market.activity.SearchResultActivity">
+        <activity android:name=".market.activity.SearchResultActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".photo.activity.PhotoPickerActivity"
+        <activity android:name=".photo.activity.PhotoPickerActivity" android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".market.activity.EnlargeImageActivity">
+        <activity android:name=".market.activity.EnlargeImageActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Main.activity.WriteMarketActivity">
+        <activity android:name=".Main.activity.WriteMarketActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Main.activity.WriteCommunityActivity">
+        <activity android:name=".Main.activity.WriteCommunityActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".community.activity.CommunityActivity" >
+        <activity android:name=".community.activity.CommunityActivity"  android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".community.activity.EnlargeCommunityImageActivity">
+        <activity android:name=".community.activity.EnlargeCommunityImageActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".community.activity.ModifyCommunityActivity">
+        <activity android:name=".community.activity.ModifyCommunityActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".community.activity.SearchCommunityActivity">
+        <activity android:name=".community.activity.SearchCommunityActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".community.activity.SearchCommunityResultActivity">
+        <activity android:name=".community.activity.SearchCommunityResultActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Main.activity.MyInfoPostActivity">
+        <activity android:name=".Main.activity.MyInfoPostActivity" android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Main.activity.MyInfo_WritenPostActivity">
+        <activity android:name=".Main.activity.MyInfo_WritenPostActivity" android:screenOrientation="portrait">
         </activity>
 
 

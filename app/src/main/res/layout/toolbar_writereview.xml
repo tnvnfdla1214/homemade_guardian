@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/colorPrimary"
+    android:background="#FFBF00"
     android:minHeight="?attr/actionBarSize"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -19,7 +19,6 @@
         android:layout_gravity="center"
         android:id="@+id/toolbar_titles"
         android:textSize="20sp"
-        android:textColor="@color/color_ffffff"
         />
 
 </androidx.appcompat.widget.Toolbar>

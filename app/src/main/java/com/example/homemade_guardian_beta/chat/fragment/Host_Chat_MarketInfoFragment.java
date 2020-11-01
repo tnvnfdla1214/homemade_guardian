@@ -89,8 +89,6 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
 
 
         Setting_Post_Info();
-        Switch_reservatrion();
-        Switch_deal();
 
         return View;
     }

@@ -10,12 +10,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -31,8 +34,8 @@ public class Guest_Chat_MarketInfoFragment extends Fragment {
     TextView Chat_MarketInfo_Title;
     TextView Chat_MarketInfo_Text;
     ImageView Chat_MarketInfo_Image;
+    CardView Chat_PostInfo_Card;
 
-    Button Chat_MarketInfo_reservation;//예약 버튼
 
    ChatActivity chatActivity;
 
@@ -61,8 +64,8 @@ public class Guest_Chat_MarketInfoFragment extends Fragment {
         Chat_MarketInfo_Title = (TextView)View.findViewById(R.id.Chat_PostInfo_Title);
         Chat_MarketInfo_Text = (TextView)View.findViewById(R.id.Chat_PostInfo_Text);
         Chat_MarketInfo_Image = (ImageView) View.findViewById(R.id.Chat_PostInfo_Image);
-        Chat_MarketInfo_reservation = (Button) View.findViewById(R.id.Chat_PostInfo_reservation);
         Chat_MarketInfo_dealText = (TextView)View.findViewById(R.id.Chat_PostInfo_dealText);
+        Chat_PostInfo_Card = View.findViewById(R.id.Chat_PostInfo_Card);
 
         CurrentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -77,13 +80,15 @@ public class Guest_Chat_MarketInfoFragment extends Fragment {
                 Chat_MarketInfo_Text.setText(marketModel.getMarketModel_Text());
                 //post의 이미지 섬네일 띄우기
                 if(marketModel.getMarketModel_ImageList() != null){
+                    Chat_PostInfo_Card.setVisibility(View.VISIBLE);
                     Glide.with(getContext()).load(marketModel.getMarketModel_ImageList().get(0)).centerCrop().override(500).into(Chat_MarketInfo_Image);
                 }
                 else{
                     Chat_MarketInfo_Image.setVisibility(View.GONE);
                 }
-                if(marketModel.getMarketModel_reservation().equals("O")){
-                    if(marketModel.getMarketModel_deal().equals("O")) {
+                //X : 예약이나 거래완료 사항이 없음 !X : [호스트]의 상대방 Uid
+                if(!marketModel.getMarketModel_reservation().equals("X")){
+                    if(!marketModel.getMarketModel_deal().equals("X")) {
                         Chat_MarketInfo_dealText.setText("[거래완료]");
                         Chat_MarketInfo_dealText.setTextColor(Color.parseColor("#e65d5d"));
                     }

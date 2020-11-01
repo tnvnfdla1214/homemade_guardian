@@ -108,19 +108,19 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                     Chat_PostInfo_Card.setVisibility(View.VISIBLE);
                     Glide.with(getContext()).load(marketModel.getMarketModel_ImageList().get(0)).centerCrop().override(500).into(Chat_MarketInfo_Image);
                 }
-                if(marketModel.getMarketModel_reservation().equals("O")){
+                if(!marketModel.getMarketModel_reservation().equals("X")){
                     Chat_MarketInfo_reservation.setChecked(true);
                 }
 
-                if(marketModel.getMarketModel_deal().equals("O")){
+                if(!marketModel.getMarketModel_deal().equals("X")){
                     Chat_MarketInfo_deal.setChecked(true);
                 }
-
             }
         });
     }
 
     //예약 버튼
+    //마켓의 reservation X -> 상대방의 Uid로 바꾸기
     void Switch_reservatrion(){
         Chat_MarketInfo_reservation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -128,7 +128,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                 if (isChecked){
                     DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
                     docRef_MARKETS_HostUid
-                            .update("MarketModel_reservation", "O")
+                            .update("MarketModel_reservation", To_User_Uid)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -271,10 +271,10 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked){
-                    //마켓에 있는 deal X -> o 바꾸기
+                    //마켓에 있는 deal X -> 상대방의 Uid로 바꾸기
                     DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
                     docRef_MARKETS_HostUid
-                            .update("MarketModel_deal", "O")
+                            .update("MarketModel_deal", To_User_Uid)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {

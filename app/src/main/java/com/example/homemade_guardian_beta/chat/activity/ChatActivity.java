@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,9 +19,11 @@ import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
 import com.example.homemade_guardian_beta.chat.fragment.Guest_Chat_MarketInfoFragment;
 import com.example.homemade_guardian_beta.chat.fragment.Host_Chat_MarketInfoFragment;
+import com.example.homemade_guardian_beta.chat.fragment.Nonepost_chat_MarketInfoFragment;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +39,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
     private ChatFragment chatFragment;
     private Host_Chat_MarketInfoFragment hostChat_MarketInfoFragment;
     private Guest_Chat_MarketInfoFragment guestChat_MarketInfoFragment;
+    private Nonepost_chat_MarketInfoFragment nonepost_chat_marketInfoFragment;
     private String currentUser_Uid =null;
     String To_User_Uid;
     String ChatRoomListModel_RoomUid;
@@ -85,8 +89,13 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 marketModel = documentSnapshot.toObject(MarketModel.class);
-                //currentUser_Uid == PostModel_Host_Uid 일 경우 Host_Chat_PostInfoFragment를 띄우고 아니라면 guest_Chat_PostInfoFragment를 띄운다.
-                if(currentUser_Uid.equals(marketModel.getMarketModel_Host_Uid())){
+                Log.d("이석규","marketModel.getMarketModel_Host_Uid() : " + marketModel);
+                //if문 : 주어진 MarketModel_Market_Uid로ㅓ 찾아간  marketModel이 null이면 없는 게시물이라는 것을 알려주기 위한 Nonepost_chat_MarketInfoFragment를 띄운다.
+                //else, else if문 : currentUser_Uid == PostModel_Host_Uid 일 경우 Host_Chat_PostInfoFragment를 띄우고 아니라면 guest_Chat_PostInfoFragment를 띄운다.
+                if(marketModel == null){
+                    nonepost_chat_marketInfoFragment = new Nonepost_chat_MarketInfoFragment();
+                    getSupportFragmentManager().beginTransaction().add(R.id.postinfoFragment, nonepost_chat_marketInfoFragment).commit();
+                } else if(currentUser_Uid.equals(marketModel.getMarketModel_Host_Uid())){
 
                     hostChat_MarketInfoFragment = new Host_Chat_MarketInfoFragment();
                     getSupportFragmentManager().beginTransaction().add(R.id.postinfoFragment, hostChat_MarketInfoFragment).commit();

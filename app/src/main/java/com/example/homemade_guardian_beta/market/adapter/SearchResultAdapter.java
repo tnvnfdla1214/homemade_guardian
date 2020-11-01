@@ -93,8 +93,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         market_state.setText("");
         GradientDrawable state_none= (GradientDrawable) ContextCompat.getDrawable(this.Activity, R.drawable.state_none);
         market_state.setBackground(state_none);
-        if(marketModel.getMarketModel_reservation().equals("O")){
-            if(marketModel.getMarketModel_deal().equals("O")){
+        if(!marketModel.getMarketModel_reservation().equals("X")){
+            if(!marketModel.getMarketModel_deal().equals("X")){
                 market_state.setText("거래완료");
                 GradientDrawable state_deal= (GradientDrawable) ContextCompat.getDrawable(this.Activity, R.drawable.state_deal);
                 market_state.setBackground(state_deal);

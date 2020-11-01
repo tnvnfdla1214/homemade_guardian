@@ -14,6 +14,7 @@ import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.model.community.Community_CommentModel;
 import com.example.homemade_guardian_beta.model.market.Market_CommentModel;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
+import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,6 +46,9 @@ public class FirebaseHelper {                                                   
     int Java_MessageModel_ImageCount;                         //string형을 int로 형변환
     ChatFragment chatFragment;
     MainActivity mainActivity;
+    UserModel userModel;
+    ArrayList<String> Market_reservationList = new ArrayList<>();
+    ArrayList<String> Market_dealList = new ArrayList<>();
 
     public FirebaseHelper(Activity Activity) {
         this.Activity = Activity;
@@ -87,6 +91,65 @@ public class FirebaseHelper {                                                   
         final FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
         final ArrayList<String> CommentList = new ArrayList<>();
         if(SuccessCount == 0){
+
+            // market이 삭제되면, 상대방의 USER에서 진행중이거나 거래완료된 market의 uid삭제
+            final String reserved_Uid = marketModel.getMarketModel_reservation();
+            final DocumentReference documentReferenceToUser = FirebaseFirestore.getInstance().collection("USERS").document(reserved_Uid);
+            documentReferenceToUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    userModel = documentSnapshot.toObject(UserModel.class);
+                    Market_reservationList = userModel.getUserModel_Market_reservationList();
+                    Market_reservationList.remove(marketModel.getMarketModel_Market_Uid());
+                    userModel.setUserModel_Market_reservationList(Market_reservationList);
+                    Market_dealList = userModel.getUserModel_Market_dealList();
+                    Market_dealList.remove(marketModel.getMarketModel_Market_Uid());
+                    userModel.setUserModel_Market_dealList(Market_dealList);
+
+                    final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(reserved_Uid);
+                    documentReferencesetToUser.set(userModel.getUserInfo())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                }
+                            });
+                }
+            });
+            // market이 삭제되면, 나의 USER에서 진행중이거나 거래완료된 market의 uid삭제
+            final DocumentReference documentReferenceCurrentUser = FirebaseFirestore.getInstance().collection("USERS").document(marketModel.getMarketModel_Host_Uid());
+            documentReferenceCurrentUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    userModel = documentSnapshot.toObject(UserModel.class);
+                    Market_reservationList = userModel.getUserModel_Market_reservationList();
+                    Market_reservationList.remove(marketModel.getMarketModel_Market_Uid());
+                    userModel.setUserModel_Market_reservationList(Market_reservationList);
+                    Market_dealList = userModel.getUserModel_Market_dealList();
+                    Market_dealList.remove(marketModel.getMarketModel_Market_Uid());
+                    userModel.setUserModel_Market_dealList(Market_dealList);
+
+                    final DocumentReference documentReferencesetCurrentUser = FirebaseFirestore.getInstance().collection("USERS").document(marketModel.getMarketModel_Host_Uid());
+                    documentReferencesetCurrentUser.set(userModel.getUserInfo())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                }
+                            });
+                }
+            });
+/////////////////////////////////
             FirebaseFirestore.getInstance().collection("MARKETS").document(marketModel.getMarketModel_Market_Uid()).collection("COMMENT")
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override

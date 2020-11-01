@@ -54,12 +54,12 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical">
-                <!--ImageView
+                <ImageView
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:src="@drawable/kind"
                     android:background="@drawable/review_border"
-                    android:layout_gravity="center_horizontal"/-->
+                    android:layout_gravity="center_horizontal"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

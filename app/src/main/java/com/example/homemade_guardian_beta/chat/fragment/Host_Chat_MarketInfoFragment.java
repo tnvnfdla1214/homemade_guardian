@@ -53,6 +53,8 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
     ArrayList<String> Market_reservationList = new ArrayList<>();
     ArrayList<String> Market_dealList = new ArrayList<>();
 
+    int reservationsetting = 0;
+    int dealsetting  = 0;
 
     @Override
     public void onAttach(Context context) {
@@ -90,12 +92,13 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
         Switch_reservatrion();
         Switch_deal();
 
-
         return View;
     }
 
     //기본 세팅
     void Setting_Post_Info(){
+        reservationsetting=0;
+        dealsetting=0;
         DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
         docRef_MARKETS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -110,11 +113,18 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                 }
                 if(!marketModel.getMarketModel_reservation().equals("X")){
                     Chat_MarketInfo_reservation.setChecked(true);
+                    reservationsetting =1;
                 }
 
                 if(!marketModel.getMarketModel_deal().equals("X")){
+                    Chat_MarketInfo_reservation.setChecked(true);
                     Chat_MarketInfo_deal.setChecked(true);
+                    dealsetting = 1;
+                    Chat_MarketInfo_reservation.setEnabled(false);
+                    Chat_MarketInfo_deal.setEnabled(false);
                 }
+                Switch_reservatrion();
+                Switch_deal();
             }
         });
     }
@@ -125,7 +135,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
         Chat_MarketInfo_reservation.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked && reservationsetting !=1){
                     DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
                     docRef_MARKETS_HostUid
                             .update("MarketModel_reservation", To_User_Uid)
@@ -270,7 +280,8 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                if (isChecked){
+                if (isChecked&&dealsetting !=1){
+                    Log.d("민규규","2");
                     //마켓에 있는 deal X -> 상대방의 Uid로 바꾸기
                     DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
                     docRef_MARKETS_HostUid
@@ -372,8 +383,8 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                     });
 
                     //리뷰 창 띄우기
-                    ReviewActivity reviewActivity = new ReviewActivity(getContext());
-                    reviewActivity.callFunction(To_User_Uid, MarketModel_Market_Uid);
+                    //ReviewActivity reviewActivity = new ReviewActivity(getContext());
+                    //reviewActivity.callFunction(To_User_Uid, MarketModel_Market_Uid);
 
                 }else{
 

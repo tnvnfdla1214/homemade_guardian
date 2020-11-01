@@ -136,14 +136,18 @@ public class ReviewActivity extends BasicActivity {
                 String ReviewModel_Uid = null;
                 ReviewModel_Uid = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid).collection("REVIEW").document().getId();
 
-                Date DateOfManufacture = new Date();
-                ReviewModel = new ReviewModel(ReviewModel_Uid, MarketModel_Market_Uid,  To_User_Uid, Writen_Review_TextView.getText().toString(), ReviewModel_Selected_Review, DateOfManufacture);
+                //ReviewModel = new ReviewModel(ReviewModel_Uid, MarketModel_Market_Uid,  To_User_Uid,닉네임 , 프로필이미지, Writen_Review_TextView.getText().toString(), ReviewModel_Selected_Review, DateOfManufacture);
 
                 final DocumentReference docRef_Users_ReviewUid = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
                 final String Reviewmodel_Uid = ReviewModel_Uid;
                 docRef_Users_ReviewUid.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        UserModel usermodel = new UserModel();
+                        Date DateOfManufacture = new Date();
+                        usermodel = documentSnapshot.toObject(UserModel.class);
+                        ReviewModel = new ReviewModel(Reviewmodel_Uid, MarketModel_Market_Uid,  To_User_Uid,usermodel.getUserModel_NickName() , usermodel.getUserModel_ProfileImage(), Writen_Review_TextView.getText().toString(), ReviewModel_Selected_Review, DateOfManufacture);
                         WriteBatch Batch_REVIEW_ReviewUid = FirebaseFirestore.getInstance().batch();
                         Batch_REVIEW_ReviewUid.set(docRef_Users_ReviewUid.collection("REVIEW").document(Reviewmodel_Uid), ReviewModel.getReviewModel());
                         Batch_REVIEW_ReviewUid.commit().addOnCompleteListener(new OnCompleteListener<Void>() {

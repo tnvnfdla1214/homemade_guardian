@@ -381,8 +381,8 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                     });
 
                     //리뷰 창 띄우기
-                    //ReviewActivity reviewActivity = new ReviewActivity(getContext());
-                    //reviewActivity.callFunction(To_User_Uid, MarketModel_Market_Uid);
+                    ReviewActivity reviewActivity = new ReviewActivity(getContext());
+                    reviewActivity.callFunction(To_User_Uid, MarketModel_Market_Uid);
 
                 }else{
 

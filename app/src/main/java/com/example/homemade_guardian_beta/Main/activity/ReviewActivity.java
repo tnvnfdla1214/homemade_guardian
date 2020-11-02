@@ -143,60 +143,64 @@ public class ReviewActivity extends BasicActivity {
                 docRef_Users_ReviewUid.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        DocumentSnapshot documentSnapshot = task.getResult();
-                        UserModel usermodel = new UserModel();
-                        Date DateOfManufacture = new Date();
-                        usermodel = documentSnapshot.toObject(UserModel.class);
-                        ReviewModel = new ReviewModel(Reviewmodel_Uid, MarketModel_Market_Uid,  To_User_Uid,usermodel.getUserModel_NickName() , usermodel.getUserModel_ProfileImage(), Writen_Review_TextView.getText().toString(), ReviewModel_Selected_Review, DateOfManufacture);
-                        WriteBatch Batch_REVIEW_ReviewUid = FirebaseFirestore.getInstance().batch();
-                        Batch_REVIEW_ReviewUid.set(docRef_Users_ReviewUid.collection("REVIEW").document(Reviewmodel_Uid), ReviewModel.getReviewModel());
-                        Batch_REVIEW_ReviewUid.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        final Date DateOfManufacture = new Date();
+                        final DocumentReference docRef_Users_ReviewWriterUid = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUserUid);
+                        docRef_Users_ReviewWriterUid.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUserUid);
-                                documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            public void onComplete(@NonNull Task<DocumentSnapshot> writetask) {
+                                DocumentSnapshot documentwriteSnapshot = writetask.getResult();
+                                UserModel usermodel = new UserModel();
+                                usermodel = documentwriteSnapshot.toObject(UserModel.class);
+                                ReviewModel = new ReviewModel(Reviewmodel_Uid, MarketModel_Market_Uid,  To_User_Uid,usermodel.getUserModel_NickName() , usermodel.getUserModel_ProfileImage(), Writen_Review_TextView.getText().toString(), ReviewModel_Selected_Review, DateOfManufacture);
+                                WriteBatch Batch_REVIEW_ReviewUid = FirebaseFirestore.getInstance().batch();
+                                Batch_REVIEW_ReviewUid.set(docRef_Users_ReviewUid.collection("REVIEW").document(Reviewmodel_Uid), ReviewModel.getReviewModel());
+                                Batch_REVIEW_ReviewUid.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            DocumentSnapshot document = task.getResult();
-                                            if (document != null) {
-                                                if (document.exists()) {
-                                                    userModel = document.toObject(UserModel.class);
-                                                    UnReViewUserList = userModel.getUserModel_UnReViewUserList();
-                                                    UnReViewPostList = userModel.getUserModel_UnReViewPostList();
-                                                    if(UnReViewUserList.size()>0){
-                                                        UnReViewUserList.remove(0);
-                                                        UnReViewPostList.remove(0);
-                                                        userModel.setUserModel_UnReViewUserList(UnReViewUserList);
-                                                        userModel.setUserModel_UnReViewPostList(UnReViewPostList);
-                                                        final DocumentReference documentReferencesetCurrentUser = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUserUid);
-                                                        documentReferencesetCurrentUser.set(userModel.getUserInfo())
-                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                    @Override
-                                                                    public void onSuccess(Void aVoid) {
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUserUid);
+                                        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    DocumentSnapshot document = task.getResult();
+                                                    if (document != null) {
+                                                        if (document.exists()) {
+                                                            userModel = document.toObject(UserModel.class);
+                                                            UnReViewUserList = userModel.getUserModel_UnReViewUserList();
+                                                            UnReViewPostList = userModel.getUserModel_UnReViewPostList();
+                                                            if(UnReViewUserList.size()>0){
+                                                                UnReViewUserList.remove(0);
+                                                                UnReViewPostList.remove(0);
+                                                                userModel.setUserModel_UnReViewUserList(UnReViewUserList);
+                                                                userModel.setUserModel_UnReViewPostList(UnReViewPostList);
+                                                                final DocumentReference documentReferencesetCurrentUser = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUserUid);
+                                                                documentReferencesetCurrentUser.set(userModel.getUserInfo())
+                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                            @Override
+                                                                            public void onSuccess(Void aVoid) {
 
-                                                                    }
-                                                                })
-                                                                .addOnFailureListener(new OnFailureListener() {
-                                                                    @Override
-                                                                    public void onFailure(@NonNull Exception e) {
-                                                                    }
-                                                                });
+                                                                            }
+                                                                        })
+                                                                        .addOnFailureListener(new OnFailureListener() {
+                                                                            @Override
+                                                                            public void onFailure(@NonNull Exception e) {
+                                                                            }
+                                                                        });
+                                                            }
+                                                        } else {
+                                                            Intent intent = new Intent(getApplicationContext(), MemberInitActivity.class);
+                                                            startActivityForResult(intent, 1);
+                                                        }
                                                     }
-                                                } else {
-                                                    Intent intent = new Intent(getApplicationContext(), MemberInitActivity.class);
-                                                    startActivityForResult(intent, 1);
                                                 }
                                             }
-                                        }
+                                        });
                                     }
                                 });
                             }
                         });
                     }
-
                 });
-
 
                 docRef_Users_ReviewUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override

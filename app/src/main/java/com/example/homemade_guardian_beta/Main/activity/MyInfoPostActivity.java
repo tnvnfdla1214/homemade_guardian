@@ -74,7 +74,7 @@ public class MyInfoPostActivity extends BasicActivity {
         if(Info.equals("4")) {
             // To_Review_Writen_Fragment
             setToolbarTitle("나에게 작성한 리뷰");
-            To_Review_Writen_Fragment = To_Review_Writen_Fragment.getInstance(Info);
+            To_Review_Writen_Fragment = To_Review_Writen_Fragment.getInstance(CurrentUid);
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.MyInfo_Post_Fragment, To_Review_Writen_Fragment)

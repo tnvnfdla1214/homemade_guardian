@@ -23,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
-                <!--androidx.cardview.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     app:cardCornerRadius="40dp"
@@ -35,7 +35,7 @@
                         android:layout_height="match_parent"
                         android:src="@drawable/none_profile_user"/>
 
-                 </androidx.cardview.widget.CardView-->
+                 </androidx.cardview.widget.CardView>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -192,12 +192,12 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="vertical">
-                <!--ImageView
+                <ImageView
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:src="@drawable/kind"
                     android:background="@drawable/review_border"
-                    android:layout_gravity="center_horizontal"/-->
+                    android:layout_gravity="center_horizontal"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

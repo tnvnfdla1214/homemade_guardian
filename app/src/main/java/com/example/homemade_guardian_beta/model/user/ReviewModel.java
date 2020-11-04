@@ -1,11 +1,12 @@
 package com.example.homemade_guardian_beta.model.user;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ReviewModel {
+public class ReviewModel implements Serializable {
     private String ReviewModel_Uid;             //리뷰의 Uid
     private String ReviewModel_PostUid;         //작성할 리뷰의 포스트 Uid
     private String ReviewModel_To_User_Uid;     //리뷰 작성자의 Uid

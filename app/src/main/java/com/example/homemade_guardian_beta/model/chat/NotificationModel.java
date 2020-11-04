@@ -1,6 +1,8 @@
 package com.example.homemade_guardian_beta.model.chat;
 
-public class NotificationModel {
+import java.io.Serializable;
+
+public class NotificationModel implements Serializable {
     public String to;
 
     public Notification notification = new Notification();

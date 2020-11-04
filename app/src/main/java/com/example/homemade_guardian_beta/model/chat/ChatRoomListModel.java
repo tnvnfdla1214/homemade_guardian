@@ -1,6 +1,8 @@
 package com.example.homemade_guardian_beta.model.chat;
 
-public class ChatRoomListModel {
+import java.io.Serializable;
+
+public class ChatRoomListModel implements Serializable {
     private String ChatRoomListModel_RoomUid; //room의 uid
     private String ChatRoomListModel_Title; //room의 제목 <- 이거 근데 상대방 닉네임인데 고민해야 할듯
     private String ChatRoomListModel_ProfileImage; //room의 상대방 이미지 <- 이것도 상대방 프로필 사진

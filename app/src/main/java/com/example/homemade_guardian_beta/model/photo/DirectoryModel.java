@@ -1,11 +1,12 @@
 package com.example.homemade_guardian_beta.model.photo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 // 디렉토리의 모델이다.
 
-public class DirectoryModel {
+public class DirectoryModel implements Serializable {
 
   private String PhotoDirectory_Id;
   private String PhotoDirectory_CoverPath;

@@ -2,7 +2,9 @@ package com.example.homemade_guardian_beta.model.photo;
 
 // 이미지의 모델이다.
 
-public class PhotoModel {
+import java.io.Serializable;
+
+public class PhotoModel implements Serializable {
 
   private int Photo_Id;
   private String Photo_Path;

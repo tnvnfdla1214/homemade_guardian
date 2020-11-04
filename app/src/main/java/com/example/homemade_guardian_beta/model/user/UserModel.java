@@ -1,11 +1,12 @@
 package com.example.homemade_guardian_beta.model.user;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserModel {
+public class UserModel implements Serializable {
     private String UserModel_ID; //아이디
     private String UserModel_Uid; //uid
     private String UserModel_NickName; //지금은 tnvnfdla1214 -> 번듯한 오크 만약 이용자가 임력을 하지 않을 시 전에꺼로 한다.

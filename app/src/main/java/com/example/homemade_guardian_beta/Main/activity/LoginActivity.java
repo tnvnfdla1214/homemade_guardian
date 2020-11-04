@@ -2,6 +2,7 @@ package com.example.homemade_guardian_beta.Main.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,6 +29,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.kakao.auth.ApiErrorCode;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.ISessionCallback;
@@ -39,6 +44,8 @@ import com.kakao.util.exception.KakaoException;
 
 import com.example.homemade_guardian_beta.chat.ChatUtil;
 
+import java.util.ArrayList;
+
 public class LoginActivity extends AppCompatActivity {
     private SessionCallback sessionCallback;
 
@@ -50,6 +57,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private ImageView login_google;
     private ImageView login_kakao;
+
+    ArrayList<String> UnReViewUserList = new ArrayList<>();
+    ArrayList<String> UnReViewMarketList = new ArrayList<>();
+    String Currunt_uid;
 
     String KakaoPassword = "1234567890"; //카카오 패스워드
 
@@ -258,9 +269,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //이동 함수수
-    private void updateUI(FirebaseUser user) { //update ui code here
-        if (user != null) {
-            Intent intent = new Intent(this, MainActivity.class);
+    private void updateUI(FirebaseUser Curruntuser_uid) { //update ui code here
+        if (Curruntuser_uid != null) {
+            Intent intent = new Intent(this, InitActivity.class);
             startActivity(intent);
             finish();
         }

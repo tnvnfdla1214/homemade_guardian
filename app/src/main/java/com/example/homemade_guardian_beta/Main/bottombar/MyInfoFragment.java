@@ -37,11 +37,7 @@ public class MyInfoFragment extends Fragment {
     TextView Kind_Count,Complete_Count,Correct_Count,Bad_Count;
     LinearLayout My_Reviews_written,To_Reviews_written;
 
-    private String CurrentUid;
-    private FirebaseUser CurrentUser;
-
-    UserModel Usermodel;
-
+    UserModel userModel = new UserModel();
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater,@Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -52,6 +48,11 @@ public class MyInfoFragment extends Fragment {
         if(actionBar != null){
             actionBar.setTitle("내 정보");
         }
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            userModel = (UserModel) bundle.getSerializable("userModel");
+        }
+
         //Myinfo_profileImage = (ImageView) view.findViewById(R.id.Myinfo_profileImage);
         Myinfo_profileNickName = (TextView) view.findViewById(R.id.Myinfo_profileNickName);
         Myinfo_profileUniversity = (TextView) view.findViewById(R.id.Myinfo_profileUniversity);
@@ -73,16 +74,8 @@ public class MyInfoFragment extends Fragment {
         To_Reviews_written = view.findViewById(R.id.To_Reviews_written);
         To_Reviews_written.setOnClickListener(onClickListener);
 
-        CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-        CurrentUid =CurrentUser.getUid();
 
-
-
-        Profile_Info();
-        Review_Count_Info();
-
-
-
+        Profile_Info(userModel);
 
         return view;
     }
@@ -112,49 +105,25 @@ public class MyInfoFragment extends Fragment {
         }
     };
 
-    public void Profile_Info(){
-        DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
-        docRef_MARKETS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-
-                Usermodel = documentSnapshot.toObject(UserModel.class);
-
-                Myinfo_profileNickName.setText(Usermodel.getUserModel_NickName());
-                //Myinfo_profileUniversity.setText(Usermodel.getUserModel_University());
-                if(Usermodel.getUserModel_University() == 0){
-                    Myinfo_profileUniversity.setText("홍익대학교");
-                }
-                else {
-                    Myinfo_profileUniversity.setText("고려대학교");
-                }
-                //post의 이미지 섬네일 띄우기
-                if(Usermodel.getUserModel_ProfileImage() != null){
-                    //Glide.with(getContext()).load(Usermodel.getUserModel_ProfileImage()).centerCrop().into(Myinfo_profileImage);
-                }
-                else{
-                    //Glide.with(getContext()).load(R.drawable.none_profile_user).centerCrop().into(Myinfo_profileImage);
-                }
-            }
-        });
-
-    }
-    public void Review_Count_Info(){
-
-
-        DocumentReference docRef_MARKETS_HostUid = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
-        docRef_MARKETS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Usermodel = documentSnapshot.toObject(UserModel.class);
-
-                Kind_Count.setText("X"+Usermodel.getUserModel_kindReviewList().size());
-                Complete_Count.setText("X"+Usermodel.getUserModel_completeReviewList().size());
-                Correct_Count.setText("X"+Usermodel.getUserModel_correctReviewList().size());
-                Bad_Count.setText("X"+Usermodel.getUserModel_badReviewList().size());
-
-            }
-        });
+    public void Profile_Info(UserModel Usermodel){
+        Myinfo_profileNickName.setText(Usermodel.getUserModel_NickName());
+        if(Usermodel.getUserModel_University() == 0){
+            Myinfo_profileUniversity.setText("홍익대학교");
+        }
+        else {
+            Myinfo_profileUniversity.setText("고려대학교");
+        }
+        //post의 이미지 섬네일 띄우기
+        if(Usermodel.getUserModel_ProfileImage() != null){
+            //Glide.with(getContext()).load(Usermodel.getUserModel_ProfileImage()).centerCrop().into(Myinfo_profileImage);
+        }
+        else{
+            //Glide.with(getContext()).load(R.drawable.none_profile_user).centerCrop().into(Myinfo_profileImage);
+        }
+        Kind_Count.setText("X"+Usermodel.getUserModel_kindReviewList().size());
+        Complete_Count.setText("X"+Usermodel.getUserModel_completeReviewList().size());
+        Correct_Count.setText("X"+Usermodel.getUserModel_correctReviewList().size());
+        Bad_Count.setText("X"+Usermodel.getUserModel_badReviewList().size());
 
     }
 

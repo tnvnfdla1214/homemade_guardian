@@ -209,7 +209,7 @@ public class MemberInitActivity extends BasicActivity {
     }
 
     //Usermodel에다 담은 회원정보를 USERS/CurrentUser의 Uid  에다가 넣는 함수
-    private void MemberInit_Store_Uploader(UserModel Usermodel) {                                                     // part5 : DB에 등록이 됬는지 알려주는 로직
+    private void MemberInit_Store_Uploader(final UserModel Usermodel) {                                                     // part5 : DB에 등록이 됬는지 알려주는 로직
         FirebaseFirestore docSet_USERS_Uid = FirebaseFirestore.getInstance();
         docSet_USERS_Uid.collection("USERS").document(CurrentUser.getUid()).set(Usermodel.getUserInfo())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -217,7 +217,9 @@ public class MemberInitActivity extends BasicActivity {
                     public void onSuccess(Void aVoid) {
                         showToast(MemberInitActivity.this, "회원정보 등록을 성공하였습니다.");
                         LoaderLayout.setVisibility(View.GONE);
-                        finish();                                                                       // part5 : 정보 입력시 창이 나가지게 된다.
+                        Intent intent = new Intent(getApplicationContext(), InitActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

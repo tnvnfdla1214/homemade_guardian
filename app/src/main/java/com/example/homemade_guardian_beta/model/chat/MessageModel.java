@@ -1,10 +1,11 @@
 package com.example.homemade_guardian_beta.model.chat;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MessageModel {
+public class MessageModel implements Serializable {
     private String MessageModel_UserUid; //메세지 보낸 유저의 uid
     private String MessageModel_Message; //메세지 내용
     private String Message_MessageType;          // 0: msg, 1: image, 2: file

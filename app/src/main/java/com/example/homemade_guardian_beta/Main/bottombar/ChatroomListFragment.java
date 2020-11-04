@@ -96,11 +96,8 @@ public class ChatroomListFragment extends Fragment {
         //메모 프로젝트에서는 리사이클뷰 이고 madapter는 리사이클뷰어뎁터임
         helper = new ItemTouchHelper(new ItemTouchHelperCallback(mAdapter));
         helper.attachToRecyclerView(recyclerView);                                // RecyclerView에 ItemTouchHelper 붙이기
-
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
-
         Firebasehelper = new FirebaseHelper(getActivity());
-
         return view;
     }
 

@@ -1,8 +1,9 @@
 package com.example.homemade_guardian_beta.model.community;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Community_CommentModel {
+public class Community_CommentModel implements Serializable {
     private String Community_CommentModel_Comment;    //댓글 내용
     private String Community_CommentModel_Host_Image; //댓글 작성자 프로필
     private String Community_CommentModel_Host_Uid;   //댓글 작성자 Uid

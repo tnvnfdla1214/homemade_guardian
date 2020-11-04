@@ -1,8 +1,9 @@
 package com.example.homemade_guardian_beta.model.market;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Market_CommentModel {
+public class Market_CommentModel implements Serializable {
     private String Market_CommentModel_Comment;    //댓글 내용
     private String Market_CommentModel_Host_Image; //댓글 작성자 프로필
     private String Market_CommentModel_Host_Uid;   //댓글 작성자 Uid

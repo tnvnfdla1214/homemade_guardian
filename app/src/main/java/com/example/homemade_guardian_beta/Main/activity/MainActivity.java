@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,28 +18,19 @@ import com.example.homemade_guardian_beta.Main.bottombar.MarketFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.MyInfoFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.WriteMarketFragment;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.model.user.UserModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Serializable {
 
     private String LocalState = null;
     MarketFragment marketFragment;
     WriteMarketFragment writeMarketFragment;
     ChatroomListFragment chatroomFragment;
     MyInfoFragment myinfoFragment;
-    ArrayList<String> UnReViewUserList = new ArrayList<>();
-    ArrayList<String> UnReViewMarketList = new ArrayList<>();
     CommunityFragment communityFragment;
     FrameLayout container;
 
@@ -46,14 +38,15 @@ public class MainActivity extends AppCompatActivity {
     Button Market_Write_Button;
     Button Community_Write_Button;
 
-    private RelativeLayout Writen_ButtonsBackground_Layout;          //글쓰기 바텀 버튼 누를시
+    UserModel userModel = new UserModel();
 
-    UserModel userModel;
+    private RelativeLayout Writen_ButtonsBackground_Layout;          //글쓰기 바텀 버튼 누를시
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         Writen_ButtonsBackground_Layout = findViewById(R.id.Writen_ButtonsBackground_Layout);
         Writen_ButtonsBackground_Layout.setOnClickListener(onClickListener);
@@ -69,7 +62,14 @@ public class MainActivity extends AppCompatActivity {
         communityFragment = new CommunityFragment();
 
         container = findViewById(R.id.container);
-        init();
+
+
+        Intent intent = getIntent();
+        UserModel userModel = (UserModel)intent.getSerializableExtra("userModel");
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("userModel",userModel);
+        myinfoFragment.setArguments(bundle);
+        Bottomnavigate();
     }
 
     //안드로이드 생명주기중 하나
@@ -88,45 +88,14 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case 1:
-                init();
-                break;
             case 0:
-                init();
+                Bottomnavigate();
                 break;
         }
     }
 
-    private void init() {
-        final FirebaseUser currentUser_Uid = FirebaseAuth.getInstance().getCurrentUser();                                // part5 : 로그인 시        // part22 : 운래는 옮길때 homeFragment로 옮겨졌으나 매번 불러오는것이 비효율적이라 여기로 옮김
+    private void Bottomnavigate() {
 
-        if (currentUser_Uid == null) {
-            myStartActivity(LoginActivity.class);                                                              // part5 : 로그인 정보 없으면 회원가입 화면으로
-        } else {
-            final String User_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(User_Uid);
-            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document != null) {
-                            if (document.exists()) {
-                                userModel = document.toObject(UserModel.class);
-                                UnReViewUserList = userModel.getUserModel_UnReViewUserList();
-                                UnReViewMarketList = userModel.getUserModel_UnReViewPostList();
-                                if(UnReViewUserList.size()>0){
-                                    ReviewActivity reviewActivity = new ReviewActivity(MainActivity.this);
-                                    reviewActivity.callFunction(UnReViewUserList.get(0), UnReViewMarketList.get(0));
-                                }
-                            }else {
-                                myStartActivity(MemberInitActivity.class);
-                            }
-                        }
-                    }
-                }
-            });
-        }
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, marketFragment)
                 .commit();

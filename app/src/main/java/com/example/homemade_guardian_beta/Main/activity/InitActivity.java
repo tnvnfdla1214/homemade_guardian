@@ -25,6 +25,9 @@ import java.util.ArrayList;
 
 public class InitActivity extends AppCompatActivity {
 
+    ArrayList<String> UnReViewUserList = new ArrayList<>();
+    ArrayList<String> UnReViewMarketList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +49,11 @@ public class InitActivity extends AppCompatActivity {
                                 UserModel userModel = document.toObject(UserModel.class);
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 intent.putExtra("userModel", userModel);
-
+                                intent.putExtra("Review",0);
+                                if(userModel.getUserModel_UnReViewUserList().size()>0){
+                                    ReviewActivity reviewActivity = new ReviewActivity(InitActivity.this);
+                                    reviewActivity.callFunction(userModel.getUserModel_UnReViewUserList().get(0), userModel.getUserModel_UnReViewPostList().get(0));
+                                }
                                 startActivity(intent);
                                 finish();
 

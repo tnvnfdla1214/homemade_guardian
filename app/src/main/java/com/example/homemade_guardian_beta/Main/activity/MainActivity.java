@@ -40,9 +40,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     CommunityFragment communityFragment;
     FrameLayout container;
 
-    ArrayList<String> UnReViewUserList = new ArrayList<>();
-    ArrayList<String> UnReViewMarketList = new ArrayList<>();
-
 
     Button Market_Write_Button;
     Button Community_Write_Button;
@@ -78,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         Bundle bundle = new Bundle();
         bundle.putSerializable("userModel",userModel);
         myinfoFragment.setArguments(bundle);
-        CheckReview(userModel);
         Bottomnavigate();
     }
 
@@ -101,14 +97,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             case 0:
                 Bottomnavigate();
                 break;
-        }
-    }
-    private void CheckReview(UserModel userModel){
-        UnReViewUserList = userModel.getUserModel_UnReViewUserList();
-        UnReViewMarketList = userModel.getUserModel_UnReViewPostList();
-        if(UnReViewUserList.size()>0){
-            ReviewActivity reviewActivity = new ReviewActivity(MainActivity.this);
-            reviewActivity.callFunction(UnReViewUserList.get(0), UnReViewMarketList.get(0));
         }
     }
 

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -14,6 +15,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +26,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,6 +43,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.homemade_guardian_beta.Main.activity.CustomDialog;
 import com.example.homemade_guardian_beta.chat.ChatUtil;
 import com.example.homemade_guardian_beta.chat.common.photoview.ViewPagerActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -125,6 +131,8 @@ public class ChatFragment extends Fragment {
     int Int_MessageModel_ImageCount;                                                               //string형을 int로 형변환
     String String_MessageModel_ImageCount;                                                         //int를 string으로 변환
 
+    private RelativeLayout loaderLayout;
+
     private RoomUidSetListener roomUidSetListener;
 
     public ChatFragment() {
@@ -151,6 +159,7 @@ public class ChatFragment extends Fragment {
         Chat_RecyclerView.setLayoutManager(linearLayoutManager);
         Chat_Send_Button = view.findViewById(R.id.Chat_Send_Button);
         Chat_Message_Input_EditText = view.findViewById(R.id.Chat_Message_Input_EditText);
+        loaderLayout = (RelativeLayout)view.findViewById(R.id.Loader_Lyaout);
 
         view.findViewById(R.id.Chat_Send_Button).setOnClickListener(Chat_Send_Button_ClickListener);
         view.findViewById(R.id.Chat_Image_Send_Button).setOnClickListener(Chat_Image_Send_Button_ClickListener);
@@ -159,6 +168,24 @@ public class ChatFragment extends Fragment {
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus) {
                     ChatUtil.hideKeyboard(getActivity());
+                }
+            }
+        });
+        Chat_Message_Input_EditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().getBytes().length >= 150) {
+                    Log.d("민규","150자 이상입니다.");
                 }
             }
         });
@@ -211,7 +238,6 @@ public class ChatFragment extends Fragment {
     public void Chat_User_Check(){
 
         if (getArguments() != null) {
-            Log.d("민규","1");
             ChatRoomListModel_RoomUid = getArguments().getString("RoomUid");
             To_User_Uid = getArguments().getString("To_User_Uid");
             MarketModel_Market_Uid = getArguments().getString("MarketModel_Market_Uid");
@@ -220,16 +246,13 @@ public class ChatFragment extends Fragment {
         }
 
         if (!"".equals(To_User_Uid) && To_User_Uid !=null) {                     // find existing room for two user ToUid가 널이 아니거나 ToUid가 ""이거가 아니면
-            Log.d("민규","2");
             findChatRoom(To_User_Uid);
         } else
         if (!"".equals(ChatRoomListModel_RoomUid) && ChatRoomListModel_RoomUid !=null) {                   // existing room (multi user)
-            Log.d("민규","3");
             setChatRoom(ChatRoomListModel_RoomUid);
         }
 
         if (ChatRoomListModel_RoomUid ==null) {                                         // new room for two user
-            Log.d("민규","4");
             currentUser_Uid = getArguments().getString("currentUser_Uid");
             To_User_Uid = getArguments().getString("To_User_Uid");
             getUserInfoFromServer(currentUser_Uid);
@@ -266,15 +289,12 @@ public class ChatFragment extends Fragment {
 
     // 사용자 ID로 채팅방을 찾은 후 룸 ID를 반환하는 함수
     void findChatRoom(final String toUid){
-        Log.d("민규","5");
-        Log.d("민규","MarketModel_Market_Uid : " + MarketModel_Market_Uid);
         Firestore = FirebaseFirestore.getInstance();
         Firestore.collection("ROOMS").whereEqualTo("MessageModel_PostUid",MarketModel_Market_Uid).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (!task.isSuccessful()) {return;}
-                        Log.d("민규","10");
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Map<String, Long> users = (Map<String, Long>) document.get("USERS");
@@ -289,7 +309,6 @@ public class ChatFragment extends Fragment {
 
     // 채팅방에서 사용자 목록을 가져오는 함수
     void setChatRoom(String RoomUid) {
-        Log.d("민규","6");
         ChatRoomListModel_RoomUid = RoomUid;
         Firestore = FirebaseFirestore.getInstance();
         Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -309,7 +328,6 @@ public class ChatFragment extends Fragment {
 
     //읽은 채팅창인지 아닌지 확인하는 함수 -> 이거 조금 문제 있기에 나중에 수정해야함(이름도 좀 이상함)
     void setUnread2Read() {
-        Log.d("민규","7");
         if (ChatRoomListModel_RoomUid ==null) return;
         Firestore = FirebaseFirestore.getInstance();
         Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -371,7 +389,6 @@ public class ChatFragment extends Fragment {
 
     //최초 채팅룸 만들기,1을 0으로 변경하는 함수
     public void CreateChattingRoom(final DocumentReference room) {
-        Log.d("민규","8");
         //유저의 uid와 읽었는지 않읽었는지 확인 하는 정보
         Map<String, Integer> USERS = new HashMap<>();
         for( String key : UserModel_UserList.keySet() ){
@@ -410,11 +427,9 @@ public class ChatFragment extends Fragment {
     //메세지 보내기 함수
     private void sendMessage(final String MessageModel_Message, String Message_MessageType, final ChatModel.FileInfo fileinfo, final String MarketModel_Market_Uid, String RoomUid) {
         Chat_Send_Button.setEnabled(false);
-        Log.d("라라라","RoomUid1 : " + RoomUid);
 
         //최초 룸 만들기기
         if(ChatRoomListModel_RoomUid ==null) {             // create chatting room for two user
-            Log.d("라라라","ChatRoomListModel_RoomUid1 : " + ChatRoomListModel_RoomUid);
             ChatRoomListModel_RoomUid = Firestore.collection("ROOMS").document().getId();
             CreateChattingRoom( Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid) );
 
@@ -436,7 +451,6 @@ public class ChatFragment extends Fragment {
 
 
         if(RoomUid ==null){
-            Log.d("라라라","ChatRoomListModel_RoomUid2 : " + ChatRoomListModel_RoomUid);
             final DocumentReference docRef = Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -474,7 +488,6 @@ public class ChatFragment extends Fragment {
             });
         }
         else{
-            Log.d("라라라","RoomUid2 : " + RoomUid);
             final DocumentReference docRef = Firestore.collection("ROOMS").document(RoomUid);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -522,10 +535,8 @@ public class ChatFragment extends Fragment {
         showProgressDialog("사진을 보내는 중입니다.");
         final ChatModel.FileInfo fileinfo  = getFileDetailFromUri(getContext(), fileUri); //chatmodel.fileinfo에 넣기
 
-
         Int_MessageModel_ImageCount = Int_MessageModel_ImageCount +1;
         String_MessageModel_ImageCount =String.valueOf(Int_MessageModel_ImageCount);
-        Log.d("민규123","onActivityResult Int_MessageModel_ImageCount :" + Int_MessageModel_ImageCount); //->이게 받아서 온게 아니고 처음 0으로 지정해서인거
         StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_MessageModel_ImageCount).putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -561,6 +572,7 @@ public class ChatFragment extends Fragment {
                         StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_MessageModel_ImageCount).putBytes(data);
                     }
                 });
+
     }
 
     // Uri에서 파일 이름 및 크기 가져오기 함수
@@ -624,11 +636,13 @@ public class ChatFragment extends Fragment {
         if (progressDialog==null) {
             progressDialog = new ProgressDialog(getContext());
         }
+        Log.d("민규","ㅁㄴㅇ1");
         progressDialog.setIndeterminate(true);
         progressDialog.setTitle(title);
         progressDialog.setMessage("사진을 보내는 중입니다.");
         progressDialog.setCancelable(false);
         progressDialog.show();
+        Log.d("민규","ㅁㄴㅇ2");
     }
 
     //로딩창 지우는 함수
@@ -956,7 +970,6 @@ public class ChatFragment extends Fragment {
 
     //유저 나갈때 나갔습니다. 텍스트 띄우기 함수
     public void User_GoOut(String current_Uid, final String Market_Uid,final String Room_uid){
-        Log.d("라라라","Room_uid3 : " + Room_uid);
         Firestore.collection("USERS").document(current_Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

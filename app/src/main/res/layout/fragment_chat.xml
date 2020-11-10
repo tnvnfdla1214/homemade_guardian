@@ -27,6 +27,7 @@
             android:id="@+id/Chat_Message_Input_EditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLength="150"
             android:layout_weight="1"
             />
 

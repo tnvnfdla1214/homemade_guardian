@@ -1,7 +1,11 @@
 package com.example.homemade_guardian_beta.Main.common;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,7 +16,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.market.activity.MarketActivity;
+import com.example.homemade_guardian_beta.market.adapter.MarketAdapter;
+import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.model.user.ReviewModel;
+import com.example.homemade_guardian_beta.model.user.UserModel;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.kakao.usermgmt.response.model.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,7 +36,11 @@ import java.util.Locale;
 
 public class ReviewResultAdapter extends RecyclerView.Adapter<ReviewResultAdapter.MainViewHolder> {
     private ArrayList<ReviewModel> ArrayList_ReviewModel;   //게시물에 담을 PostModel의 정보들을 담는다.
+    private ArrayList<UserModel> ArrayList_UserModel = new ArrayList<>();
+    private ArrayList<MarketModel> ArrayList_MarketModel = new ArrayList<>();
     private Activity Activity;
+    //private UserModel userModel;
+    private MarketModel marketModel;
 
     private final int MORE_INDEX = 1;                   //게시물에서 미리 표현할 사진의 개수
 
@@ -35,6 +52,11 @@ public class ReviewResultAdapter extends RecyclerView.Adapter<ReviewResultAdapte
         }
     }
 
+    public ReviewResultAdapter(Activity activity, ArrayList<ReviewModel> ArrayList_ReviewModel, ArrayList<UserModel> ArrayList_UserModel) {
+        this.ArrayList_ReviewModel = ArrayList_ReviewModel;
+        this.ArrayList_UserModel = ArrayList_UserModel;
+        this.Activity = activity;
+    }
     public ReviewResultAdapter(Activity activity, ArrayList<ReviewModel> ArrayList_ReviewModel) {
         this.ArrayList_ReviewModel = ArrayList_ReviewModel;
         this.Activity = activity;
@@ -46,6 +68,26 @@ public class ReviewResultAdapter extends RecyclerView.Adapter<ReviewResultAdapte
     public ReviewResultAdapter.MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {             // part : 게시물을 눌렀을 떄
         CardView Cardview = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_review, parent, false);
         final MainViewHolder Mainviewholder = new MainViewHolder(Cardview);
+        Cardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {                                                                   // part18 : 게시물 클릭시 게시물페이지로 이동 (36'10")
+
+                final DocumentReference documentReferenceMyUser = FirebaseFirestore.getInstance().collection("MARKETS").document(ArrayList_ReviewModel.get(Mainviewholder.getAdapterPosition()).getReviewModel_PostUid());
+                documentReferenceMyUser.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        marketModel = documentSnapshot.toObject(MarketModel.class);
+                        Intent Intent_MarketActivity = new Intent(Activity, MarketActivity.class);
+                        ArrayList_MarketModel.add(marketModel);
+                        if( ArrayList_MarketModel.size()!=0){
+                            Intent_MarketActivity.putExtra("marketInfo", ArrayList_MarketModel.get(Mainviewholder.getAdapterPosition()));
+                            Activity.startActivity(Intent_MarketActivity);
+                        }
+
+                    }
+                });
+            }
+        });
         return Mainviewholder;
     }
 
@@ -59,19 +101,41 @@ public class ReviewResultAdapter extends RecyclerView.Adapter<ReviewResultAdapte
         TextView Review = Contents_CardView.findViewById(R.id.Review);
 
         ReviewModel reviewModel = ArrayList_ReviewModel.get(position);
-        String profileImage = reviewModel.getReviewModel_To_User_ProfileImage();
-        if(profileImage != null) {
-            Glide.with(Activity).load(profileImage).centerCrop().override(500).into(Review_profileImage);         // 흐릿하게 로딩하기
-        }else {
-            Glide.with(Activity).load(R.drawable.none_profile_user).centerCrop().override(500).into(Review_profileImage);
+        Log.d("test","ArrayList_UserModel : "+ArrayList_UserModel);
+        if( ArrayList_UserModel.size()!=0){
+            UserModel userModel = ArrayList_UserModel.get(position);
+            if(userModel == null){
+                String profileImage = reviewModel.getReviewModel_To_User_ProfileImage();
+                if(profileImage != null) {
+                    Glide.with(Activity).load(profileImage).centerCrop().override(500).into(Review_profileImage);         // 흐릿하게 로딩하기
+                }else {
+                    Glide.with(Activity).load(R.drawable.none_profile_user).centerCrop().override(500).into(Review_profileImage);
+                }
+                Review_Nickname.setText(reviewModel.getReviewModel_To_User_NickName());
+            }else{
+                // 내게 쓴 리뷰이면 그사람의 닉네임과 프로필을 불러오는 것이 맞지만
+                // 내가 쓴 리뷰이면 누구한테 쓴건지를 위해 해당 게시자의 닉네임과 프로필 따와야함
+                String profileImage = userModel.getUserModel_ProfileImage();
+                if(profileImage != null) {
+                    Glide.with(Activity).load(profileImage).centerCrop().override(500).into(Review_profileImage);         // 흐릿하게 로딩하기
+                }else {
+                    Glide.with(Activity).load(R.drawable.none_profile_user).centerCrop().override(500).into(Review_profileImage);
+                }
+                Review_Nickname.setText(userModel.getUserModel_NickName());
+            }
         }
-        Review_Nickname.setText(reviewModel.getReviewModel_To_User_NickName());
+
+
+
+
+
+
         Review_DateOfManufacture.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(reviewModel.getReviewModel_DateOfManufacture()));
         switch (reviewModel.getReviewModel_Selected_Review()) {
-            case 0 : Selected_Review.setText("친절함"); break;
-            case 1 : Selected_Review.setText("정확함"); break;
-            case 2 : Selected_Review.setText("완벽함"); break;
-            case 3 : Selected_Review.setText("불쾌함"); break;
+            case 0 : Selected_Review.setText("친절함"); Selected_Review.setTextColor(Color.parseColor("#ffbf00"));break;
+            case 1 : Selected_Review.setText("정확함"); Selected_Review.setTextColor(Color.parseColor("#ffbf00")); break;
+            case 2 : Selected_Review.setText("완벽함"); Selected_Review.setTextColor(Color.parseColor("#ffbf00")); break;
+            case 3 : Selected_Review.setText("불쾌함"); Selected_Review.setTextColor(Color.parseColor("#E91E63")); break;
         }
         Review.setText(reviewModel.getReviewModel_Review());
     }

@@ -68,6 +68,8 @@ public class WriteMarketActivity extends BasicActivity {
     private TextView BorrowText;
     private TextView WorkText;
 
+    CustomDialog dialog = new CustomDialog(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +95,7 @@ public class WriteMarketActivity extends BasicActivity {
         BorrowMarketbtn.setOnClickListener(onClickListener);
         WorkMarketbtn = (ImageView) findViewById(R.id.WorkPostbtn);
         WorkMarketbtn.setOnClickListener(onClickListener);
-        loaderLayout = (RelativeLayout)findViewById(R.id.Loader_Lyaout);
+        //loaderLayout = (RelativeLayout)findViewById(R.id.Loader_Lyaout);
 
         FoodText = findViewById(R.id.FoodPostText);
         LifeText = findViewById(R.id.LifePostText);
@@ -180,7 +182,8 @@ public class WriteMarketActivity extends BasicActivity {
         if (Market_Title_EditText.length() > 0 && Category != null) {
             String MarketID = null;
             //Log.d();
-            loaderLayout.setVisibility(View.VISIBLE);
+
+            dialog.callDialog();
             final ArrayList<String> contentsList = new ArrayList<>();                                   // part11 : contentsList에는 컨텐츠 내용이
             FirebaseStorage storage = FirebaseStorage.getInstance();                                    // part12 :
             StorageReference storageRef = storage.getReference();
@@ -247,7 +250,8 @@ public class WriteMarketActivity extends BasicActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        loaderLayout.setVisibility(View.GONE);
+                        dialog.calldismiss();
+                        //loaderLayout.setVisibility(View.GONE);
                         Intent resultIntent = new Intent();
                         resultIntent.putExtra("marketinfo", marketModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                         //getActivity().setResult(RESULT_OK, resultIntent);
@@ -260,7 +264,8 @@ public class WriteMarketActivity extends BasicActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        loaderLayout.setVisibility(View.GONE);                                                  // part20 : (37'30") 보면 로딩 뒤에 있는 이미지 클릭시 이ㅏ벤트가 진행되버리는 현상을 방지
+                        dialog.calldismiss();
+                        //loaderLayout.setVisibility(View.GONE);                                                  // part20 : (37'30") 보면 로딩 뒤에 있는 이미지 클릭시 이ㅏ벤트가 진행되버리는 현상을 방지
                     }
                 });
     }

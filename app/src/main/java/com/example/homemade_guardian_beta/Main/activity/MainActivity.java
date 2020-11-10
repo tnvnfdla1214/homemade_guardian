@@ -19,7 +19,13 @@ import com.example.homemade_guardian_beta.Main.bottombar.MyInfoFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.WriteMarketFragment;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.user.UserModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     MyInfoFragment myinfoFragment;
     CommunityFragment communityFragment;
     FrameLayout container;
+
+    ArrayList<String> UnReViewUserList = new ArrayList<>();
+    ArrayList<String> UnReViewMarketList = new ArrayList<>();
 
 
     Button Market_Write_Button;
@@ -69,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         Bundle bundle = new Bundle();
         bundle.putSerializable("userModel",userModel);
         myinfoFragment.setArguments(bundle);
+        CheckReview(userModel);
         Bottomnavigate();
     }
 
@@ -93,6 +103,16 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 break;
         }
     }
+    private void CheckReview(UserModel userModel){
+        UnReViewUserList = userModel.getUserModel_UnReViewUserList();
+        UnReViewMarketList = userModel.getUserModel_UnReViewPostList();
+        if(UnReViewUserList.size()>0){
+            ReviewActivity reviewActivity = new ReviewActivity(MainActivity.this);
+            reviewActivity.callFunction(UnReViewUserList.get(0), UnReViewMarketList.get(0));
+        }
+    }
+
+
 
     private void Bottomnavigate() {
 

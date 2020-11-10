@@ -35,13 +35,13 @@
                         android:layout_height="match_parent"
                         android:src="@drawable/none_profile_user"/>
 
-                 </androidx.cardview.widget.CardView>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center_vertical"
-                        >
+                </androidx.cardview.widget.CardView>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    >
                     <TextView
                         android:id="@+id/Myinfo_profileNickName"
                         android:layout_width="match_parent"
@@ -66,7 +66,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"/>
                 <Button
-                    android:id="@+id/Change_NickName_Button"
+                    android:id="@+id/Update_Info_Buutton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="닉네임 변경"
@@ -187,118 +187,118 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/kind"
-                    android:background="@drawable/review_border"
-                    android:layout_gravity="center_horizontal"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="친절함"
-                    android:textSize="15dp"
-                    android:gravity="center_horizontal"
-                    android:textColor="#FFBF00"/>
-                <TextView
-                    android:id="@+id/Kind_Count"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="X"
-                    android:gravity="center_horizontal"
-                    android:textSize="20dp"
-                    android:textColor="#FFC107"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/correct"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/review_border"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/kind"
+                        android:background="@drawable/review_border"
+                        android:layout_gravity="center_horizontal"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="친절함"
+                        android:textSize="15dp"
+                        android:gravity="center_horizontal"
+                        android:textColor="#FFBF00"/>
+                    <TextView
+                        android:id="@+id/Kind_Count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="X"
+                        android:gravity="center_horizontal"
+                        android:textSize="20dp"
+                        android:textColor="#FFC107"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/correct"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/review_border"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="정확함"
-                    android:gravity="center_horizontal"
-                    android:textSize="15dp"
-                    android:textColor="#FFC107"/>
-                <TextView
-                    android:id="@+id/Correct_Count"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="X"
-                    android:gravity="center_horizontal"
-                    android:textSize="20dp"
-                    android:textColor="#FFC107"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="정확함"
+                        android:gravity="center_horizontal"
+                        android:textSize="15dp"
+                        android:textColor="#FFC107"/>
+                    <TextView
+                        android:id="@+id/Correct_Count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="X"
+                        android:gravity="center_horizontal"
+                        android:textSize="20dp"
+                        android:textColor="#FFC107"/>
 
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/complete"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/review_border"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="완벽함"
-                    android:gravity="center_horizontal"
-                    android:textSize="15dp"
-                    android:textColor="#FFC107"/>
-                <TextView
-                    android:id="@+id/Complete_Count"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="X"
-                    android:gravity="center_horizontal"
-                    android:textSize="20dp"
-                    android:textColor="#FFC107"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/bad"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/bad_boreder"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="불쾌함"
-                    android:gravity="center_horizontal"
-                    android:textSize="15dp"
-                    android:textColor="#E91E63"/>
-                <TextView
-                    android:id="@+id/Bad_Count"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="X"
-                    android:gravity="center_horizontal"
-                    android:textSize="20dp"
-                    android:textColor="#E91E63"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/complete"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/review_border"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="완벽함"
+                        android:gravity="center_horizontal"
+                        android:textSize="15dp"
+                        android:textColor="#FFC107"/>
+                    <TextView
+                        android:id="@+id/Complete_Count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="X"
+                        android:gravity="center_horizontal"
+                        android:textSize="20dp"
+                        android:textColor="#FFC107"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:src="@drawable/bad"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/bad_boreder"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="불쾌함"
+                        android:gravity="center_horizontal"
+                        android:textSize="15dp"
+                        android:textColor="#E91E63"/>
+                    <TextView
+                        android:id="@+id/Bad_Count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="X"
+                        android:gravity="center_horizontal"
+                        android:textSize="20dp"
+                        android:textColor="#E91E63"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
     </LinearLayout>
     <LinearLayout
@@ -364,11 +364,11 @@
             android:layout_marginTop="2dp"
             android:background="@color/color_ededee"
             android:layout_gravity="center_horizontal"/>
-<!--        <Button-->
-<!--            android:id="@+id/button"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="60dp"-->
-<!--            android:text="Button 1" />-->
+        <!--        <Button-->
+        <!--            android:id="@+id/button"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="60dp"-->
+        <!--            android:text="Button 1" />-->
     </LinearLayout>
 
 </LinearLayout>

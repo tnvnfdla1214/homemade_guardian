@@ -2,7 +2,6 @@ package com.example.homemade_guardian_beta.Main.bottombar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +16,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
-
 import com.example.homemade_guardian_beta.Main.activity.MyInfoPostActivity;
+import com.example.homemade_guardian_beta.Main.activity.UpdateInfoActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.user.UserModel;
-
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MyInfoFragment extends Fragment {
     ImageView Myinfo_profileImage;
@@ -36,7 +29,9 @@ public class MyInfoFragment extends Fragment {
     LinearLayout Proceeding_Post,Deal_Complete_Post,My_Writen_Post;
     TextView Kind_Count,Complete_Count,Correct_Count,Bad_Count;
     LinearLayout My_Reviews_written,To_Reviews_written;
-
+    Button Update_InfoBtn;
+    private String CurrentUid;
+    private FirebaseUser CurrentUser;
     UserModel userModel = new UserModel();
     @Nullable
     @Override
@@ -52,6 +47,9 @@ public class MyInfoFragment extends Fragment {
         if (bundle != null) {
             userModel = (UserModel) bundle.getSerializable("userModel");
         }
+
+        CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        CurrentUid =CurrentUser.getUid();
 
         //Myinfo_profileImage = (ImageView) view.findViewById(R.id.Myinfo_profileImage);
         Myinfo_profileNickName = (TextView) view.findViewById(R.id.Myinfo_profileNickName);
@@ -74,6 +72,8 @@ public class MyInfoFragment extends Fragment {
         To_Reviews_written = view.findViewById(R.id.To_Reviews_written);
         To_Reviews_written.setOnClickListener(onClickListener);
 
+        Update_InfoBtn = view.findViewById(R.id.Update_Info_Buutton);
+        Update_InfoBtn.setOnClickListener(onClickListener);
 
         Profile_Info(userModel);
 
@@ -99,7 +99,9 @@ public class MyInfoFragment extends Fragment {
                 case R.id.To_Reviews_written:
                     myStartActivity(MyInfoPostActivity.class,"4");
                     break;
-
+                case R.id.Update_Info_Buutton:
+                    myStartActivity(UpdateInfoActivity.class,"5");
+                    break;
 
             }
         }
@@ -130,6 +132,7 @@ public class MyInfoFragment extends Fragment {
     private void myStartActivity(Class c,String Info) {
         Intent intent = new Intent(getActivity(), c);
         intent.putExtra("Info",Info);
+        intent.putExtra("CurrentUid",CurrentUid);
         startActivityForResult(intent, 0);
     }
 

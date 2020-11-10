@@ -42,7 +42,7 @@ public class ReviewModel implements Serializable {
         return  docData;
     }
 
-
+    public ReviewModel() { }
     public String getReviewModel_Uid() {
         return ReviewModel_Uid;
     }
@@ -77,7 +77,7 @@ public class ReviewModel implements Serializable {
         return this.ReviewModel_Selected_Review;
     }
     public void setReviewModel_Selected_Review(int ReviewModel_Selected_Review){ this.ReviewModel_Selected_Review = ReviewModel_Selected_Review; }
-    
+
     public Date getReviewModel_DateOfManufacture() { return ReviewModel_DateOfManufacture; }
     public void setReviewModel_DateOfManufacture(Date ReviewModel_DateOfManufacture) { this.ReviewModel_DateOfManufacture = ReviewModel_DateOfManufacture; }
 }

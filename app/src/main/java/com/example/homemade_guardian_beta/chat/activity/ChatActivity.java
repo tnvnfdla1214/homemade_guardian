@@ -14,6 +14,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 
+import com.example.homemade_guardian_beta.Main.activity.CustomDialog;
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
@@ -50,6 +51,8 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
     FirebaseUser firebaseCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
     public static Context mcontext;
     MarketModel marketModel;
+
+    CustomDialog dialog = new CustomDialog(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +92,6 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 marketModel = documentSnapshot.toObject(MarketModel.class);
-                Log.d("이석규","marketModel.getMarketModel_Host_Uid() : " + marketModel);
                 //if문 : 주어진 MarketModel_Market_Uid로ㅓ 찾아간  marketModel이 null이면 없는 게시물이라는 것을 알려주기 위한 Nonepost_chat_MarketInfoFragment를 띄운다.
                 //else, else if문 : currentUser_Uid == PostModel_Host_Uid 일 경우 Host_Chat_PostInfoFragment를 띄우고 아니라면 guest_Chat_PostInfoFragment를 띄운다.
                 if(marketModel == null){
@@ -154,7 +156,14 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
     }
 
     public void ChatFragment_User_GoOut(String Roomuid){
-        Log.d("라라라","RoomUid4 : " + Roomuid);
         chatFragment.User_GoOut(currentUser_Uid,MarketModel_Market_Uid,Roomuid);
+    }
+
+    public void loading_callDialog(){
+        dialog.callDialog();
+    }
+
+    public void loading_calldismiss(){
+        dialog.calldismiss();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.homemade_guardian_beta.Main.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,13 +26,12 @@ import java.util.ArrayList;
 
 public class InitActivity extends AppCompatActivity {
 
-    ArrayList<String> UnReViewUserList = new ArrayList<>();
-    ArrayList<String> UnReViewMarketList = new ArrayList<>();
-
+    public static Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_init);
+        mContext =this;
 
         final FirebaseUser currentUser_Uid = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser_Uid == null) {
@@ -54,8 +54,10 @@ public class InitActivity extends AppCompatActivity {
                                     ReviewActivity reviewActivity = new ReviewActivity(InitActivity.this);
                                     reviewActivity.callFunction(userModel.getUserModel_UnReViewUserList().get(0), userModel.getUserModel_UnReViewPostList().get(0));
                                 }
-                                startActivity(intent);
-                                finish();
+                                else{
+                                    startActivity(intent);
+                                    finish();
+                                }
 
                             }else {
                                 myStartActivity(MemberInitActivity.class);
@@ -68,7 +70,7 @@ public class InitActivity extends AppCompatActivity {
 
     }
 
-    private void myStartActivity(Class c) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
+    public void myStartActivity(Class c) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
         Intent intent = new Intent(this, c);
         startActivityForResult(intent, 1);
     }

@@ -310,17 +310,17 @@ public class ReviewActivity extends BasicActivity {
 
                     }
                 });
-
                 dlg.dismiss();
+                ((InitActivity)InitActivity.mContext).myStartActivity(MainActivity.class);
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, "취소 했습니다.", Toast.LENGTH_SHORT).show();
-
                 // 커스텀 다이얼로그를 종료한다.
                 dlg.dismiss();
+                ((InitActivity)InitActivity.mContext).myStartActivity(MainActivity.class);
             }
         });
         WriteReview_Button.setOnClickListener(new View.OnClickListener() {

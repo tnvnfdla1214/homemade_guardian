@@ -165,5 +165,6 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
 
     public void loading_calldismiss(){
         dialog.calldismiss();
+        Log.d("민규","사진 시작3");
     }
 }

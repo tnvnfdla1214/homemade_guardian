@@ -45,6 +45,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.homemade_guardian_beta.Main.activity.CustomDialog;
 import com.example.homemade_guardian_beta.chat.ChatUtil;
+import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.chat.common.photoview.ViewPagerActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -531,8 +532,10 @@ public class ChatFragment extends Fragment {
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         if (resultCode!= RESULT_OK) { return;}
+        Log.d("민규","사진 시작1");
+        ((ChatActivity)getActivity()).loading_callDialog();
         Uri fileUri = data.getData(); //해당 사진
-        showProgressDialog("사진을 보내는 중입니다.");
+        //showProgressDialog("사진을 보내는 중입니다.");
         final ChatModel.FileInfo fileinfo  = getFileDetailFromUri(getContext(), fileUri); //chatmodel.fileinfo에 넣기
 
         Int_MessageModel_ImageCount = Int_MessageModel_ImageCount +1;
@@ -556,7 +559,7 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        hideProgressDialog();
+        //hideProgressDialog();
         if (requestCode != PICK_FROM_ALBUM) { return;}
         // small image
         Glide.with(getContext())
@@ -572,7 +575,8 @@ public class ChatFragment extends Fragment {
                         StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_MessageModel_ImageCount).putBytes(data);
                     }
                 });
-
+        Log.d("민규","사진 시작2");
+        ((ChatActivity)getActivity()).loading_calldismiss();
     }
 
     // Uri에서 파일 이름 및 크기 가져오기 함수

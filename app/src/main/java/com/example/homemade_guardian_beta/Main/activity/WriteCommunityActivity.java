@@ -60,6 +60,7 @@ public class WriteCommunityActivity extends BasicActivity {
 
     public final static int REQUEST_CODE = 1;
 
+    CustomDialog dialog = new CustomDialog(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +78,7 @@ public class WriteCommunityActivity extends BasicActivity {
         PhotoList2 = (ImageView)findViewById(R.id.PhotoList2);
         PhotoList3 = (ImageView)findViewById(R.id.PhotoList3);
         PhotoList4 = (ImageView)findViewById(R.id.PhotoList4);
-        loaderLayout = (RelativeLayout)findViewById(R.id.Loader_Lyaout);
+        //loaderLayout = (RelativeLayout)findViewById(R.id.Loader_Lyaout);
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -153,9 +154,12 @@ public class WriteCommunityActivity extends BasicActivity {
         final String HotCommunity = "X";
 
         if (Community_Title_EditText.length() > 0) {
+
+            dialog.callDialog();
+
             String CommunityID = null;
             //Log.d();
-            loaderLayout.setVisibility(View.VISIBLE);
+            //loaderLayout.setVisibility(View.VISIBLE);
             final ArrayList<String> contentsList = new ArrayList<>();                                   // part11 : contentsList에는 컨텐츠 내용이
             FirebaseStorage storage = FirebaseStorage.getInstance();                                    // part12 :
             StorageReference storageRef = storage.getReference();
@@ -219,7 +223,8 @@ public class WriteCommunityActivity extends BasicActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        loaderLayout.setVisibility(View.GONE);
+                        dialog.calldismiss();
+                        //loaderLayout.setVisibility(View.GONE);
                         Intent resultIntent = new Intent();
                         resultIntent.putExtra("communityInfo", communityModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                         //getActivity().setResult(RESULT_OK, resultIntent);
@@ -231,7 +236,8 @@ public class WriteCommunityActivity extends BasicActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        loaderLayout.setVisibility(View.GONE);                                                  // part20 : (37'30") 보면 로딩 뒤에 있는 이미지 클릭시 이ㅏ벤트가 진행되버리는 현상을 방지
+                        dialog.calldismiss();
+                        //loaderLayout.setVisibility(View.GONE);                                                  // part20 : (37'30") 보면 로딩 뒤에 있는 이미지 클릭시 이ㅏ벤트가 진행되버리는 현상을 방지
                     }
                 });
     }

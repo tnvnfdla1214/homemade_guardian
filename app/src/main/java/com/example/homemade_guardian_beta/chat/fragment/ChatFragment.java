@@ -136,6 +136,8 @@ public class ChatFragment extends Fragment {
 
     private RoomUidSetListener roomUidSetListener;
 
+    //CustomDialog dialog = new CustomDialog(getActivity().getApplicationContext());
+
     public ChatFragment() {
     }
 
@@ -532,7 +534,9 @@ public class ChatFragment extends Fragment {
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         if (resultCode!= RESULT_OK) { return;}
-        Log.d("민규","사진 시작1");
+
+        //dialog.callDialog();
+        //Log.d("민규","사진 시작1");
         ((ChatActivity)getActivity()).loading_callDialog();
         Uri fileUri = data.getData(); //해당 사진
         //showProgressDialog("사진을 보내는 중입니다.");
@@ -575,8 +579,10 @@ public class ChatFragment extends Fragment {
                         StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_MessageModel_ImageCount).putBytes(data);
                     }
                 });
-        Log.d("민규","사진 시작2");
+        //Log.d("민규","사진 시작2");
         ((ChatActivity)getActivity()).loading_calldismiss();
+
+        //dialog.calldismiss();
     }
 
     // Uri에서 파일 이름 및 크기 가져오기 함수

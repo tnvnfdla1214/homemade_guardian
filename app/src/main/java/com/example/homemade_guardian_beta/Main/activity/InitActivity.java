@@ -50,11 +50,15 @@ public class InitActivity extends AppCompatActivity {
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 intent.putExtra("userModel", userModel);
                                 intent.putExtra("Review",0);
+                                Log.d("test1","InitActivity : "+userModel);
+                                Log.d("test1","InitActivity : "+userModel.getUserModel_NickName());
                                 if(userModel.getUserModel_UnReViewUserList().size()>0){
                                     ReviewActivity reviewActivity = new ReviewActivity(InitActivity.this);
-                                    reviewActivity.callFunction(userModel.getUserModel_UnReViewUserList().get(0), userModel.getUserModel_UnReViewPostList().get(0));
+                                    reviewActivity.callFunction(userModel.getUserModel_UnReViewUserList().get(0), userModel.getUserModel_UnReViewPostList().get(0),userModel);
                                 }
                                 else{
+                                    Log.d("test1","InitActivity 아래 : "+userModel);
+                                    Log.d("test1","InitActivity 아래 : "+userModel.getUserModel_NickName());
                                     startActivity(intent);
                                     finish();
                                 }
@@ -74,10 +78,11 @@ public class InitActivity extends AppCompatActivity {
         Intent intent = new Intent(this, c);
         startActivityForResult(intent, 1);
     }
-    private void myStartFinishActivity(Class c) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
+    public void myStartFinishActivity(Class c, UserModel userModel) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
         Intent intent = new Intent(this, c);
+        intent.putExtra("userModel", userModel);
         startActivityForResult(intent, 1);
-        finish();
+
     }
 
 }

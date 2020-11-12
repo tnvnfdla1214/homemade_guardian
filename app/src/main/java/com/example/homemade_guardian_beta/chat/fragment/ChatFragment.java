@@ -136,7 +136,6 @@ public class ChatFragment extends Fragment {
 
     private RoomUidSetListener roomUidSetListener;
 
-    //CustomDialog dialog = new CustomDialog(getActivity().getApplicationContext());
 
     public ChatFragment() {
     }
@@ -502,7 +501,7 @@ public class ChatFragment extends Fragment {
                     // save message
                     List<String> ReadUsers = new ArrayList();
                     ReadUsers.add(currentUser_Uid);
-                    MessageModel.put("MessageModel_ReadUser", ReadUsers);//new String[]{myUid} );
+                    MessageModel.put("MessageModel_ReadUser", ReadUsers);
                     batch.set(docRef.collection("MESSAGE").document(), MessageModel);
                     // inc unread message count
                     DocumentSnapshot document = task.getResult();
@@ -536,23 +535,22 @@ public class ChatFragment extends Fragment {
         if (resultCode!= RESULT_OK) { return;}
 
         //dialog.callDialog();
-        //Log.d("민규","사진 시작1");
-        ((ChatActivity)getActivity()).loading_callDialog();
+        //((ChatActivity)getActivity()).loading_callDialog();
         Uri fileUri = data.getData(); //해당 사진
         //showProgressDialog("사진을 보내는 중입니다.");
         final ChatModel.FileInfo fileinfo  = getFileDetailFromUri(getContext(), fileUri); //chatmodel.fileinfo에 넣기
-
         Int_MessageModel_ImageCount = Int_MessageModel_ImageCount +1;
         String_MessageModel_ImageCount =String.valueOf(Int_MessageModel_ImageCount);
         StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_MessageModel_ImageCount).putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                sendMessage(String_MessageModel_ImageCount, Integer.toString(requestCode), fileinfo, MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
+                //sendMessage(String_MessageModel_ImageCount, Integer.toString(requestCode), fileinfo, MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
                 //추가 ()
                 DocumentReference docRefe_ROOMS_CurrentUid = FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid);
                 docRefe_ROOMS_CurrentUid.update("MessageModel_ImageCount", String_MessageModel_ImageCount).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        sendMessage(String_MessageModel_ImageCount, Integer.toString(requestCode), fileinfo, MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
                     }
                 })
                         .addOnFailureListener(new OnFailureListener() {
@@ -562,7 +560,6 @@ public class ChatFragment extends Fragment {
                         });
             }
         });
-
         //hideProgressDialog();
         if (requestCode != PICK_FROM_ALBUM) { return;}
         // small image
@@ -579,9 +576,6 @@ public class ChatFragment extends Fragment {
                         StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_MessageModel_ImageCount).putBytes(data);
                     }
                 });
-        //Log.d("민규","사진 시작2");
-        ((ChatActivity)getActivity()).loading_calldismiss();
-
         //dialog.calldismiss();
     }
 
@@ -646,13 +640,11 @@ public class ChatFragment extends Fragment {
         if (progressDialog==null) {
             progressDialog = new ProgressDialog(getContext());
         }
-        Log.d("민규","ㅁㄴㅇ1");
         progressDialog.setIndeterminate(true);
         progressDialog.setTitle(title);
         progressDialog.setMessage("사진을 보내는 중입니다.");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        Log.d("민규","ㅁㄴㅇ2");
     }
 
     //로딩창 지우는 함수

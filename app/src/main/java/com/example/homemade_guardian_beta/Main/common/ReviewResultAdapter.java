@@ -21,14 +21,20 @@ import com.example.homemade_guardian_beta.market.adapter.MarketAdapter;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.model.user.ReviewModel;
 import com.example.homemade_guardian_beta.model.user.UserModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.kakao.usermgmt.response.model.User;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 //SearchResultFragment와 연결된 어댑터이다. onBindViewHolder로 카드뷰에 검색된 게시물의 정보들을 담는 역할을 한다. !검색된 결과의 게시물 나열!
@@ -52,11 +58,6 @@ public class ReviewResultAdapter extends RecyclerView.Adapter<ReviewResultAdapte
         }
     }
 
-    public ReviewResultAdapter(Activity activity, ArrayList<ReviewModel> ArrayList_ReviewModel, ArrayList<UserModel> ArrayList_UserModel) {
-        this.ArrayList_ReviewModel = ArrayList_ReviewModel;
-        this.ArrayList_UserModel = ArrayList_UserModel;
-        this.Activity = activity;
-    }
     public ReviewResultAdapter(Activity activity, ArrayList<ReviewModel> ArrayList_ReviewModel) {
         this.ArrayList_ReviewModel = ArrayList_ReviewModel;
         this.Activity = activity;
@@ -77,12 +78,12 @@ public class ReviewResultAdapter extends RecyclerView.Adapter<ReviewResultAdapte
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         marketModel = documentSnapshot.toObject(MarketModel.class);
+                        ArrayList_UserModel = new ArrayList<>();
                         Intent Intent_MarketActivity = new Intent(Activity, MarketActivity.class);
                         ArrayList_MarketModel.add(marketModel);
-                        if( ArrayList_MarketModel.size()!=0){
-                            Intent_MarketActivity.putExtra("marketInfo", ArrayList_MarketModel.get(Mainviewholder.getAdapterPosition()));
+                            Intent_MarketActivity.putExtra("marketInfo",marketModel);
                             Activity.startActivity(Intent_MarketActivity);
-                        }
+
 
                     }
                 });
@@ -99,9 +100,25 @@ public class ReviewResultAdapter extends RecyclerView.Adapter<ReviewResultAdapte
         TextView Review_DateOfManufacture = Contents_CardView.findViewById(R.id.Review_DateOfManufacture);
         TextView Selected_Review = Contents_CardView.findViewById(R.id.Selected_Review);
         TextView Review = Contents_CardView.findViewById(R.id.Review);
+        final TextView Review_University = Contents_CardView.findViewById(R.id.Review_University);
 
         ReviewModel reviewModel = ArrayList_ReviewModel.get(position);
         Log.d("test","ArrayList_UserModel : "+ArrayList_UserModel);
+
+        final DocumentReference documentReferenceReview = FirebaseFirestore.getInstance().collection("USERS").document(reviewModel.getReviewModel_To_User_Uid());
+        documentReferenceReview.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                UserModel userModel = documentSnapshot.toObject(UserModel.class);
+                int University = userModel.getUserModel_University();
+                if(University == 0){
+                    Review_University.setText("홍익대학교");
+                }else {
+                    Review_University.setText("고려대학교");
+                }
+            }
+        });
+
 
         String profileImage = reviewModel.getReviewModel_To_User_ProfileImage();
         if(profileImage != null) {
@@ -111,7 +128,7 @@ public class ReviewResultAdapter extends RecyclerView.Adapter<ReviewResultAdapte
         }
         Review_Nickname.setText(reviewModel.getReviewModel_To_User_NickName());
 
-        Review_DateOfManufacture.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(reviewModel.getReviewModel_DateOfManufacture()));
+        Review_DateOfManufacture.setText(new SimpleDateFormat("MM/dd hh:mm", Locale.getDefault()).format(reviewModel.getReviewModel_DateOfManufacture()));
         switch (reviewModel.getReviewModel_Selected_Review()) {
             case 0 : Selected_Review.setText("친절함"); Selected_Review.setTextColor(Color.parseColor("#ffbf00"));break;
             case 1 : Selected_Review.setText("정확함"); Selected_Review.setTextColor(Color.parseColor("#ffbf00")); break;

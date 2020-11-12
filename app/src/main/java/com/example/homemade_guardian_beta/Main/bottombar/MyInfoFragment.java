@@ -28,7 +28,7 @@ public class MyInfoFragment extends Fragment {
     TextView Myinfo_profileNickName, Myinfo_profileUniversity;
     LinearLayout Proceeding_Post,Deal_Complete_Post,My_Writen_Post;
     TextView Kind_Count,Complete_Count,Correct_Count,Bad_Count;
-    LinearLayout My_Reviews_written,To_Reviews_written;
+    LinearLayout LogOut_Button,To_Reviews_written;
     Button Update_InfoBtn;
     private String CurrentUid;
     private FirebaseUser CurrentUser;
@@ -67,8 +67,8 @@ public class MyInfoFragment extends Fragment {
         Correct_Count = (TextView) view.findViewById(R.id.Correct_Count);
         Bad_Count = (TextView) view.findViewById(R.id.Bad_Count);
 
-        My_Reviews_written = view.findViewById(R.id.My_Reviews_written);
-        My_Reviews_written.setOnClickListener(onClickListener);
+        LogOut_Button = view.findViewById(R.id.LogOut_Button);
+        LogOut_Button.setOnClickListener(onClickListener);
         To_Reviews_written = view.findViewById(R.id.To_Reviews_written);
         To_Reviews_written.setOnClickListener(onClickListener);
 
@@ -84,31 +84,30 @@ public class MyInfoFragment extends Fragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.Deal_Complete_Post:
+                case R.id.Proceeding_Post:
                     myStartActivity(MyInfoPostActivity.class,"0");
                     break;
-                case R.id.My_Reviews_written:
+                case R.id.Deal_Complete_Post:
                     myStartActivity(MyInfoPostActivity.class,"1");
                     break;
                 case R.id.My_Writen_Post:
                     myStartActivity(MyInfoPostActivity.class,"2");
                     break;
-                case R.id.Proceeding_Post:
+                case R.id.To_Reviews_written:
                     myStartActivity(MyInfoPostActivity.class,"3");
                     break;
-                case R.id.To_Reviews_written:
-                    myStartActivity(MyInfoPostActivity.class,"4");
-                    break;
                 case R.id.Update_Info_Buutton:
-                    myStartActivity(UpdateInfoActivity.class,"5");
+                    //myStartActivity(UpdateInfoActivity.class,"4");
                     break;
-
+                case R.id.LogOut_Button:
+                    //
+                    break;
             }
         }
     };
 
     public void Profile_Info(UserModel Usermodel){
-        Myinfo_profileNickName.setText(Usermodel.getUserModel_NickName());
+        //Myinfo_profileNickName.setText(Usermodel.getUserModel_NickName());
         if(Usermodel.getUserModel_University() == 0){
             Myinfo_profileUniversity.setText("홍익대학교");
         }

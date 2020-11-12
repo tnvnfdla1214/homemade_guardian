@@ -1,6 +1,7 @@
 package com.example.homemade_guardian_beta.chat.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,13 +17,19 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.homemade_guardian_beta.Main.activity.InitActivity;
+import com.example.homemade_guardian_beta.Main.activity.MainActivity;
+import com.example.homemade_guardian_beta.Main.activity.MemberInitActivity;
 import com.example.homemade_guardian_beta.Main.activity.ReviewActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -380,9 +387,32 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                         }
                     });
 
+                    
+                    final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
+                    documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document != null) {
+                                    if (document.exists()) {  //데이터의 존재여부
+                                        UserModel userModel = document.toObject(UserModel.class);
+                                        ReviewActivity reviewActivity = new ReviewActivity(getContext());
+                                        reviewActivity.callFunction(To_User_Uid, MarketModel_Market_Uid, userModel);
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+
+
+
                     //리뷰 창 띄우기
+                    /*
                     ReviewActivity reviewActivity = new ReviewActivity(getContext());
                     reviewActivity.callFunction(To_User_Uid, MarketModel_Market_Uid);
+                     */
 
                 }else{
 

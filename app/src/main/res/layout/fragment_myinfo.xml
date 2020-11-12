@@ -153,7 +153,7 @@
         <RelativeLayout
             android:layout_width="340dp"
             android:layout_height="1dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginTop="10dp"
             android:background="@color/color_ededee"
             android:layout_gravity="center_horizontal"
@@ -319,28 +319,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@color/color_ededee"
                     android:layout_gravity="center_horizontal"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:orientation="vertical"
-                    android:id="@+id/My_Reviews_written">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:textSize="18dp"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_vertical"
-                        android:text="내가 작성한 리뷰" />
-                </LinearLayout>
-                <RelativeLayout
-                    android:layout_width="340dp"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginTop="2dp"
-                    android:background="@color/color_ededee"
-                    android:layout_gravity="center_horizontal"
-                    />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
@@ -364,11 +343,21 @@
             android:layout_marginTop="2dp"
             android:background="@color/color_ededee"
             android:layout_gravity="center_horizontal"/>
-        <!--        <Button-->
-        <!--            android:id="@+id/button"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="60dp"-->
-        <!--            android:text="Button 1" />-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="vertical"
+            android:id="@+id/LogOut_Button">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:text="로그아웃 하기" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

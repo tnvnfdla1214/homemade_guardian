@@ -236,7 +236,7 @@ public class ChatroomListFragment extends Fragment {
                 Glide.with(getActivity()).load(chatRoomListModel.getChatRoomListModel_ProfileImage()).centerCrop().override(500).into(roomViewHolder.room_image);
             }
             else{
-                Glide.with(getActivity()).load(R.drawable.user).into(roomViewHolder.room_image);
+                Glide.with(getActivity()).load(R.drawable.none_profile_user).into(roomViewHolder.room_image);
             }
 
             if (chatRoomListModel.getChatRoomListModel_NumberOfUser() > 2) {

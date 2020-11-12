@@ -69,8 +69,9 @@ public class To_Review_Writen_Fragment extends Fragment {
     }
     private void MarketUpdate(final boolean clear) {
 
+        Date date =  new Date();
         CollectionReference collectionReference = firebaseFirestore.collection("USERS").document(CurrentUid).collection("REVIEW");
-        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        collectionReference.orderBy("ReviewModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("ReviewModel_DateOfManufacture", date).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {

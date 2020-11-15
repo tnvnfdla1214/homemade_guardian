@@ -387,7 +387,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                         }
                     });
 
-                    
+
                     final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
                     documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override

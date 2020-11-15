@@ -1,7 +1,9 @@
 package com.example.homemade_guardian_beta.Main.bottombar;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,8 @@ public class MyInfoFragment extends Fragment {
     private String CurrentUid;
     private FirebaseUser CurrentUser;
     UserModel userModel = new UserModel();
+    UpdateInfoActivity updateInfoActivity;
+
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater,@Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -45,8 +49,16 @@ public class MyInfoFragment extends Fragment {
         }
         Bundle bundle = getArguments();
         if (bundle != null) {
+            userModel = new UserModel();
             userModel = (UserModel) bundle.getSerializable("userModel");
         }
+
+//        updateInfoActivity = new UpdateInfoActivity();
+//        Intent intent = getActivity().getIntent();
+//        UserModel userModel = (UserModel)intent.getSerializableExtra("userModel");
+//        Bundle Tobundle = new Bundle();
+//        Tobundle.putSerializable("userModel",userModel);
+//        updateInfoActivity.setArguments(Tobundle);
 
         CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         CurrentUid =CurrentUser.getUid();
@@ -97,7 +109,7 @@ public class MyInfoFragment extends Fragment {
                     myStartActivity(MyInfoPostActivity.class,"3");
                     break;
                 case R.id.Update_Info_Buutton:
-                    //myStartActivity(UpdateInfoActivity.class,"4");
+                    myStartActivity(UpdateInfoActivity.class,"4");
                     break;
                 case R.id.LogOut_Button:
                     //
@@ -106,8 +118,25 @@ public class MyInfoFragment extends Fragment {
         }
     };
 
+    public void setUsermodel(Intent data){
+        userModel = new UserModel();
+        userModel = (UserModel) data.getExtras().getSerializable("userModel");
+        Profile_Info(userModel);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0) {
+            if (resultCode == Activity.RESULT_OK) {
+                Log.d("dataa", "data: " + data);
+                //setUsermodel(data);
+                Log.d("dataa", "userModel2: " + userModel.getUserModel_NickName());
+            }
+        }
+    }
+
     public void Profile_Info(UserModel Usermodel){
-        //Myinfo_profileNickName.setText(Usermodel.getUserModel_NickName());
+        Myinfo_profileNickName.setText(Usermodel.getUserModel_NickName());
         if(Usermodel.getUserModel_University() == 0){
             Myinfo_profileUniversity.setText("홍익대학교");
         }
@@ -132,6 +161,7 @@ public class MyInfoFragment extends Fragment {
         Intent intent = new Intent(getActivity(), c);
         intent.putExtra("Info",Info);
         intent.putExtra("CurrentUid",CurrentUid);
+        intent.putExtra("userModel",userModel);
         startActivityForResult(intent, 0);
     }
 

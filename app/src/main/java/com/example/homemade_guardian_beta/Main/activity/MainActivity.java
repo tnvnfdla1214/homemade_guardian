@@ -3,6 +3,7 @@ package com.example.homemade_guardian_beta.Main.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
 
         Intent intent = getIntent();
-        UserModel userModel = (UserModel)intent.getSerializableExtra("userModel");
+        userModel = (UserModel)intent.getSerializableExtra("userModel");
         Bundle bundle = new Bundle();
         bundle.putSerializable("userModel",userModel);
         myinfoFragment.setArguments(bundle);
@@ -90,6 +91,15 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         super.onPause();
     }
 
+    public void setUsermodel(Intent data){
+        MyInfoFragment myinfoFragment = new MyInfoFragment();
+        userModel = new UserModel();
+        userModel = (UserModel) data.getExtras().getSerializable("userModel");
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("userModel",userModel);
+        myinfoFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, myinfoFragment).commit();
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -97,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             case 0:
                 Bottomnavigate();
                 break;
+        }
+        if (resultCode == Activity.RESULT_OK) {
+            setUsermodel(data);
         }
     }
 

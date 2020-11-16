@@ -118,6 +118,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                 }
                 if(!marketModel.getMarketModel_reservation().equals("X")){
                     Chat_MarketInfo_reservation.setChecked(true);
+                    Chat_MarketInfo_deal.setEnabled(true);
                     reservationsetting =1;
                 }
 

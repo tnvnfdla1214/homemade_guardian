@@ -78,7 +78,6 @@ public class ReviewActivity extends BasicActivity {
         // 커스텀 다이얼로그의 각 위젯들을 정의한다.
         final Button WriteReview_Button = (Button) dlg.findViewById(R.id.WriteReview_Button);
         final Button okButton = (Button) dlg.findViewById(R.id.okButton);
-        final Button cancelButton = (Button) dlg.findViewById(R.id.cancelButton);
         final TextView Writen_Review_TextView = (TextView) dlg.findViewById(R.id.Writen_Review_TextView);
 
         final CheckBox kind = dlg.findViewById(R.id.kind);
@@ -362,17 +361,7 @@ public class ReviewActivity extends BasicActivity {
 
             }
         });
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "취소 했습니다.", Toast.LENGTH_SHORT).show();
-                // 커스텀 다이얼로그를 종료한다.
-                dlg.dismiss();
-                Log.d("test1","ReviewActivity 아래 : "+currentuserModel);
-                Log.d("test1","ReviewActivity 아래 : "+currentuserModel.getUserModel_NickName());
-                ((InitActivity)InitActivity.mContext).myStartFinishActivity(MainActivity.class, currentuserModel);
-            }
-        });
+
         WriteReview_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -73,12 +74,23 @@ public class PhotoPickerActivity extends AppCompatActivity {
   //저장경로의 접근권한 요청
   private void checkExternalStoragePermission(){
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+      Log.d("민규","1");
       if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+        Log.d("민규","2");
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+
       } else {
+        Log.d("민규","3");
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+          checkCameraPermission();
+        }
+        else{
+          finish();
+        }
       }
     }else {
+      Log.d("민규","4");
       checkCameraPermission();
     }
   }
@@ -196,14 +208,14 @@ public class PhotoPickerActivity extends AppCompatActivity {
     }
   }
 
-   // 앨범 화면에서 사진을 클릭하여 크게 볼때
+  // 앨범 화면에서 사진을 클릭하여 크게 볼때
   public void addImagePagerFragment(ImagePagerFragment imagePagerFragment) {
     this.ImagePagerFragment = imagePagerFragment;
     getSupportFragmentManager()
-        .beginTransaction()
-        .replace(R.id.Photo_Container, this.ImagePagerFragment)
-        .addToBackStack(null)
-        .commit();
+            .beginTransaction()
+            .replace(R.id.Photo_Container, this.ImagePagerFragment)
+            .addToBackStack(null)
+            .commit();
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {

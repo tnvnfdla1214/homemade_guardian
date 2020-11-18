@@ -89,11 +89,11 @@ public class Guest_Chat_MarketInfoFragment extends Fragment {
                 //X : 예약이나 거래완료 사항이 없음 !X : [호스트]의 상대방 Uid
                 if(!marketModel.getMarketModel_reservation().equals("X")){
                     if(!marketModel.getMarketModel_deal().equals("X")) {
-                        Chat_MarketInfo_dealText.setText("[거래완료]");
-                        Chat_MarketInfo_dealText.setTextColor(Color.parseColor("#e65d5d"));
+                        Chat_MarketInfo_dealText.setText("거래완료");
+                        Chat_MarketInfo_dealText.setTextColor(Color.parseColor("#505050"));
                     }
                     else{
-                        Chat_MarketInfo_dealText.setText("[예약중]");
+                        Chat_MarketInfo_dealText.setText("예약중");
                         Chat_MarketInfo_dealText.setTextColor(Color.parseColor("#e65d5d"));
                     }
                 }

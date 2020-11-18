@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.example.homemade_guardian_beta.Main.activity.Loding_Dialog;
+import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.Main.activity.MyInfoPostActivity;
 import com.example.homemade_guardian_beta.Main.activity.UpdateInfoActivity;
 import com.example.homemade_guardian_beta.R;
@@ -36,6 +38,7 @@ public class MyInfoFragment extends Fragment {
     private FirebaseUser CurrentUser;
     UserModel userModel = new UserModel();
     UpdateInfoActivity updateInfoActivity;
+
 
     @Nullable
     @Override
@@ -112,7 +115,7 @@ public class MyInfoFragment extends Fragment {
                     myStartActivity(UpdateInfoActivity.class,"4");
                     break;
                 case R.id.LogOut_Button:
-                    //
+                    ((MainActivity)getActivity()).Logout_dialog();
                     break;
             }
         }

@@ -2,8 +2,6 @@ package com.example.homemade_guardian_beta.Main.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -60,7 +58,7 @@ public class WriteCommunityActivity extends BasicActivity {
 
     public final static int REQUEST_CODE = 1;
 
-    CustomDialog dialog = new CustomDialog(this);
+    Loding_Dialog dialog = new Loding_Dialog(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

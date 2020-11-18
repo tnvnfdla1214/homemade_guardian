@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     MyInfoFragment myinfoFragment;
     CommunityFragment communityFragment;
     FrameLayout container;
+    public static Context mContext;
 
 
     Button Market_Write_Button;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mContext = this;
 
 
         Writen_ButtonsBackground_Layout = findViewById(R.id.Writen_ButtonsBackground_Layout);
@@ -170,9 +173,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         Intent intent = new Intent(this, c);
         startActivityForResult(intent, 1);
     }
-    private void myStartFinishActivity(Class c) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
+    public void myStartFinishActivity(Class c) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
         Intent intent = new Intent(this, c);
         startActivityForResult(intent, 1);
         finish();
+    }
+    public void Logout_dialog(){
+        Logout_Dialog Logout_Dialog = new Logout_Dialog(this);
+        Logout_Dialog.callFunction();
     }
 }

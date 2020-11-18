@@ -9,9 +9,9 @@ import android.widget.Toast;
 
 import com.example.homemade_guardian_beta.R;
 
-public class CustomDialog {
+public class Loding_Dialog {
     private Context context;
-    public CustomDialog(Context context)
+    public Loding_Dialog(Context context)
     {
         this.context = context;
     }

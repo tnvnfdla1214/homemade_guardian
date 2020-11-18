@@ -7,14 +7,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 
-import com.example.homemade_guardian_beta.Main.activity.CustomDialog;
+import com.example.homemade_guardian_beta.Main.activity.Loding_Dialog;
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
@@ -24,7 +23,6 @@ import com.example.homemade_guardian_beta.chat.fragment.Nonepost_chat_MarketInfo
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -52,7 +50,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
     public static Context mcontext;
     MarketModel marketModel;
 
-    CustomDialog dialog = new CustomDialog(this);
+    Loding_Dialog dialog = new Loding_Dialog(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

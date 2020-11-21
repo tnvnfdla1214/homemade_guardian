@@ -268,4 +268,11 @@ public class WriteCommunityActivity extends BasicActivity {
             }
         }
     };
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent3 = new Intent(WriteCommunityActivity.this, InitActivity.class);
+        startActivity(intent3);
+        finish();
+    }
 }

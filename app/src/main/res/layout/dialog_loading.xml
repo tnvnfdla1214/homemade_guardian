@@ -3,12 +3,8 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#ffffff">
+    android:background="@drawable/border_layout">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000"/>
     <TextView
         android:id="@+id/title"
         android:layout_width="300dp"
@@ -18,10 +14,11 @@
         android:text="잠시만 기다려주세요...!!"/>
     <RelativeLayout
         android:id="@+id/Loader_Lyaout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="#ffffff"
-        android:clickable="true">
+        android:clickable="true"
+        android:layout_gravity="center">
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -35,8 +32,4 @@
         android:layout_width="300dp"
         android:layout_height="20dp"
         android:gravity="center" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000000"/>
 </LinearLayout>

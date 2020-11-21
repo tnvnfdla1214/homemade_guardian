@@ -2,12 +2,19 @@ package com.example.homemade_guardian_beta.community.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
+import com.example.homemade_guardian_beta.community.adapter.SearchCommunityResultAdapter;
+import com.example.homemade_guardian_beta.market.activity.SearchResultActivity;
+
+import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 
 // 검색을 실행하려 하고 검색하고자 하는 단어를 입력 받는 액티비티이다.
 //      Ex) 메인프레그먼트에서 검색버튼을 눌러 넘어온다.
@@ -15,7 +22,7 @@ import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
 
 public class SearchCommunityActivity extends BasicActivity {
     private EditText SearchCommunity;    //검색하고자 하는 단어 입력 받는 EditText
-    private Button Title_Search_Button;    //검색을 실행하는 버튼
+    private ImageView searchbtn;      //검색을 실행하는 버튼
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,16 +30,29 @@ public class SearchCommunityActivity extends BasicActivity {
         setToolbarTitle("검색");
 
         SearchCommunity = findViewById(R.id.Search_PostTitle);
-        Title_Search_Button = findViewById(R.id.Search_PostTitle_Button);
-        Title_Search_Button.setOnClickListener(onClickListener);
-    }
+        searchbtn = findViewById(R.id.searchbtn);
+        searchbtn.setOnClickListener(onClickListener);
 
-    //검색버튼의 OnClickListener
+        SearchCommunity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                switch (actionId)
+                {
+                    case IME_ACTION_SEARCH :
+                        String Search = SearchCommunity.getText().toString();
+                        myStartActivity(SearchCommunityResultActivity.class,Search);
+                        break;
+                }
+                return true;
+            }
+        });
+    }
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.Search_PostTitle_Button:
+                case R.id.searchbtn:
                     String Search = SearchCommunity.getText().toString();
                     myStartActivity(SearchCommunityResultActivity.class,Search);
                     break;

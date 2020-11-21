@@ -276,6 +276,13 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        moveTaskToBack(true);
+        finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
 
 }
 

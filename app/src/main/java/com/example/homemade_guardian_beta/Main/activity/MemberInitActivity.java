@@ -242,4 +242,5 @@ public class MemberInitActivity extends BasicActivity {
         String[] parts = email.split("@");
         return parts[0];
     }
+
 }

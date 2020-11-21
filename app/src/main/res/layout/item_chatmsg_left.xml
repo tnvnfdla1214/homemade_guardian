@@ -40,17 +40,13 @@
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:orientation="horizontal">
-        <androidx.cardview.widget.CardView
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/User_Profile_Imalge"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:cardCornerRadius="20dp">
-
-            <ImageView
-                android:id="@+id/User_Profile_Imalge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/user" />
-        </androidx.cardview.widget.CardView>
+            android:src="@drawable/none_profile_user"
+            app:civ_border_color="#FF000000"/>
 
         <LinearLayout
             android:orientation="vertical"

@@ -121,7 +121,7 @@ public class WriteMarketActivity extends BasicActivity {
             if (data != null) {
                 photos = data.getStringArrayListExtra(PhotoPickerActivity.KEY_SELECTED_PHOTOS);
             }
-            if (photos != null) {
+            if (photos != null || selectedPhotos!=null) {
                 selectedPhotos.addAll(photos);
                 for(int i=0;i<photos.size();i++){
                     switch (i){
@@ -254,7 +254,7 @@ public class WriteMarketActivity extends BasicActivity {
                         resultIntent.putExtra("marketinfo", marketModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                         //getActivity().setResult(RESULT_OK, resultIntent);
                         setResult(Activity.RESULT_OK, resultIntent);
-                        Intent intentpage = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent intentpage = new Intent(getApplicationContext(), InitActivity.class);
                         startActivity(intentpage);
                         finish();
                     }
@@ -322,7 +322,7 @@ public class WriteMarketActivity extends BasicActivity {
                     Category = "용역";
                     break;
                 case R.id.back_Button:
-                    Intent intent3 = new Intent(WriteMarketActivity.this, MainActivity.class);
+                    Intent intent3 = new Intent(WriteMarketActivity.this, InitActivity.class);
                     startActivity(intent3);
                     finish();
                     break;
@@ -342,5 +342,12 @@ public class WriteMarketActivity extends BasicActivity {
             }
         }
     };
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent3 = new Intent(WriteMarketActivity.this, InitActivity.class);
+        startActivity(intent3);
+        finish();
+    }
 
 }

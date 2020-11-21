@@ -77,11 +77,13 @@ public class InitActivity extends AppCompatActivity {
     public void myStartActivity(Class c) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
         Intent intent = new Intent(this, c);
         startActivityForResult(intent, 1);
+        finish();
     }
     public void myStartFinishActivity(Class c, UserModel userModel) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
         Intent intent = new Intent(this, c);
         intent.putExtra("userModel", userModel);
         startActivityForResult(intent, 1);
+        finish();
 
     }
 

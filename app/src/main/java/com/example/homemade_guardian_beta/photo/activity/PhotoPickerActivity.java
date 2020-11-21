@@ -61,15 +61,28 @@ public class PhotoPickerActivity extends AppCompatActivity {
   /** to prevent multiple calls to inflate menu */
   private boolean MenuIsInflated = false;
   private boolean ShowGif = false;
+  @Override
+  public void onStart() {
+    super.onStart();
+    Log.d("민규","222222");
+    //checkExternalStoragePermission();
+    Log.d("민규","2222222");
+  }
 
-  @Override protected void onCreate(Bundle savedInstanceState) {
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.util_activity_photo_picker);
     checkExternalStoragePermission();
   }
 
   @Override
-  protected void onResume() { super.onResume(); }
+  protected void onResume() {
+    super.onResume();
+//    Log.d("민규","3333333");
+//    checkExternalStoragePermission();
+//    Log.d("민규","333333");
+  }
 
   //저장경로의 접근권한 요청
   private void checkExternalStoragePermission(){

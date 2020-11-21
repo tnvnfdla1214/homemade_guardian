@@ -2,12 +2,17 @@ package com.example.homemade_guardian_beta.market.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
+import android.widget.ImageView;
+import android.widget.TextView;
+import static android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH;
 import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
 import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.community.activity.SearchCommunityResultActivity;
 
 // 검색을 실행하려 하고 검색하고자 하는 단어를 입력 받는 액티비티이다.
 //      Ex) 메인프레그먼트에서 검색버튼을 눌러 넘어온다.
@@ -15,7 +20,7 @@ import com.example.homemade_guardian_beta.R;
 
 public class SearchActivity extends BasicActivity {
     private EditText SearchMarket;    //검색하고자 하는 단어 입력 받는 EditText
-    private Button Title_Search_Button;    //검색을 실행하는 버튼
+    private ImageView searchbtn;    //검색을 실행하는 버튼
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,16 +28,30 @@ public class SearchActivity extends BasicActivity {
         setToolbarTitle("검색");
 
         SearchMarket = findViewById(R.id.Search_PostTitle);
-        Title_Search_Button = findViewById(R.id.Search_PostTitle_Button);
-        Title_Search_Button.setOnClickListener(onClickListener);
-    }
+        searchbtn = findViewById(R.id.searchbtn);
+        searchbtn.setOnClickListener(onClickListener);
 
+        SearchMarket.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+            {
+                switch (actionId)
+                {
+                    case IME_ACTION_SEARCH :
+                        String Search = SearchMarket.getText().toString();
+                        myStartActivity(SearchResultActivity.class,Search);
+                        break;
+                }
+                return true;
+            }
+        });
+    }
     //검색버튼의 OnClickListener
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.Search_PostTitle_Button:
+                case R.id.searchbtn:
                     String Search = SearchMarket.getText().toString();
                     myStartActivity(SearchResultActivity.class,Search);
                     break;

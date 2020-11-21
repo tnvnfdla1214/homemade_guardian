@@ -1,5 +1,6 @@
 package com.example.homemade_guardian_beta.photo.common;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,10 @@ import android.util.Log;
 
 import androidx.core.content.FileProvider;
 
+import com.example.homemade_guardian_beta.Main.activity.InitActivity;
+import com.example.homemade_guardian_beta.Main.activity.WriteMarketActivity;
+import com.example.homemade_guardian_beta.photo.PhotoUtil;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -22,7 +27,7 @@ import java.util.Date;
 //  PhotoPickerFragment에 나열되어 있는 이미지, 카메라 버튼 중에 카메라 버튼을 누르면 실행되는 이벤트이다.
 //    (PhotoPickerFragment) -> ImageCaptureManager
 
-public class ImageCaptureManager {
+public class ImageCaptureManager extends Activity {
 
   private final static String CAPTURED_PHOTO_PATH_KEY = "mCurrentPhotoPath";
   public static final int REQUEST_TAKE_PHOTO = 1;
@@ -32,6 +37,7 @@ public class ImageCaptureManager {
   public ImageCaptureManager(Context Context) {
     this.Context = Context;
   }
+  public final static int REQUEST_CODE = 1;
 
   //찍은 이미지의 이름과 형식을 설정
   private File createImageFile() throws IOException {
@@ -132,4 +138,18 @@ public class ImageCaptureManager {
       CurrentPhotoPath = savedInstanceState.getString(CAPTURED_PHOTO_PATH_KEY);
     }
   }
+  @Override
+  public void onBackPressed() {
+    super.onBackPressed();
+    PhotoUtil intent2 = new PhotoUtil(getApplicationContext());
+    intent2.setMaxSelectCount(5);
+    intent2.setShowCamera(true);
+    intent2.setShowGif(true);
+    intent2.setSelectCheckBox(false);
+    intent2.setMaxGrideItemCount(3);
+    startActivityForResult(intent2, REQUEST_CODE);
+    finish();
+  }
+
+
 }

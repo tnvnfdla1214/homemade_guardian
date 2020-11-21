@@ -60,16 +60,13 @@
                 android:orientation="horizontal"
                 android:padding="10dp">
 
-                <androidx.cardview.widget.CardView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/Host_UserPage_ImageButton"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    app:cardCornerRadius="20dp">
-
-                    <ImageView
-                        android:id="@+id/Host_UserPage_ImageButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </androidx.cardview.widget.CardView>
+                    android:src="@drawable/none_profile_user"
+                    app:civ_border_color="#FF000000"/>
 
                 <LinearLayout
                     android:id="@+id/RelativeLayout01"
@@ -164,11 +161,17 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="horizontal">
+
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/Chat_With_PostHost_Button"
+            android:layout_width="80dp"
+            android:layout_height="35dp"
+            android:layout_marginVertical="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/chatbutton_layout"
             android:text="채팅하기"
-            android:id="@+id/Chat_With_PostHost_Button"/>
+            android:textColor="@color/img_loding_placeholder" />
         <com.example.homemade_guardian_beta.Main.common.BackPressEditText
             android:id="@+id/Comment_Input_EditText"
             android:layout_width="wrap_content"
@@ -176,6 +179,7 @@
             android:layout_weight="1"
             android:hint="댓글을 입력하세요"
             android:focusable="false"
+            android:layout_marginTop="5dp"
             />
 
         <Button

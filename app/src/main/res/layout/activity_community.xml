@@ -62,18 +62,13 @@
                 android:orientation="horizontal"
                 android:padding="10dp">
 
-                <androidx.cardview.widget.CardView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/Host_UserPage_ImageButton"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-
-                    app:cardCornerRadius="20dp">
-
-                    <ImageView
-                        android:id="@+id/Host_UserPage_ImageButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/none_profile_user"/>
-                </androidx.cardview.widget.CardView>
+                    android:src="@drawable/none_profile_user"
+                    app:civ_border_color="#FF000000"/>
 
                 <LinearLayout
                     android:id="@+id/RelativeLayout01"

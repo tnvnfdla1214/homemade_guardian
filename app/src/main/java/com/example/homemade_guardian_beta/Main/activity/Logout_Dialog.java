@@ -42,8 +42,8 @@ public class Logout_Dialog {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                ((MainActivity)context).myStartFinishActivity(LoginActivity.class);
                 dlg.dismiss();
+                ((MainActivity)context).myStartFinishActivity(LoginActivity.class);
             }
         });
 

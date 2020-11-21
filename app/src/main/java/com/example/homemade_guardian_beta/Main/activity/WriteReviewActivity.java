@@ -2,6 +2,8 @@ package com.example.homemade_guardian_beta.Main.activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -25,6 +27,7 @@ public class WriteReviewActivity extends BasicActivity {
     public void callFunction(final TextView Writen_Review_TextView) {
         final Dialog dlg = new Dialog(context);
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dlg.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dlg.setContentView(R.layout.activity_writereview);
         dlg.show();
 //        setContentView(R.layout.activity_writereview);

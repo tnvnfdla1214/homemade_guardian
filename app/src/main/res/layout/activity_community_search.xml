@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,32 +10,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@+id/toolbar"
-        android:id="@+id/Linearlayout">
+        android:id="@+id/Linearlayout"
+        android:layout_marginTop="10dp">
 
-    <EditText
-        android:id="@+id/Search_PostTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="검색 할 단어를 입력하세요"
-        android:inputType="textPersonName"
+        <EditText
+            android:id="@+id/Search_PostTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="9"
+            android:ems="10"
+            android:hint=" 검색 할 단어를 입력하세요"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"/>
 
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"/>
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-    <Button
-        android:id="@+id/Search_PostTitle_Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="검색" />
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/searchbtn"
+            android:layout_width="30dp"
+            android:layout_height="32dp"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:src="@drawable/search"
+            app:layout_constraintEnd_toEndOf="@+id/Search_PostTitle"
+            tools:ignore="MissingConstraints"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

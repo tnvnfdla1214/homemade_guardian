@@ -385,6 +385,8 @@ public class MarketActivity extends BasicActivity {                             
                         LikeList.add(CurrentUid);
                         if (LikeList.size() > 0) {
                             marketmodel.setMarketModel_HotMarket("O");
+                        }if (LikeList.size() <= 0) {
+                            marketmodel.setMarketModel_HotMarket("X");
                         }
                         marketmodel.setMarketModel_LikeList(LikeList);
 
@@ -410,6 +412,9 @@ public class MarketActivity extends BasicActivity {                             
                         LikeList.remove(CurrentUid);
                         if (LikeList.size() > 0) {
                             marketmodel.setMarketModel_HotMarket("O");
+                        }
+                        if (LikeList.size() <= 0) {
+                            marketmodel.setMarketModel_HotMarket("X");
                         }
                         marketmodel.setMarketModel_LikeList(LikeList);
 

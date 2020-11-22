@@ -69,6 +69,10 @@ public class UpdateInfoActivity extends BasicActivity {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
+//                                Intent Resultintent = new Intent(UpdateInfoActivity.this, MainActivity.class);
+//                                Resultintent.putExtra("userModel", userModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
+//                                startActivity(Resultintent);
+
                                 Intent Resultintent = new Intent();
                                 Resultintent.putExtra("userModel", userModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                                 setResult(Activity.RESULT_OK, Resultintent);

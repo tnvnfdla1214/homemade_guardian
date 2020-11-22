@@ -250,19 +250,20 @@ public class WriteMarketActivity extends BasicActivity {
                     public void onSuccess(Void aVoid) {
                         dialog.calldismiss();
                         //loaderLayout.setVisibility(View.GONE);
-                        Intent resultIntent = new Intent();
-                        resultIntent.putExtra("marketinfo", marketModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
+                        //Intent resultIntent = new Intent();
+                        //resultIntent.putExtra("marketinfo", marketModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                         //getActivity().setResult(RESULT_OK, resultIntent);
-                        setResult(Activity.RESULT_OK, resultIntent);
-                        Intent intentpage = new Intent(getApplicationContext(), InitActivity.class);
-                        startActivity(intentpage);
+                        //setResult(Activity.RESULT_OK, resultIntent);
+                        //Intent intentpage = new Intent(getApplicationContext(), MainActivity.class);
+                        //startActivity(intentpage);
                         finish();
+                        dialog.calldismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        dialog.calldismiss();
+                        //dialog.calldismiss();
                         //loaderLayout.setVisibility(View.GONE);                                                  // part20 : (37'30") 보면 로딩 뒤에 있는 이미지 클릭시 이ㅏ벤트가 진행되버리는 현상을 방지
                     }
                 });
@@ -322,8 +323,6 @@ public class WriteMarketActivity extends BasicActivity {
                     Category = "용역";
                     break;
                 case R.id.back_Button:
-                    Intent intent3 = new Intent(WriteMarketActivity.this, InitActivity.class);
-                    startActivity(intent3);
                     finish();
                     break;
                 case R.id.camera_Button_Layout:
@@ -345,8 +344,6 @@ public class WriteMarketActivity extends BasicActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent3 = new Intent(WriteMarketActivity.this, InitActivity.class);
-        startActivity(intent3);
         finish();
     }
 

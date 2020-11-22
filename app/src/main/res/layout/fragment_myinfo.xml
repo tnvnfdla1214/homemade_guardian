@@ -95,7 +95,8 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_weight="1"
-                    android:id="@+id/Proceeding_Post">
+                    android:id="@+id/Proceeding_Post"
+                    android:background="?attr/selectableItemBackground">
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
@@ -114,7 +115,8 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_weight="1"
-                    android:id="@+id/Deal_Complete_Post">
+                    android:id="@+id/Deal_Complete_Post"
+                    android:background="?attr/selectableItemBackground">
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
@@ -134,7 +136,8 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:layout_weight="1"
-                    android:id="@+id/My_Writen_Post">
+                    android:id="@+id/My_Writen_Post"
+                    android:background="?attr/selectableItemBackground">
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
@@ -324,7 +327,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:orientation="vertical"
-                    android:id="@+id/To_Reviews_written">
+                    android:id="@+id/To_Reviews_written"
+                    android:background="?attr/selectableItemBackground">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -348,7 +352,8 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:orientation="vertical"
-            android:id="@+id/LogOut_Button">
+            android:id="@+id/LogOut_Button"
+            android:background="?attr/selectableItemBackground">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

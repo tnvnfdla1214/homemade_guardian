@@ -108,8 +108,10 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.MainViewHo
         market_state.setText("");
         GradientDrawable state_none= (GradientDrawable) ContextCompat.getDrawable(this.Activity, R.drawable.state_none);
         market_state.setBackground(state_none);
+        market_state.setVisibility(View.INVISIBLE);
         ///////////////////////////////////////////////////////////////////////////////////////////////
         if(!marketModel.getMarketModel_reservation().equals("X")){
+            market_state.setVisibility(View.VISIBLE);
             if(!marketModel.getMarketModel_deal().equals("X")){
                 ///////////////////////////////////////////////////////////////////////////////////////////////
 

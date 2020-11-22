@@ -124,34 +124,34 @@ public class MainActivity extends AppCompatActivity implements Serializable {
                 .replace(R.id.container, marketFragment)
                 .commit();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);            // part22 : 바텀 네비게이션바  설정 (47'20")
-                bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.Market:
-                                MarketFragment marketFragment = new MarketFragment();
-                                getSupportFragmentManager().beginTransaction().replace(R.id.container, marketFragment).commit();
-                                Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
-                                return true;
-                            case R.id.Community:
-                                getSupportFragmentManager().beginTransaction().replace(R.id.container, communityFragment).commit();
-                                Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
-                                return true;
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.Market:
+                        MarketFragment marketFragment = new MarketFragment();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, marketFragment).commit();
+                        Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
+                        return true;
+                    case R.id.Community:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, communityFragment).commit();
+                        Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
+                        return true;
 
-                            case R.id.Writepost:
-                                Writen_ButtonsBackground_Layout.setVisibility(View.VISIBLE);
-                                getSupportFragmentManager().beginTransaction().replace(R.id.container, writeMarketFragment).commit();
-                                return true;
-                            case R.id.Chatroomlist:
-                                getSupportFragmentManager().beginTransaction().replace(R.id.container, chatroomFragment).commit();
-                                Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
-                                return true;
-                            case R.id.Myinfo:
-                                getSupportFragmentManager().beginTransaction().replace(R.id.container, myinfoFragment).commit();
-                                Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
-                                return true;
-                        }
-                        return false;
+                    case R.id.Writepost:
+                        Writen_ButtonsBackground_Layout.setVisibility(View.VISIBLE);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, writeMarketFragment).commit();
+                        return true;
+                    case R.id.Chatroomlist:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, chatroomFragment).commit();
+                        Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
+                        return true;
+                    case R.id.Myinfo:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, myinfoFragment).commit();
+                        Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
+                        return true;
+                }
+                return false;
             }
         });
     }
@@ -160,10 +160,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.Market_Write_Button:
-                    myStartFinishActivity(WriteMarketActivity.class);
+                    myStartActivity(WriteMarketActivity.class);
                     break;
                 case R.id.Community_Write_Button:
-                    myStartFinishActivity(WriteCommunityActivity.class);
+                    myStartActivity(WriteCommunityActivity.class);
                     break;
             }
         }

@@ -54,6 +54,7 @@ public class MyInfoFragment extends Fragment {
         if (bundle != null) {
             userModel = new UserModel();
             userModel = (UserModel) bundle.getSerializable("userModel");
+            Log.d("userModel", "userModel: " + userModel);
         }
 
 //        updateInfoActivity = new UpdateInfoActivity();

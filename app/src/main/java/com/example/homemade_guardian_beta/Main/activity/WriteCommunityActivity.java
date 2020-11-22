@@ -223,12 +223,14 @@ public class WriteCommunityActivity extends BasicActivity {
                     public void onSuccess(Void aVoid) {
                         dialog.calldismiss();
                         //loaderLayout.setVisibility(View.GONE);
-                        Intent resultIntent = new Intent();
-                        resultIntent.putExtra("communityInfo", communityModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
+                        //Intent resultIntent = new Intent();
+                        //resultIntent.putExtra("communityInfo", communityModel);                                    // part19 : 수정 후 수정된 정보 즉시 반영 (80')
                         //getActivity().setResult(RESULT_OK, resultIntent);
-                        setResult(Activity.RESULT_OK, resultIntent);
-                        Intent intentpage = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(intentpage);
+                        //setResult(Activity.RESULT_OK, resultIntent);
+                        //Intent intentpage = new Intent(getApplicationContext(), MainActivity.class);
+                        //startActivity(intentpage);
+                        finish();
+                        dialog.calldismiss();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -245,8 +247,6 @@ public class WriteCommunityActivity extends BasicActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.back_Button:
-                    Intent intent3 = new Intent(WriteCommunityActivity.this, MainActivity.class);
-                    startActivity(intent3);
                     finish();
                     break;
 
@@ -271,8 +271,6 @@ public class WriteCommunityActivity extends BasicActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent3 = new Intent(WriteCommunityActivity.this, InitActivity.class);
-        startActivity(intent3);
         finish();
     }
 }

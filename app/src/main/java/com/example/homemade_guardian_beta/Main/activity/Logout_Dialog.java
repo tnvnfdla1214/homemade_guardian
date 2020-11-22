@@ -30,6 +30,7 @@ public class Logout_Dialog {
 
         // 커스텀 다이얼로그의 레이아웃을 설정한다.
         dlg.setContentView(R.layout.dialog_logout);
+        dlg.setCancelable(false);
 
         // 커스텀 다이얼로그를 노출한다.
         dlg.show();

@@ -343,6 +343,9 @@ public class CommunityActivity extends BasicActivity {                          
                         if (LikeList.size() > 0) {
                             communityModel.setCommunityModel_HotCommunity("O");
                         }
+                        if (LikeList.size() <= 0) {
+                            communityModel.setCommunityModel_HotCommunity("X");
+                        }
                         communityModel.setCommunityModel_LikeList(LikeList);
 
                         documentReference.set(communityModel.getCommunityInfo())
@@ -367,6 +370,9 @@ public class CommunityActivity extends BasicActivity {                          
                         LikeList.remove(CurrentUid);
                         if (LikeList.size() > 0) {
                             communityModel.setCommunityModel_HotCommunity("O");
+                        }
+                        if (LikeList.size() <= 0) {
+                            communityModel.setCommunityModel_HotCommunity("X");
                         }
                         communityModel.setCommunityModel_LikeList(LikeList);
 

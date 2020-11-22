@@ -23,7 +23,8 @@
         android:id="@+id/camera_Button_Layout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp">
         <ImageView
             android:id="@+id/camera_Button"
             android:layout_width="25dp"
@@ -35,7 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#ffffff"
-            android:text="0/5"/>
+            android:text="0/5"
+            android:layout_gravity="center"/>
 
 
     </LinearLayout>

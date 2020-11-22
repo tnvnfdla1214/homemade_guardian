@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,11 +22,17 @@ import androidx.fragment.app.Fragment;
 import com.example.homemade_guardian_beta.Main.activity.Loding_Dialog;
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.Main.activity.MyInfoPostActivity;
+import com.example.homemade_guardian_beta.Main.activity.ReviewActivity;
 import com.example.homemade_guardian_beta.Main.activity.UpdateInfoActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.user.UserModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MyInfoFragment extends Fragment {
     ImageView Myinfo_profileImage;
@@ -50,12 +57,7 @@ public class MyInfoFragment extends Fragment {
         if(actionBar != null){
             actionBar.setTitle("내 정보");
         }
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            userModel = new UserModel();
-            userModel = (UserModel) bundle.getSerializable("userModel");
-            Log.d("userModel", "userModel: " + userModel);
-        }
+
 
 //        updateInfoActivity = new UpdateInfoActivity();
 //        Intent intent = getActivity().getIntent();
@@ -90,10 +92,30 @@ public class MyInfoFragment extends Fragment {
 
         Update_InfoBtn = view.findViewById(R.id.Update_Info_Buutton);
         Update_InfoBtn.setOnClickListener(onClickListener);
-
-        Profile_Info(userModel);
+        Log.d("userModel", "userModel: " + userModel);
+        getUserModel(CurrentUid);
+        Log.d("userModel", "userModel: " + userModel);
 
         return view;
+    }
+
+    public void getUserModel(String CurrentUid){
+        final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (document.exists()) {  //데이터의 존재여부
+                            userModel = document.toObject(UserModel.class);
+                            Profile_Info(userModel);
+                        }
+                    }
+                }
+            }
+        });
+        return;
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -133,7 +155,7 @@ public class MyInfoFragment extends Fragment {
         if (requestCode == 0) {
             if (resultCode == Activity.RESULT_OK) {
                 Log.d("dataa", "data: " + data);
-                //setUsermodel(data);
+                getUserModel(CurrentUid);
                 Log.d("dataa", "userModel2: " + userModel.getUserModel_NickName());
             }
         }

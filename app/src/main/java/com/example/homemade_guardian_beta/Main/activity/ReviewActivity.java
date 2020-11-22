@@ -356,7 +356,7 @@ public class ReviewActivity extends BasicActivity {
                         }
                     });
                     dlg.dismiss();
-                    ((InitActivity)InitActivity.mContext).myStartFinishActivity(MainActivity.class, currentuserModel);
+                    //((InitActivity)InitActivity.mContext).myStartFinishActivity(MainActivity.class, currentuserModel);
                 }else {
                     Toast.makeText(context, "리뷰를 작성해 주세요!", Toast.LENGTH_SHORT).show();
                 }

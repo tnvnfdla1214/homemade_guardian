@@ -272,8 +272,7 @@ public class CommunityActivity extends BasicActivity {                          
                 switch (menuItem.getItemId()) {
                     case R.id.Post_Delete_Button:
                         Firebasehelper.Community_Storagedelete(communityModel);
-                        Intent Intent_MainActivity = new Intent(CommunityActivity.this, MainActivity.class);
-                        startActivity(Intent_MainActivity);
+                        finish();
                         return true;
                     case R.id.Post_Modify_Button:
                         myStartActivity(ModifyCommunityActivity.class, communityModel);

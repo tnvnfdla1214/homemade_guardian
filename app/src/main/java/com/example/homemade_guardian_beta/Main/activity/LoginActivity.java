@@ -271,7 +271,7 @@ public class LoginActivity extends AppCompatActivity {
     //이동 함수수
     private void updateUI(FirebaseUser Curruntuser_uid) { //update ui code here
         if (Curruntuser_uid != null) {
-            Intent intent = new Intent(this, InitActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
         }

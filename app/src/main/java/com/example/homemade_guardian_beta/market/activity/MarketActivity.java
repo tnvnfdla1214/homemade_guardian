@@ -294,8 +294,9 @@ public class MarketActivity extends BasicActivity {                             
                 switch (menuItem.getItemId()) {
                     case R.id.Post_Delete_Button:
                         Firebasehelper.Market_Storagedelete(marketmodel);
-                        Intent Intent_MainActivity = new Intent(MarketActivity.this, MainActivity.class);
-                        startActivity(Intent_MainActivity);
+//                        Intent Intent_MainActivity = new Intent(MarketActivity.this, MainActivity.class);
+//                        startActivity(Intent_MainActivity);
+                        finish();
                         return true;
                     case R.id.Post_Modify_Button:
                         myStartActivity(ModifyMarketActivity.class, marketmodel);

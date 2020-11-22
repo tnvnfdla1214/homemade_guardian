@@ -1,5 +1,6 @@
 package com.example.homemade_guardian_beta.Main.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -53,13 +54,14 @@ public class InitActivity extends AppCompatActivity {
                                 Log.d("test1","InitActivity : "+userModel);
                                 Log.d("test1","InitActivity : "+userModel.getUserModel_NickName());
                                 if(userModel.getUserModel_UnReViewUserList().size()>0){
-                                    ReviewActivity reviewActivity = new ReviewActivity(InitActivity.this);
-                                    reviewActivity.callFunction(userModel.getUserModel_UnReViewUserList().get(0), userModel.getUserModel_UnReViewPostList().get(0),userModel);
+                                    //ReviewActivity reviewActivity = new ReviewActivity(InitActivity.this);
+                                    //reviewActivity.callFunction(userModel.getUserModel_UnReViewUserList().get(0), userModel.getUserModel_UnReViewPostList().get(0),userModel);
                                 }
                                 else{
                                     Log.d("test1","InitActivity 아래 : "+userModel);
                                     Log.d("test1","InitActivity 아래 : "+userModel.getUserModel_NickName());
-                                    startActivity(intent);
+                                    setResult(Activity.RESULT_OK, intent);
+                                    startActivityForResult(intent, 0);
                                     finish();
                                 }
 

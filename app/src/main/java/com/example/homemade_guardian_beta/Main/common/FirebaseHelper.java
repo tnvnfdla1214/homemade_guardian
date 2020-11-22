@@ -1,6 +1,7 @@
 package com.example.homemade_guardian_beta.Main.common;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.Main.common.listener.OnPostListener;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
+import com.example.homemade_guardian_beta.market.activity.MarketActivity;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.model.community.Community_CommentModel;
@@ -99,26 +101,32 @@ public class FirebaseHelper {                                                   
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     userModel = documentSnapshot.toObject(UserModel.class);
-                    Market_reservationList = userModel.getUserModel_Market_reservationList();
-                    Market_reservationList.remove(marketModel.getMarketModel_Market_Uid());
-                    userModel.setUserModel_Market_reservationList(Market_reservationList);
-                    Market_dealList = userModel.getUserModel_Market_dealList();
-                    Market_dealList.remove(marketModel.getMarketModel_Market_Uid());
-                    userModel.setUserModel_Market_dealList(Market_dealList);
+                    if(userModel != null){
+                        if(userModel.getUserModel_Market_reservationList() != null){
+                            Market_reservationList = userModel.getUserModel_Market_reservationList();
+                            Market_reservationList.remove(marketModel.getMarketModel_Market_Uid());
+                            userModel.setUserModel_Market_reservationList(Market_reservationList);
+                        }
+                        if(userModel.getUserModel_Market_dealList() != null){
+                            Market_dealList = userModel.getUserModel_Market_dealList();
+                            Market_dealList.remove(marketModel.getMarketModel_Market_Uid());
+                            userModel.setUserModel_Market_dealList(Market_dealList);
+                        }
+                        final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(reserved_Uid);
+                        documentReferencesetToUser.set(userModel.getUserInfo())
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
 
-                    final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(reserved_Uid);
-                    documentReferencesetToUser.set(userModel.getUserInfo())
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                    }
+                                });
+                    }
 
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                }
-                            });
                 }
             });
             // market이 삭제되면, 나의 USER에서 진행중이거나 거래완료된 market의 uid삭제

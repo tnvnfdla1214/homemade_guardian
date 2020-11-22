@@ -217,7 +217,7 @@ public class MemberInitActivity extends BasicActivity {
                     public void onSuccess(Void aVoid) {
                         showToast(MemberInitActivity.this, "회원정보 등록을 성공하였습니다.");
                         LoaderLayout.setVisibility(View.GONE);
-                        Intent intent = new Intent(getApplicationContext(), InitActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                         finish();
                     }

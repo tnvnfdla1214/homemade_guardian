@@ -17,7 +17,6 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.example.homemade_guardian_beta.Main.activity.InitActivity;
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.Main.activity.MemberInitActivity;
 import com.example.homemade_guardian_beta.Main.activity.ReviewActivity;

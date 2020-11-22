@@ -13,7 +13,6 @@ import android.util.Log;
 
 import androidx.core.content.FileProvider;
 
-import com.example.homemade_guardian_beta.Main.activity.InitActivity;
 import com.example.homemade_guardian_beta.Main.activity.WriteMarketActivity;
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
 

@@ -3,9 +3,14 @@ package com.example.homemade_guardian_beta.chat.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.TestLooperManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -52,6 +57,8 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
 
     Loding_Dialog dialog = new Loding_Dialog(this);
 
+    private ImageView back_Button;
+    private TextView RoomTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +67,6 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
 
         To_User_Uid = getIntent().getStringExtra("To_User_Uid");     //MyInfoFragment에서 받아옴 ,PostActivity 받아옴, ChatroomListFragment에서 받아옴, 포스트에선 아마 못받아올듯
         ChatRoomListModel_RoomUid = getIntent().getStringExtra("RoomUid");     //ChatRoomListFragment에서 받아옴
@@ -69,8 +74,16 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         MarketModel_Market_Uid = getIntent().getStringExtra("MarketModel_Market_Uid"); //PostActivity에서 받아옴//ChatRoomListFragment에서 받아옴
         currentUser_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();  //현재 누구냐의 따라 포스트 정보 프레그먼트가 달라진다.
 
-
-        if (ChatRoomListModel_Title!=null) { actionBar.setTitle(ChatRoomListModel_Title); }
+        actionBar.setTitle("");
+        RoomTitle =  findViewById(R.id.RoomTitle);
+        RoomTitle.setText(ChatRoomListModel_Title);
+        back_Button =  findViewById(R.id.back_Button);
+        back_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         // chatting area

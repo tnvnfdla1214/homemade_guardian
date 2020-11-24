@@ -114,6 +114,10 @@ public class MemberInitActivity extends BasicActivity {
                     SelectedImagePath = data.getStringExtra(INTENT_PATH);
                     Glide.with(this).load(SelectedImagePath).centerCrop().override(500).into(Profile_ImageView);
                 }
+                if(resultCode == Activity.RESULT_CANCELED){
+                    SelectedImagePath = null;
+                    Glide.with(this).load(R.drawable.non_userprofile_v2).centerInside().into(Profile_ImageView);
+                }
                 break;
             }
         }

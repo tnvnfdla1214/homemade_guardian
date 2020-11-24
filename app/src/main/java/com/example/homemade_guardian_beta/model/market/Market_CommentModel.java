@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Market_CommentModel implements Serializable {
-    private String Market_CommentModel_Comment;    //댓글 내용
-    private String Market_CommentModel_Host_Image; //댓글 작성자 프로필
-    private String Market_CommentModel_Host_Uid;   //댓글 작성자 Uid
-    private String Market_CommentModel_Host_Name;  //댓글 작성자 이름
-    private String Market_CommentModel_Market_Uid;   //댓글이 쓰여진 게시물의 Uid
-    private String Market_CommentModel_Comment_Uid;//댓글의 Uid
-    private Date Market_CommentModel_DateOfManufacture;    //댓글 작성 시간
+    private String Market_CommentModel_Comment;             //댓글 내용
+    private String Market_CommentModel_Host_Image;          //댓글 작성자 프로필
+    private String Market_CommentModel_Host_Uid;            //댓글 작성자 Uid
+    private String Market_CommentModel_Host_Name;           //댓글 작성자 이름
+    private String Market_CommentModel_Market_Uid;          //댓글이 쓰여진 게시물의 Uid
+    private String Market_CommentModel_Comment_Uid;         //댓글의 Uid
+    private Date Market_CommentModel_DateOfManufacture;     //댓글 작성 시간
 
     public Market_CommentModel(String Market_CommentModel_Host_Uid, String Market_CommentModel_Comment, Date Market_CommentModel_DateOfManufacture, String Market_CommentModel_Host_Name, String Market_CommentModel_Comment_Uid, String Market_CommentModel_Market_Uid, String Market_CommentModel_Host_Image){
         this.Market_CommentModel_Host_Uid = Market_CommentModel_Host_Uid;

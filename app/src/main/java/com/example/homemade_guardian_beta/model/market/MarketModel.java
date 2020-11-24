@@ -32,18 +32,18 @@ import java.util.Map;
 //post-석규, chat - 민규 먼저끝낸사람이 photo하기, 나증에한사람은 짤짤이
 
 public class MarketModel implements Serializable {                                                         // part10 : 게시물 정보 (21'30") // part17 : Serializable(29')
-    private String MarketModel_Title;                 //게시물 제목
-    private String MarketModel_Host_Uid;              //게시물 작성자의 Uid
+    private String MarketModel_Title;                   //게시물 제목
+    private String MarketModel_Host_Uid;                //게시물 작성자의 Uid
     private String MarketModel_Market_Uid;              //게시물의 Uid
-    private Date MarketModel_DateOfManufacture;       //게시물의 작성 시간
-    private ArrayList<String> MarketModel_ImageList;  //게시물의 사진 리스트
-    private String MarketModel_Text;                //게시물의 글
-    private String MarketModel_Category;            //게시물의 카테고리
-    private ArrayList<String> MarketModel_LikeList;  //게시물의 좋아요 리스트
-    private String MarketModel_HotMarket;
+    private Date MarketModel_DateOfManufacture;         //게시물의 작성 시간
+    private ArrayList<String> MarketModel_ImageList;    //게시물의 사진 리스트
+    private String MarketModel_Text;                    //게시물의 글
+    private String MarketModel_Category;                //게시물의 카테고리
+    private ArrayList<String> MarketModel_LikeList;     //게시물의 좋아요 리스트
+    private String MarketModel_HotMarket;               //게시물의 핫게시물 유무
     private String MarketModel_reservation;             //게시자가 예약을 할때 안했을때는 0 했다면 1
     private String MarketModel_deal;                    //게시물이 거래 안했을때 0, 했으면 1
-    private int MarketModel_CommentCount;
+    private int MarketModel_CommentCount;               //게시물의 댓글 개수
 
     public MarketModel(String MarketModel_Title, String MarketModel_Text, ArrayList<String> MarketModel_ImageList, Date MarketModel_DateOfManufacture, String MarketModel_Host_Uid, String MarketModel_Market_Uid, String MarketModel_Category, ArrayList<String> MarketModel_LikeList, String MarketModel_HotMarket, String MarketModel_reservation, String MarketModel_deal, int MarketModel_CommentCount){
         this.MarketModel_Title = MarketModel_Title;

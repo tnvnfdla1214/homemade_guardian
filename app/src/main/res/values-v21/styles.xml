@@ -7,5 +7,9 @@
         <item name="colorPrimaryDark">@color/color_Mint</item>
         <item name="colorAccent">@color/color_505050</item> // 스위치의 체크 색상 결정
         <item name="android:statusBarColor">@color/color_505050</item> //제일위의 statusbar관여
+<!--        <item name="android:textColorSecondary">@color/color_ffffff</item>-->
+<!--        <item name="android:textColorTertiary">@color/color_red</item>-->
+
+
     </style>
 </resources>

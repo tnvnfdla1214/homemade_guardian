@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.Main.activity.Loding_Dialog;
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.Main.activity.MyInfoPostActivity;
@@ -44,7 +45,6 @@ public class MyInfoFragment extends Fragment {
     private String CurrentUid;
     private FirebaseUser CurrentUser;
     UserModel userModel = new UserModel();
-    UpdateInfoActivity updateInfoActivity;
 
 
     @Nullable
@@ -59,17 +59,10 @@ public class MyInfoFragment extends Fragment {
         }
 
 
-//        updateInfoActivity = new UpdateInfoActivity();
-//        Intent intent = getActivity().getIntent();
-//        UserModel userModel = (UserModel)intent.getSerializableExtra("userModel");
-//        Bundle Tobundle = new Bundle();
-//        Tobundle.putSerializable("userModel",userModel);
-//        updateInfoActivity.setArguments(Tobundle);
-
         CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         CurrentUid =CurrentUser.getUid();
 
-        //Myinfo_profileImage = (ImageView) view.findViewById(R.id.Myinfo_profileImage);
+        Myinfo_profileImage = (ImageView) view.findViewById(R.id.Myinfo_profileImage);
         Myinfo_profileNickName = (TextView) view.findViewById(R.id.Myinfo_profileNickName);
         Myinfo_profileUniversity = (TextView) view.findViewById(R.id.Myinfo_profileUniversity);
 
@@ -92,9 +85,7 @@ public class MyInfoFragment extends Fragment {
 
         Update_InfoBtn = view.findViewById(R.id.Update_Info_Buutton);
         Update_InfoBtn.setOnClickListener(onClickListener);
-        Log.d("userModel", "userModel: " + userModel);
         getUserModel(CurrentUid);
-        Log.d("userModel", "userModel: " + userModel);
 
         return view;
     }
@@ -154,9 +145,7 @@ public class MyInfoFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 0) {
             if (resultCode == Activity.RESULT_OK) {
-                Log.d("dataa", "data: " + data);
                 getUserModel(CurrentUid);
-                Log.d("dataa", "userModel2: " + userModel.getUserModel_NickName());
             }
         }
     }
@@ -171,10 +160,10 @@ public class MyInfoFragment extends Fragment {
         }
         //post의 이미지 섬네일 띄우기
         if(Usermodel.getUserModel_ProfileImage() != null){
-            //Glide.with(getContext()).load(Usermodel.getUserModel_ProfileImage()).centerCrop().into(Myinfo_profileImage);
+            Glide.with(this).load(Usermodel.getUserModel_ProfileImage()).centerCrop().into(Myinfo_profileImage);
         }
         else{
-            //Glide.with(getContext()).load(R.drawable.none_profile_user).centerCrop().into(Myinfo_profileImage);
+            Glide.with(this).load(R.drawable.none_profile_user).centerCrop().into(Myinfo_profileImage);
         }
         Kind_Count.setText("X"+Usermodel.getUserModel_kindReviewList().size());
         Complete_Count.setText("X"+Usermodel.getUserModel_completeReviewList().size());

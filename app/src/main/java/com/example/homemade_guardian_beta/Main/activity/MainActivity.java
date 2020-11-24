@@ -77,9 +77,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         container = findViewById(R.id.container);
 
         Bottomnavigate();
-
-
-//
     }
 
     //안드로이드 생명주기중 하나

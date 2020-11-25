@@ -171,14 +171,10 @@ public class ChatFragment extends Fragment {
         Chat_Message_Input_EditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
-
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().getBytes().length >= 150) {
@@ -238,12 +234,10 @@ public class ChatFragment extends Fragment {
             ChatRoomListModel_RoomUid = getArguments().getString("RoomUid");
             To_User_Uid = getArguments().getString("To_User_Uid");
             MarketModel_Market_Uid = getArguments().getString("MarketModel_Market_Uid");
-
-
         }
 
-        if (!"".equals(To_User_Uid) && To_User_Uid !=null) {                     // find existing room for two user ToUid가 널이 아니거나 ToUid가 ""이거가 아니면
-            findChatRoom(To_User_Uid);
+        if (!"".equals(To_User_Uid) && To_User_Uid !=null && !"".equals(MarketModel_Market_Uid) && MarketModel_Market_Uid !=null) {
+            findChatRoom(To_User_Uid,MarketModel_Market_Uid);
         } else
         if (!"".equals(ChatRoomListModel_RoomUid) && ChatRoomListModel_RoomUid !=null) {                   // existing room (multi user)
             setChatRoom(ChatRoomListModel_RoomUid);
@@ -284,15 +278,14 @@ public class ChatFragment extends Fragment {
         });
     }
 
-    // 사용자 ID로 채팅방을 찾은 후 룸 ID를 반환하는 함수
-    void findChatRoom(final String toUid){
+    // Room에서 MessageModel_PostUid로 찾는다.
+    void findChatRoom(final String toUid,final String MarketModel_Market_Uid){
         Firestore = FirebaseFirestore.getInstance();
         Firestore.collection("ROOMS").whereEqualTo("MessageModel_PostUid",MarketModel_Market_Uid).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (!task.isSuccessful()) {return;}
-
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Map<String, Long> users = (Map<String, Long>) document.get("USERS");
                             if (users.size()==2 & users.get(toUid)!=null){
@@ -304,9 +297,8 @@ public class ChatFragment extends Fragment {
                 });
     }
 
-    // 채팅방에서 사용자 목록을 가져오는 함수
-    void setChatRoom(String RoomUid) {
-        ChatRoomListModel_RoomUid = RoomUid;
+    // 채팅방에서 사용자 목록을 가져오는 함수 -> 사실 필요없을 듯
+    void setChatRoom(String ChatRoomListModel_RoomUid) {
         Firestore = FirebaseFirestore.getInstance();
         Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -323,7 +315,7 @@ public class ChatFragment extends Fragment {
         });
     }
 
-    //읽은 채팅창인지 아닌지 확인하는 함수 -> 이거 조금 문제 있기에 나중에 수정해야함(이름도 좀 이상함)
+    //읽은 채팅창인지 아닌지 확인하는 함수 -> 이거 조금 문제 있기에 나중에 수정해야함(이름도 좀 이상함) , 이거 사용을 안함
     void setUnread2Read() {
         if (ChatRoomListModel_RoomUid ==null) return;
         Firestore = FirebaseFirestore.getInstance();
@@ -360,10 +352,12 @@ public class ChatFragment extends Fragment {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         MessageModel = documentSnapshot.toObject(MessageModel.class);
                         Int_MessageModel_ImageCount = Integer.parseInt(MessageModel.getMessageModel_ImageCount());
+                        Log.d("민규","Int_MessageModel_ImageCount1 : " + Int_MessageModel_ImageCount);
                     }
                 });
             }
             else{
+                //이렇게 되면 첫채팅에서 사진 누르고 다시 취소하면 아무 채팅없이 방이 하나 파질듯
                 ChatRoomListModel_RoomUid = Firestore.collection("ROOMS").document().getId();
                 CreateChattingRoom( Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid) );
 
@@ -374,6 +368,7 @@ public class ChatFragment extends Fragment {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         MessageModel = documentSnapshot.toObject(MessageModel.class);
                         Int_MessageModel_ImageCount = Integer.parseInt(MessageModel.getMessageModel_ImageCount());
+                        Log.d("민규","Int_MessageModel_ImageCount2 : " + Int_MessageModel_ImageCount);
                     }
                 });
             }
@@ -447,11 +442,14 @@ public class ChatFragment extends Fragment {
         }
 
 
+        //처음 채팅을 시작할때 -> 텍스트만 들어옴
         if(RoomUid ==null){
             final DocumentReference docRef = Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    //MESSAGE의 MessageModel_ReadUser에 uid를 넣는다.
+                    //ROOMS의 USERS의 해당 uid의 1->0으로 바꾼다.
                     if (!task.isSuccessful()) {return;}
                     WriteBatch batch = Firestore.batch();
                     // save last message
@@ -459,7 +457,7 @@ public class ChatFragment extends Fragment {
                     // save message
                     List<String> ReadUsers = new ArrayList();
                     ReadUsers.add(currentUser_Uid);
-                    MessageModel.put("MessageModel_ReadUser", ReadUsers);//new String[]{myUid} );
+                    MessageModel.put("MessageModel_ReadUser", ReadUsers);
                     batch.set(docRef.collection("MESSAGE").document(), MessageModel);
                     // inc unread message count
                     DocumentSnapshot document = task.getResult();
@@ -485,6 +483,7 @@ public class ChatFragment extends Fragment {
             });
         }
         else{
+            //룸이 있다면
             final DocumentReference docRef = Firestore.collection("ROOMS").document(RoomUid);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -528,18 +527,13 @@ public class ChatFragment extends Fragment {
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         if (resultCode!= RESULT_OK) { return;}
-
-        //dialog.callDialog();
-        //((ChatActivity)getActivity()).loading_callDialog();
         Uri fileUri = data.getData(); //해당 사진
-        //showProgressDialog("사진을 보내는 중입니다.");
         final ChatModel.FileInfo fileinfo  = getFileDetailFromUri(getContext(), fileUri); //chatmodel.fileinfo에 넣기
         Int_MessageModel_ImageCount = Int_MessageModel_ImageCount +1;
         String_MessageModel_ImageCount =String.valueOf(Int_MessageModel_ImageCount);
         StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_MessageModel_ImageCount).putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                //sendMessage(String_MessageModel_ImageCount, Integer.toString(requestCode), fileinfo, MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
                 //추가 ()
                 DocumentReference docRefe_ROOMS_CurrentUid = FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid);
                 docRefe_ROOMS_CurrentUid.update("MessageModel_ImageCount", String_MessageModel_ImageCount).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -555,7 +549,6 @@ public class ChatFragment extends Fragment {
                         });
             }
         });
-        //hideProgressDialog();
         if (requestCode != PICK_FROM_ALBUM) { return;}
         // small image
         Glide.with(getContext())
@@ -571,7 +564,6 @@ public class ChatFragment extends Fragment {
                         StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_MessageModel_ImageCount).putBytes(data);
                     }
                 });
-        //dialog.calldismiss();
     }
 
     // Uri에서 파일 이름 및 크기 가져오기 함수
@@ -805,7 +797,7 @@ public class ChatFragment extends Fragment {
             }
         }
 
-        //상대방 유저가 읽었는지 확인한다.
+        //상대방 유저가 읽었는지 확인한다. -> 채팅방 안의 1이랑 사라지는거는 MESSAGE의 MessageModel_ReadUser의 수로 파악
         void setReadCounter (MessageModel messageModel, final TextView textView) {
             int cnt = NumberOfUser - messageModel.getMessageModel_ReadUser().size();
             if (cnt > 0) {

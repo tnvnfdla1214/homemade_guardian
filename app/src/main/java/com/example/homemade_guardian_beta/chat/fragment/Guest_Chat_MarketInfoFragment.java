@@ -37,7 +37,7 @@ public class Guest_Chat_MarketInfoFragment extends Fragment {
     CardView Chat_PostInfo_Card;
 
 
-   ChatActivity chatActivity;
+    ChatActivity chatActivity;
 
     TextView Chat_MarketInfo_dealText;
 

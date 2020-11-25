@@ -42,6 +42,7 @@ import com.example.homemade_guardian_beta.model.user.UserModel;
 
 //그룹채팅에 쓰이는 액티비티
 //그룹 채팅방 할때 쓰는거 지워야함
+//나중에 쓸 수 도 있음
 public class SelectUserActivity extends AppCompatActivity {
     private String ChatRoomListModel_RoomUid;
     private Map<String, String> selectedUsers = new HashMap<>();

@@ -10,13 +10,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.market.adapter.GalleryAdapter;
@@ -25,24 +23,25 @@ import static com.example.homemade_guardian_beta.Main.common.Util.GALLERY_IMAGE;
 import static com.example.homemade_guardian_beta.Main.common.Util.GALLERY_VIDEO;
 import static com.example.homemade_guardian_beta.Main.common.Util.INTENT_MEDIA;
 import static com.example.homemade_guardian_beta.Main.common.Util.showToast;
-//(1). 1.클래스, 2.변수및 배열, 3.Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등), 4.파이어베이스 관련 선언, 5.잡자한 변수들
-//이미지 리스트에 넣을 때와는 달리 이미지의 다중 선택을 불허하고, 사용자의 프로필 사진의 선택을 할 때에 실행되는 액티비티이다.
-//      Ex) MemberInitActivity에서 사진을 고를 때에 사용된다. <-> GalleryAdapter와 연결된다.
+
+// 이미지를 단일 선택하고, 사용자의 프로필 사진의 선택을 할 때에 실행되는 액티비티이다. 초기화 버튼 존재
+//      Ex) MemberInitActivity, UpdateInfoActivity에서 사진을 고를 때에 사용된다. <-> GalleryAdapter와 연결된다.
 
 public class GalleryActivity extends BasicActivity {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);                                                             // part8 : 갤러리를 불러올 때 (16'40")
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         setToolbarTitle("");
         checkpermission();
     }
 
-    @Override                                                                                           // part8 : (C) 그 requestCode를 받아서 onRequestPermissionsResult
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {   //(33')
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
+
+            // 권한이 주어진 상태라면 이미지들을 담을 RecyclerView 실행 / 아니라면 finish();
             case 1: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     recyclerInit();
@@ -54,9 +53,10 @@ public class GalleryActivity extends BasicActivity {
         }
     }
 
+    // 권한을 체크하는 함수
     public void checkpermission(){
-        if (ContextCompat.checkSelfPermission(GalleryActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)  != PackageManager.PERMISSION_GRANTED) {   // part8 : (A) 갤러리 권한 받기 (30')
-            ActivityCompat.requestPermissions(GalleryActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);              // part8 : (B) 권한을 줘서 requestCode가 1이 되면
+        if (ContextCompat.checkSelfPermission(GalleryActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)  != PackageManager.PERMISSION_GRANTED) {   // checkSelfPermission 권한 체크
+            ActivityCompat.requestPermissions(GalleryActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);              // requestPermissions 권한 요구
             if (ActivityCompat.shouldShowRequestPermissionRationale(GalleryActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
             }else { showToast(GalleryActivity.this, getResources().getString(R.string.please_grant_permission));}   // part18 : strings에 메시지 관리하기
         } else { recyclerInit(); }
@@ -64,7 +64,7 @@ public class GalleryActivity extends BasicActivity {
 
     // 이미지들을 담을 RecyclerView 설정
     private void recyclerInit(){
-        final int numberOfColumns = 3;                                                                  // part9 : (E) recyclerInit()는 사진을 3개씩 나열 (2')
+        final int numberOfColumns = 3;                                                                              // recyclerInit()는 사진을 3개씩 나열
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
@@ -72,22 +72,26 @@ public class GalleryActivity extends BasicActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
-    // 아이콘 이미지 생성
-    public ArrayList<String> GetImagePath(Activity activity) {
-
-        final ArrayList<String> ListOfImage = new ArrayList<String>();            //PathOfImage의 값을 넣어서 전달하는 ArrayList<String>
-        //이미지를 선택했다는 이벤트의 값
-        Uri URI;                                                        //선택한 이미지의 Uri
+    // 아이콘 이미지 생성, return
+    public ArrayList<String> GetImagePath(Activity activity) { // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5.기타 변수
+                                                               // 2. 변수 및 배열
+        final ArrayList<String> ListOfImage = new ArrayList<String>();   //PathOfImage의 값을 넣어서 전달하는 ArrayList<String>
         String[] projection;
+        String PathOfImage = null;                                  //커서로 선택한 이미지의 Uri를 String의 값으로 받으려는 변수
         int Column_Index_Data;
-        String PathOfImage = null;                                      //커서로 선택한 이미지의 Uri를 String의 값으로 받으려는 변수
-        Cursor CursorEvent;
-        Button Image_Reset_Button;      //이미지를 선택하고 싶지 않을 때 ImagePath를 비워주는 Reset버튼
-        Intent ImageIntent = getIntent();
-        int Media = ImageIntent.getIntExtra(INTENT_MEDIA, GALLERY_IMAGE);                                           // part11 : 비디오면 비디오 / 이미지면 이미지 리스트 반환
+                                                               // 3. xml 변수
+        Button Image_Reset_Button;                                  // 이미지를 선택하고 싶지 않을 때 ImagePath를 비워주는 Reset 버튼
+                                                               // 5. 기타 변수
+        Cursor CursorEvent;                                         // 이미지를 선택한 행위
+        Uri URI;                                                    // 선택한 이미지의 Uri
 
+        // 비디오면 비디오 / 이미지면 이미지 리스트 반환
+        Intent ImageIntent = getIntent();
+        int Media = ImageIntent.getIntExtra(INTENT_MEDIA, GALLERY_IMAGE);
+
+        // Reset 버튼을 누르면 RESULT_CANCELED로 resultCode를 set하고 finish();
         Image_Reset_Button = findViewById(R.id.Image_Reset_Button);
-        Image_Reset_Button.setOnClickListener(onClickListener);                                                     // Reset 버튼을 누르면 RESULT_CANCELED로 resultCode를 set하고 finish();
+        Image_Reset_Button.setOnClickListener(onClickListener);
 
         if(Media == GALLERY_VIDEO){
             URI = android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;

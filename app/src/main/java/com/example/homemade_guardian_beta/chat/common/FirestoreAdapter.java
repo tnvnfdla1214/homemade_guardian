@@ -38,13 +38,10 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
     @Override
     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
         if (e != null) {
-            Log.w("태그", "FirestoreAdapter.onEvent:error:", e);
             onError(e);
             return;
         }
 
-        // Dispatch the event
-        Log.d("태그", "FirestoreAdapter.onEvent:numChanges:" + documentSnapshots.getDocumentChanges().size());
         for (DocumentChange change : documentSnapshots.getDocumentChanges()) {
             switch (change.getType()) {
                 case ADDED:

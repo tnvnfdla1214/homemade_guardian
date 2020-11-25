@@ -55,6 +55,7 @@ import com.example.homemade_guardian_beta.model.chat.MessageModel;
 
 
 //chatfragment에서 roomID와 realname이거 줌
+//이게 뭔지 모르겠음
 public class ViewPagerActivity extends AppCompatActivity {
 
 	private static String ChatRoomListModel_RoomUid; //룸 uid

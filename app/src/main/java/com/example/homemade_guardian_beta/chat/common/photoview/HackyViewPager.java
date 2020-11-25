@@ -19,6 +19,8 @@ import androidx.viewpager.widget.ViewPager;
  *
  * @author Chris Banes
  */
+
+//이게 무슨 코드인지 모르겠음
 public class HackyViewPager extends ViewPager {
 
     public HackyViewPager(Context context) {

@@ -1,15 +1,13 @@
-package com.example.homemade_guardian_beta.Main.Fragment;
+package com.example.homemade_guardian_beta.market.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.market.adapter.SearchResultAdapter;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
@@ -20,18 +18,21 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Market_Thing_Fragment extends Fragment {
-    private FirebaseFirestore firebaseFirestore;
-    private ArrayList<MarketModel> MarketList;
-    private SearchResultAdapter searchResultAdapter;
-    private boolean updating;
-    private boolean topScrolled;
+// SearchResultActivity에서 Info = 3을 가지고 이동된 Fragment : 카테고리가 '대여하기'인  Market 나열 Fragment
 
-    public Market_Thing_Fragment() { }
+public class Market_Borrow_Fragment extends Fragment {          // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5. 기타 변수
+                                                                // 1. 클래스
+    private SearchResultAdapter SearchresultAdapter;
+                                                                // 2. 변수 및 배열
+    private ArrayList<MarketModel> Marketmodel = new ArrayList<>(); // 해당하는 Market 정보 model
+                                                                // 5. 기타 변수
+    private boolean updating;                                       // 정보를 받아오는 중인지 분별하는 boolean 변수
+    private boolean topScrolled;                                    // 상단으로 스크롤한 상태의 boolean 변수
+
+    public Market_Borrow_Fragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,24 +40,25 @@ public class Market_Thing_Fragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_searchcommunity_result, container, false);
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        MarketList = new ArrayList<>();
-        searchResultAdapter = new SearchResultAdapter(getActivity(), MarketList);
+       // Search_Market_Result에서 가져온 검색 결과를 나열할 어댑터와 연결한다.
+        SearchresultAdapter = new SearchResultAdapter(getActivity(), Marketmodel);
         final RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(searchResultAdapter);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {                          // part21 : 스크롤로 새로고침 (29'10")
+        recyclerView.setAdapter(SearchresultAdapter);
+
+       // 제일 위에서 스크롤 되는 경우
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {        //part21 : 스크롤 손을 뗏을때(31')
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
                 int firstVisibleItemPosition = ((LinearLayoutManager)layoutManager).findFirstVisibleItemPosition();
-                if(newState == 1 && firstVisibleItemPosition == 0){                                      // part21 : 위로 새로고침 (39'40")
+                if(newState == 1 && firstVisibleItemPosition == 0){
                     topScrolled = true;
                 }
                 if(newState == 0 && topScrolled){
@@ -64,41 +66,47 @@ public class Market_Thing_Fragment extends Fragment {
                     topScrolled = false;
                 }
             }
+
+           // 불러들인 10개의 게시물 중에 스크롤하여 8번째가 보이면 업데이트 하는 경우
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy){                          //part21 : 스크롤 되는 내내(31')
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
                 super.onScrolled(recyclerView, dx, dy);
                 RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItemPosition = ((LinearLayoutManager)layoutManager).findFirstVisibleItemPosition();
                 int lastVisibleItemPosition = ((LinearLayoutManager)layoutManager).findLastVisibleItemPosition();
-
-                if(totalItemCount - 8 <= lastVisibleItemPosition && !updating){                         // part21 : 아래에서 3번쩨 일때 && 로딩중일 때는 이벤트 작용 안하게 (35'10")
-                    MarketUpdate(true);
+                if(totalItemCount - 8 <= lastVisibleItemPosition && !updating){
+                    MarketUpdate(false);
                 }
                 if(0 < firstVisibleItemPosition){
                     topScrolled = false;
                 }
             }
         });
-        MarketUpdate(true);
+
+       // Market 게시물 불러들이는 함수
+        MarketUpdate(false);
         return  view;
     }
-    private void MarketUpdate(final boolean clear) {
-        updating = true;
 
-        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
-        //아래꺼는 색인이 없으면 안뜨는듯
-        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","생필품").limit(10).get()
+   // Market 게시물 불러들이는 함수
+    private void MarketUpdate(final boolean clear) {
+
+       // 현재  MarketUpdate()가 진행 중임을 알림
+        updating = true;
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        Date date = Marketmodel.size() == 0 || clear ? new Date() : Marketmodel.get(Marketmodel.size() - 1).getMarketModel_DateOfManufacture();
+        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");
+        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","대여").limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
-                            }                                                                               // part16 : postsUpdate로 이동 (15'50")
+                            if(clear){
+                                Marketmodel.clear();
+                            }
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+                                Marketmodel.add(new MarketModel(
                                         document.getData().get("MarketModel_Title").toString(),
                                         document.getData().get("MarketModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
@@ -113,13 +121,11 @@ public class Market_Thing_Fragment extends Fragment {
                                         Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))
                                 ));
                             }
-                            searchResultAdapter.notifyDataSetChanged();
-                        } else {
+                            SearchresultAdapter.notifyDataSetChanged();
                         }
+                       // 현재  MarketUpdate()가 끝났음을 알림
                         updating = false;
                     }
                 });
-
     }
-
 }

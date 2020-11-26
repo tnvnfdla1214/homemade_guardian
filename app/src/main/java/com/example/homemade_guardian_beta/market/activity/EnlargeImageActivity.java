@@ -23,12 +23,13 @@ public class EnlargeImageActivity extends BasicActivity {           // 1. 클래
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enlarge_imagelist);
 
-        // marketActivity에서 받아온 Image들을 ImageList로 저장
+       // marketActivity에서 받아온 Image들을 ImageList로 저장
         ImageList = (ArrayList<String>) getIntent().getSerializableExtra("marketImage");
 
         Viewpager = findViewById(R.id.ViewPager);
         Viewpager.setAdapter(new ViewPagerAdapter(this, ImageList, "Disable","Enlarge"));
-        // 이미지의 개수 대로 이미지 하단에 CircleIndicator를 생성
+
+       // 이미지의 개수 대로 이미지 하단에 CircleIndicator를 생성
         CircleIndicator indicator = (CircleIndicator) findViewById(R.id.indicator);
         indicator.setViewPager(Viewpager);
     }

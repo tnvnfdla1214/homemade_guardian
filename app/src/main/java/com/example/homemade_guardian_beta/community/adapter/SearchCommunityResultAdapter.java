@@ -23,13 +23,13 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 //SearchResultFragment와 연결된 어댑터이다. onBindViewHolder로 카드뷰에 검색된 게시물의 정보들을 담는 역할을 한다. !검색된 결과의 게시물 나열!
-//      Ex) MORE_INDEX를 readContentsView에서 MORE_INDEX 보다 작은 수의 사진만 SearchResultFragment에서 나타낸다.
 
 public class SearchCommunityResultAdapter extends RecyclerView.Adapter<SearchCommunityResultAdapter.MainViewHolder> {
-    private ArrayList<CommunityModel> ArrayList_CommunityModel;   //게시물에 담을 PostModel의 정보들을 담는다.
+                                                                    // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5.기타 변수
+                                                                    // 2. 변수 및 배열
+    private ArrayList<CommunityModel> ArrayList_CommunityModel;         // 게시물에 담을 CommunityModel
+                                                                    // 5.기타 변수
     private Activity Activity;
-
-    private final int MORE_INDEX = 1;                   //게시물에서 미리 표현할 사진의 개수
 
     static class MainViewHolder extends RecyclerView.ViewHolder {
         CardView Cardview;
@@ -44,17 +44,16 @@ public class SearchCommunityResultAdapter extends RecyclerView.Adapter<SearchCom
         this.Activity = activity;
     }
 
-    //검색한 결과를 POSTS에서 불러온 게시물 내용으로 화면에 나타내는 Holder
+   // 검색한 결과를 Community에서 불러온 게시물 내용으로 화면에 나타내는 Holder
     @NonNull
     @Override
-    public SearchCommunityResultAdapter.MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {             // part : 게시물을 눌렀을 떄
+    public SearchCommunityResultAdapter.MainViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         CardView Cardview = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_community, parent, false);
         final MainViewHolder Mainviewholder = new MainViewHolder(Cardview);
         Cardview.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {                                                                   // part18 : 게시물 클릭시 게시물페이지로 이동 (36'10")
+            public void onClick(View v) {
                 Intent Intent_CommunityActivity = new Intent(Activity, CommunityActivity.class);
-                //postInfo 안에 uid있음
                 Intent_CommunityActivity.putExtra("communityInfo", ArrayList_CommunityModel.get(Mainviewholder.getAdapterPosition()));
                 Activity.startActivity(Intent_CommunityActivity);
             }
@@ -63,26 +62,34 @@ public class SearchCommunityResultAdapter extends RecyclerView.Adapter<SearchCom
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MainViewHolder holder, int position) {                      // part : 게시물을 나열
+    public void onBindViewHolder(@NonNull final MainViewHolder holder, int position) {
+
         CardView Contents_CardView = holder.Cardview;
+
+       // 제목, 내용, 좋아요 개수, 댓글 개수, 작성일을 나타낼 TextView find
         TextView Title_TextView = Contents_CardView.findViewById(R.id.Post_Title_TextView);
         TextView Contents_TextView = Contents_CardView.findViewById(R.id.Post_Contents_TextView);
         TextView Community_LikeCount = Contents_CardView.findViewById(R.id.Post_LikeCount);
-        CommunityModel communityModel = ArrayList_CommunityModel.get(position);                                                         //HomeFragment에서 PostInfo(mDaset)에 넣은 데이터 get
+        TextView Community_CommentCount = Contents_CardView.findViewById(R.id.comment_count_text);
+        TextView DateOfManufacture_TextView = Contents_CardView.findViewById(R.id.Post_DateOfManufacture);
+
+       // 어떤 CommunityModel? : 해당 position의 CommunityModel
+        CommunityModel communityModel = ArrayList_CommunityModel.get(position);
+
+       // 제목, 내용, 좋아요 개수, 댓글 개수, 작성일을 나타낼 TextView set
         Title_TextView.setText(communityModel.getCommunityModel_Title());
         Contents_TextView.setText(communityModel.getCommunityModel_Text());
         Community_LikeCount.setText(String.valueOf(communityModel.getCommunityModel_LikeList().size()));
-        ImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);                   //contentsLayout에다가 날짜포함
-        LinearLayout Contentslayout = Contents_CardView.findViewById(R.id.contentsLayout);                      /////////////////////이거 대신 텍스트 만든거 보여주기로
-        TextView DateOfManufacture_TextView = Contents_CardView.findViewById(R.id.Post_DateOfManufacture);
-        DateOfManufacture_TextView.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(communityModel.getCommunityModel_DateOfManufacture()));
-
-        TextView Community_CommentCount = Contents_CardView.findViewById(R.id.comment_count_text);
         Community_CommentCount.setText(String.valueOf(communityModel.getCommunityModel_CommentCount()));
+        DateOfManufacture_TextView.setText(new SimpleDateFormat("yyyy-MM-dd",
+                Locale.getDefault()).format(communityModel.getCommunityModel_DateOfManufacture()));
+
+       // if : 게시물에 이미지가 존재한다면 첫번째 사진을 썸네일 사진으로 설정한다. / 없으면 ImageView 자체를 GONE
         ArrayList<String> ArrayList_ImageList = communityModel.getCommunityModel_ImageList();
+        ImageView Thumbnail_ImageView = Contents_CardView.findViewById(R.id.Post_ImageView);
         if(ArrayList_ImageList != null) {
             String Image = ArrayList_ImageList.get(0);
-            Glide.with(Activity).load(Image).centerCrop().override(500).thumbnail(0.1f).into(Thumbnail_ImageView);         // 흐릿하게 로딩하기
+            Glide.with(Activity).load(Image).centerCrop().override(500).thumbnail(0.1f).into(Thumbnail_ImageView);
         }else {
             Thumbnail_ImageView.setVisibility(View.GONE);
         }

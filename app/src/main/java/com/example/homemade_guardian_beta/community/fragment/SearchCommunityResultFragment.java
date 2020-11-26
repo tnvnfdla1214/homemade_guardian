@@ -24,16 +24,18 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class SearchCommunityResultFragment extends Fragment {
-    private String search;
-    private ArrayList<CommunityModel> CommunityList;
-    private FirebaseFirestore firebaseFirestore;
-    private static final String TAG = "SearchCommunityResultFragment";
-    private SearchCommunityResultAdapter searchCommunityResultAdapter;
+// SearchCommunityActivity (abc 검색) -> SearchCommunityResultActivity (abc 가져옴) (abc 전해줌) -> SearchCommunityResultFragment (abc 가져옴)
 
-    public SearchCommunityResultFragment() {
+public class SearchCommunityResultFragment extends Fragment {           // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5.기타 변수
+                                                                        // 1. 클래스
+    private SearchCommunityResultAdapter SearchCommunityresultAdapter;
+                                                                        // 2. 변수 및 배열
+    private String Search;                                                  // 검색하고자 하는 단어
+    private ArrayList<CommunityModel> CommunityList  = new ArrayList<>();   // 해당하는 Community 정보 model
 
-    }
+    public SearchCommunityResultFragment() {}
+
+   // SearchCommunityResultActivity에서 검색하려는 단어를 SearchCommunityResultFragment 넘겨주기 위한 함수
     public static final SearchCommunityResultFragment getInstance(String search) {
         SearchCommunityResultFragment f = new SearchCommunityResultFragment();
         Bundle bdl = new Bundle();
@@ -41,45 +43,53 @@ public class SearchCommunityResultFragment extends Fragment {
         f.setArguments(bdl);
         return f;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_searchcommunity_result, container, false);
-        search = (String)  getActivity().getIntent().getSerializableExtra("Communitysearch");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        CommunityList = new ArrayList<>();
-        searchCommunityResultAdapter = new SearchCommunityResultAdapter(getActivity(), CommunityList);
+        View view = inflater.inflate(R.layout.fragment_searchcommunity_result, container, false);
+
+       // SearchCommunityResultFragment getInstance로 받은 검색하려는 단어 get
+        Search = (String)  getActivity().getIntent().getSerializableExtra("Communitysearch");
+
+       // Search_Market_Result에서 가져온 검색 결과를 나열할 어댑터와 연결한다.
+        SearchCommunityresultAdapter = new SearchCommunityResultAdapter(getActivity(), CommunityList);
         final RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(searchCommunityResultAdapter);
+        recyclerView.setAdapter(SearchCommunityresultAdapter);
+
+       // 검색결과를 가져오는 함수
         CommunityUpdate(true);
         return  view;
     }
-    private void CommunityUpdate(final boolean clear) {
-        //updating = true;
 
-        Date date = CommunityList.size() == 0 || clear ? new Date() : CommunityList.get(CommunityList.size() - 1).getCommunityModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("COMMUNITY");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("CommunityModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("CommunityModel_DateOfManufacture", date).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+   // 검색결과를 가져오는 함수
+    private void CommunityUpdate(final boolean clear) {
+        Date date = new Date();
+        FirebaseFirestore Firebasefirestore;
+        Firebasefirestore = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = Firebasefirestore.collection("COMMUNITY");
+        collectionReference.orderBy("CommunityModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("CommunityModel_DateOfManufacture", date).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        String title;
+                        String title = null;
                         if (task.isSuccessful()) {
-                            if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                CommunityList.clear();                                                           // part16 : List 안의 데이터 초기화
-                            }                                                                               // part16 : postsUpdate로 이동 (15'50")
+                            if(clear){
+                                CommunityList.clear();
+                            }
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 title = document.getData().get("CommunityModel_Title").toString();
-                                if(title.toLowerCase().contains(search.toLowerCase())) {
-                                    CommunityList.add(new CommunityModel(                                                          //postList로 데이터를 넣는다.
+
+                               // if : 제목이 검색한 단어에 포함되어 있는 case 일때만 진행
+                                if(title.toLowerCase().contains(Search.toLowerCase())) {
+                                    CommunityList.add(new CommunityModel(
                                             document.getData().get("CommunityModel_Title").toString(),
                                             document.getData().get("CommunityModel_Text").toString(),
                                             (ArrayList<String>) document.getData().get("CommunityModel_ImageList"),
@@ -91,14 +101,9 @@ public class SearchCommunityResultFragment extends Fragment {
                                             Integer.parseInt(String.valueOf(document.getData().get("CommunityModel_CommentCount")))
                                     ));
                                 }
-                                title = null;
                             }
-                            searchCommunityResultAdapter.notifyDataSetChanged();
-                        } else {
-                            //Log.d("로그","실패?");
-                            //Log.d(TAG, "Error getting documents: ", task.getException());
+                            SearchCommunityresultAdapter.notifyDataSetChanged();
                         }
-                        //updating = false;
                     }
                 });
     }

@@ -24,16 +24,18 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class SearchResultFragment extends Fragment {
-    private String search;
-    private ArrayList<MarketModel> marketList;
-    private FirebaseFirestore firebaseFirestore;
-    private static final String TAG = "SearchResultFragment";
-    private SearchResultAdapter searchResultAdapter;
+// SearchResultActivity에서 Info = 0을 가지고 이동된 Fragment : 검색된  Market 나열 Fragment
 
-    public SearchResultFragment() {
+public class SearchResultFragment extends Fragment {            // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5.기타 변수
+                                                                // 1. 클래스
+    private SearchResultAdapter SearchresultAdapter;
+                                                                // 2. 변수 및 배열
+    private String Search;                                          // 검색하고자 하는 단어
+    private ArrayList<MarketModel> Marketmodel= new ArrayList<>();  // 해당하는 Market 정보 model
 
-    }
+    public SearchResultFragment() {}
+
+   // SearchResultActivity에서 검색하려는 단어를 SearchResultFragment로 넘겨주기 위한 함수
     public static final SearchResultFragment getInstance(String search) {
         SearchResultFragment f = new SearchResultFragment();
         Bundle bdl = new Bundle();
@@ -41,45 +43,53 @@ public class SearchResultFragment extends Fragment {
         f.setArguments(bdl);
         return f;
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_searchresult, container, false);
-        search = (String)  getActivity().getIntent().getSerializableExtra("search");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        marketList = new ArrayList<>();
-        searchResultAdapter = new SearchResultAdapter(getActivity(), marketList);
+        View view = inflater.inflate(R.layout.fragment_searchresult, container, false);
+
+       // SearchResultFragment getInstance로 받은 검색하려는 단어 get
+        Search = (String)  getActivity().getIntent().getSerializableExtra("search");
+
+       // Search_Market_Result에서 가져온 검색 결과를 나열할 어댑터와 연결한다.
+        SearchresultAdapter = new SearchResultAdapter(getActivity(), Marketmodel);
         final RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(searchResultAdapter);
-        MarketUpdate(true);
+        recyclerView.setAdapter(SearchresultAdapter);
+
+       // 검색결과를 가져오는 함수
+        Search_Market_Result(true);
         return  view;
     }
-    private void MarketUpdate(final boolean clear) {
-        //updating = true;
 
-        Date date = marketList.size() == 0 || clear ? new Date() : marketList.get(marketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+    // 검색결과를 가져오는 함수
+    private void Search_Market_Result(final boolean clear) {
+        Date date = new Date();
+        FirebaseFirestore Firebasefirestore;
+        Firebasefirestore = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = Firebasefirestore.collection("MARKETS");
+        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        String title;
+                        String title= null;
                         if (task.isSuccessful()) {
-                            if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                marketList.clear();                                                           // part16 : List 안의 데이터 초기화
-                            }                                                                               // part16 : postsUpdate로 이동 (15'50")
+                            if(clear){
+                                Marketmodel.clear();
+                            }
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 title = document.getData().get("MarketModel_Title").toString();
-                                if(title.toLowerCase().contains(search.toLowerCase())) {
-                                    marketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+
+                               // if : 제목이 검색한 단어에 포함되어 있는 case 일때만 진행
+                                if(title.toLowerCase().contains(Search.toLowerCase())) {
+                                    Marketmodel.add(new MarketModel(
                                             document.getData().get("MarketModel_Title").toString(),
                                             document.getData().get("MarketModel_Text").toString(),
                                             (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
@@ -94,14 +104,10 @@ public class SearchResultFragment extends Fragment {
                                             Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))
                                     ));
                                 }
-                                title = null;
                             }
-                            searchResultAdapter.notifyDataSetChanged();
+                            SearchresultAdapter.notifyDataSetChanged();
                         } else {
-                            //Log.d("로그","실패?");
-                            //Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                        //updating = false;
                     }
                 });
     }

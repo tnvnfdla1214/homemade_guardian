@@ -53,10 +53,10 @@ public class GalleryActivity extends BasicActivity {
         }
     }
 
-    // 권한을 체크하는 함수
+    // 권한을 체크하는 함수 : checkSelfPermission 권한 체크, requestPermissions 권한 요구
     public void checkpermission(){
-        if (ContextCompat.checkSelfPermission(GalleryActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)  != PackageManager.PERMISSION_GRANTED) {   // checkSelfPermission 권한 체크
-            ActivityCompat.requestPermissions(GalleryActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);              // requestPermissions 권한 요구
+        if (ContextCompat.checkSelfPermission(GalleryActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)  != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(GalleryActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             if (ActivityCompat.shouldShowRequestPermissionRationale(GalleryActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
             }else { showToast(GalleryActivity.this, getResources().getString(R.string.please_grant_permission));}   // part18 : strings에 메시지 관리하기
         } else { recyclerInit(); }
@@ -64,7 +64,7 @@ public class GalleryActivity extends BasicActivity {
 
     // 이미지들을 담을 RecyclerView 설정
     private void recyclerInit(){
-        final int numberOfColumns = 3;                                                                              // recyclerInit()는 사진을 3개씩 나열
+        final int numberOfColumns = 3;
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));

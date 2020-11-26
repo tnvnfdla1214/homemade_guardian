@@ -14,10 +14,13 @@ import com.example.homemade_guardian_beta.R;
 import java.util.ArrayList;
 import static com.example.homemade_guardian_beta.Main.common.Util.INTENT_PATH;
 
-//GalleryActivity와 연결되어 사용되는 어댑터이다.
+// GalleryActivity와 연결되어 사용되는 어댑터이다.
 
 public class GalleryAdapter  extends RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder> {
-    private ArrayList<String> ArrayList_ImageList;     //GalleryActivity의 ArrayList<String> getImagesPath에서 return 한 listOfImage를 받는 ArrayList<String>이다.
+                                                        // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5.기타 변수
+                                                        // 2. 변수 및 배열
+    private ArrayList<String> ArrayList_ImageList;          //GalleryActivity에서 return 한 listOfImage를 받는 ArrayList<String>
+                                                        // 5.기타 변수
     private Activity Activity;
 
     static class GalleryViewHolder extends RecyclerView.ViewHolder {
@@ -30,14 +33,13 @@ public class GalleryAdapter  extends RecyclerView.Adapter<GalleryAdapter.Gallery
 
     public GalleryAdapter(Activity activity, ArrayList<String> myDataset) {
         ArrayList_ImageList = myDataset;
-        this.Activity = activity;                                                                       // part9 : 60줄에서 쓸 activity 생성 (11')
+        this.Activity = activity;
     }
 
-    //앨범에서 불러온 사진을 화면에 나타내는 Holder
+   //앨범에서 불러온 사진을 화면에 나타내는 Holder
     @NonNull
     @Override
-    public GalleryAdapter.GalleryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {   // part9 : 앨범에서 선택한 사진 회원정보 입력화면에 적용 (20'),
-        // part10 : 비효율적일 수 있으므로 onBindViewHolder에서 뺐음 (3')
+    public GalleryAdapter.GalleryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         CardView Cardview = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_gallery, parent, false);
         final GalleryViewHolder Galleryviewholder = new GalleryViewHolder(Cardview);
         Cardview.setOnClickListener(new View.OnClickListener() {
@@ -49,15 +51,15 @@ public class GalleryAdapter  extends RecyclerView.Adapter<GalleryAdapter.Gallery
                 Activity.finish();
             }
         });
-
         return Galleryviewholder;
     }
 
+   // 보여지는 적용사항
     @Override
     public void onBindViewHolder(@NonNull final GalleryViewHolder holder, int position) {
         CardView Cardview = holder.Cardview;
         ImageView Imageview = Cardview.findViewById(R.id.Directory_Image);
-        Glide.with(Activity).load(ArrayList_ImageList.get(position)).centerCrop().override(500).into(Imageview);   // part9 :  오픈소스 (10'30") override : 추가적인 resizeing (13') centercrop() : 가운데 정렬 (14')
+        Glide.with(Activity).load(ArrayList_ImageList.get(position)).centerCrop().override(500).into(Imageview);
     }
 
     @Override

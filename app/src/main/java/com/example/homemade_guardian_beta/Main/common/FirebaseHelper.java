@@ -12,6 +12,7 @@ import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
 import com.example.homemade_guardian_beta.market.activity.MarketActivity;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
+import com.example.homemade_guardian_beta.model.chat.RoomModel;
 import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.model.community.Community_CommentModel;
 import com.example.homemade_guardian_beta.model.market.Market_CommentModel;
@@ -44,7 +45,6 @@ public class FirebaseHelper {                                                   
     private OnPostListener Onpostlistener;
     private int SuccessCount;
     private Market_CommentModel Market_CommentModel;
-    private com.example.homemade_guardian_beta.model.chat.MessageModel MessageModel;                    //UserModel 참조 선언
     int Java_MessageModel_ImageCount;                         //string형을 int로 형변환
     ChatFragment chatFragment;
     MainActivity mainActivity;
@@ -271,8 +271,9 @@ public class FirebaseHelper {                                                   
         docRefe_ROOMS_CurrentUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                MessageModel = documentSnapshot.toObject(MessageModel.class);
-                Java_MessageModel_ImageCount = Integer.parseInt(MessageModel.getMessageModel_ImageCount());
+                RoomModel roomModel = new RoomModel();
+                roomModel = documentSnapshot.toObject(RoomModel.class);
+                Java_MessageModel_ImageCount = Integer.parseInt(roomModel.getRoomModel_ImageCount());
                 if(Java_MessageModel_ImageCount > 0){
                     for (int i = 1; i <= Java_MessageModel_ImageCount; i++) {
                         StorageReference desertRef_ROOMS_ChatRoomListModel_RoomUid = Storagereference.child("ROOMS/" + ChatRoomListModel_RoomUid + "/" + String.valueOf(i));

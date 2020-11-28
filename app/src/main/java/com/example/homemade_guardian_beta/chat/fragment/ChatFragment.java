@@ -356,9 +356,9 @@ public class ChatFragment extends Fragment {
                 docRefe_ROOMS_CurrentUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        MessageModel = documentSnapshot.toObject(MessageModel.class);
-                        Int_MessageModel_ImageCount = Integer.parseInt(MessageModel.getMessageModel_ImageCount());
-                        Log.d("민규","Int_MessageModel_ImageCount1 : " + Int_MessageModel_ImageCount);
+                        RoomModel roomModel = new RoomModel();
+                        roomModel = documentSnapshot.toObject(RoomModel.class);
+                        Int_MessageModel_ImageCount = Integer.parseInt(roomModel.getRoomModel_ImageCount());
                     }
                 });
             }
@@ -372,9 +372,9 @@ public class ChatFragment extends Fragment {
                 docRefe_ROOMS_CurrentUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        MessageModel = documentSnapshot.toObject(MessageModel.class);
-                        Int_MessageModel_ImageCount = Integer.parseInt(MessageModel.getMessageModel_ImageCount());
-                        Log.d("민규","Int_MessageModel_ImageCount2 : " + Int_MessageModel_ImageCount);
+                        RoomModel roomModel = new RoomModel();
+                        roomModel = documentSnapshot.toObject(RoomModel.class);
+                        Int_MessageModel_ImageCount = Integer.parseInt(roomModel.getRoomModel_ImageCount());
                     }
                 });
             }

@@ -38,6 +38,9 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.example.homemade_guardian_beta.Main.common.Util.INTENT_PATH;
 import static com.example.homemade_guardian_beta.Main.common.Util.showToast;
 
@@ -172,8 +175,8 @@ public class MemberInitActivity extends BasicActivity {     // 1. 클래스 2. �
            //스토리지의 USER/유저의 UID/이미지 들어가는곳  에다가 넣는다.
             final StorageReference ImageRef_USERS_Uid = Storagereference.child("USERS/" + CurrentUser.getUid() + "/USERSImage.jpg");
             final Date DateOfManufacture = new Date();
-            final ArrayList<String> UserModel_UnReViewPostList = new ArrayList<>();
-            final ArrayList<String> UserModel_UnReViewUserList = new ArrayList<>();
+
+            final ArrayList<HashMap<String, String>> UserModel_Unreview = new ArrayList<HashMap<String, String>>();
 
             final ArrayList<String> UserModel_kindReviewList = new ArrayList<>();
             final ArrayList<String> UserModel_correctReviewList = new ArrayList<>();
@@ -196,9 +199,15 @@ public class MemberInitActivity extends BasicActivity {     // 1. 클래스 2. �
 
                            // if : 선택한 이미지가 없다면 스토리지에 저장할 필요가 없다. ->  UserModel만 만들어서 MemberInit_Store_Uploader로 이동한다.
                             if (SelectedImagePath == null) {
-                                UserModel userModel = new UserModel(UserModel_Nickname, BirthDay,DateOfManufacture,UserModel_University,UserModel_UnReViewUserList,UserModel_UnReViewPostList,UserModel_kindReviewList,UserModel_correctReviewList,UserModel_completeReviewList,UserModel_badReviewList,UserModel_WritenReviewList,UserModel_Market_reservationList,UserModel_Market_dealList,token);
+                                UserModel userModel = new UserModel(UserModel_Nickname, BirthDay,DateOfManufacture,UserModel_University, UserModel_kindReviewList,UserModel_correctReviewList,UserModel_completeReviewList,UserModel_badReviewList,UserModel_WritenReviewList,UserModel_Market_reservationList,UserModel_Market_dealList,token);
                                 userModel.setUserModel_Uid(CurrentUser.getUid());
                                 userModel.setUserModel_ID(CurrentUser.getEmail());
+                                HashMap<String, String> Unreview = new HashMap<String, String>();
+                                Unreview.put("UserModel_UnReViewMarketList", "");
+                                Unreview.put("UserModel_UnReViewUserList", "");
+                                UserModel_Unreview.add(Unreview);
+                                userModel.setUserModel_Unreview(UserModel_Unreview);
+
                                 if(UserModel_Nickname.equals("")){
                                     userModel.setUserModel_NickName(extractIDFromEmail(CurrentUser.getEmail()));
                                 }
@@ -223,12 +232,18 @@ public class MemberInitActivity extends BasicActivity {     // 1. 클래스 2. �
                                             if (task.isSuccessful()) {
                                                // 이미지의 스토리지에 대한 저장이 끝났다면 스토어 저장을 위해 UserModel만 만들어서 MemberInit_Store_Uploader로 이동한다.
                                                 Uri DownloadUri = task.getResult();
-                                                UserModel Usermodel = new UserModel(UserModel_Nickname, BirthDay, DateOfManufacture, UserModel_University, DownloadUri.toString(),UserModel_UnReViewUserList,UserModel_UnReViewPostList,UserModel_kindReviewList,UserModel_correctReviewList,UserModel_completeReviewList,UserModel_badReviewList,UserModel_WritenReviewList,UserModel_Market_reservationList,UserModel_Market_dealList,token);
+                                                UserModel Usermodel = new UserModel(UserModel_Nickname, BirthDay, DateOfManufacture, UserModel_University, DownloadUri.toString(), UserModel_kindReviewList,UserModel_correctReviewList,UserModel_completeReviewList,UserModel_badReviewList,UserModel_WritenReviewList,UserModel_Market_reservationList,UserModel_Market_dealList,token);
                                                 Usermodel.setUserModel_Uid(CurrentUser.getUid());
                                                 Usermodel.setUserModel_ID(CurrentUser.getEmail());
                                                 if(UserModel_Nickname.equals("")){
                                                     Usermodel.setUserModel_NickName(extractIDFromEmail(CurrentUser.getEmail()));
                                                 }
+                                                HashMap<String, String> Unreview = new HashMap<String, String>();
+                                                Unreview.put("UserModel_UnReViewPostList", null);
+                                                Unreview.put("UserModel_UnReViewUserList", null);
+                                                UserModel_Unreview.add(Unreview);
+                                                Usermodel.setUserModel_Unreview(UserModel_Unreview);
+
                                                 MemberInit_Store_Uploader(Usermodel);
                                             } else {
                                                 showToast(MemberInitActivity.this, "회원정보를 보내는데 실패하였습니다.");

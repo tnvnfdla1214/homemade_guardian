@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,8 +62,18 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+        actionBar.setTitle("");
+
+        TextView RoomTitle = findViewById(R.id.RoomTitle);
+
+        ImageView back_Button = findViewById(R.id.back_Button);
+        back_Button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
         To_User_Uid = getIntent().getStringExtra("To_User_Uid");
         ChatRoomListModel_RoomUid = getIntent().getStringExtra("RoomUid");
@@ -68,9 +81,10 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         MarketModel_Market_Uid = getIntent().getStringExtra("MarketModel_Market_Uid");
         currentUser_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-
-        if (ChatRoomListModel_Title!=null) { actionBar.setTitle(ChatRoomListModel_Title); }
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (ChatRoomListModel_Title!=null) {
+            RoomTitle.setText(ChatRoomListModel_Title);
+        }
+         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         // 채팅 프레그먼트
         chatFragment = ChatFragment.getInstance(To_User_Uid, ChatRoomListModel_RoomUid, MarketModel_Market_Uid,currentUser_Uid);

@@ -15,8 +15,12 @@ public class UserModel implements Serializable {
     private String UserModel_ProfileImage; //프로필 사진
     private Date UserModel_DateOfManufacture; //생성일자
     private String UserModel_Token;//토큰값
+
+    private ArrayList<HashMap<String, String>> UserModel_Unreview = new ArrayList<HashMap<String, String>>();
+
     private ArrayList<String> UserModel_UnReViewUserList;  //리뷰를 작성하지 않은 유저리스트
     private ArrayList<String> UserModel_UnReViewPostList;  //리뷰를 작성하지 않은 포스트리스트
+
     private ArrayList<String> UserModel_kindReviewList;  //리뷰를 작성하지 않은 유저리스트
     private ArrayList<String> UserModel_correctReviewList;  //리뷰를 작성하지 않은 포스트리스트
     private ArrayList<String> UserModel_completeReviewList;  //리뷰를 작성하지 않은 유저리스트
@@ -25,14 +29,12 @@ public class UserModel implements Serializable {
     private ArrayList<String> UserModel_Market_reservationList;  //예약된 마켓포스트 리스트
     private ArrayList<String> UserModel_Market_dealList;  //거래된 마켓포스트 리스트
 
-    public UserModel(String UserModel_NickName, String UserModel_BirthDay, Date UserModel_DateOfManufacture, int UserModel_University , String UserModel_ProfileImage, ArrayList<String> UserModel_UnReViewUserList, ArrayList<String> UserModel_UnReViewPostList,ArrayList<String> UserModel_kindReviewList,ArrayList<String> UserModel_correctReviewList,ArrayList<String> UserModel_completeReviewList,ArrayList<String> UserModel_badReviewList,ArrayList<String> UserModel_WritenReviewList,ArrayList<String> UserModel_Market_reservationList,ArrayList<String> UserModel_Market_dealList,String UserModel_Token){     // part5 : 생성자 초기화 (7')
+    public UserModel(String UserModel_NickName, String UserModel_BirthDay, Date UserModel_DateOfManufacture, int UserModel_University , String UserModel_ProfileImage ,ArrayList<String> UserModel_kindReviewList,ArrayList<String> UserModel_correctReviewList,ArrayList<String> UserModel_completeReviewList,ArrayList<String> UserModel_badReviewList,ArrayList<String> UserModel_WritenReviewList,ArrayList<String> UserModel_Market_reservationList,ArrayList<String> UserModel_Market_dealList,String UserModel_Token){     // part5 : 생성자 초기화 (7')
         this.UserModel_NickName = UserModel_NickName;
         this.UserModel_BirthDay = UserModel_BirthDay;
         this.UserModel_University = UserModel_University;
         this.UserModel_ProfileImage = UserModel_ProfileImage;
         this.UserModel_DateOfManufacture = UserModel_DateOfManufacture;    // + : 사용자 리스트 수정 (날짜 정보 추가)
-        this.UserModel_UnReViewUserList = UserModel_UnReViewUserList;
-        this.UserModel_UnReViewPostList = UserModel_UnReViewPostList;
         this.UserModel_kindReviewList = UserModel_kindReviewList;
         this.UserModel_correctReviewList = UserModel_correctReviewList;
         this.UserModel_completeReviewList = UserModel_completeReviewList;
@@ -43,13 +45,11 @@ public class UserModel implements Serializable {
         this.UserModel_Token = UserModel_Token;
     }
 
-    public UserModel(String UserModel_NickName,String UserModel_BirthDay, Date UserModel_DateOfManufacture, int UserModel_University, ArrayList<String> UserModel_UnReViewUserList, ArrayList<String> UserModel_UnReViewPostList,ArrayList<String> UserModel_kindReviewList,ArrayList<String> UserModel_correctReviewList,ArrayList<String> UserModel_completeReviewList,ArrayList<String> UserModel_badReviewList,ArrayList<String> UserModel_WritenReviewList,ArrayList<String> UserModel_Market_reservationList,ArrayList<String> UserModel_Market_dealList,String UserModel_Token){      // + : 사용자 리스트 수정(날짜 정보 추가)
+    public UserModel(String UserModel_NickName,String UserModel_BirthDay, Date UserModel_DateOfManufacture, int UserModel_University, ArrayList<String> UserModel_kindReviewList,ArrayList<String> UserModel_correctReviewList,ArrayList<String> UserModel_completeReviewList,ArrayList<String> UserModel_badReviewList,ArrayList<String> UserModel_WritenReviewList,ArrayList<String> UserModel_Market_reservationList,ArrayList<String> UserModel_Market_dealList,String UserModel_Token){      // + : 사용자 리스트 수정(날짜 정보 추가)
         this.UserModel_NickName = UserModel_NickName;
         this.UserModel_BirthDay = UserModel_BirthDay;
         this.UserModel_DateOfManufacture = UserModel_DateOfManufacture;
         this.UserModel_University = UserModel_University;
-        this.UserModel_UnReViewUserList = UserModel_UnReViewUserList;
-        this.UserModel_UnReViewPostList = UserModel_UnReViewPostList;
         this.UserModel_kindReviewList = UserModel_kindReviewList;
         this.UserModel_correctReviewList = UserModel_correctReviewList;
         this.UserModel_completeReviewList = UserModel_completeReviewList;
@@ -73,8 +73,6 @@ public class UserModel implements Serializable {
         docData.put("UserModel_University", UserModel_University);
         docData.put("UserModel_ProfileImage", UserModel_ProfileImage);
         docData.put("UserModel_DateOfManufacture", UserModel_DateOfManufacture);
-        docData.put("UserModel_UnReViewUserList", UserModel_UnReViewUserList);
-        docData.put("UserModel_UnReViewPostList", UserModel_UnReViewPostList);
         docData.put("UserModel_kindReviewList", UserModel_kindReviewList);
         docData.put("UserModel_correctReviewList", UserModel_correctReviewList);
         docData.put("UserModel_completeReviewList", UserModel_completeReviewList);
@@ -83,6 +81,7 @@ public class UserModel implements Serializable {
         docData.put("UserModel_Market_reservationList", UserModel_Market_reservationList);
         docData.put("UserModel_Market_dealList", UserModel_Market_dealList);
         docData.put("UserModel_Token", UserModel_Token);
+        docData.put("UserModel_Unreview", UserModel_Unreview);
         return  docData;
     }
 
@@ -139,18 +138,6 @@ public class UserModel implements Serializable {
 
     public void setUserModel_DateOfManufacture(Date userModel_DateOfManufacture) { this.UserModel_DateOfManufacture = userModel_DateOfManufacture; }
 
-    public ArrayList<String> getUserModel_UnReViewUserList(){
-        return this.UserModel_UnReViewUserList;
-    }
-    public void setUserModel_UnReViewUserList(ArrayList<String> UserModel_UnReViewList){ this.UserModel_UnReViewUserList = UserModel_UnReViewList; }
-
-    public ArrayList<String> getUserModel_UnReViewPostList() {
-        return UserModel_UnReViewPostList;
-    }
-
-    public void setUserModel_UnReViewPostList(ArrayList<String> userModel_UnReViewPostList) {
-        UserModel_UnReViewPostList = userModel_UnReViewPostList;
-    }
     public ArrayList<String> getUserModel_kindReviewList() {
         return UserModel_kindReviewList;
     }
@@ -211,4 +198,11 @@ public class UserModel implements Serializable {
         UserModel_Token = UserModel_Token;
     }
 
+    public ArrayList<HashMap<String, String>> getUserModel_Unreview() {
+        return UserModel_Unreview;
+    }
+
+    public void setUserModel_Unreview(ArrayList<HashMap<String, String>> userModel_Unreview) {
+        UserModel_Unreview = userModel_Unreview;
+    }
 }

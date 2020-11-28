@@ -34,6 +34,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 //호스트용 포스트 정보 프레그먼트
 public class Host_Chat_MarketInfoFragment extends Fragment {
@@ -299,12 +300,14 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                                         @Override
                                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                                             userModel = documentSnapshot.toObject(UserModel.class);
-                                            UnReViewUserList = userModel.getUserModel_UnReViewUserList();
-                                            UnReViewUserList.add(currentUser_Uid);
-                                            userModel.setUserModel_UnReViewUserList(UnReViewUserList);
-                                            UnReViewMarketList = userModel.getUserModel_UnReViewPostList();
-                                            UnReViewMarketList.add(MarketModel_Market_Uid);
-                                            userModel.setUserModel_UnReViewPostList(UnReViewMarketList);
+
+                                            ArrayList<HashMap<String, String>> UserModel_Unreview = userModel.getUserModel_Unreview();
+                                            HashMap<String, String> Unreview = new HashMap<String, String>();
+                                            Unreview.put("UserModel_UnReViewMarketList", MarketModel_Market_Uid);
+                                            Unreview.put("UserModel_UnReViewUserList", currentUser_Uid);
+                                            UserModel_Unreview.add(Unreview);
+                                            userModel.setUserModel_Unreview(UserModel_Unreview);
+
 
                                             final DocumentReference documentReferencesetToUser = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
                                             documentReferencesetToUser.set(userModel.getUserInfo())
@@ -405,14 +408,6 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                         }
                     });
 
-
-
-
-                    //리뷰 창 띄우기
-                    /*
-                    ReviewActivity reviewActivity = new ReviewActivity(getContext());
-                    reviewActivity.callFunction(To_User_Uid, MarketModel_Market_Uid);
-                     */
 
                 }else{
 

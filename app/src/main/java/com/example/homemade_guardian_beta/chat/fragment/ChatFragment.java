@@ -487,7 +487,7 @@ public class ChatFragment extends Fragment {
             });
         }
         else{
-            //룸이 있다면
+            //룸이 있다면`
             final DocumentReference docRef = Firestore.collection("ROOMS").document(RoomUid);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override

@@ -31,6 +31,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 // 어플리케이션이 시작되면 처음 들르는 액티비티로 유저의 로그인 상태 정보를 판별하며, 하단 네비게이션의 각 속성들을 선언, 정의 해주는 액티비티
 
@@ -111,11 +113,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {   
                            // else : CurruntUser는 있으나 CurruntUser_Uid를 Uid로 가지는 document가 존재 X
                             if (document.exists()) {
                                 UserModel userModel = document.toObject(UserModel.class);
-                                if(userModel.getUserModel_UnReViewUserList().size() > 0){
+                                ArrayList<HashMap<String, String>> UserModel_Unreview = userModel.getUserModel_Unreview();
 
-                                   // UnReViewUserList가 비어 있지 않다면  userModel과 UnReViewUserList, UnReViewPostList의 첫번째 data를 callFunction으로 보내준다.
+                                if(UserModel_Unreview.size() > 1){
+                                    HashMap<String, String> Unreview = (HashMap<String,String>)UserModel_Unreview.get(1);
                                     ReviewActivity reviewActivity = new ReviewActivity(MainActivity.this);
-                                    reviewActivity.callFunction(userModel.getUserModel_UnReViewUserList().get(0), userModel.getUserModel_UnReViewPostList().get(0), userModel);
+                                    reviewActivity.callFunction(Unreview.get("UserModel_UnReViewUserList") ,Unreview.get("UserModel_UnReViewMarketList"), userModel);
                                 }
                             } else {
                                 myStartActivity(MemberInitActivity.class);

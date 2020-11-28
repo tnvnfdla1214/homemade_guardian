@@ -147,7 +147,7 @@ public class ImageCaptureManager extends Activity {
     intent2.setSelectCheckBox(false);
     intent2.setMaxGrideItemCount(3);
     startActivityForResult(intent2, REQUEST_CODE);
-    finish();
+    //finish();
   }
 
 

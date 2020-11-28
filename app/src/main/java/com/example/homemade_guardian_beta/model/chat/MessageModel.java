@@ -3,7 +3,9 @@ package com.example.homemade_guardian_beta.model.chat;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MessageModel implements Serializable {
     private String MessageModel_UserUid; //메세지 보낸 유저의 uid

@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -32,6 +33,7 @@ import com.google.firebase.firestore.WriteBatch;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 // 리뷰를 쓰게 된다면 이동되는 액티비티 / 거래가 완료된 작성자 시점의 채팅방과 상대방의 메인 액티비티에서 이동된다.
@@ -192,18 +194,18 @@ public class ReviewActivity extends BasicActivity {                     // 1. �
                                                         if (document != null) {
                                                             if (document.exists()) {
                                                                 Usermodel = document.toObject(UserModel.class);
-                                                                UnReViewUserList = Usermodel.getUserModel_UnReViewUserList();
-                                                                UnReViewPostList = Usermodel.getUserModel_UnReViewPostList();
-                                                                if(UnReViewUserList.size()>0){
-                                                                    UnReViewUserList.remove(0);
-                                                                    UnReViewPostList.remove(0);
-                                                                    Usermodel.setUserModel_UnReViewUserList(UnReViewUserList);
-                                                                    Usermodel.setUserModel_UnReViewPostList(UnReViewPostList);
+                                                                ArrayList<HashMap<String, String>> UserModel_Unreview = Usermodel.getUserModel_Unreview();
+
+                                                                if(UserModel_Unreview.size()>1){
+                                                                    Log.d("test","들어왔음");
+                                                                    UserModel_Unreview.remove(1);
+                                                                    Usermodel.setUserModel_Unreview(UserModel_Unreview);
+
                                                                     final DocumentReference documentReferencesetCurrentUser = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUserUid);
                                                                     documentReferencesetCurrentUser.set(Usermodel.getUserInfo())
                                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                                 @Override
-                                                                                public void onSuccess(Void aVoid) {}
+                                                                                public void onSuccess(Void aVoid) {Log.d("test","들어왔음2");}
                                                                             }).addOnFailureListener(new OnFailureListener() {
                                                                                 @Override
                                                                                 public void onFailure(@NonNull Exception e) {}

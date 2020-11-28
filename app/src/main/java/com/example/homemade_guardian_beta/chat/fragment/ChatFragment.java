@@ -44,6 +44,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.homemade_guardian_beta.chat.ChatUtil;
 import com.example.homemade_guardian_beta.chat.common.SendNotification;
 import com.example.homemade_guardian_beta.chat.common.photoview.ViewPagerActivity;
+import com.example.homemade_guardian_beta.model.chat.RoomModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -74,6 +75,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -382,7 +384,6 @@ public class ChatFragment extends Fragment {
         }
     };
 
-
     //최초 채팅룸 만들기,1을 0으로 변경하는 함수
     public void CreateChattingRoom(final DocumentReference room) {
         //유저의 uid와 읽었는지 않읽었는지 확인 하는 정보
@@ -390,25 +391,22 @@ public class ChatFragment extends Fragment {
         for( String key : UserModel_UserList.keySet() ){
             USERS.put(key, 0);
         }
+        Log.d("alsrb","USERS 1 : " + USERS);
         //유저의 uid와 유저가 나갔는지 안나갓는지 확인하는 정보 <- 1이면 안나간거 0이면 나간거
         Map<String, Integer> USERS_OUT = new HashMap<>();
         for( String key : UserModel_UserList.keySet() ){
             USERS_OUT.put(key, 1);
         }
 
-        //나머지 ROOMS 정보
-        final Map<String,Object> MessageModel = new HashMap<>();
-        MessageModel.put("MessageModel_Title", null);
-        MessageModel.put("USERS", USERS);
-        MessageModel.put("USERS_OUT", USERS_OUT);
+        RoomModel roomModel = new RoomModel();
+        roomModel.setRoomModel_Title(null);
+        roomModel.setRoomModel_USERS(USERS);
 
-        //최초 MessageModel_ImageCount 는 0으로 시작
-        MessageModel.put("MessageModel_ImageCount","0");
+        roomModel.setRoomModel_USER_OUT(USERS_OUT);
+        roomModel.setRoomModel_ImageCount("0");
+        roomModel.setRoomModel_PostUid(MarketModel_Market_Uid);
 
-        //해당 룸은 어떤 포스트의 경로인지 확인하는 Postuid를 만들어준다.
-        MessageModel.put("MessageModel_PostUid", MarketModel_Market_Uid);
-
-        room.set(MessageModel).addOnCompleteListener(new OnCompleteListener<Void>() {
+        room.set(roomModel.getRoomInfo()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
@@ -420,17 +418,18 @@ public class ChatFragment extends Fragment {
     }
 
 
+
+
+
     //메세지 보내기 함수
-    private void sendMessage(final String MessageModel_Message, String Message_MessageType, final ChatModel.FileInfo fileinfo, final String MarketModel_Market_Uid, String RoomUid) {
+    private void sendMessage(final String MessageModel_Message, final String Message_MessageType, final ChatModel.FileInfo fileinfo, final String MarketModel_Market_Uid, String RoomUid) {
         Chat_Send_Button.setEnabled(false);
 
-        //최초 룸 만들기기
-        if(RoomUid ==null) {             // create chatting room for two user
-            RoomUid = Firestore.collection("ROOMS").document().getId();
-            CreateChattingRoom( Firestore.collection("ROOMS").document(RoomUid) );
-
-            //ChatActivity에 Room_uid 넘겨주기
-            roomUidSetListener.RoomUidSet(RoomUid, To_User_Uid);
+        //최초 룸 만들기
+        if(ChatRoomListModel_RoomUid ==null) {             // create chatting room for two user
+            ChatRoomListModel_RoomUid = Firestore.collection("ROOMS").document().getId();
+            CreateChattingRoom( Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid) );
+            roomUidSetListener.RoomUidSet(ChatRoomListModel_RoomUid, To_User_Uid);
 
         }
         //이거 어떻게 바꿈?
@@ -448,7 +447,7 @@ public class ChatFragment extends Fragment {
 
         //처음 채팅을 시작할때 -> 텍스트만 들어옴
         if(RoomUid ==null){
-            final DocumentReference docRef = Firestore.collection("ROOMS").document(RoomUid);
+            final DocumentReference docRef = Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -457,7 +456,15 @@ public class ChatFragment extends Fragment {
                     if (!task.isSuccessful()) {return;}
                     WriteBatch batch = Firestore.batch();
                     // save last message
-                    batch.set(docRef, MessageModel, SetOptions.merge());
+
+                    DocumentSnapshot document2 = task.getResult();
+                    RoomModel roomModel = document2.toObject(RoomModel.class);
+                    roomModel.setRoomModel_DateOfManufacture(new Date());
+                    roomModel.setRoomModel_MessageType(Message_MessageType);
+                    roomModel.setRoomModel_Message(MessageModel_Message);
+                    roomModel.setRoomModel_UserUid(currentUser_Uid);
+
+                    batch.set(docRef, roomModel.getRoomInfo(), SetOptions.merge());
                     // save message
                     List<String> ReadUsers = new ArrayList();
                     ReadUsers.add(currentUser_Uid);
@@ -465,13 +472,13 @@ public class ChatFragment extends Fragment {
                     batch.set(docRef.collection("MESSAGE").document(), MessageModel);
                     // inc unread message count
                     DocumentSnapshot document = task.getResult();
-                    Map<String, Long> users = (Map<String, Long>) document.get("USERS");
+                    Map<String, Long> users = (Map<String, Long>) document.get("RoomModel_USERS");
 
                     for( String key : users.keySet() ){
                         if (!currentUser_Uid.equals(key)) users.put(key, users.get(key)+1);
                     }
-                    document.getReference().update("USERS", users);
-                    document.getReference().update("MessageModel_PostUid", MarketModel_Market_Uid);
+                    document.getReference().update("RoomModel_USERS", users);
+                    document.getReference().update("RoomModel_PostUid", MarketModel_Market_Uid);
 
                     batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -489,14 +496,22 @@ public class ChatFragment extends Fragment {
         }
         else{
             //룸이 있다면`
-            final DocumentReference docRef = Firestore.collection("ROOMS").document(RoomUid);
+            final DocumentReference docRef = Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (!task.isSuccessful()) {return;}
                     WriteBatch batch = Firestore.batch();
                     // save last message
-                    batch.set(docRef, MessageModel, SetOptions.merge());
+                    DocumentSnapshot document2 = task.getResult();
+                    RoomModel roomModel = document2.toObject(RoomModel.class);
+                    roomModel.setRoomModel_DateOfManufacture(new Date());
+                    roomModel.setRoomModel_MessageType(Message_MessageType);
+                    roomModel.setRoomModel_Message(MessageModel_Message);
+                    roomModel.setRoomModel_UserUid(currentUser_Uid);
+
+
+                    batch.set(docRef, roomModel.getRoomInfo(), SetOptions.merge());
                     // save message
                     List<String> ReadUsers = new ArrayList();
                     ReadUsers.add(currentUser_Uid);
@@ -504,13 +519,13 @@ public class ChatFragment extends Fragment {
                     batch.set(docRef.collection("MESSAGE").document(), MessageModel);
                     // inc unread message count
                     DocumentSnapshot document = task.getResult();
-                    Map<String, Long> users = (Map<String, Long>) document.get("USERS");
+                    Map<String, Long> users = (Map<String, Long>) document.get("RoomModel_USERS");
 
                     for( String key : users.keySet() ){
                         if (!currentUser_Uid.equals(key)) users.put(key, users.get(key)+1);
                     }
-                    document.getReference().update("USERS", users);
-                    document.getReference().update("MessageModel_PostUid", MarketModel_Market_Uid);
+                    document.getReference().update("RoomModel_USERS", users);
+                    document.getReference().update("RoomModel_PostUid", MarketModel_Market_Uid);
 
                     batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -525,7 +540,6 @@ public class ChatFragment extends Fragment {
 
             });
         }
-
     }
 
     // 이미지나 파일을 로딩하는 결과 함수 (대략 10초가 넘게 걸림 , 스토리지에 넣는것 9초 사진 띄우기 1초)

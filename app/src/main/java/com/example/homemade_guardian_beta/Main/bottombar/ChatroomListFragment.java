@@ -36,6 +36,7 @@ import com.example.homemade_guardian_beta.chat.common.ItemTouchHelperCallback;
 import com.example.homemade_guardian_beta.chat.common.ItemTouchHelperListener;
 import com.example.homemade_guardian_beta.model.chat.ChatRoomListModel;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
+import com.example.homemade_guardian_beta.model.chat.RoomModel;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 
 
@@ -143,30 +144,30 @@ public class ChatroomListFragment extends Fragment {
 
         public void getRoomInfo() {
             // my chatting room information
-            listenerRegistration = Firestore.collection("ROOMS").whereGreaterThanOrEqualTo("USERS_OUT."+My_User_Uid,1)
+            listenerRegistration = Firestore.collection("ROOMS").whereGreaterThanOrEqualTo("RoomModel_USER_OUT."+My_User_Uid,1)
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
-                        public void onEvent(@Nullable QuerySnapshot value,
-                                            @Nullable FirebaseFirestoreException e) {
+                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
                             if (e != null) {return;}
                             TreeMap<Date, ChatRoomListModel> orderedRooms = new TreeMap<Date, ChatRoomListModel>(Collections.reverseOrder());
                             for (final QueryDocumentSnapshot document : value) {
-                                MessageModel messageModel = document.toObject(MessageModel.class);
-                                if (messageModel.getMessageModel_Message() !=null & messageModel.getMessageModel_DateOfManufacture() == null) {continue;} // FieldValue.serverTimestamp is so late
+                                RoomModel roomModel = document.toObject(RoomModel.class);
+                                Log.d("alsrbb",""+roomModel.getRoomModel_PostUid());
+                                if (roomModel.getRoomModel_Message() !=null & roomModel.getRoomModel_DateOfManufacture() == null) {continue;} // FieldValue.serverTimestamp is so late
                                 ChatRoomListModel chatRoomListModel = new ChatRoomListModel();
                                 chatRoomListModel.setChatRoomListModel_RoomUid(document.getId());
                                 //추가
-                                chatRoomListModel.setChatRoomListModel_PostUid(document.getData().get("MessageModel_PostUid").toString());
+                                chatRoomListModel.setChatRoomListModel_PostUid(document.getData().get("RoomModel_PostUid").toString());
 
-                                if (messageModel.getMessageModel_Message() !=null) { // there are no last message
-                                    chatRoomListModel.setChatRoomListModel_MessageLastDateTime(simpleDateFormat.format(messageModel.getMessageModel_DateOfManufacture()));
-                                    switch(messageModel.getMessage_MessageType()){
+                                if (roomModel.getRoomModel_Message() !=null) { // there are no last message
+                                    chatRoomListModel.setChatRoomListModel_MessageLastDateTime(simpleDateFormat.format(roomModel.getRoomModel_DateOfManufacture()));
+                                    switch(roomModel.getRoomModel_MessageType()){
                                         case "1": chatRoomListModel.setChatRoomListModel_LastMessage("Image"); break;
                                         case "2": chatRoomListModel.setChatRoomListModel_LastMessage("File"); break;
-                                        default:  chatRoomListModel.setChatRoomListModel_LastMessage(messageModel.getMessageModel_Message());
+                                        default:  chatRoomListModel.setChatRoomListModel_LastMessage(roomModel.getRoomModel_Message());
                                     }
                                 }
-                                Map<String, Long> users = (Map<String, Long>) document.get("USERS");
+                                Map<String, Long> users = (Map<String, Long>) document.get("RoomModel_USERS");
                                 chatRoomListModel.setChatRoomListModel_NumberOfUser(users.size());
                                 for( String key : users.keySet() ){
                                     if (My_User_Uid.equals(key)) {
@@ -187,8 +188,8 @@ public class ChatroomListFragment extends Fragment {
                                     }
                                 }
 
-                                if (messageModel.getMessageModel_DateOfManufacture()==null) messageModel.setMessageModel_DateOfManufacture(new Date());
-                                orderedRooms.put(messageModel.getMessageModel_DateOfManufacture(), chatRoomListModel);
+                                if (roomModel.getRoomModel_DateOfManufacture()==null) roomModel.setRoomModel_DateOfManufacture(new Date());
+                                orderedRooms.put(roomModel.getRoomModel_DateOfManufacture(), chatRoomListModel);
                             }
                             RoomList.clear();
                             for(Map.Entry<Date, ChatRoomListModel> entry : orderedRooms.entrySet()) {

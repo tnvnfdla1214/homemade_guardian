@@ -35,6 +35,9 @@ public class MessageModel implements Serializable {
         this.MessageModel_FileSize = MessageModel_FileSize;
     }
 
+
+
+
     public String getMessageModel_UserUid() {
         return MessageModel_UserUid;
     }

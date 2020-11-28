@@ -300,8 +300,9 @@ public class ChatFragment extends Fragment {
                 });
     }
 
-    // 채팅방에서 사용자 목록을 가져오는 함수 -> 사실 필요없을 듯
-    void setChatRoom(String ChatRoomListModel_RoomUid) {
+    // 채팅방에서 사용자 목록을 가져오는 함수
+    void setChatRoom(String RoomUid) {
+        ChatRoomListModel_RoomUid = RoomUid;
         Firestore = FirebaseFirestore.getInstance();
         Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -424,12 +425,12 @@ public class ChatFragment extends Fragment {
         Chat_Send_Button.setEnabled(false);
 
         //최초 룸 만들기기
-        if(ChatRoomListModel_RoomUid ==null) {             // create chatting room for two user
-            ChatRoomListModel_RoomUid = Firestore.collection("ROOMS").document().getId();
-            CreateChattingRoom( Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid) );
+        if(RoomUid ==null) {             // create chatting room for two user
+            RoomUid = Firestore.collection("ROOMS").document().getId();
+            CreateChattingRoom( Firestore.collection("ROOMS").document(RoomUid) );
 
             //ChatActivity에 Room_uid 넘겨주기
-            roomUidSetListener.RoomUidSet(ChatRoomListModel_RoomUid, To_User_Uid);
+            roomUidSetListener.RoomUidSet(RoomUid, To_User_Uid);
 
         }
         //이거 어떻게 바꿈?
@@ -447,7 +448,7 @@ public class ChatFragment extends Fragment {
 
         //처음 채팅을 시작할때 -> 텍스트만 들어옴
         if(RoomUid ==null){
-            final DocumentReference docRef = Firestore.collection("ROOMS").document(ChatRoomListModel_RoomUid);
+            final DocumentReference docRef = Firestore.collection("ROOMS").document(RoomUid);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {

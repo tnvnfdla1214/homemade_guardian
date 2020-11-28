@@ -135,7 +135,7 @@ public class ChatRoomFragment extends Fragment {
 
                                 if (messageModel.getMessageModel_Message() !=null) { // there are no last message
                                     chatRoomListModel.setChatRoomListModel_MessageLastDateTime(simpleDateFormat.format(messageModel.getMessageModel_DateOfManufacture()));
-                                    switch(messageModel.getMessage_MessageType()){
+                                    switch(messageModel.getMessageModel_MessageType()){
                                         case "1": chatRoomListModel.setChatRoomListModel_LastMessage("Image"); break;
                                         case "2": chatRoomListModel.setChatRoomListModel_LastMessage("File"); break;
                                         default:  chatRoomListModel.setChatRoomListModel_LastMessage(messageModel.getMessageModel_Message());

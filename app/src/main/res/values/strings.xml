@@ -24,4 +24,5 @@
     <string name="naver_client_id">Us33ta7HvGEcHYlNgvFy</string>
     <string name="naver_client_secret">4A5BUw37Si</string>
     <string name="naver_client_name">Homemade_ Guardian_Beta</string>
+    <string name="default_notification_channel_id">Homemade_ Guardian_Beta</string>
 </resources>

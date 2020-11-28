@@ -9,13 +9,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.user.UserModel;
@@ -28,6 +27,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -37,41 +38,49 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
-
 import static com.example.homemade_guardian_beta.Main.common.Util.INTENT_PATH;
 import static com.example.homemade_guardian_beta.Main.common.Util.showToast;
 
 //앱이 실행되고나면 로그인 후에 가장 먼저 보게 되는 액티비티로서, 사용자의 정보를 입력 받는다.
 //      Ex) 메인프레그먼트에서는 이 MemberInitActivity가 실행되지 않으면, 계속 MemberInitActivity를 실행하게 된다.
 
-public class MemberInitActivity extends BasicActivity {
-    private String SelectedImagePath;                       //프로필 이미지로선택한 이미지
+public class MemberInitActivity extends BasicActivity {     // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5. 기타 변수
+                                                            // 2. 변수 및 배열
+    private String SelectedImagePath;                           // 프로필 이미지
+    private String BirthDay;                                    // 생일
+    private int UserModel_University;                           // 대학교
+                                                            // 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등)
+    private RelativeLayout LoaderLayout;                        // 로딩중을 나타내는 layout 선언
+    private ImageView Profile_ImageView;                        // 선택한 이미지를 넣은 ImageView
+    private Button Users_Info_Send_Button;                      // 입력한 정보 등록 Button
+    private EditText Nickname_EditText;                                  // 닉네임 EditText
+                                                            // 4. 파이어베이스 관련 선언
+    private FirebaseUser CurrentUser;;                       //파이어베이스 데이터 상의 현재 사용자
 
-    private ImageView Profile_ImageView;                     //xml에서 선택한 이미지를 넣은 ImageView
-    private RelativeLayout LoaderLayout;                     //로딩중을 나타내는 layout 선언
-    private RelativeLayout ButtonBackgroundLayout;          //사진을 넣을 때 앨범으로 가기 위한 버튼을 생성해주는 layout
-
-    private FirebaseUser CurrentUser=FirebaseAuth.getInstance().getCurrentUser();;                       //파이어베이스 데이터 상의 현재 사용자
-    private String BirthDay;
-    private Spinner University;
-    private int UserModel_University;
-
-    private EditText Nickname;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_init);
         setToolbarTitle("");
 
+       // 현재 사용자를 파이어베이스에서 받아옴
+        CurrentUser=FirebaseAuth.getInstance().getCurrentUser();
+
+       // 진행중 레이아웃, 프로필 ImageView, 회원정보 등록 Button, 닉네임 EditText find
         LoaderLayout = findViewById(R.id.Loader_Lyaout);
         Profile_ImageView = findViewById(R.id.Users_Profile_ImageView);
-        DatePicker BirthDay_Picker = (DatePicker)findViewById(R.id.BirthDay_Picker);
-        Nickname = ((EditText) findViewById(R.id.Nickname));
+        Users_Info_Send_Button = findViewById(R.id.Users_Info_Send_Button);
+        Nickname_EditText =  findViewById(R.id.Nickname);
+
+       // 프로필 ImageView, 회원정보 등록 Button setOnClickListener
         Profile_ImageView.setOnClickListener(onClickListener);
+        Users_Info_Send_Button.setOnClickListener(onClickListener);
 
-        findViewById(R.id.Users_Info_Send_Button).setOnClickListener(onClickListener);
+       // 닉네임을 이메일 @앞 부분으로 HINT로 임의지정
+        Nickname_EditText.setHint(extractIDFromEmail(CurrentUser.getEmail()));
 
-        Nickname.setHint(extractIDFromEmail(CurrentUser.getEmail()));
+       // DatePicker를 이용해 생일 지정, 받아서 String 값으로 저장함
+        DatePicker BirthDay_Picker = findViewById(R.id.BirthDay_Picker);
         BirthDay_Picker.init(2020, 0, 1, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -79,30 +88,29 @@ public class MemberInitActivity extends BasicActivity {
             }
         });
 
-        University = findViewById(R.id.University);
-
+       // Spinner를 이용해 대학교 자정
+        Spinner University = findViewById(R.id.University);
         ArrayAdapter monthAdapter = ArrayAdapter.createFromResource(this, R.array.University, android.R.layout.simple_spinner_dropdown_item);
-        //android.R.layout.simple_spinner_dropdown_item은 기본으로 제공해주는 형식입니다.
         monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        University.setAdapter(monthAdapter); //어댑터에 연결해줍니다.
-
+        University.setAdapter(monthAdapter);
+       // 해당 listener로 스피너의 position으로 대학교를 결정
         University.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 UserModel_University = position;
-            } //이 오버라이드 메소드에서 position은 몇번째 값이 클릭됬는지 알 수 있습니다.
-            //getItemAtPosition(position)를 통해서 해당 값을 받아올수있습니다.
-
+            }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
     }
 
-    // 뒤로가기 이벤트
+   // 뒤로 가면 종료
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        moveTaskToBack(true);
         finish();
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     @Override
@@ -110,6 +118,8 @@ public class MemberInitActivity extends BasicActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case 0: {
+
+               // GalleryActivity에서 이미지를 골랐다면 RESULT_OK / 고르지 않았다면 RESULT_CANCELED 실행
                 if (resultCode == Activity.RESULT_OK) {
                     SelectedImagePath = data.getStringExtra(INTENT_PATH);
                     Glide.with(this).load(SelectedImagePath).centerCrop().override(500).into(Profile_ImageView);
@@ -123,37 +133,45 @@ public class MemberInitActivity extends BasicActivity {
         }
     }
 
-
-    //사용하는 버튼들의 OnClickListener
+   // 프로필 ImageView, 회원정보 등록 Button의 OnClickListener
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.Users_Info_Send_Button:
-                    MemberInit_Storage_Uploader();
-                    break;
+
+               // 프로필 ImageView 클릭시 : GalleryActivity 실행
                 case R.id.Users_Profile_ImageView:
-                    myStartActivity(GalleryActivity.class);                                // part8 : 처음에는 안보이다가 이미지그림 누르면 나타나게함 (11'30")
+                    myStartActivity(GalleryActivity.class);
                     break;
+
+               // 회원정보 등록 Button 클릭시 : MemberInit_Storage_Uploader 함수 실행행
+                case R.id.Users_Info_Send_Button:
+                  // 스토리지에 사진을 먼저 담는 함수
+                   MemberInit_Storage_Uploader();
+                   break;
+
             }
         }
     };
 
-    //스토리지에 사진을 먼저 담는 함수
-    private void MemberInit_Storage_Uploader() {                                                                            // part5 : 회원정보 업로드 로직 (3')
-        final String UserModel_Nickname = Nickname.getText().toString();
+   //스토리지에 사진을 먼저 담는 함수
+    private void MemberInit_Storage_Uploader() {
 
-
+       // 입력받은 닉네임을 받아오고 20자가 넘으면 안됨
+        final String UserModel_Nickname = Nickname_EditText.getText().toString();
         if (UserModel_Nickname.length() < 20) {
 
+           // LoaderLayout으로 파이어베이스에 접근 할 때에는 다른 행동을 방지한다.
             LoaderLayout.setVisibility(View.VISIBLE);
+
+           // 파이어베이스 스토리지에 대한 Reference와 현재 유저의 정보를 받아온다.
             FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();
             StorageReference Storagereference = Firebasestorage.getReference();
             CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-            //스토리지의 USER/유저의 UID/이미지 들어가는곳  에다가 넣는다.
+           //스토리지의 USER/유저의 UID/이미지 들어가는곳  에다가 넣는다.
             final StorageReference ImageRef_USERS_Uid = Storagereference.child("USERS/" + CurrentUser.getUid() + "/USERSImage.jpg");
-            final Date DateOfManufacture = new Date();                                                              // + : 사용자 리스트 수정 (현재 날짜 받아오기 [ 사진마다 달라서 그때 그댸 불르기])
+            final Date DateOfManufacture = new Date();
             final ArrayList<String> UserModel_UnReViewPostList = new ArrayList<>();
             final ArrayList<String> UserModel_UnReViewUserList = new ArrayList<>();
 
@@ -166,54 +184,71 @@ public class MemberInitActivity extends BasicActivity {
             final ArrayList<String> UserModel_Market_reservationList = new ArrayList<>();
             final ArrayList<String> UserModel_Market_dealList = new ArrayList<>();
 
-            if (SelectedImagePath == null) {                                                                      // part5 : 데이터 추가 (9'10")
-                UserModel userModel = new UserModel(UserModel_Nickname, BirthDay,DateOfManufacture,UserModel_University,UserModel_UnReViewUserList,UserModel_UnReViewPostList,UserModel_kindReviewList,UserModel_correctReviewList,UserModel_completeReviewList,UserModel_badReviewList,UserModel_WritenReviewList,UserModel_Market_reservationList,UserModel_Market_dealList);          // + : 사용자 리스트 수정 (가입날짜 추가[사진 없는 버전])
-                userModel.setUserModel_Uid(CurrentUser.getUid());
-                userModel.setUserModel_ID(CurrentUser.getEmail());
-                if(UserModel_Nickname.equals("")){
-                    userModel.setUserModel_NickName(extractIDFromEmail(CurrentUser.getEmail()));
-                }
-                MemberInit_Store_Uploader(userModel);
-            } else {
-                try {
-                    InputStream Stream = new FileInputStream(new File(SelectedImagePath));                        // part7 : 입력한 회원정보를 스토리지에 저장 (25'20")
-                    UploadTask Uploadtask = ImageRef_USERS_Uid.putStream(Stream);
-                    Uploadtask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                         @Override
-                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
                             if (!task.isSuccessful()) {
-                                throw task.getException();
+                                return;
                             }
-                            return ImageRef_USERS_Uid.getDownloadUrl();                                  // part7 : ImageRef_USERS_Uid.getDownloadUrl()를 아래 task.getResult();에서 받아오는 것이 아닐까?
-                        }
-                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if (task.isSuccessful()) {
-                                Uri DownloadUri = task.getResult();                                         // part7 : 입력한 회원정보를 DB에 저장 (28')
-                                UserModel Usermodel = new UserModel(UserModel_Nickname, BirthDay, DateOfManufacture, UserModel_University, DownloadUri.toString(),UserModel_UnReViewUserList,UserModel_UnReViewPostList,UserModel_kindReviewList,UserModel_correctReviewList,UserModel_completeReviewList,UserModel_badReviewList,UserModel_WritenReviewList,UserModel_Market_reservationList,UserModel_Market_dealList);      // + : 사용자 리스트 수정 (가입날짜 추가)
-                                Usermodel.setUserModel_Uid(CurrentUser.getUid());
-                                Usermodel.setUserModel_ID(CurrentUser.getEmail());
+
+                           // 토큰을 가져오는 task가 끝났다면 정보 등록에 대한 코드가 진행됨
+                            final String token = task.getResult().getToken();
+
+                           // if : 선택한 이미지가 없다면 스토리지에 저장할 필요가 없다. ->  UserModel만 만들어서 MemberInit_Store_Uploader로 이동한다.
+                            if (SelectedImagePath == null) {
+                                UserModel userModel = new UserModel(UserModel_Nickname, BirthDay,DateOfManufacture,UserModel_University,UserModel_UnReViewUserList,UserModel_UnReViewPostList,UserModel_kindReviewList,UserModel_correctReviewList,UserModel_completeReviewList,UserModel_badReviewList,UserModel_WritenReviewList,UserModel_Market_reservationList,UserModel_Market_dealList,token);
+                                userModel.setUserModel_Uid(CurrentUser.getUid());
+                                userModel.setUserModel_ID(CurrentUser.getEmail());
                                 if(UserModel_Nickname.equals("")){
-                                    Usermodel.setUserModel_NickName(extractIDFromEmail(CurrentUser.getEmail()));
+                                    userModel.setUserModel_NickName(extractIDFromEmail(CurrentUser.getEmail()));
                                 }
-                                MemberInit_Store_Uploader(Usermodel);
-                            } else {
-                                showToast(MemberInitActivity.this, "회원정보를 보내는데 실패하였습니다.");
+                                MemberInit_Store_Uploader(userModel);
+                            }
+                           // else : 선택한 이미지가 있다면, ImageRef_USERS_Uid로 지정한 해당 경로의 이름으로 프로필을 저장한다.
+                            else {
+                                try {
+                                    InputStream Stream = new FileInputStream(new File(SelectedImagePath));
+                                    UploadTask Uploadtask = ImageRef_USERS_Uid.putStream(Stream);
+                                    Uploadtask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                        @Override
+                                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                                            if (!task.isSuccessful()) {
+                                                throw task.getException();
+                                            }
+                                            return ImageRef_USERS_Uid.getDownloadUrl();
+                                        }
+                                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Uri> task) {
+                                            if (task.isSuccessful()) {
+                                               // 이미지의 스토리지에 대한 저장이 끝났다면 스토어 저장을 위해 UserModel만 만들어서 MemberInit_Store_Uploader로 이동한다.
+                                                Uri DownloadUri = task.getResult();
+                                                UserModel Usermodel = new UserModel(UserModel_Nickname, BirthDay, DateOfManufacture, UserModel_University, DownloadUri.toString(),UserModel_UnReViewUserList,UserModel_UnReViewPostList,UserModel_kindReviewList,UserModel_correctReviewList,UserModel_completeReviewList,UserModel_badReviewList,UserModel_WritenReviewList,UserModel_Market_reservationList,UserModel_Market_dealList,token);
+                                                Usermodel.setUserModel_Uid(CurrentUser.getUid());
+                                                Usermodel.setUserModel_ID(CurrentUser.getEmail());
+                                                if(UserModel_Nickname.equals("")){
+                                                    Usermodel.setUserModel_NickName(extractIDFromEmail(CurrentUser.getEmail()));
+                                                }
+                                                MemberInit_Store_Uploader(Usermodel);
+                                            } else {
+                                                showToast(MemberInitActivity.this, "회원정보를 보내는데 실패하였습니다.");
+                                            }
+                                        }
+                                    });
+                                } catch (FileNotFoundException e) {
+                                    Log.e("로그", "에러: " + e.toString());
+                                }
                             }
                         }
                     });
-                } catch (FileNotFoundException e) {
-                    Log.e("로그", "에러: " + e.toString());
-                }
-            }
+
         }else {
             showToast(MemberInitActivity.this, "닉네임은 최대 20자까지 가능합나다.");
         }
     }
 
-    //Usermodel에다 담은 회원정보를 USERS/CurrentUser의 Uid  에다가 넣는 함수
-    private void MemberInit_Store_Uploader(final UserModel Usermodel) {                                                     // part5 : DB에 등록이 됬는지 알려주는 로직
+   //Usermodel에다 담은 회원정보를 파이어스토어 USERS/CurrentUser의 Uid에다가 넣는 함수
+    private void MemberInit_Store_Uploader(final UserModel Usermodel) {
         FirebaseFirestore docSet_USERS_Uid = FirebaseFirestore.getInstance();
         docSet_USERS_Uid.collection("USERS").document(CurrentUser.getUid()).set(Usermodel.getUserInfo())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -235,16 +270,14 @@ public class MemberInitActivity extends BasicActivity {
                 });
     }
 
-    //Intent를 하기 위한 함수
-    private void myStartActivity(Class c) {
-        Intent intent = new Intent(this, c);
-        startActivityForResult(intent, 0);
-    }
-
-    // 이메일에서 @뒤로 잘라서 닉네임으로 이용한다.
+   // 이메일에서 @뒤로 잘라서 닉네임으로 이용한다.
     String extractIDFromEmail(String email){
         String[] parts = email.split("@");
         return parts[0];
     }
 
+    private void myStartActivity(Class c) {
+        Intent intent = new Intent(this, c);
+        startActivityForResult(intent, 0);
+    }
 }

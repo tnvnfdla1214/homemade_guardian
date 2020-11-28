@@ -46,27 +46,27 @@ import java.util.List;
 
 public class ModifyMarketActivity extends BasicActivity {                       // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5.기타 변수
                                                                                 // 2. 변수 및 배열
-    private MarketModel Marketmodel;                                                // UserModel 선언
+    private MarketModel Marketmodel;                                                // Marketmodel 선언
     public  ArrayList<String> ArrayList_SelectedPhoto = new ArrayList<>();          // 선택한 이미지들이 담기는 리스트
     private ArrayList<String> ImageList;                                            // 수정하려는 게시물의 이미지 리스트
     private int PathCount;                                                          // ArrayList_SelectedPhoto의 count 변수
     private String Category;                                                        // 게시물의 카테고리
                                                                                 // 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등)
     private RelativeLayout LoaderLayout;                                            // 로딩중을 나타내는 layout 선언
-    private EditText Title_EditText;                                                // 게시물의 제목
-    private EditText TextContents_EditText;                                         // 게시물의 내용
     private ImageView FoodCategory_ImageView;                                       // '음식교환' 카테고리
-    private ImageView LifeCategory_ImageView;                                       // '물건교환' 카테고리
+    private ImageView ThingCategory_ImageView;                                      // '물건교환' 카테고리
     private ImageView BorrowCategory_ImageView;                                     // '대여하기' 카테고리
-    private ImageView WorkCategory_ImageView;                                       // '퀘스트' 카테고리
+    private ImageView QuestCategory_ImageView;                                      // '퀘스트' 카테고리
     private ImageView PhotoList0, PhotoList1, PhotoList2, PhotoList3, PhotoList4;   // 수정 화면의 게시물 사진이 보여지는 ImageView
     private TextView Image_Count_TextView;                                          // 선택된 이미지의 개수
-    private TextView Food_TextView, Life_TextView, Borrow_TextView, Work_TextView;  // 카테고리 이미지 아래에 있는 카테고리 이름
+    private TextView Food_TextView, Thing_TextView, Borrow_TextView, Quest_TextView;// 카테고리 이미지 아래에 있는 카테고리 이름
+    private EditText Title_EditText;                                                // 게시물의 제목
+    private EditText TextContents_EditText;                                         // 게시물의 내용
                                                                                 // 4. 파이어베이스 관련 선언
     private FirebaseUser CurrentUser;                                               // 현재 사용자
     private StorageReference Storagereference;                                      // 파이어스토리지에 접근하기 위한 선언
                                                                                 // 5.기타 변수
-    public final static int REQUEST_CODE = 1;                                       //REQUEST_CODE 초기화
+    public final static int REQUEST_CODE = 1;                                       // REQUEST_CODE 초기화
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,21 +88,21 @@ public class ModifyMarketActivity extends BasicActivity {                       
 
        // 카테고리 별 이미지 ImageView find
         FoodCategory_ImageView = (ImageView) findViewById(R.id.FoodPostbtn);
-        LifeCategory_ImageView = (ImageView) findViewById(R.id.LifePostbtn);
+        ThingCategory_ImageView = (ImageView) findViewById(R.id.LifePostbtn);
         BorrowCategory_ImageView = (ImageView) findViewById(R.id.BorrowPostbtn);
-        WorkCategory_ImageView = (ImageView) findViewById(R.id.WorkPostbtn);
+        QuestCategory_ImageView = (ImageView) findViewById(R.id.WorkPostbtn);
 
        // 카테고리 별 이미지 setOnClickListener
         FoodCategory_ImageView.setOnClickListener(onClickListener);
-        LifeCategory_ImageView.setOnClickListener(onClickListener);
+        ThingCategory_ImageView.setOnClickListener(onClickListener);
         BorrowCategory_ImageView.setOnClickListener(onClickListener);
-        WorkCategory_ImageView.setOnClickListener(onClickListener);
+        QuestCategory_ImageView.setOnClickListener(onClickListener);
 
        // 카테고리의 이름 TextView find
         Food_TextView = findViewById(R.id.FoodPostText);
-        Life_TextView = findViewById(R.id.LifePostText);
+        Thing_TextView = findViewById(R.id.LifePostText);
         Borrow_TextView = findViewById(R.id.BorrowPostText);
-        Work_TextView = findViewById(R.id.WorkPostText);
+        Quest_TextView = findViewById(R.id.WorkPostText);
 
        // Toolbar에 속성된 뒤로가기 Button, 앨범 들어가기 Button, 수정하기 Button, 선택된 이미지 카운트 TextView find
         findViewById(R.id.back_Button).setOnClickListener(onClickListener);
@@ -220,19 +220,19 @@ public class ModifyMarketActivity extends BasicActivity {                       
                 FoodCategory_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
                 Food_TextView.setTextColor(Color.parseColor("#2fd8df"));
             }else if(Category.equals("생필품")){
-                LifeCategory_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                Life_TextView.setTextColor(Color.parseColor("#2fd8df"));
+                ThingCategory_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                Thing_TextView.setTextColor(Color.parseColor("#2fd8df"));
             }else if(Category.equals("대여")){
                 BorrowCategory_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
                 Borrow_TextView.setTextColor(Color.parseColor("#2fd8df"));
             }else if(Category.equals("용역")){
-                WorkCategory_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                Work_TextView.setTextColor(Color.parseColor("#2fd8df"));
+                QuestCategory_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                Quest_TextView.setTextColor(Color.parseColor("#2fd8df"));
             }
         }
     }
 
-   //Activity에서 사용하는 버튼들의 OnClickListener
+   // Activity에서 사용하는 버튼들의 OnClickListener
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -241,26 +241,26 @@ public class ModifyMarketActivity extends BasicActivity {                       
                // 클릭시 : 클릭한 카테고리 ImageView, Text ColorFilter 설정 다른 카테고리는 초기화 / Category = 현재 카테고리로
                 case R.id.FoodPostbtn:
                     FoodCategory_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    LifeCategory_ImageView.setColorFilter(null);
+                    ThingCategory_ImageView.setColorFilter(null);
                     BorrowCategory_ImageView.setColorFilter(null);
-                    WorkCategory_ImageView.setColorFilter(null);
+                    QuestCategory_ImageView.setColorFilter(null);
                     Food_TextView.setTextColor(Color.parseColor("#2fd8df"));
-                    Life_TextView.setTextColor(Color.parseColor("#000000"));
+                    Thing_TextView.setTextColor(Color.parseColor("#000000"));
                     Borrow_TextView.setTextColor(Color.parseColor("#000000"));
-                    Work_TextView.setTextColor(Color.parseColor("#000000"));
+                    Quest_TextView.setTextColor(Color.parseColor("#000000"));
                     Category = "음식";
                     break;
 
                // 클릭시 : 클릭한 카테고리 ImageView, Text ColorFilter 설정 다른 카테고리는 초기화 / Category = 현재 카테고리로
                 case R.id.LifePostbtn:
-                    LifeCategory_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    ThingCategory_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
                     FoodCategory_ImageView.setColorFilter(null);
                     BorrowCategory_ImageView.setColorFilter(null);
-                    WorkCategory_ImageView.setColorFilter(null);
+                    QuestCategory_ImageView.setColorFilter(null);
                     Food_TextView.setTextColor(Color.parseColor("#000000"));
-                    Life_TextView.setTextColor(Color.parseColor("#2fd8df"));
+                    Thing_TextView.setTextColor(Color.parseColor("#2fd8df"));
                     Borrow_TextView.setTextColor(Color.parseColor("#000000"));
-                    Work_TextView.setTextColor(Color.parseColor("#000000"));
+                    Quest_TextView.setTextColor(Color.parseColor("#000000"));
                     Category = "생필품";
                     break;
 
@@ -268,25 +268,25 @@ public class ModifyMarketActivity extends BasicActivity {                       
                 case R.id.BorrowPostbtn:
                     BorrowCategory_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
                     FoodCategory_ImageView.setColorFilter(null);
-                    LifeCategory_ImageView.setColorFilter(null);
-                    WorkCategory_ImageView.setColorFilter(null);
+                    ThingCategory_ImageView.setColorFilter(null);
+                    QuestCategory_ImageView.setColorFilter(null);
                     Food_TextView.setTextColor(Color.parseColor("#000000"));
-                    Life_TextView.setTextColor(Color.parseColor("#000000"));
+                    Thing_TextView.setTextColor(Color.parseColor("#000000"));
                     Borrow_TextView.setTextColor(Color.parseColor("#2fd8df"));
-                    Work_TextView.setTextColor(Color.parseColor("#000000"));
+                    Quest_TextView.setTextColor(Color.parseColor("#000000"));
                     Category = "대여";
                     break;
 
                 // 클릭시 : 클릭한 카테고리 ImageView, Text ColorFilter 설정 다른 카테고리는 초기화 / Category = 현재 카테고리로
                 case R.id.WorkPostbtn:
-                    WorkCategory_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    QuestCategory_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
                     FoodCategory_ImageView.setColorFilter(null);
-                    LifeCategory_ImageView.setColorFilter(null);
+                    ThingCategory_ImageView.setColorFilter(null);
                     BorrowCategory_ImageView.setColorFilter(null);
                     Food_TextView.setTextColor(Color.parseColor("#000000"));
-                    Life_TextView.setTextColor(Color.parseColor("#000000"));
+                    Thing_TextView.setTextColor(Color.parseColor("#000000"));
                     Borrow_TextView.setTextColor(Color.parseColor("#000000"));
-                    Work_TextView.setTextColor(Color.parseColor("#2fd8df"));
+                    Quest_TextView.setTextColor(Color.parseColor("#2fd8df"));
                     Category = "용역";
                     break;
 
@@ -394,9 +394,10 @@ public class ModifyMarketActivity extends BasicActivity {                       
                                         @Override
                                         public void onSuccess(Uri uri) {
 
-                                           // 새로운 Image 및 usermodel 구성 후 스토어 추가로 이동한다.
+                                           // 새로운 Image 및 marketModel 구성 후 스토어 추가로 이동한다.
                                             Modify_Image_List.set(index, uri.toString());
-                                            MarketModel marketModel = new MarketModel(Title, TextContents, Modify_Image_List,  DateOfManufacture, CurrentUser.getUid(), Get_MarketUid, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal, commentcount);
+                                            MarketModel marketModel = new MarketModel(Title, TextContents, Modify_Image_List,  DateOfManufacture,
+                                                    CurrentUser.getUid(), Get_MarketUid, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal, commentcount);
                                             marketModel.setMarketModel_Market_Uid(Get_MarketUid);
                                             if(finalI == ArrayList_SelectedPhoto.size()-1){
                                                 Modify_Store_Upload(docRef_MARKETS_MarketUid, marketModel);
@@ -408,14 +409,14 @@ public class ModifyMarketActivity extends BasicActivity {                       
                         } catch (FileNotFoundException e) {
                             Log.e("로그", "에러: " + e.toString());
                         }
-
                        // 다음 이미지로 넘어가기 위한 PathCount 증가
                         PathCount++;
                     }
                 }
                // else -> else : 기존에 이미지가 있었지만, 이미지가 사라졌다.
                 else{
-                    MarketModel marketModel = new MarketModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Market_Uid, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal, commentcount);
+                    MarketModel marketModel = new MarketModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Market_Uid, Category, LikeList,
+                            HotMarket,MarketModel_reservation,MarketModel_deal, commentcount);
                     marketModel.setMarketModel_Market_Uid(Market_Uid);
                     Modify_Store_Upload(docRef_MARKETS_MarketUid, marketModel);
                 }
@@ -428,7 +429,7 @@ public class ModifyMarketActivity extends BasicActivity {                       
         }
     }
 
-   // 파이어스토어에 바뀐 정보들을 POSTS에 넣는다. WriteMaerketActivity에 있는 것과는 차이가 없다.
+   // 파이어스토어에 바뀐 정보들을 Market에 넣는다. WriteMaerketActivity에 있는 것과는 차이가 없다.
     private void Modify_Store_Upload(DocumentReference docRef_MARKETS_MarketUid, final MarketModel marketmodel) {
         docRef_MARKETS_MarketUid.set(marketmodel.getMarketInfo())
                // data set이 성공한다면, LoaderLayout 사라지게 하고, finish()

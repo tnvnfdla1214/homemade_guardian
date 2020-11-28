@@ -23,6 +23,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -32,6 +34,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.kakao.auth.ApiErrorCode;
 import com.kakao.auth.AuthType;
 import com.kakao.auth.ISessionCallback;
@@ -267,10 +271,52 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
-
-    //이동 함수수
-    private void updateUI(FirebaseUser Curruntuser_uid) { //update ui code here
+    //이동 함수 + token 확인
+    private void updateUI(final FirebaseUser Curruntuser_uid) { //update ui code here
         if (Curruntuser_uid != null) {
+
+            final String CurrentUid =Curruntuser_uid.getUid();
+            FirebaseInstanceId.getInstance().getInstanceId()
+                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            if (!task.isSuccessful()) {
+                                Log.d("민규", "토큰 못 가져옴");
+                                return;
+                            }
+                            final String token = task.getResult().getToken();
+                            final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
+                            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document != null) {
+                                            UserModel userModel = new UserModel();
+                                            userModel = document.toObject(UserModel.class);
+
+                                            if(!token.equals(userModel.getUserModel_Token())){
+                                                userModel.setUserModel_Token(token);
+                                                DocumentReference documentReferencesetUser = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
+                                                documentReferencesetUser
+                                                        .update("UserModel_Token", token)
+                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                            @Override
+                                                            public void onSuccess(Void aVoid) {
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                            }
+                                                        });
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    });
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();

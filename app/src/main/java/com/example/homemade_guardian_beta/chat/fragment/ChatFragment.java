@@ -42,11 +42,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.homemade_guardian_beta.chat.ChatUtil;
+import com.example.homemade_guardian_beta.chat.common.SendNotification;
 import com.example.homemade_guardian_beta.chat.common.photoview.ViewPagerActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -474,6 +477,7 @@ public class ChatFragment extends Fragment {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 //sendGCM();
+                                sendGson();
                                 Chat_Send_Button.setEnabled(true);
                             }
                         }
@@ -593,6 +597,7 @@ public class ChatFragment extends Fragment {
         return fileDetail;
     }
 
+    /*
     //사용안하는 듯-> 이거 근데 사용해야함 이거 안드로이드 폰에 메세지 뜨게 하는 용도 인듯
     void sendGCM(){
         Gson gson = new Gson();
@@ -620,6 +625,28 @@ public class ChatFragment extends Fragment {
                 public void onResponse(Call call, Response response) throws IOException {                }
             });
         }
+    }
+
+     */
+
+    private void sendGson() {
+
+        final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (document.exists()) {  //데이터의 존재여부
+                            UserModel userModel = document.toObject(UserModel.class);
+                            SendNotification.sendNotification(userModel.getUserModel_Token(), userModel.getUserModel_NickName(), Chat_Message_Input_EditText.getText().toString());
+                        }
+                    }
+                }
+            }
+        });
+
     }
 
     //로딩창 창띄우는 함수

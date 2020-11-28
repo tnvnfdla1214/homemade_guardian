@@ -299,7 +299,8 @@ public class ModifyCommunityActivity extends BasicActivity {                    
 
                                             // 새로운 Image 및 usermodel 구성 후 스토어 추가로 이동한다.
                                             Modify_Image_List.set(index, uri.toString());
-                                            CommunityModel communityModel = new CommunityModel(Title, TextContents, Modify_Image_List, DateOfManufacture, CurrentUser.getUid(), Get_CommunityUid, LikeList, HotCommunity, commentcount);
+                                            CommunityModel communityModel = new CommunityModel(Title, TextContents, Modify_Image_List, DateOfManufacture,
+                                                    CurrentUser.getUid(), Get_CommunityUid, LikeList, HotCommunity, commentcount);
                                             communityModel.setCommunityModel_Community_Uid(Get_CommunityUid);
                                             if (finalI == ArrayList_SelectedPhoto.size() - 1) {
                                                 Modify_Store_Upload(docRef_COMMUNITY_CommunityUid, communityModel);

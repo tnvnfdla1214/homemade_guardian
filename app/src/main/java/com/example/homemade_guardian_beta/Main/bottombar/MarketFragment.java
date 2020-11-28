@@ -5,13 +5,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.market.activity.SearchActivity;
@@ -31,40 +27,39 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MarketFragment extends Fragment {
-    private static final String TAG = "HomeFragment";
-    private FirebaseFirestore firebaseFirestore;
-    private MarketAdapter marketAdapter;
-    private ArrayList<MarketModel> MarketList;
-    private boolean updating;
-    private boolean topScrolled;
-    private String State;
-    private RecyclerView recyclerView;
-    private ImageView FoodMarketbtn;
-    private ImageView LifeMarketbtn;
-    private ImageView BorrowMarketbtn;
-    private ImageView WorkMarketbtn;
-    private ImageView HotMarketbtn;
-    private String FoodMarketbtn_State = "unSelected";
-    private String LifeMarketbtn_State = "unSelected";
-    private String BorrowMarketbtn_State = "unSelected";
-    private String WorkMarketbtn_State = "unSelected";
-    private String HotMarketbtn_State = "unSelected";
-    private TextView FoodText;
-    private TextView LifeText;
-    private TextView BorrowText;
-    private TextView WorkText;
-    private TextView HotText;
+public class MarketFragment extends Fragment {          // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5. 기타 변수
+                                                        // 2. 변수 및 배열
+    private MarketAdapter Marketadapter;                    // MarketAdapter
+    private ArrayList<MarketModel> Marketmodel;             // Marketmodel 선언
+    private String State;                                   // 카테고리의 현재 상태
+    private String FoodMarketbtn_State = "unSelected";      // 카테고리 '음식교환'의 선택 여부
+    private String ThingMarketbtn_State = "unSelected";     // 카테고리 '물건교환'의 선택 여부
+    private String BorrowMarketbtn_State = "unSelected";    // 카테고리 '대여하기'의 선택 여부
+    private String QuestMarketbtn_State = "unSelected";     // 카테고리 '퀘스트'의 선택 여부
+    private String HotMarketbtn_State = "unSelected";       // 카테고리 '핫게시물'의 선택 여부
+                                                        // 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등)
+    private RecyclerView Recyclerview;                      // 어댑터의 내용을 나열하기 위한 RecyclerView
+    private ImageView SearchButton_ImageView;                     // 검색 ImageView
+    private ImageView FoodMarket_ImageView;                 // 카테고리 '음식교환' ImageView
+    private ImageView ThingMarket_ImageView;                // 카테고리 '물건교환' ImageView
+    private ImageView BorrowMarket_ImageView;               // 카테고리 '대여하기' ImageView
+    private ImageView QuestMarket_ImageView;                // 카테고리 '퀘스트' ImageView
+    private ImageView HotMarket_ImageView;                  // 카테고리 '핫게시물' ImageView
+    private TextView FoodText_TextView;                     // 카테고리 '음식교환' Image 아래의 TextView
+    private TextView ThingText_TextView;                    // 카테고리 '물건교환' Image 아래의 TextView
+    private TextView BorrowText_TextView;                   // 카테고리 '대여하기' Image 아래의 TextView
+    private TextView Quest_TextView;                        // 카테고리 '퀘스트' Image 아래의 TextView
+    private TextView Hot_TextView;                          // 카테고리 '핫게시물' Image 아래의 TextView
+                                                        // 4. 파이어베이스 관련 선언
+    private FirebaseFirestore Firebasefirestore;            // 파이어스토어
+                                                        // 5. 기타 변수
+    private boolean updating;                               // 정보를 받아오는 중인지 분별하는 boolean 변수
+    private boolean topScrolled;                            // 상단으로 스크롤한 상태의 boolean 변수
 
-    private ImageView searchbtn;
-
-    public MarketFragment() {                                                                                 // part22 : 프레그먼트로 내용 이전 (21'40")
-        // Required empty public constructor
-    }
+    public MarketFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,91 +67,77 @@ public class MarketFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        //지역선택
+       // 지역선택
         Spinner Market_Category_Spinner = (Spinner)view.findViewById(R.id.Local_Spinner);
         ArrayAdapter Market_Category_Adapter = ArrayAdapter.createFromResource(getContext(), R.array.Local, android.R.layout.simple_spinner_item);
         Market_Category_Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Market_Category_Spinner.setAdapter(Market_Category_Adapter);
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        MarketList = new ArrayList<>();
-        marketAdapter = new MarketAdapter(getActivity(), MarketList);
-        //homeAdapter.setOnPostListener(onPostListener);
+       // 핫게시물 Button, 카테고리(음식교환, 물건교환, 대여하기, 퀘스트) Button, 검색 Button find
+        HotMarket_ImageView = (ImageView) view.findViewById(R.id.HotPostbtn);
+        FoodMarket_ImageView = (ImageView) view.findViewById(R.id.FoodPostbtn);
+        ThingMarket_ImageView = (ImageView) view.findViewById(R.id.LifePostbtn);
+        BorrowMarket_ImageView = (ImageView) view.findViewById(R.id.BorrowPostbtn);
+        QuestMarket_ImageView = (ImageView) view.findViewById(R.id.WorkPostbtn);
+        SearchButton_ImageView = (ImageView) view.findViewById(R.id.searchbtn);
 
-        recyclerView = view.findViewById(R.id.recyclerView);
-        //view.findViewById(R.id.floatingActionButton).setOnClickListener(onClickListener);
+       // 핫게시물 Button, 카테고리(음식교환, 물건교환, 대여하기, 퀘스트) Button, 검색 Button setOnClickListener
+        HotMarket_ImageView.setOnClickListener(onClickListener);
+        FoodMarket_ImageView.setOnClickListener(onClickListener);
+        ThingMarket_ImageView.setOnClickListener(onClickListener);
+        BorrowMarket_ImageView.setOnClickListener(onClickListener);
+        QuestMarket_ImageView.setOnClickListener(onClickListener);
+        SearchButton_ImageView.setOnClickListener(onClickListener);
 
-        view.findViewById(R.id.searchbtn).setOnClickListener(onClickListener);
+       // 핫게시물 Button, 카테고리(음식교환, 물건교환, 대여하기, 퀘스트) Button 아래의 TextView find
+        FoodText_TextView = view.findViewById(R.id.FoodPostText);
+        ThingText_TextView = view.findViewById(R.id.LifePostText);
+        BorrowText_TextView = view.findViewById(R.id.BorrowPostText);
+        Quest_TextView = view.findViewById(R.id.WorkPostText);
+        Hot_TextView = view.findViewById(R.id.HotPostText);
 
-        //view.findViewById(R.id.AllPostbtn).setOnClickListener(onClickListener);
-        HotMarketbtn = (ImageView) view.findViewById(R.id.HotPostbtn);
-        HotMarketbtn.setOnClickListener(onClickListener);
-        FoodMarketbtn = (ImageView) view.findViewById(R.id.FoodPostbtn);
-        FoodMarketbtn.setOnClickListener(onClickListener);
-        LifeMarketbtn = (ImageView) view.findViewById(R.id.LifePostbtn);
-        LifeMarketbtn.setOnClickListener(onClickListener);
-        BorrowMarketbtn = (ImageView) view.findViewById(R.id.BorrowPostbtn);
-        BorrowMarketbtn.setOnClickListener(onClickListener);
-        WorkMarketbtn = (ImageView) view.findViewById(R.id.WorkPostbtn);
-        WorkMarketbtn.setOnClickListener(onClickListener);
-        searchbtn = (ImageView) view.findViewById(R.id.searchbtn);
-        searchbtn.setOnClickListener(onClickListener);
-        //searchbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-        FoodText = view.findViewById(R.id.FoodPostText);
-        LifeText = view.findViewById(R.id.LifePostText);
-        BorrowText = view.findViewById(R.id.BorrowPostText);
-        WorkText = view.findViewById(R.id.WorkPostText);
-        HotText = view.findViewById(R.id.HotPostText);
-
-
+       // 필터의 초기화는 '전체'로 핫게시물, 카테고리 상관없이 나열한다.
         State = "전체";
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(marketAdapter);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {                          // part21 : 스크롤로 새로고침 (29'10")
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {        //part21 : 스크롤 손을 뗏을때(31')
-                super.onScrollStateChanged(recyclerView, newState);
 
+       // 파이어스토어
+        Firebasefirestore = FirebaseFirestore.getInstance();
+
+       // Marketmodel 초기화, 어댑터에 연결
+        Marketmodel = new ArrayList<>();
+        Marketadapter = new MarketAdapter(getActivity(), Marketmodel);
+        Recyclerview = view.findViewById(R.id.recyclerView);
+        Recyclerview.setHasFixedSize(true);
+        Recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        Recyclerview.setAdapter(Marketadapter);
+       // 스크롤 listener
+        Recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
                 RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
                 int firstVisibleItemPosition = ((LinearLayoutManager)layoutManager).findFirstVisibleItemPosition();
-
-                if(newState == 1 && firstVisibleItemPosition == 0){                                      // part21 : 위로 새로고침 (39'40")
-                    topScrolled = true;
-                }
+                if(newState == 1 && firstVisibleItemPosition == 0){topScrolled = true; }
                 if(newState == 0 && topScrolled){
                     JudgeState(true);
                     topScrolled = false;
                 }
             }
-
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy){                          //part21 : 스크롤 되는 내내(31')
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy){
                 super.onScrolled(recyclerView, dx, dy);
-
                 RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-                int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItemPosition = ((LinearLayoutManager)layoutManager).findFirstVisibleItemPosition();
                 int lastVisibleItemPosition = ((LinearLayoutManager)layoutManager).findLastVisibleItemPosition();
-                Log.d("onScrolled","totalItemCount : "+totalItemCount);
-                Log.d("onScrolled","firstVisibleItemPosition : "+firstVisibleItemPosition);
-                Log.d("onScrolled","lastVisibleItemPosition : "+lastVisibleItemPosition);
-
-                if(totalItemCount - 8 <= lastVisibleItemPosition && !updating){                         // part21 : 아래에서 3번쩨 일때 && 로딩중일 때는 이벤트 작용 안하게 (35'10")
-                    JudgeState(false);
-                }
-
-                if(0 < firstVisibleItemPosition){
-                    topScrolled = false;
-                }
+                if(totalItemCount - 8 <= lastVisibleItemPosition && !updating){ JudgeState(false); }
+                if(0 < firstVisibleItemPosition){ topScrolled = false; }
             }
         });
+
         All_MarketUpdate(false);
 
         return view;
@@ -204,32 +185,32 @@ public class MarketFragment extends Fragment {
                     break;
                 case R.id.HotPostbtn:
                     if(HotMarketbtn_State.equals("unSelected")){
-                    HotMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    HotText.setTextColor(Color.parseColor("#2fd8df"));
-                    FoodMarketbtn.setColorFilter(null);
-                    FoodText.setTextColor(Color.parseColor("#000000"));
-                    LifeMarketbtn.setColorFilter(null);
-                    LifeText.setTextColor(Color.parseColor("#000000"));
-                    BorrowMarketbtn.setColorFilter(null);
-                    BorrowText.setTextColor(Color.parseColor("#000000"));
-                    WorkMarketbtn.setColorFilter(null);
-                    WorkText.setTextColor(Color.parseColor("#000000"));
-                    MarketList.clear();
+                    HotMarket_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    Hot_TextView.setTextColor(Color.parseColor("#2fd8df"));
+                    FoodMarket_ImageView.setColorFilter(null);
+                    FoodText_TextView.setTextColor(Color.parseColor("#000000"));
+                    ThingMarket_ImageView.setColorFilter(null);
+                    ThingText_TextView.setTextColor(Color.parseColor("#000000"));
+                    BorrowMarket_ImageView.setColorFilter(null);
+                    BorrowText_TextView.setTextColor(Color.parseColor("#000000"));
+                    QuestMarket_ImageView.setColorFilter(null);
+                    Quest_TextView.setTextColor(Color.parseColor("#000000"));
+                    Marketmodel.clear();
                     Hot_MarketUpdate(true);
                     State = "핫게시판";
                     HotMarketbtn_State = "Selected";
                     }else if(HotMarketbtn_State.equals("Selected")){
-                        FoodMarketbtn.setColorFilter(null);
-                        FoodText.setTextColor(Color.parseColor("#000000"));
-                        LifeMarketbtn.setColorFilter(null);
-                        LifeText.setTextColor(Color.parseColor("#000000"));
-                        BorrowMarketbtn.setColorFilter(null);
-                        BorrowText.setTextColor(Color.parseColor("#000000"));
-                        WorkMarketbtn.setColorFilter(null);
-                        WorkText.setTextColor(Color.parseColor("#000000"));
-                        HotMarketbtn.setColorFilter(null);
-                        HotText.setTextColor(Color.parseColor("#000000"));
-                        MarketList.clear();
+                        FoodMarket_ImageView.setColorFilter(null);
+                        FoodText_TextView.setTextColor(Color.parseColor("#000000"));
+                        ThingMarket_ImageView.setColorFilter(null);
+                        ThingText_TextView.setTextColor(Color.parseColor("#000000"));
+                        BorrowMarket_ImageView.setColorFilter(null);
+                        BorrowText_TextView.setTextColor(Color.parseColor("#000000"));
+                        QuestMarket_ImageView.setColorFilter(null);
+                        Quest_TextView.setTextColor(Color.parseColor("#000000"));
+                        HotMarket_ImageView.setColorFilter(null);
+                        Hot_TextView.setTextColor(Color.parseColor("#000000"));
+                        Marketmodel.clear();
                         All_MarketUpdate(true);
                         State = "전체";
                         HotMarketbtn_State = "unSelected";
@@ -238,32 +219,32 @@ public class MarketFragment extends Fragment {
                 case R.id.FoodPostbtn:
                     //ImageView FoodPostbtn = (ImageView) view.findViewById(R.id.FoodPostbtn);
                     if(FoodMarketbtn_State.equals("unSelected")){
-                        FoodMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                        FoodText.setTextColor(Color.parseColor("#2fd8df"));
-                        LifeMarketbtn.setColorFilter(null);
-                        LifeText.setTextColor(Color.parseColor("#000000"));
-                        BorrowMarketbtn.setColorFilter(null);
-                        BorrowText.setTextColor(Color.parseColor("#000000"));
-                        WorkMarketbtn.setColorFilter(null);
-                        WorkText.setTextColor(Color.parseColor("#000000"));
-                        HotMarketbtn.setColorFilter(null);
-                        HotText.setTextColor(Color.parseColor("#000000"));
-                        MarketList.clear();
+                        FoodMarket_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                        FoodText_TextView.setTextColor(Color.parseColor("#2fd8df"));
+                        ThingMarket_ImageView.setColorFilter(null);
+                        ThingText_TextView.setTextColor(Color.parseColor("#000000"));
+                        BorrowMarket_ImageView.setColorFilter(null);
+                        BorrowText_TextView.setTextColor(Color.parseColor("#000000"));
+                        QuestMarket_ImageView.setColorFilter(null);
+                        Quest_TextView.setTextColor(Color.parseColor("#000000"));
+                        HotMarket_ImageView.setColorFilter(null);
+                        Hot_TextView.setTextColor(Color.parseColor("#000000"));
+                        Marketmodel.clear();
                         Food_MarketUpdate(true);
                         State = "음식";
                         FoodMarketbtn_State = "Selected";
                     }else if(FoodMarketbtn_State.equals("Selected")){
-                        FoodMarketbtn.setColorFilter(null);
-                        FoodText.setTextColor(Color.parseColor("#000000"));
-                        LifeMarketbtn.setColorFilter(null);
-                        LifeText.setTextColor(Color.parseColor("#000000"));
-                        BorrowMarketbtn.setColorFilter(null);
-                        BorrowText.setTextColor(Color.parseColor("#000000"));
-                        WorkMarketbtn.setColorFilter(null);
-                        WorkText.setTextColor(Color.parseColor("#000000"));
-                        HotMarketbtn.setColorFilter(null);
-                        HotText.setTextColor(Color.parseColor("#000000"));
-                        MarketList.clear();
+                        FoodMarket_ImageView.setColorFilter(null);
+                        FoodText_TextView.setTextColor(Color.parseColor("#000000"));
+                        ThingMarket_ImageView.setColorFilter(null);
+                        ThingText_TextView.setTextColor(Color.parseColor("#000000"));
+                        BorrowMarket_ImageView.setColorFilter(null);
+                        BorrowText_TextView.setTextColor(Color.parseColor("#000000"));
+                        QuestMarket_ImageView.setColorFilter(null);
+                        Quest_TextView.setTextColor(Color.parseColor("#000000"));
+                        HotMarket_ImageView.setColorFilter(null);
+                        Hot_TextView.setTextColor(Color.parseColor("#000000"));
+                        Marketmodel.clear();
                         All_MarketUpdate(true);
                         State = "전체";
                         FoodMarketbtn_State = "unSelected";
@@ -271,102 +252,102 @@ public class MarketFragment extends Fragment {
 
                     break;
                 case R.id.LifePostbtn:
-                    if(LifeMarketbtn_State.equals("unSelected")){
-                    LifeMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    LifeText.setTextColor(Color.parseColor("#2fd8df"));
-                    FoodMarketbtn.setColorFilter(null);
-                    FoodText.setTextColor(Color.parseColor("#000000"));
-                    BorrowMarketbtn.setColorFilter(null);
-                    BorrowText.setTextColor(Color.parseColor("#000000"));
-                    WorkMarketbtn.setColorFilter(null);
-                    WorkText.setTextColor(Color.parseColor("#000000"));
-                    HotMarketbtn.setColorFilter(null);
-                    HotText.setTextColor(Color.parseColor("#000000"));
-                    MarketList.clear();
+                    if(ThingMarketbtn_State.equals("unSelected")){
+                    ThingMarket_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    ThingText_TextView.setTextColor(Color.parseColor("#2fd8df"));
+                    FoodMarket_ImageView.setColorFilter(null);
+                    FoodText_TextView.setTextColor(Color.parseColor("#000000"));
+                    BorrowMarket_ImageView.setColorFilter(null);
+                    BorrowText_TextView.setTextColor(Color.parseColor("#000000"));
+                    QuestMarket_ImageView.setColorFilter(null);
+                    Quest_TextView.setTextColor(Color.parseColor("#000000"));
+                    HotMarket_ImageView.setColorFilter(null);
+                    Hot_TextView.setTextColor(Color.parseColor("#000000"));
+                    Marketmodel.clear();
                     Thing_MarketUpdate(true);
                     State = "생필품";
-                    LifeMarketbtn_State = "Selected";
-                    } else if(LifeMarketbtn_State.equals("Selected")){
-                        FoodMarketbtn.setColorFilter(null);
-                        FoodText.setTextColor(Color.parseColor("#000000"));
-                        LifeMarketbtn.setColorFilter(null);
-                        LifeText.setTextColor(Color.parseColor("#000000"));
-                        BorrowMarketbtn.setColorFilter(null);
-                        BorrowText.setTextColor(Color.parseColor("#000000"));
-                        WorkMarketbtn.setColorFilter(null);
-                        WorkText.setTextColor(Color.parseColor("#000000"));
-                        HotMarketbtn.setColorFilter(null);
-                        HotText.setTextColor(Color.parseColor("#000000"));
-                        MarketList.clear();
+                    ThingMarketbtn_State = "Selected";
+                    } else if(ThingMarketbtn_State.equals("Selected")){
+                        FoodMarket_ImageView.setColorFilter(null);
+                        FoodText_TextView.setTextColor(Color.parseColor("#000000"));
+                        ThingMarket_ImageView.setColorFilter(null);
+                        ThingText_TextView.setTextColor(Color.parseColor("#000000"));
+                        BorrowMarket_ImageView.setColorFilter(null);
+                        BorrowText_TextView.setTextColor(Color.parseColor("#000000"));
+                        QuestMarket_ImageView.setColorFilter(null);
+                        Quest_TextView.setTextColor(Color.parseColor("#000000"));
+                        HotMarket_ImageView.setColorFilter(null);
+                        Hot_TextView.setTextColor(Color.parseColor("#000000"));
+                        Marketmodel.clear();
                         All_MarketUpdate(true);
                         State = "전체";
-                        LifeMarketbtn_State = "unSelected";
+                        ThingMarketbtn_State = "unSelected";
                     }
                     break;
                 case R.id.BorrowPostbtn:
                     if(BorrowMarketbtn_State.equals("unSelected")){
-                    BorrowMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    BorrowText.setTextColor(Color.parseColor("#2fd8df"));
-                    FoodMarketbtn.setColorFilter(null);
-                    FoodText.setTextColor(Color.parseColor("#000000"));
-                    LifeMarketbtn.setColorFilter(null);
-                    LifeText.setTextColor(Color.parseColor("#000000"));
-                    WorkMarketbtn.setColorFilter(null);
-                    WorkText.setTextColor(Color.parseColor("#000000"));
-                    HotMarketbtn.setColorFilter(null);
-                    HotText.setTextColor(Color.parseColor("#000000"));
-                    MarketList.clear();
+                    BorrowMarket_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    BorrowText_TextView.setTextColor(Color.parseColor("#2fd8df"));
+                    FoodMarket_ImageView.setColorFilter(null);
+                    FoodText_TextView.setTextColor(Color.parseColor("#000000"));
+                    ThingMarket_ImageView.setColorFilter(null);
+                    ThingText_TextView.setTextColor(Color.parseColor("#000000"));
+                    QuestMarket_ImageView.setColorFilter(null);
+                    Quest_TextView.setTextColor(Color.parseColor("#000000"));
+                    HotMarket_ImageView.setColorFilter(null);
+                    Hot_TextView.setTextColor(Color.parseColor("#000000"));
+                    Marketmodel.clear();
                     Borrow_MarketUpdate(true);
                     State = "대여";
                     BorrowMarketbtn_State = "Selected";
                     } else if(BorrowMarketbtn_State.equals("Selected")){
-                        FoodMarketbtn.setColorFilter(null);
-                        FoodText.setTextColor(Color.parseColor("#000000"));
-                        LifeMarketbtn.setColorFilter(null);
-                        LifeText.setTextColor(Color.parseColor("#000000"));
-                        BorrowMarketbtn.setColorFilter(null);
-                        BorrowText.setTextColor(Color.parseColor("#000000"));
-                        WorkMarketbtn.setColorFilter(null);
-                        WorkText.setTextColor(Color.parseColor("#000000"));
-                        HotMarketbtn.setColorFilter(null);
-                        HotText.setTextColor(Color.parseColor("#000000"));
-                        MarketList.clear();
+                        FoodMarket_ImageView.setColorFilter(null);
+                        FoodText_TextView.setTextColor(Color.parseColor("#000000"));
+                        ThingMarket_ImageView.setColorFilter(null);
+                        ThingText_TextView.setTextColor(Color.parseColor("#000000"));
+                        BorrowMarket_ImageView.setColorFilter(null);
+                        BorrowText_TextView.setTextColor(Color.parseColor("#000000"));
+                        QuestMarket_ImageView.setColorFilter(null);
+                        Quest_TextView.setTextColor(Color.parseColor("#000000"));
+                        HotMarket_ImageView.setColorFilter(null);
+                        Hot_TextView.setTextColor(Color.parseColor("#000000"));
+                        Marketmodel.clear();
                         All_MarketUpdate(true);
                         State = "전체";
                         BorrowMarketbtn_State = "unSelected";
                     }
                     break;
                 case R.id.WorkPostbtn:
-                    if(WorkMarketbtn_State.equals("unSelected")){
-                    WorkMarketbtn.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
-                    WorkText.setTextColor(Color.parseColor("#2fd8df"));
-                    FoodMarketbtn.setColorFilter(null);
-                    FoodText.setTextColor(Color.parseColor("#000000"));
-                    LifeMarketbtn.setColorFilter(null);
-                    LifeText.setTextColor(Color.parseColor("#000000"));
-                    BorrowMarketbtn.setColorFilter(null);
-                    BorrowText.setTextColor(Color.parseColor("#000000"));
-                    HotMarketbtn.setColorFilter(null);
-                    HotText.setTextColor(Color.parseColor("#000000"));
-                    MarketList.clear();
+                    if(QuestMarketbtn_State.equals("unSelected")){
+                    QuestMarket_ImageView.setColorFilter(Color.parseColor("#2fd8df"), PorterDuff.Mode.SRC_IN);
+                    Quest_TextView.setTextColor(Color.parseColor("#2fd8df"));
+                    FoodMarket_ImageView.setColorFilter(null);
+                    FoodText_TextView.setTextColor(Color.parseColor("#000000"));
+                    ThingMarket_ImageView.setColorFilter(null);
+                    ThingText_TextView.setTextColor(Color.parseColor("#000000"));
+                    BorrowMarket_ImageView.setColorFilter(null);
+                    BorrowText_TextView.setTextColor(Color.parseColor("#000000"));
+                    HotMarket_ImageView.setColorFilter(null);
+                    Hot_TextView.setTextColor(Color.parseColor("#000000"));
+                    Marketmodel.clear();
                     Work_MarketUpdate(true);
                     State = "용역";
-                    WorkMarketbtn_State = "Selected";
-                    } else if(WorkMarketbtn_State.equals("Selected")){
-                        FoodMarketbtn.setColorFilter(null);
-                        FoodText.setTextColor(Color.parseColor("#000000"));
-                        LifeMarketbtn.setColorFilter(null);
-                        LifeText.setTextColor(Color.parseColor("#000000"));
-                        BorrowMarketbtn.setColorFilter(null);
-                        BorrowText.setTextColor(Color.parseColor("#000000"));
-                        WorkMarketbtn.setColorFilter(null);
-                        WorkText.setTextColor(Color.parseColor("#000000"));
-                        HotMarketbtn.setColorFilter(null);
-                        HotText.setTextColor(Color.parseColor("#000000"));
-                        MarketList.clear();
+                    QuestMarketbtn_State = "Selected";
+                    } else if(QuestMarketbtn_State.equals("Selected")){
+                        FoodMarket_ImageView.setColorFilter(null);
+                        FoodText_TextView.setTextColor(Color.parseColor("#000000"));
+                        ThingMarket_ImageView.setColorFilter(null);
+                        ThingText_TextView.setTextColor(Color.parseColor("#000000"));
+                        BorrowMarket_ImageView.setColorFilter(null);
+                        BorrowText_TextView.setTextColor(Color.parseColor("#000000"));
+                        QuestMarket_ImageView.setColorFilter(null);
+                        Quest_TextView.setTextColor(Color.parseColor("#000000"));
+                        HotMarket_ImageView.setColorFilter(null);
+                        Hot_TextView.setTextColor(Color.parseColor("#000000"));
+                        Marketmodel.clear();
                         All_MarketUpdate(true);
                         State = "전체";
-                        WorkMarketbtn_State = "unSelected";
+                        QuestMarketbtn_State = "unSelected";
                     }
                     break;
             }
@@ -375,18 +356,18 @@ public class MarketFragment extends Fragment {
 
     private void All_MarketUpdate(final boolean clear) {
         updating = true;
-        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
+        Date date = Marketmodel.size() == 0 || clear ? new Date() : Marketmodel.get(Marketmodel.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        CollectionReference collectionReference = Firebasefirestore.collection("MARKETS");                // 파이어베이스의 posts에서
         collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).limit(10).get()        // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
+                                Marketmodel.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+                                Marketmodel.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("MarketModel_Title").toString(),
                                         document.getData().get("MarketModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
@@ -401,7 +382,7 @@ public class MarketFragment extends Fragment {
                                         Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))                                        )
                                 );
                         }
-                            marketAdapter.notifyDataSetChanged();
+                            Marketadapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());
@@ -414,8 +395,8 @@ public class MarketFragment extends Fragment {
     private void Hot_MarketUpdate(final boolean clear) {
         updating = true;
 
-        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
+        Date date = Marketmodel.size() == 0 || clear ? new Date() : Marketmodel.get(Marketmodel.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        CollectionReference collectionReference = Firebasefirestore.collection("MARKETS");                // 파이어베이스의 posts에서
         collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_HotMarket","O").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -423,13 +404,13 @@ public class MarketFragment extends Fragment {
                         int HotMarketCut;
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
+                                Marketmodel.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 HotMarketCut = ((ArrayList<String>) document.getData().get("MarketModel_LikeList")).size();
                                 if(HotMarketCut>0) {
-                                    MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+                                    Marketmodel.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                             document.getData().get("MarketModel_Title").toString(),
                                             document.getData().get("MarketModel_Text").toString(),
                                             (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
@@ -445,7 +426,7 @@ public class MarketFragment extends Fragment {
                                 }
                                 HotMarketCut = 0;
                             }
-                            marketAdapter.notifyDataSetChanged();
+                            Marketadapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());
@@ -458,8 +439,8 @@ public class MarketFragment extends Fragment {
     private void Food_MarketUpdate(final boolean clear) {
         updating = true;
 
-        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
+        Date date = Marketmodel.size() == 0 || clear ? new Date() : Marketmodel.get(Marketmodel.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        CollectionReference collectionReference = Firebasefirestore.collection("MARKETS");                // 파이어베이스의 posts에서
         collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","음식").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -467,11 +448,11 @@ public class MarketFragment extends Fragment {
 
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
+                                Marketmodel.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+                                Marketmodel.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("MarketModel_Title").toString(),
                                         document.getData().get("MarketModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
@@ -485,7 +466,7 @@ public class MarketFragment extends Fragment {
                                         document.getData().get("MarketModel_deal").toString(),
                                         Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))                                ));
                             }
-                            marketAdapter.notifyDataSetChanged();
+                            Marketadapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());
@@ -498,8 +479,8 @@ public class MarketFragment extends Fragment {
     private void Thing_MarketUpdate(final boolean clear) {
         updating = true;
 
-        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
+        Date date = Marketmodel.size() == 0 || clear ? new Date() : Marketmodel.get(Marketmodel.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        CollectionReference collectionReference = Firebasefirestore.collection("MARKETS");                // 파이어베이스의 posts에서
         collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","생필품").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -507,11 +488,11 @@ public class MarketFragment extends Fragment {
                         String Thing;
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
+                                Marketmodel.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+                                Marketmodel.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("MarketModel_Title").toString(),
                                         document.getData().get("MarketModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
@@ -525,7 +506,7 @@ public class MarketFragment extends Fragment {
                                         document.getData().get("MarketModel_deal").toString(),
                                         Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))                                ));
                             }
-                            marketAdapter.notifyDataSetChanged();
+                            Marketadapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());
@@ -538,8 +519,8 @@ public class MarketFragment extends Fragment {
     private void Borrow_MarketUpdate(final boolean clear) {
         updating = true;
 
-        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
+        Date date = Marketmodel.size() == 0 || clear ? new Date() : Marketmodel.get(Marketmodel.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        CollectionReference collectionReference = Firebasefirestore.collection("MARKETS");                // 파이어베이스의 posts에서
         collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","대여").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -547,11 +528,11 @@ public class MarketFragment extends Fragment {
                         String Borrow;
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
+                                Marketmodel.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+                                Marketmodel.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("MarketModel_Title").toString(),
                                         document.getData().get("MarketModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
@@ -565,7 +546,7 @@ public class MarketFragment extends Fragment {
                                         document.getData().get("MarketModel_deal").toString(),
                                         Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))                                ));
                             }
-                            marketAdapter.notifyDataSetChanged();
+                            Marketadapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());
@@ -578,8 +559,8 @@ public class MarketFragment extends Fragment {
     private void Work_MarketUpdate(final boolean clear) {
         updating = true;
 
-        Date date = MarketList.size() == 0 || clear ? new Date() : MarketList.get(MarketList.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
-        CollectionReference collectionReference = firebaseFirestore.collection("MARKETS");                // 파이어베이스의 posts에서
+        Date date = Marketmodel.size() == 0 || clear ? new Date() : Marketmodel.get(Marketmodel.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
+        CollectionReference collectionReference = Firebasefirestore.collection("MARKETS");                // 파이어베이스의 posts에서
         collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","용역").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -587,11 +568,11 @@ public class MarketFragment extends Fragment {
                         String Work;
                         if (task.isSuccessful()) {
                             if(clear){                      //part22 : clear를 boolean으로 써서 업데이트 도중에 게시물 클릭시 발생하는 오류 해결 (3'30")   // part15 : MainAdapter에서 setOnClickListener에서 시작 (35'30")
-                                MarketList.clear();                                                           // part16 : List 안의 데이터 초기화
+                                Marketmodel.clear();                                                           // part16 : List 안의 데이터 초기화
                             }                                                                               // part16 : postsUpdate로 이동 (15'50")
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                MarketList.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
+                                Marketmodel.add(new MarketModel(                                                          //postList로 데이터를 넣는다.
                                         document.getData().get("MarketModel_Title").toString(),
                                         document.getData().get("MarketModel_Text").toString(),
                                         (ArrayList<String>) document.getData().get("MarketModel_ImageList"),
@@ -605,7 +586,7 @@ public class MarketFragment extends Fragment {
                                         document.getData().get("MarketModel_deal").toString(),
                                         Integer.parseInt(String.valueOf(document.getData().get("MarketModel_CommentCount")))                                ));
                             }
-                            marketAdapter.notifyDataSetChanged();
+                            Marketadapter.notifyDataSetChanged();
                         } else {
                             //Log.d("로그","실패?");
                             //Log.d(TAG, "Error getting documents: ", task.getException());

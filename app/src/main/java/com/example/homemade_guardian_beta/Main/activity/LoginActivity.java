@@ -276,47 +276,44 @@ public class LoginActivity extends AppCompatActivity {
         if (Curruntuser_uid != null) {
 
             final String CurrentUid =Curruntuser_uid.getUid();
-            FirebaseInstanceId.getInstance().getInstanceId()
-                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                            if (!task.isSuccessful()) {
-                                Log.d("민규", "토큰 못 가져옴");
-                                return;
-                            }
-                            final String token = task.getResult().getToken();
-                            final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
-                            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document != null) {
-                                            UserModel userModel = new UserModel();
-                                            userModel = document.toObject(UserModel.class);
+            FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                @Override
+                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                    if (!task.isSuccessful()) {
+                        Log.d("민규", "토큰 못 가져옴");
+                        return;
+                    }
+                    final String token = task.getResult().getToken();
+                    final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
 
-                                            if(!token.equals(userModel.getUserModel_Token())){
-                                                userModel.setUserModel_Token(token);
-                                                DocumentReference documentReferencesetUser = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
-                                                documentReferencesetUser
-                                                        .update("UserModel_Token", token)
-                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void aVoid) {
-                                                            }
-                                                        })
-                                                        .addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                            }
-                                                        });
-                                            }
-                                        }
-                                    }
+                    documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            UserModel Usermodel = documentSnapshot.toObject(UserModel.class);
+                            if (Usermodel != null) {
+                                if (!token.equals(Usermodel.getUserModel_Token())) {
+                                    Usermodel.setUserModel_Token(token);
+                                    DocumentReference documentReferencesetUser = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
+                                    documentReferencesetUser
+                                            .update("UserModel_Token", token)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+
+                                                }
+                                            });
                                 }
-                            });
+                            }
                         }
                     });
+
+                }
+            });
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();

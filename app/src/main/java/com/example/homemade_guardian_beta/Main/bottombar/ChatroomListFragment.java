@@ -173,7 +173,7 @@ public class ChatroomListFragment extends Fragment {
                                     if (My_User_Uid.equals(key)) {
                                         Integer  unread = (int) (long) users.get(key);
                                         unreadTotal += unread;
-                                        chatRoomListModel.setChatRoomListModel_UnreadCheck(unread);
+                                        chatRoomListModel.setChatRoomListModel_UnreadCheck(unreadTotal);
                                         break;
                                     }
                                 }
@@ -224,7 +224,7 @@ public class ChatroomListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            RoomViewHolder roomViewHolder = (RoomViewHolder) holder;
+            final RoomViewHolder roomViewHolder = (RoomViewHolder) holder;
 
             final ChatRoomListModel chatRoomListModel = RoomList.get(position);
 
@@ -261,6 +261,8 @@ public class ChatroomListFragment extends Fragment {
                     intent.putExtra("To_User_Uid", chatRoomListModel.getChatRoomListModel_ToUserUid());
                     intent.putExtra("ChatRoomListModel_Title", chatRoomListModel.getChatRoomListModel_Title());
                     intent.putExtra("MarketModel_Market_Uid", chatRoomListModel.getChatRoomListModel_PostUid());
+                    chatRoomListModel.setChatRoomListModel_UnreadCheck(0);
+                    roomViewHolder.unread_count.setVisibility(View.GONE);
                     startActivity(intent);
                 }
             });

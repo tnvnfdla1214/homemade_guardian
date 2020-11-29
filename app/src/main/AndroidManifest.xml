@@ -15,8 +15,8 @@
     <application
         android:name="com.example.homemade_guardian_beta.Main.common.GlobalApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:icon="@drawable/complete"
+        android:label="자취방 수호대"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -26,7 +26,9 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
-
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/complete" />
         <activity android:name=".Main.activity.LoginActivity" android:screenOrientation="portrait">
         </activity>
 
@@ -42,6 +44,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
+
         </service>
 
         <provider
@@ -61,6 +64,7 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
+
         </provider>
 
         <activity android:name=".market.activity.MarketActivity" android:screenOrientation="portrait">

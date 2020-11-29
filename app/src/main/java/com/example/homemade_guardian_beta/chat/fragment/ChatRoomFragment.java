@@ -116,7 +116,7 @@ public class ChatRoomFragment extends Fragment {
         Integer unreadTotal = 0;
         public void getRoomInfo() {
             // my chatting room information
-            listenerRegistration = firestore.collection("ROOMS").whereGreaterThanOrEqualTo("USERS."+myUid, 0)
+            listenerRegistration = firestore.collection("ROOMS").whereGreaterThanOrEqualTo("RoomModel_USERS."+myUid, 0)
 //                    a.orderBy("timestamp", Query.Direction.DESCENDING)
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
@@ -141,7 +141,7 @@ public class ChatRoomFragment extends Fragment {
                                         default:  chatRoomListModel.setChatRoomListModel_LastMessage(messageModel.getMessageModel_Message());
                                     }
                                 }
-                                Map<String, Long> users = (Map<String, Long>) document.get("USERS");
+                                Map<String, Long> users = (Map<String, Long>) document.get("RoomModel_USERS");
                                 chatRoomListModel.setChatRoomListModel_NumberOfUser(users.size());
                                 for( String key : users.keySet() ){
                                     if (myUid.equals(key)) {

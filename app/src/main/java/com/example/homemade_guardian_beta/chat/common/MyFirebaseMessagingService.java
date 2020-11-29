@@ -32,7 +32,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+        Log.d("tjrrb","1");
         sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+        Log.d("tjrrb","2");
     }
     // [END receive_message]
 
@@ -59,12 +61,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      */
     private void sendNotification(String title, String messageBody) {
         Intent intent = new Intent(this, MainActivity.class);
+        Log.d("tjrrb","11");
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Log.d("tjrrb","12");
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
+        Log.d("tjrrb","13");
 
         String channelId = getString(R.string.default_notification_channel_id);
+        Log.d("tjrrb","14");
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Log.d("tjrrb","15");
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.complete)
@@ -73,18 +80,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
                         .setContentIntent(pendingIntent);
+        Log.d("tjrrb","16");
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        Log.d("tjrrb","17");
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Log.d("tjrrb","18");
             NotificationChannel channel = new NotificationChannel("fcm_default_channel",
                     "fcm_default_channel",
                     NotificationManager.IMPORTANCE_DEFAULT);
+            Log.d("tjrrb","19");
             notificationManager.createNotificationChannel(channel);
+            Log.d("tjrrb","20");
         }
-
+        Log.d("tjrrb","21");
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        Log.d("tjrrb","22");
     }
 }

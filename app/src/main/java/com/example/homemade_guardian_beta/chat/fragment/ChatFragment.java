@@ -481,7 +481,8 @@ public class ChatFragment extends Fragment {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 //sendGCM();
-                                sendGson();
+                                Log.d("tjrrb","To_User_Uidcccc"+To_User_Uid);
+                                sendGson(MessageModel_Message);
                                 Chat_Send_Button.setEnabled(true);
                             }
                         }
@@ -532,6 +533,7 @@ public class ChatFragment extends Fragment {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 //sendGCM();
+                                sendGson(MessageModel_Message);
                                 Chat_Send_Button.setEnabled(true);
                             }
                         }
@@ -613,9 +615,9 @@ public class ChatFragment extends Fragment {
     }
 
 
-    private void sendGson() {
-
-        final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
+    private void sendGson(final String MessageModel_Message) {
+        Log.d("tjrrb","currentUser_Uid"+currentUser_Uid);
+        final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -623,8 +625,23 @@ public class ChatFragment extends Fragment {
                     DocumentSnapshot document = task.getResult();
                     if (document != null) {
                         if (document.exists()) {  //데이터의 존재여부
-                            UserModel userModel = document.toObject(UserModel.class);
-                            SendNotification.sendNotification(userModel.getUserModel_Token(), userModel.getUserModel_NickName(), Chat_Message_Input_EditText.getText().toString());
+                            final UserModel userModel = document.toObject(UserModel.class);
+                            final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(To_User_Uid);
+                            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document != null) {
+                                            if (document.exists()) {  //데이터의 존재여부
+                                                UserModel TouserModel = document.toObject(UserModel.class);
+                                                Log.d("tjrrb","userModel.getUserModel_NickName()"+TouserModel.getUserModel_NickName());
+                                                SendNotification.sendNotification(TouserModel.getUserModel_Token(), userModel.getUserModel_NickName(), MessageModel_Message);
+                                            }
+                                        }
+                                    }
+                                }
+                            });
                         }
                     }
                 }
@@ -823,10 +840,10 @@ public class ChatFragment extends Fragment {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (!task.isSuccessful()) {return;}
                         DocumentSnapshot document = task.getResult();
-                        Map<String, Long> users = (Map<String, Long>) document.get("USERS");
+                        Map<String, Long> users = (Map<String, Long>) document.get("RoomModel_USERS");
 
                         users.put(currentUser_Uid, (long) 0);
-                        document.getReference().update("USERS", users);
+                        document.getReference().update("RoomModel_USERS", users);
                     }
                 });
             }

@@ -212,6 +212,11 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                 Current_NickName = Usermodel.getUserModel_NickName();
                 Comment_Host_Image = Usermodel.getUserModel_ProfileImage();
             }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
         });
     }
 

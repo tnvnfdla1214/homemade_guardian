@@ -22,6 +22,7 @@ import com.example.homemade_guardian_beta.Main.activity.MemberInitActivity;
 import com.example.homemade_guardian_beta.Main.activity.ReviewActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
+import com.example.homemade_guardian_beta.chat.common.SendNotification;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -292,7 +293,7 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-
+                                SendAlarm(currentUser_Uid,To_User_Uid);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -317,6 +318,39 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
                             UserModel userModel = document.toObject(UserModel.class);
                             ReviewActivity reviewActivity = new ReviewActivity(getContext());
                             reviewActivity.callFunction(To_User_Uid, MarketModel_Market_Uid, userModel);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    void SendAlarm(String CurrentUser_Uid, final String ToUser_Uid){
+        final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUser_Uid);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (document.exists()) {  //데이터의 존재여부
+                            final UserModel userModel = document.toObject(UserModel.class);
+                            // 리뷰 작성자가 게시물 작성자가 아닐 때
+                            final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(ToUser_Uid);
+                            documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document != null) {
+                                            if (document.exists()) {  //데이터의 존재여부
+                                                UserModel ToHostuserModel = document.toObject(UserModel.class);
+                                                SendNotification.sendNotification(ToHostuserModel.getUserModel_Token(), userModel.getUserModel_NickName(), "완료된 거래의 리뷰를 작성해주세요! ");
+                                            }
+                                        }
+                                    }
+                                }
+                            });
                         }
                     }
                 }

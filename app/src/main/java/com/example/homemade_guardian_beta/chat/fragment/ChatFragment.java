@@ -224,20 +224,20 @@ public class ChatFragment extends Fragment {
             MarketModel_Market_Uid = getArguments().getString("MarketModel_Market_Uid");
         }
 
-        if (!"".equals(To_User_Uid) && To_User_Uid !=null && !"".equals(MarketModel_Market_Uid) && MarketModel_Market_Uid !=null) {
-            findChatRoom(To_User_Uid,MarketModel_Market_Uid);
-        }
-        if (!"".equals(ChatRoomListModel_RoomUid) && ChatRoomListModel_RoomUid !=null) {                   // existing room (multi user)
-            setChatRoom(ChatRoomListModel_RoomUid);
-        }
-
         if (ChatRoomListModel_RoomUid ==null) {                                         // new room for two user
             currentUser_Uid = getArguments().getString("currentUser_Uid");
             To_User_Uid = getArguments().getString("To_User_Uid");
             getUserInfoFromServer(currentUser_Uid);
             getUserInfoFromServer(To_User_Uid);
             NumberOfUser = 2;
-        };
+        }
+
+        if (!"".equals(To_User_Uid) && To_User_Uid !=null && !"".equals(MarketModel_Market_Uid) && MarketModel_Market_Uid !=null) {
+            findChatRoom(currentUser_Uid,To_User_Uid,MarketModel_Market_Uid);
+        }
+        if (!"".equals(ChatRoomListModel_RoomUid) && ChatRoomListModel_RoomUid !=null) {                   // existing room (multi user)
+            setChatRoom(ChatRoomListModel_RoomUid);
+        }
     }
 
 
@@ -267,9 +267,9 @@ public class ChatFragment extends Fragment {
     }
 
     // Room에서 MessageModel_PostUid로 찾는다.
-    void findChatRoom(final String toUid,final String MarketModel_Market_Uid){
+    void findChatRoom(final String currentUser_Uid,final String toUid,final String MarketModel_Market_Uid){
         Firestore = FirebaseFirestore.getInstance();
-        Firestore.collection("ROOMS").whereEqualTo("RoomModel_PostUid",MarketModel_Market_Uid).get()
+        Firestore.collection("ROOMS").whereEqualTo("RoomModel_PostUid",MarketModel_Market_Uid).whereGreaterThanOrEqualTo("RoomModel_USERS."+currentUser_Uid, 0).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -304,7 +304,7 @@ public class ChatFragment extends Fragment {
         });
     }
 
-    //읽은 채팅창인지 아닌지 확인하는 함수 -> 이거 조금 문제 있기에 나중에 수정해야함(이름도 좀 이상함) , 이거 사용을 안함
+    //유저가 읽었다면
     void setUnreadRead() {
         if (ChatRoomListModel_RoomUid ==null) return;
         Firestore = FirebaseFirestore.getInstance();
@@ -313,10 +313,10 @@ public class ChatFragment extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (!task.isSuccessful()) {return;}
                 DocumentSnapshot document = task.getResult();
-                Map<String, Long> users = (Map<String, Long>) document.get("RoomModel_USERS");
+                Map<String, Integer> users = (Map<String, Integer>) document.get("RoomModel_USERS");
 
-                users.put(currentUser_Uid, (long) 0);
-                document.getReference().update("USERS", users);
+                users.put(currentUser_Uid, 0);
+                document.getReference().update("RoomModel_USERS", users);
             }
         });
     }
@@ -372,7 +372,7 @@ public class ChatFragment extends Fragment {
         //유저의 uid와 읽었는지 않읽었는지 확인 하는 정보
         Map<String, Integer> USERS = new HashMap<>();
         for( String key : UserModel_UserList.keySet() ){
-            USERS.put(key, 0);
+            USERS.put(key, 1);
         }
         //유저의 uid와 유저가 나갔는지 안나갓는지 확인하는 정보 <- 1이면 안나간거 0이면 나간거
         Map<String, Integer> USERS_OUT = new HashMap<>();
@@ -452,22 +452,13 @@ public class ChatFragment extends Fragment {
                         roomModel.setRoomModel_FileName(fileinfo.FileName);
                         roomModel.setRoomModel_FileSize(fileinfo.FileSize);
                     }
-
+                    roomModel.setRoomModel_PostUid(MarketModel_Market_Uid);
                     batch.set(docRef, roomModel.getRoomInfo(), SetOptions.merge());
-                    // save message
+
                     List<String> ReadUsers = new ArrayList();
                     ReadUsers.add(currentUser_Uid);
                     messageModel.setMessageModel_ReadUser(ReadUsers);
                     batch.set(docRef.collection("MESSAGE").document(), messageModel.getMeesageInfo());
-                    // inc unread message count
-                    DocumentSnapshot document = task.getResult();
-                    Map<String, Long> users = (Map<String, Long>) document.get("RoomModel_USERS");
-
-                    for( String key : users.keySet() ){
-                        if (!currentUser_Uid.equals(key)) users.put(key, users.get(key)+1);
-                    }
-                    document.getReference().update("RoomModel_USERS", users);
-                    document.getReference().update("RoomModel_PostUid", MarketModel_Market_Uid);
 
                     batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -501,23 +492,19 @@ public class ChatFragment extends Fragment {
                         roomModel.setRoomModel_FileName(fileinfo.FileName);
                         roomModel.setRoomModel_FileSize(fileinfo.FileSize);
                     }
-
+                    Map<String, Integer> users = roomModel.getRoomModel_USERS();
+                    for( String key : users.keySet() ){
+                        if (!currentUser_Uid.equals(key)) users.put(key, users.get(key)+1);
+                    }
+                    roomModel.setRoomModel_USERS(users);
                     batch.set(docRef, roomModel.getRoomInfo(), SetOptions.merge());
-                    // save message
+
                     List<String> ReadUsers = new ArrayList();
                     ReadUsers.add(currentUser_Uid);
                     //MessageModel.put("MessageModel_ReadUser", ReadUsers);
                     messageModel.setMessageModel_ReadUser(ReadUsers);
                     batch.set(docRef.collection("MESSAGE").document(), messageModel.getMeesageInfo());
                     // inc unread message count
-                    DocumentSnapshot document = task.getResult();
-                    Map<String, Long> users = (Map<String, Long>) document.get("RoomModel_USERS");
-
-                    for( String key : users.keySet() ){
-                        if (!currentUser_Uid.equals(key)) users.put(key, users.get(key)+1);
-                    }
-                    document.getReference().update("RoomModel_USERS", users);
-                    document.getReference().update("RoomModel_PostUid", MarketModel_Market_Uid);
 
                     batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -676,7 +663,7 @@ public class ChatFragment extends Fragment {
 
             //setUnread2Read();
             startListening();
-            //setUnread2Read();
+            setUnreadRead();
         }
 
         //시작 세팅 함수
@@ -710,7 +697,7 @@ public class ChatFragment extends Fragment {
                             case REMOVED:
                                 MessageModel_List.remove(change.getOldIndex());
                                 notifyItemRemoved(change.getOldIndex());
-                            break;
+                                break;
                         }
                     }
                     Chat_RecyclerView.scrollToPosition(MessageModel_List.size() - 1);

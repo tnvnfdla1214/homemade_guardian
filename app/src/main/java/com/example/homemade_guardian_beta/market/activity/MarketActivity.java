@@ -32,6 +32,7 @@ import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
 import com.example.homemade_guardian_beta.Main.activity.HostModelActivity;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.chat.common.FirestoreAdapter;
+import com.example.homemade_guardian_beta.chat.common.SendNotification;
 import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.model.community.Community_CommentModel;
 import com.example.homemade_guardian_beta.model.user.UserModel;
@@ -310,6 +311,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                         MarketActivity.this.Comment_Input_EditText.setText("");
                         InputMethodManager immhide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                        SendAlarm(Comment);
                     }
                     if (!CurrentUid.equals(Marketmodel.getMarketModel_Host_Uid())) {
                         Chat_With_MarketHost_Button.setVisibility(View.VISIBLE);
@@ -414,6 +416,42 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
             }
         }
     };
+
+    private void SendAlarm(final String MessageModel_Message) {
+        final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (document.exists()) {  //데이터의 존재여부
+                            final UserModel userModel = document.toObject(UserModel.class);
+                            if(CurrentUid != Marketmodel.getMarketModel_Host_Uid()){
+                                final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(Marketmodel.getMarketModel_Host_Uid());
+                                documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document != null) {
+                                                if (document.exists()) {  //데이터의 존재여부
+                                                    UserModel TouserModel = document.toObject(UserModel.class);
+                                                    Log.d("tjrrb","댓글이 userModel.getUserModel_NickName()"+TouserModel.getUserModel_NickName());
+                                                    SendNotification.sendNotification(TouserModel.getUserModel_Token(), userModel.getUserModel_NickName(), "댓글이 달렸습니다! "+MessageModel_Message);
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+    }
 
     // 작성자 정보 우측에 있는 점 3개의 메뉴 버튼
     private void showPopup(View v) {

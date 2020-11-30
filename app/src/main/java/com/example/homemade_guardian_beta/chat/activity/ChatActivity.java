@@ -34,7 +34,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
-//채팅방안 액티비티 - 마켓의 정보,채팅
+//채팅방안 액티비티 - 마켓의 정보(호스트용,게스트용,정보가 없을 때),채팅 기능
 public class ChatActivity extends AppCompatActivity implements ChatFragment.RoomUidSetListener{
 
     private DrawerLayout drawerLayout;  //평소에는 화면의 한쪽에 숨겨져 있다가 사용자가 액션을 취하면 화면에 나타나는 기능을 만들 수 있게 해주는 레이아웃
@@ -94,8 +94,8 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
                 .commit();
 
         Firebasehelper = new FirebaseHelper(this);
-
         mcontext = this;
+
 
         //포스트 정보 프레그먼트
         DocumentReference docRef_USERS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
@@ -161,12 +161,14 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         }
     }
 
+    //챗프레그먼트 연결 함수
     @Override
     public void RoomUidSet(String RoomUid,String ToUid){
         ChatRoomListModel_RoomUid = RoomUid;
         To_User_Uid = ToUid;
     }
 
+    //챗프레그먼트 나가기 함수
     public void ChatFragment_User_GoOut(String Roomuid){
         chatFragment.User_GoOut(currentUser_Uid,MarketModel_Market_Uid,Roomuid);
     }

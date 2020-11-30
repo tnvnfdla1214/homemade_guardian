@@ -6,11 +6,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
@@ -18,14 +16,13 @@ import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-//호스트용 포스트 정보 프레그먼트
+//게스트 포스트 정보 프레그먼트
 public class Guest_Chat_MarketInfoFragment extends Fragment {
 
     String MarketModel_Market_Uid;
@@ -71,6 +68,13 @@ public class Guest_Chat_MarketInfoFragment extends Fragment {
 
         Bundle Marketbundle = getArguments();
         MarketModel_Market_Uid = Marketbundle.getString("MarketModel_Market_Uid");
+
+        MarketInfo(MarketModel_Market_Uid);
+        return View;
+    }
+
+    //마켓 정보
+    void MarketInfo(String RoomUid){
         DocumentReference docRef_USERS_HostUid = FirebaseFirestore.getInstance().collection("MARKETS").document(MarketModel_Market_Uid);
         docRef_USERS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -103,7 +107,5 @@ public class Guest_Chat_MarketInfoFragment extends Fragment {
 
             }
         });
-
-        return View;
     }
 }

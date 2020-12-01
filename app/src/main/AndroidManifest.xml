@@ -35,7 +35,7 @@
         <activity android:name=".chat.activity.ChatActivity" android:theme="@style/AppTheme.NoActionBar" android:screenOrientation="portrait"/>
         <activity android:name=".chat.common.photoview.ViewPagerActivity" android:theme="@style/AppTheme.NoActionBar"  android:screenOrientation="portrait"/>
 
-        <service android:name=".chat.common.MyFirebaseMessagingService"
+        <service android:name=".Main.common.MyFirebaseMessagingService"
             android:enabled="true"
             android:exported="true"
             android:stopWithTask="false">

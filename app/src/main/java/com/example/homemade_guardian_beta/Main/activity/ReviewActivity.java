@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.chat.common.SendNotification;
+import com.example.homemade_guardian_beta.Main.common.SendNotification;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.model.user.ReviewModel;
 import com.example.homemade_guardian_beta.model.user.UserModel;

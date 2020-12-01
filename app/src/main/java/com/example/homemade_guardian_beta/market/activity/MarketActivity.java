@@ -32,7 +32,7 @@ import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
 import com.example.homemade_guardian_beta.Main.activity.HostModelActivity;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.chat.common.FirestoreAdapter;
-import com.example.homemade_guardian_beta.chat.common.SendNotification;
+import com.example.homemade_guardian_beta.Main.common.SendNotification;
 import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.model.community.Community_CommentModel;
 import com.example.homemade_guardian_beta.model.user.UserModel;

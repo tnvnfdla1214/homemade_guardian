@@ -1,9 +1,7 @@
 package com.example.homemade_guardian_beta.chat.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +15,16 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.example.homemade_guardian_beta.Main.activity.MainActivity;
-import com.example.homemade_guardian_beta.Main.activity.MemberInitActivity;
 import com.example.homemade_guardian_beta.Main.activity.ReviewActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
-import com.example.homemade_guardian_beta.chat.common.SendNotification;
+import com.example.homemade_guardian_beta.Main.common.SendNotification;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;

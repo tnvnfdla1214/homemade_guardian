@@ -11,12 +11,28 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.market.activity.MarketActivity;
+import com.example.homemade_guardian_beta.model.market.MarketModel;
+import com.example.homemade_guardian_beta.model.user.UserModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 
 //파이어베이스 클라우드 메세징(FCM) : 메세지를 안정적으로 전송할수있는 교차 플랫폼 메세징 솔루션
@@ -30,10 +46,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      */
     // [START receive_message]
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    public void onMessageReceived(final RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        sendchatNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
-        sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+        Log.d("dltjr","getClass()");
+        if(remoteMessage.getNotification().getTag() != null){
+
+            sendCommentNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(),remoteMessage.getNotification().getTag());
+
+        }else{
+            sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
+        }
+
+
     }
     // [END receive_message]
 
@@ -58,8 +82,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    private void sendchatNotification(String title, String messageBody) {
+    private void sendCommentNotification(String title, String messageBody, String Uid) {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("Popup_Uid", Uid);
+        intent.putExtra("messageBody", messageBody);
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
@@ -86,6 +113,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
         notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
     }
+
+
     private void sendNotification(String title, String messageBody) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

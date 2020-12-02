@@ -16,6 +16,8 @@ import com.example.homemade_guardian_beta.Main.bottombar.MarketFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.MyInfoFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.WriteMarketFragment;
 import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.market.activity.MarketActivity;
+import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -112,14 +114,40 @@ public class MainActivity extends AppCompatActivity implements Serializable {   
                            // if : 파이어베이스에 CurruntUser_Uid를 Uid로 가지는 document가 존재한다면 --> 작성하지 않은 리뷰를 작성하게 함
                            // else : CurruntUser는 있으나 CurruntUser_Uid를 Uid로 가지는 document가 존재 X
                             if (document.exists()) {
-                                UserModel userModel = document.toObject(UserModel.class);
-                                ArrayList<HashMap<String, String>> UserModel_Unreview = userModel.getUserModel_Unreview();
+                                String Popup_Uid = getIntent().getExtras().getString("Popup_Uid");
+                                String messageBody = getIntent().getExtras().getString("messageBody");
 
-                                if(UserModel_Unreview.size() > 1){
-                                    HashMap<String, String> Unreview = (HashMap<String,String>)UserModel_Unreview.get(1);
-                                    ReviewActivity reviewActivity = new ReviewActivity(MainActivity.this);
-                                    reviewActivity.callFunction(Unreview.get("UserModel_UnReViewUserList") ,Unreview.get("UserModel_UnReViewMarketList"), userModel);
+                                if(messageBody.equals("댓글이 달렸습니다!")){
+                                    final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("MARKETS").document(Popup_Uid);
+                                    documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document != null) {
+                                                    if (document.exists()) {  //데이터의 존재여부
+                                                        final MarketModel Marketmodel = document.toObject(MarketModel.class);
+                                                        MarketModel intentmarketmodel = new MarketModel(Marketmodel.getMarketModel_Title(),Marketmodel.getMarketModel_Text(),Marketmodel.getMarketModel_ImageList(),Marketmodel.getMarketModel_DateOfManufacture(),Marketmodel.getMarketModel_Host_Uid(),Marketmodel.getMarketModel_Market_Uid(),Marketmodel.getMarketModel_Category(),Marketmodel.getMarketModel_LikeList(),Marketmodel.getMarketModel_HotMarket(),Marketmodel.getMarketModel_reservation(),Marketmodel.getMarketModel_deal(),Marketmodel.getMarketModel_CommentCount());
+                                                        Intent intent = new Intent(getApplicationContext(), MarketActivity.class);
+                                                        intent.putExtra("marketInfo", intentmarketmodel);
+                                                        startActivity(intent);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
                                 }
+                              else{
+                                    UserModel userModel = document.toObject(UserModel.class);
+                                    ArrayList<HashMap<String, String>> UserModel_Unreview = userModel.getUserModel_Unreview();
+
+                                    if(UserModel_Unreview.size() > 1){
+                                        HashMap<String, String> Unreview = (HashMap<String,String>)UserModel_Unreview.get(1);
+                                        ReviewActivity reviewActivity = new ReviewActivity(MainActivity.this);
+                                        reviewActivity.callFunction(Unreview.get("UserModel_UnReViewUserList") ,Unreview.get("UserModel_UnReViewMarketList"), userModel);
+                                    }
+                                }
+
                             } else {
                                 myStartActivity(MemberInitActivity.class);
                             }

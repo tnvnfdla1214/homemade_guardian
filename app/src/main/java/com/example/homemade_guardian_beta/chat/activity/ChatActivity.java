@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -26,7 +27,10 @@ import com.example.homemade_guardian_beta.chat.fragment.Nonepost_chat_MarketInfo
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
+import com.example.homemade_guardian_beta.model.user.UserModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -64,7 +68,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("");
 
-        TextView RoomTitle = findViewById(R.id.RoomTitle);
+        final TextView RoomTitle = findViewById(R.id.RoomTitle);
 
         ImageView back_Button = findViewById(R.id.back_Button);
         back_Button.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +90,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         }
          drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        Log.d("임민규","ChatRoomListModel_Title : " + ChatRoomListModel_Title);
         // 채팅 프레그먼트
         chatFragment = ChatFragment.getInstance(To_User_Uid, ChatRoomListModel_RoomUid, MarketModel_Market_Uid,currentUser_Uid);
         getSupportFragmentManager()

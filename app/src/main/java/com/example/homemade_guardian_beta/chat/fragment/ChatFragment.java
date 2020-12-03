@@ -612,8 +612,8 @@ public class ChatFragment extends Fragment {
                                         if (document != null) {
                                             if (document.exists()) {  //데이터의 존재여부
                                                 UserModel TouserModel = document.toObject(UserModel.class);
-                                                Log.d("tjrrb","userModel.getUserModel_NickName()"+TouserModel.getUserModel_NickName());
-                                                SendNotification.sendNotification(TouserModel.getUserModel_Token(), userModel.getUserModel_NickName(), MessageModel_Message);
+                                                //SendNotification.sendNotification(TouserModel.getUserModel_Token(), userModel.getUserModel_NickName(), MessageModel_Message);
+                                                SendNotification.sendCommentNotification(TouserModel.getUserModel_Token(), userModel.getUserModel_NickName(), "메세지가 도착했습니다!",ChatRoomListModel_RoomUid);
                                             }
                                         }
                                     }

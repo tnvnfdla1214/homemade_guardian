@@ -64,15 +64,11 @@ public class PhotoPickerActivity extends AppCompatActivity {
   @Override
   public void onStart() {
     super.onStart();
-    Log.d("민규","222222");
-    //checkExternalStoragePermission();
-    Log.d("민규","2222222");
   }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.util_activity_photo_picker);
     checkExternalStoragePermission();
   }
 
@@ -87,13 +83,10 @@ public class PhotoPickerActivity extends AppCompatActivity {
   //저장경로의 접근권한 요청
   private void checkExternalStoragePermission(){
     if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-      Log.d("민규","1");
       if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-        Log.d("민규","2");
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
 
       } else {
-        Log.d("민규","3");
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
           checkCameraPermission();
@@ -103,7 +96,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
         }
       }
     }else {
-      Log.d("민규","4");
       checkCameraPermission();
     }
   }
@@ -148,6 +140,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
   //접근권한 요청 후 화면 구성
   private void init(){
+    setContentView(R.layout.util_activity_photo_picker);
     ShowCamera = getIntent().getBooleanExtra(EXTRA_SHOW_CAMERA, true);
     ShowGif = getIntent().getBooleanExtra(EXTRA_SHOW_GIF, false);
     IsCheckBoxOnly = getIntent().getBooleanExtra(EXTRA_CHECK_BOX_ONLY, false);

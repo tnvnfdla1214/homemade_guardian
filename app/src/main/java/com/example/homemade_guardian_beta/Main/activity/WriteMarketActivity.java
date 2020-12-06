@@ -1,12 +1,21 @@
 package com.example.homemade_guardian_beta.Main.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,7 +23,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
@@ -28,6 +44,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -96,11 +114,68 @@ public class WriteMarketActivity extends BasicActivity {                        
         Image_Count_TextView = (TextView) findViewById(R.id.camera_Select_Text);
     }
 
+//    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
+//        Bitmap output = Bitmap.createBitmap(70,70, Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(output);
+//
+//        final int color = 0xff424242;
+//        final Paint paint = new Paint();
+//        final Rect rect = new Rect(70, 70, 70, 70);
+//        final RectF rectF = new RectF(rect);
+//        final float roundPx = 12;
+//
+//        paint.setAntiAlias(true);
+//        canvas.drawARGB(0, 0, 0, 0);
+//        paint.setColor(color);
+//        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+//
+//        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+//        canvas.drawBitmap(bitmap, rect, rect, paint);
+//
+//        return output;
+//    }
+//    public static Bitmap StringToBitmap(String encodedString) {
+//        try {
+//            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+//            return bitmap;
+//        } catch (Exception e) {
+//            e.getMessage();
+//            return null;
+//        }
+//    }
+//
+//    /*
+//     * Bitmap을 String형으로 변환
+//     * */
+//    public static String BitmapToString(Bitmap bitmap) {
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.PNG, 70, baos);
+//        byte[] bytes = baos.toByteArray();
+//        String temp = Base64.encodeToString(bytes, Base64.DEFAULT);
+//        return temp;
+//    }
+
+
+
+    public static BitmapImageViewTarget getRoundedImageTarget(@NonNull final Context context, @NonNull final ImageView imageView, final float radius) {
+        return new BitmapImageViewTarget(imageView) {
+            @Override
+            protected void setResource(final Bitmap resource) {
+                RoundedBitmapDrawable circularBitmapDrawable = RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                circularBitmapDrawable.setCornerRadius(radius);
+                imageView.setImageDrawable(circularBitmapDrawable);
+                }
+            };
+        }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         List<String> photos = null;
-        GradientDrawable drawable= (GradientDrawable) ContextCompat.getDrawable(getApplicationContext(), R.drawable.round);
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions.circleCropTransform();
+        requestOptions.transforms( new CenterCrop(),new RoundedCorners(25));
 
        // if : 설정한 resultcode와 requestCode라면 PhotoList에 선택된 이미지를 넣겠다.
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
@@ -120,23 +195,19 @@ public class WriteMarketActivity extends BasicActivity {                        
                 for(int i=0;i<photos.size();i++){
                     switch (i){
                         case 0 :
-
-                           // 아래 방법으로 이미지 뷰 끝을 둥글게 하려 했으나 안됨
-                            PhotoList0.setBackground(drawable);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { PhotoList0.setClipToOutline(true); }
-                            Glide.with(getApplicationContext()).load(photos.get(0)).centerInside().override(500).into(PhotoList0);
-                            break;
+                            Glide.with(this).load(photos.get(0)).apply(requestOptions).into(PhotoList0);
+                           break;
                         case 1 :
-                            Glide.with(getApplicationContext()).load(photos.get(1)).centerInside().override(500).into(PhotoList1);
+                            Glide.with(this).load(photos.get(1)).apply(requestOptions).into(PhotoList1);
                             break;
                         case 2 :
-                            Glide.with(getApplicationContext()).load(photos.get(2)).centerInside().override(500).into(PhotoList2);
+                            Glide.with(this).load(photos.get(2)).apply(requestOptions).into(PhotoList2);
                             break;
                         case 3 :
-                            Glide.with(getApplicationContext()).load(photos.get(3)).centerInside().override(500).into(PhotoList3);
+                            Glide.with(this).load(photos.get(3)).apply(requestOptions).into(PhotoList3);
                             break;
                         case 4 :
-                            Glide.with(getApplicationContext()).load(photos.get(4)).centerInside().override(500).into(PhotoList4);
+                            Glide.with(this).load(photos.get(4)).apply(requestOptions).into(PhotoList4);
                             break;
                     }
                 }

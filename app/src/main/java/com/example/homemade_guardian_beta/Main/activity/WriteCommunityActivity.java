@@ -13,6 +13,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
@@ -74,11 +77,13 @@ public class WriteCommunityActivity extends BasicActivity {                     
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         List<String> photos = null;
-        GradientDrawable drawable= (GradientDrawable) ContextCompat.getDrawable(getApplicationContext(), R.drawable.round);
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions.circleCropTransform();
+        requestOptions.transforms( new CenterCrop(),new RoundedCorners(25));
 
        // if : 설정한 resultcode와 requestCode라면 PhotoList에 선택된 이미지를 넣겠다.
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-           // 기존 이미지 지우기
+            // 기존 이미지 지우기
             PhotoList0.setImageResource(0);
             PhotoList1.setImageResource(0);
             PhotoList2.setImageResource(0);
@@ -89,28 +94,24 @@ public class WriteCommunityActivity extends BasicActivity {                     
             if (data != null) {
                 photos = data.getStringArrayListExtra(PhotoPickerActivity.KEY_SELECTED_PHOTOS);
             }
-            if (photos != null) {
+            if (photos != null || ArrayList_SelectedPhoto !=null) {
                 ArrayList_SelectedPhoto.addAll(photos);
                 for(int i=0;i<photos.size();i++){
                     switch (i){
-
-                       // 아래 방법으로 이미지 뷰 끝을 둥글게 하려 했으나 안됨
                         case 0 :
-                            PhotoList0.setBackground(drawable);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { PhotoList0.setClipToOutline(true); }
-                            Glide.with(getApplicationContext()).load(photos.get(0)).centerInside().override(500).into(PhotoList0);
+                            Glide.with(this).load(photos.get(0)).apply(requestOptions).into(PhotoList0);
                             break;
                         case 1 :
-                            Glide.with(getApplicationContext()).load(photos.get(1)).centerInside().override(500).into(PhotoList1);
+                            Glide.with(this).load(photos.get(1)).apply(requestOptions).into(PhotoList1);
                             break;
                         case 2 :
-                            Glide.with(getApplicationContext()).load(photos.get(2)).centerInside().override(500).into(PhotoList2);
+                            Glide.with(this).load(photos.get(2)).apply(requestOptions).into(PhotoList2);
                             break;
                         case 3 :
-                            Glide.with(getApplicationContext()).load(photos.get(3)).centerInside().override(500).into(PhotoList3);
+                            Glide.with(this).load(photos.get(3)).apply(requestOptions).into(PhotoList3);
                             break;
                         case 4 :
-                            Glide.with(getApplicationContext()).load(photos.get(4)).centerInside().override(500).into(PhotoList4);
+                            Glide.with(this).load(photos.get(4)).apply(requestOptions).into(PhotoList4);
                             break;
                     }
                 }

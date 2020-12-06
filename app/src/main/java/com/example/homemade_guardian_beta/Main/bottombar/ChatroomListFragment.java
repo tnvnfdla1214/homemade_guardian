@@ -181,6 +181,7 @@ public class ChatroomListFragment extends Fragment {
                                     for( String key : users.keySet() ){
                                         if (My_User_Uid.equals(key)) continue;
                                         UserModel userModel = UserList.get(key);
+                                        //런타임 에러에 걸리는 곳
                                         chatRoomListModel.setChatRoomListModel_Title(userModel.getUserModel_NickName());
                                         //ChatRoomListModel_ToUserUid 받아오기
                                         chatRoomListModel.setChatRoomListModel_ToUserUid(userModel.getUserModel_Uid());

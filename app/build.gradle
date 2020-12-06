@@ -24,6 +24,12 @@ android {
         }
     }
 
+    //dexOptions 추가
+    dexOptions {
+        jumboMode true
+        javaMaxHeapSize "4g"
+    }
+
 }
 
 dependencies {

@@ -163,6 +163,7 @@ public class MyInfoFragment extends Fragment {
             Glide.with(this).load(Usermodel.getUserModel_ProfileImage()).centerCrop().into(Myinfo_profileImage);
         }
         else{
+            //런타임 에러에 걸리는 곳
             Glide.with(this).load(R.drawable.none_profile_user).centerCrop().into(Myinfo_profileImage);
         }
         Kind_Count.setText("X"+Usermodel.getUserModel_kindReviewList().size());

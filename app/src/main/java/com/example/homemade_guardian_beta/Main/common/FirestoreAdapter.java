@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.chat.common;
+package com.example.homemade_guardian_beta.Main.common;
 
 import android.util.Log;
 

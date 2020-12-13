@@ -11,7 +11,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.InputStream;
 
-//지금 사용하지 않는 Activity
+//Firebase Storage with Glide 를 이용하여 ImageView에 이미지 띄우기위해 사용하는 자바 파일
 @GlideModule
 public class MyAppGlideModule extends AppGlideModule {
 

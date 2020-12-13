@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.Window;
 import android.widget.ImageView;
 
@@ -20,7 +21,6 @@ public class Loding_Dialog {
     {
         this.context = context;
     }
-
     public void callDialog()
     {
         final Dialog dialog = new Dialog(context);
@@ -41,5 +41,6 @@ public class Loding_Dialog {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.dialog_loading);
         dialog.dismiss();
+        Log.d("깔깔","ㅂㅈㄷ");
     }
 }

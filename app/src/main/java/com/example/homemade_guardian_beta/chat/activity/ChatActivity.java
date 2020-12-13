@@ -47,16 +47,15 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
     private Guest_Chat_MarketInfoFragment guestChat_MarketInfoFragment; //상대 마켓 채팅 일때의 마켓정보 프레그먼트
     private Nonepost_chat_MarketInfoFragment nonepost_chat_marketInfoFragment; //포스트의 정보가 없는 마켓정보 프레그먼트
     private String currentUser_Uid =null;
-    String To_User_Uid =null;
-    String ChatRoomListModel_RoomUid =null;
-    String ChatRoomListModel_Title =null;
-    String MarketModel_Market_Uid =null;
+    String To_User_Uid =null;  //상대방 uid
+    String ChatRoomListModel_RoomUid =null; //채팅방 uid
+    String ChatRoomListModel_Title =null;  //채팅방 이름 (상대방 닉네임)
+    String MarketModel_Market_Uid =null; //마켓 uid
     private FirebaseHelper Firebasehelper;          //FirebaseHelper 참조 선언
     private MessageModel MessageModel;                    //UserModel 참조 선언
     public static Context mcontext;
     MarketModel marketModel;
 
-    Loding_Dialog dialog = new Loding_Dialog(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

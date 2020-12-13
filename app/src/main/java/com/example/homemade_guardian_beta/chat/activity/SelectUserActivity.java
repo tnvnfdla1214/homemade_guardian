@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.chat.common.FirestoreAdapter;
+import com.example.homemade_guardian_beta.Main.common.FirestoreAdapter;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 
 

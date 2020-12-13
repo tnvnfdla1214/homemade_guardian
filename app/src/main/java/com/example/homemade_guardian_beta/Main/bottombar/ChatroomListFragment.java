@@ -28,14 +28,12 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
 
-import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
-import com.example.homemade_guardian_beta.chat.common.ItemTouchHelperCallback;
-import com.example.homemade_guardian_beta.chat.common.ItemTouchHelperListener;
+import com.example.homemade_guardian_beta.Main.common.ItemTouchHelperCallback;
+import com.example.homemade_guardian_beta.Main.common.ItemTouchHelperListener;
 import com.example.homemade_guardian_beta.model.chat.ChatRoomListModel;
-import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.model.chat.RoomModel;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 

@@ -31,7 +31,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.homemade_guardian_beta.Main.activity.HostModelActivity;
 import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.chat.common.FirestoreAdapter;
+import com.example.homemade_guardian_beta.Main.common.FirestoreAdapter;
 import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
 import com.example.homemade_guardian_beta.Main.common.BackPressEditText;
 import com.example.homemade_guardian_beta.Main.common.listener.OnPostListener;

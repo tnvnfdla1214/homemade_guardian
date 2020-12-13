@@ -41,6 +41,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.homemade_guardian_beta.Main.activity.Loding_Dialog;
 import com.example.homemade_guardian_beta.chat.ChatUtil;
 import com.example.homemade_guardian_beta.Main.common.SendNotification;
 import com.example.homemade_guardian_beta.chat.common.photoview.ViewPagerActivity;
@@ -113,12 +114,14 @@ public class ChatFragment extends Fragment {
     private static final int PICK_FROM_FILE = 2;                                                   //이미지 선택
     private static String rootPath = ChatUtil.getRootPath()+"/homemade_guardian_beta/";            //경로 설정
 
-    int Int_MessageModel_ImageCount;                                                               //string형을 int로 형변환
-    String String_MessageModel_ImageCount;                                                         //int를 string으로 변환
+    int Int_RoomModel_ImageCount;                                                               //string형을 int로 형변환
+    String String_RoomModel_ImageCount;                                                         //int를 string으로 변환
 
     private RelativeLayout loaderLayout;
 
     private RoomUidSetListener roomUidSetListener;
+
+    public Loding_Dialog dialog =null;                 // 로딩 액티비티
 
 
     public ChatFragment() {
@@ -341,7 +344,7 @@ public class ChatFragment extends Fragment {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         RoomModel roomModel = new RoomModel();
                         roomModel = documentSnapshot.toObject(RoomModel.class);
-                        Int_MessageModel_ImageCount = Integer.parseInt(roomModel.getRoomModel_ImageCount());
+                        Int_RoomModel_ImageCount = Integer.parseInt(roomModel.getRoomModel_ImageCount());
                     }
                 });
             }
@@ -357,7 +360,7 @@ public class ChatFragment extends Fragment {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         RoomModel roomModel = new RoomModel();
                         roomModel = documentSnapshot.toObject(RoomModel.class);
-                        Int_MessageModel_ImageCount = Integer.parseInt(roomModel.getRoomModel_ImageCount());
+                        Int_RoomModel_ImageCount = Integer.parseInt(roomModel.getRoomModel_ImageCount());
                     }
                 });
             }
@@ -528,17 +531,20 @@ public class ChatFragment extends Fragment {
         if (resultCode!= RESULT_OK) { return;}
         Uri fileUri = data.getData(); //해당 사진
         final ChatModel.FileInfo fileinfo  = getFileDetailFromUri(getContext(), fileUri); //chatmodel.fileinfo에 넣기
-        Int_MessageModel_ImageCount = Int_MessageModel_ImageCount +1;
-        String_MessageModel_ImageCount =String.valueOf(Int_MessageModel_ImageCount);
-        StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_MessageModel_ImageCount).putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+
+        showProgressDialog("잠시만 기다려 주세요^^");
+        Int_RoomModel_ImageCount = Int_RoomModel_ImageCount +1;
+        String_RoomModel_ImageCount =String.valueOf(Int_RoomModel_ImageCount);
+        StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_RoomModel_ImageCount).putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 //추가 ()
                 DocumentReference docRefe_ROOMS_CurrentUid = FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid);
-                docRefe_ROOMS_CurrentUid.update("MessageModel_ImageCount", String_MessageModel_ImageCount).addOnSuccessListener(new OnSuccessListener<Void>() {
+                docRefe_ROOMS_CurrentUid.update("RoomModel_ImageCount", String_RoomModel_ImageCount).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        sendMessage(String_MessageModel_ImageCount, Integer.toString(requestCode), fileinfo, MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
+                        sendMessage(String_RoomModel_ImageCount, Integer.toString(requestCode), fileinfo, MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
+                        hideProgressDialog();
                     }
                 })
                         .addOnFailureListener(new OnFailureListener() {
@@ -560,7 +566,7 @@ public class ChatFragment extends Fragment {
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                         byte[] data = baos.toByteArray();
-                        StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_MessageModel_ImageCount).putBytes(data);
+                        StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_RoomModel_ImageCount).putBytes(data);
                     }
                 });
     }
@@ -590,6 +596,23 @@ public class ChatFragment extends Fragment {
         }
 
         return fileDetail;
+    }
+
+    public void showProgressDialog(String title ) {
+        if (progressDialog==null) {
+            progressDialog = new ProgressDialog(getContext());
+        }
+        progressDialog.setIndeterminate(true);
+        progressDialog.setTitle(title);
+        progressDialog.setMessage("사진을 보내는 중입니다..!!");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+    public void setProgressDialog(int value) {
+        progressDialog.setProgress(value);
+    }
+    public void hideProgressDialog() {
+        progressDialog.dismiss();
     }
 
 
@@ -627,22 +650,6 @@ public class ChatFragment extends Fragment {
 
     }
 
-    //로딩창 창띄우는 함수
-    public void showProgressDialog(String title ) {
-        if (progressDialog==null) {
-            progressDialog = new ProgressDialog(getContext());
-        }
-        progressDialog.setIndeterminate(true);
-        progressDialog.setTitle(title);
-        progressDialog.setMessage("사진을 보내는 중입니다.");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-    }
-
-    //로딩창 지우는 함수
-    public void hideProgressDialog() {
-        progressDialog.dismiss();
-    }
 
 
     //채팅 RecyclerViewAdapter
@@ -876,7 +883,7 @@ public class ChatFragment extends Fragment {
                 if (!ChatUtil.isPermissionGranted(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     return ;
                 }
-                showProgressDialog("Downloading File.");
+                //showProgressDialog("Downloading File.");
 
                 final File localFile = new File(rootPath, filename);
 
@@ -884,7 +891,7 @@ public class ChatFragment extends Fragment {
                     @Override
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                         button_item.setText("Open File");
-                        hideProgressDialog();
+                        //hideProgressDialog();
                         Log.e("DirectTalk9 ","local file created " +localFile.toString());
                     }
                 }).addOnFailureListener(new OnFailureListener() {

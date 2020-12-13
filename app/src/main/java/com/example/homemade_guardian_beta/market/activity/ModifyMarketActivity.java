@@ -22,6 +22,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
+import com.example.homemade_guardian_beta.Main.activity.Loding_Dialog;
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
 import com.example.homemade_guardian_beta.photo.activity.PhotoPickerActivity;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
@@ -48,6 +49,7 @@ import java.util.List;
 //      Ex) 게시물에서 수정을 눌렀을 때 실행되는 액티비티이다.
 
 public class ModifyMarketActivity extends BasicActivity {                       // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5.기타 변수
+    private Loding_Dialog dialog = new Loding_Dialog(this);                 // 로딩 액티비티
                                                                                 // 2. 변수 및 배열
     private MarketModel Marketmodel;                                                // Marketmodel 선언
     public  ArrayList<String> ArrayList_SelectedPhoto = new ArrayList<>();          // 선택한 이미지들이 담기는 리스트

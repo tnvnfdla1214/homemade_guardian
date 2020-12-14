@@ -49,7 +49,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.chat.ChatUtil;
+import com.example.homemade_guardian_beta.chat.common.ChatUtil;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 
 

@@ -2,10 +2,8 @@ package com.example.homemade_guardian_beta.Main.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -46,7 +44,7 @@ import com.kakao.usermgmt.callback.MeV2ResponseCallback;
 import com.kakao.usermgmt.response.MeV2Response;
 import com.kakao.util.exception.KakaoException;
 
-import com.example.homemade_guardian_beta.chat.ChatUtil;
+import com.example.homemade_guardian_beta.chat.common.ChatUtil;
 
 import java.util.ArrayList;
 

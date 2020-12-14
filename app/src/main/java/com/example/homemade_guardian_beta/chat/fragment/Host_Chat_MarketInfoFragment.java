@@ -50,9 +50,6 @@ public class Host_Chat_MarketInfoFragment extends Fragment {
 
     ChatActivity chatActivity;
 
-    ArrayList<String> UnReViewUserList = new ArrayList<>();
-    ArrayList<String> UnReViewMarketList = new ArrayList<>();
-
     ArrayList<String> Market_reservationList = new ArrayList<>();
     ArrayList<String> Market_dealList = new ArrayList<>();
 

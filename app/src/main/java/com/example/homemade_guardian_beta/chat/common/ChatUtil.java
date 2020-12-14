@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.chat;
+package com.example.homemade_guardian_beta.chat.common;
 
 import android.app.Activity;
 import android.content.Context;
@@ -35,7 +35,6 @@ public class ChatUtil {
     }
 
     //edittext를 포커스 할때 사용하는 함수
-    //https://satisfactoryplace.tistory.com/9 참고
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         View view = activity.getCurrentFocus();

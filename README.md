@@ -4,7 +4,6 @@
 
 ## 2. Explanation</br>
 ### 1) chat(패키지)</br>
-<img src="https://user-images.githubusercontent.com/54509842/83601971-9c180800-a5ac-11ea-9af6-8f80ee99909c.jpg" width="25%"></img>
 #### (1) activity (패키지)
 -ChatActivity : 여러 변수를 다른 액티비티에서 받아오고 여러 프레그먼트를 담고 있다. </br>
 	      주요 변수  </br>

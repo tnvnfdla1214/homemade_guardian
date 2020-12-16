@@ -5,7 +5,8 @@
 ## 2. Explanation</br>
 ### 1) chat(패키지)</br>
 #### (1) activity (패키지)
--ChatActivity : 여러 변수를 다른 액티비티에서 받아오고 여러 프레그먼트를 담고 있다. </br>
+ChatActivity</br>
+여러 변수를 다른 액티비티에서 받아오고 여러 프레그먼트를 담고 있다. </br>
 	      주요 변수  </br>
 	      currentUser_Uid (현재 자신의 UID) ,To_User_Uid (상대방 UID) , ChatRoomListModel_RoomUid(채팅방 UID),MarketModel_Market_Uid(마켓 UID) </br>
 	      주요 기능   </br>

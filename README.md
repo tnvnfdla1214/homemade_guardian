@@ -3,17 +3,15 @@
 #### 사용자 간 물물교환을 할 수 있고, 채팅 및 커뮤니티 기능을 제공하는 소셜 네트워크 서비스(SNS) 어플리케이션</br>
 
 ## 2. Explanation</br>
-### 1) chat(패키지)</br>
-#### (1) activity (패키지)
-ChatActivity</br>
-여러 변수를 다른 액티비티에서 받아오고 여러 프레그먼트를 담고 있다. </br>
-	      주요 변수  </br>
-	      currentUser_Uid (현재 자신의 UID) ,To_User_Uid (상대방 UID) , ChatRoomListModel_RoomUid(채팅방 UID),MarketModel_Market_Uid(마켓 UID) </br>
-	      주요 기능   </br>
-	      - ChatFragment의 위치를 선정해 주고 주요변수를 넘겨준다. </br>
-	      - currentUser_Uid와 해당 마켓의 MarketModel_Host_Uid에 따라 다른 프레그먼트를 띄워준다. </br> </br>
-
--SelectUserActivity : 그룹채팅방을 할때 사용하는 액티비티 (현재는 사용하지 않음, 나중에 사용할지 모르므로 남겨 놓은 상태) </br>
+### 1. chat(패키지)</br>
+#### 1) activity (패키지)
+ Ⅰ ChatActivity : 여러 변수를 다른 액티비티에서 받아오고 여러 프레그먼트를 담고 있다. </br>
+◇ 주요 변수  </br>
+currentUser_Uid (현재 자신의 UID), To_User_Uid (상대방 UID), ChatRoomListModel_RoomUid(채팅방 UID), MarketModel_Market_Uid(마켓 UID)</br>
+◆ 주요 기능   </br>
+ⓐ ChatFragment의 위치를 선정해 주고 주요변수를 넘겨준다. </br>
+ⓑ currentUser_Uid와 해당 마켓의 MarketModel_Host_Uid에 따라 다른 프레그먼트를 띄워준다. </br></br> 
+Ⅱ SelectUserActivity : 그룹채팅방을 할때 사용하는 액티비티 (현재는 사용하지 않음, 나중에 사용할지 모르므로 남겨 놓은 상태) </br>
 ### 2) 메모 추가</br>
 <img src="https://user-images.githubusercontent.com/54509842/83602751-21e88300-a5ae-11ea-8f80-a53a4f5cb4fd.jpg" width="25%"></img>
 <img src="https://user-images.githubusercontent.com/54509842/83602756-23b24680-a5ae-11ea-85b2-9b93e24a638f.jpg" width="25%"></img>

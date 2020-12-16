@@ -1,4 +1,4 @@
-package com.example.homemade_guardian_beta.Main.activity;
+package com.example.homemade_guardian_beta.Main.common;
 
 import android.app.Dialog;
 import android.content.Context;

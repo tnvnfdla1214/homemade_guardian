@@ -59,11 +59,12 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
-//참고 : adapter란 데이터 테이블을 목록 상태로 보여주기 위해 사용되는것
-//데이터를 다양한 형식의 리스트 형식으로 보여주기 위해서 데이터와 리스트 뷰 사이에 존재하는 객체
-//users - (token,uid:고유번호,user id : "tnvnfdla1214@naver.com", usermsg : "....",userm : "tnvnfdla1214",userphoto : null)
-//지금까지 채팅했던거 보여주는 프레그먼트 액티비티 -(채팅앱 : ChatroomFragment)
-public class ChatroomListFragment extends Fragment {
+//채팅방 목록 페이지 프레그먼트
+//현 이용자의 지금까지의 채팅을 하였었던 정보들을 파이어스토어 ROOMS에서 불러 와 Adapter에 배치 시켜 준다.
+//알고리즘 순서 :
+//1. 모든 유저의 정보를 받아 온다.
+//2. ROOMS에서 필드값 RoomModel_USER_OUT의 My_User_Uid가 같고 1인것의 문서를 가져온다.
+public class ChatroomList_BottombarFragment extends Fragment {
 
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private RecyclerViewAdapter mAdapter;
@@ -72,7 +73,7 @@ public class ChatroomListFragment extends Fragment {
     String RoomUid;                                 //해당 포지션에 따른 룸 uid
     String ToUserUid;                               // 해당 포지션에 따른 상대방 uid
 
-    public ChatroomListFragment() {
+    public ChatroomList_BottombarFragment() {
     }
 
     @Nullable

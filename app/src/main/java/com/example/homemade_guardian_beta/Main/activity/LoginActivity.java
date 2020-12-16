@@ -54,17 +54,13 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth Firebaseauth =null;
     private FirebaseUser currentUser=null;
 
-    private GoogleSignInClient mGoogleSignInClient;
-    private SignInButton local_google_login;
+    private GoogleSignInClient mGoogleSignInClient;                         //구글 로그인 진짜 버튼
+    private SignInButton local_google_login;                                //카카오 로그인 진짜 버튼
 
-    private ImageView login_google;
-    private ImageView login_kakao;
+    private ImageView login_google;                                         //구글 로그인 버튼
+    private ImageView login_kakao;                                          //카카오 로그인 버튼
 
-    ArrayList<String> UnReViewUserList = new ArrayList<>();
-    ArrayList<String> UnReViewMarketList = new ArrayList<>();
-    String Currunt_uid;
-
-    String KakaoPassword = "1234567890"; //카카오 패스워드
+    String KakaoPassword = "1234567890";                                    //카카오 패스워드
 
     private static final int RC_SIGN_IN = 9001;
 
@@ -89,7 +85,6 @@ public class LoginActivity extends AppCompatActivity {
                 KaKaoLoginSession(); //카카오 세션 함수
             }
         });
-
 
         //KaKaoLoginSession(); //카카오 세션 함수
         //FirebaseAuthgoogle(); //구글 로그인 메인 함수(onCreate안의 함수)
@@ -148,13 +143,6 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(MeV2Response result) {
                     FirebaseAuthkakaologin(result.getKakaoAccount().getEmail(), KakaoPassword);
-
-
-
-                    //result.getKakaoAccount().getGender().getValue();
-                    //result.getKakaoAccount().getBirthday();
-                    //result.getNickname();
-
                 }
             });
         }
@@ -164,6 +152,8 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "로그인 도중 오류가 발생했습니다. 인터넷 연결을 확인해주세요: "+e.toString(), Toast.LENGTH_SHORT).show();
         }
     }
+
+
     //카카오 로그인
     public void FirebaseAuthkakaologin(final String email, String password) {
         Firebaseauth.signInWithEmailAndPassword(email, password)
@@ -226,14 +216,6 @@ public class LoginActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        /*
-        local_google_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                googlesignIn();
-            }
-        });
-         */
         login_google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -269,6 +251,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
     //이동 함수 + token 확인
     private void updateUI(final FirebaseUser Curruntuser_uid) { //update ui code here
         if (Curruntuser_uid != null) {
@@ -281,7 +264,8 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("민규", "토큰 못 가져옴");
                         return;
                     }
-                    final String token = task.getResult().getToken();
+                    //토큰 확인 이거 보안에 문제있을 수도있음 계속 로그가 그런거뜸뜸
+                   final String token = task.getResult().getToken();
                     final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
 
                     documentReference.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

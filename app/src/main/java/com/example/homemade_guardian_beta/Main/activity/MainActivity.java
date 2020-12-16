@@ -10,11 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import com.example.homemade_guardian_beta.Main.bottombar.ChatroomListFragment;
-import com.example.homemade_guardian_beta.Main.bottombar.CommunityFragment;
-import com.example.homemade_guardian_beta.Main.bottombar.MarketFragment;
-import com.example.homemade_guardian_beta.Main.bottombar.MyInfoFragment;
-import com.example.homemade_guardian_beta.Main.bottombar.WriteMarketFragment;
+import com.example.homemade_guardian_beta.Main.bottombar.ChatroomList_BottombarFragment;
+import com.example.homemade_guardian_beta.Main.bottombar.Community_BottombarFragment;
+import com.example.homemade_guardian_beta.Main.bottombar.Market_BottombarFragment;
+import com.example.homemade_guardian_beta.Main.bottombar.MyInfo_BottombarFragment;
+import com.example.homemade_guardian_beta.Main.common.Logout_Dialog;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.market.activity.MarketActivity;
@@ -22,8 +22,6 @@ import com.example.homemade_guardian_beta.model.chat.RoomModel;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,8 +29,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -84,9 +80,9 @@ public class MainActivity extends AppCompatActivity implements Serializable {   
                 Bottomnavigate();
                 break;
             case 1:
-                WriteMarketFragment writeMarketFragment = new WriteMarketFragment();
+                WriteMarket_BottombarFragment writeMarketBottombarFragment = new WriteMarket_BottombarFragment();
                 Writen_ButtonsBackground_Layout.setVisibility(View.VISIBLE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, writeMarketFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, writeMarketBottombarFragment).commit();
                 break;
         }
     }
@@ -216,8 +212,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {   
     private void Bottomnavigate() {
 
         // container의 첫 화면은 마켓프레그먼트로 초기화
-        MarketFragment marketFragment = new MarketFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, marketFragment).commit();
+        Market_BottombarFragment marketBottombarFragment = new Market_BottombarFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, marketBottombarFragment).commit();
 
         // container의 바텀 메뉴를 누르면 어떤 프레그먼트가 연결되는지 설정
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -228,28 +224,28 @@ public class MainActivity extends AppCompatActivity implements Serializable {   
 
                     // 3번째 프레그먼트를 제외한 어떠한 프레그먼트가 클릭되면, Writen_ButtonsBackground_Layout를 사라지게 함
                     case R.id.Market:
-                        MarketFragment marketFragment = new MarketFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, marketFragment).commit();
+                        Market_BottombarFragment marketBottombarFragment = new Market_BottombarFragment();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, marketBottombarFragment).commit();
                         Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
                         return true;
                     case R.id.Community:
-                        CommunityFragment communityFragment = new CommunityFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, communityFragment).commit();
+                        Community_BottombarFragment communityBottombarFragment = new Community_BottombarFragment();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, communityBottombarFragment).commit();
                         Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
                         return true;
                     case R.id.Writepost:
-                        WriteMarketFragment writeMarketFragment = new WriteMarketFragment();
+                        WriteMarket_BottombarFragment writeMarketBottombarFragment = new WriteMarket_BottombarFragment();
                         Writen_ButtonsBackground_Layout.setVisibility(View.VISIBLE);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, writeMarketFragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, writeMarketBottombarFragment).commit();
                         return true;
                     case R.id.Chatroomlist:
-                        ChatroomListFragment chatroomFragment = new ChatroomListFragment();
+                        ChatroomList_BottombarFragment chatroomFragment = new ChatroomList_BottombarFragment();
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, chatroomFragment).commit();
                         Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
                         return true;
                     case R.id.Myinfo:
-                        MyInfoFragment myinfoFragment = new MyInfoFragment();
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container, myinfoFragment).commit();
+                        MyInfo_BottombarFragment myinfoBottombarFragment = new MyInfo_BottombarFragment();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, myinfoBottombarFragment).commit();
                         Writen_ButtonsBackground_Layout.setVisibility(View.GONE);
                         return true;
                 }

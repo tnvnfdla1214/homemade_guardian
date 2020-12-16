@@ -1,9 +1,7 @@
 package com.example.homemade_guardian_beta.Main.activity;
 
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -11,11 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.homemade_guardian_beta.Main.common.Loding_Dialog;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.community.CommunityModel;
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
@@ -23,7 +22,6 @@ import com.example.homemade_guardian_beta.photo.activity.PhotoPickerActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;

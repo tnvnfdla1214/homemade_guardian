@@ -44,8 +44,6 @@ public class ReviewActivity extends BasicActivity {                     // 1. �
     private int ReviewModel_Selected_Review = 4;                            // 처음 초기 값은 4 : [0 : 친절함] [1 : 정확함] [2 : 완벽함] [3 : 불쾌함]
     private UserModel Usermodel;                                            // Usermodel 선언
     private ReviewModel Reviewmodel;                                        // Reviewmodel 선언
-    private ArrayList<String> UnReViewUserList = new ArrayList<>();         // 리뷰를 쓰지 않은 유저 리스트
-    private ArrayList<String> UnReViewPostList = new ArrayList<>();         // 리뷰를 쓰지 않은 게시물 리스트
     private ArrayList<String> ReViewList = new ArrayList<>();               // 상대방에게 리뷰가 적힐 리뷰 리스트
                                                                         // 5. 기타 변수
     private Context context;

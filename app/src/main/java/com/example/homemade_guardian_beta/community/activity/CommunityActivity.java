@@ -68,7 +68,7 @@ public class CommunityActivity extends BasicActivity {              // 1. 클래
                                                                     // 2. 변수 및 배열
     private CommunityModel Communitymodel;                              // CommunityModel 선언
     private UserModel Usermodel;                                        // UserModel 선언
-    private String CurrentUid;                                          // 현재 사용자의 Uid
+    private String currentUser_Uid;                                          // 현재 사용자의 Uid
     private String Current_NickName = null;                             // 현재 사용자의 닉네임
     private String Comment_Host_Image;                                  // 댓글 작성자의 이미지
     private ArrayList<String> ImageList = new ArrayList<>();            // 게시물의 이미지 리스트
@@ -140,7 +140,7 @@ public class CommunityActivity extends BasicActivity {              // 1. 클래
 
        // 현재 사용자 설정
         CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-        CurrentUid = CurrentUser.getUid();
+        currentUser_Uid = CurrentUser.getUid();
 
        // Firebasehelper을 setting
         Firebasehelper = new FirebaseHelper(this);
@@ -187,7 +187,7 @@ public class CommunityActivity extends BasicActivity {              // 1. 클래
 
    // 댓글을 쓰는 사람 (현재 이용자) 의 정보를 미리 받는다.
     public void Get_CurrentUser_Info(){
-        DocumentReference docRefe_USERS_CurrentUid = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
+        DocumentReference docRefe_USERS_CurrentUid = FirebaseFirestore.getInstance().collection("USERS").document(currentUser_Uid);
         docRefe_USERS_CurrentUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -223,7 +223,7 @@ public class CommunityActivity extends BasicActivity {              // 1. 클래
         Like_TextView.setText(String.valueOf(Communitymodel.getCommunityModel_LikeList().size()));
         int Check_Like = 0;
         for(int count = 0; count < Communitymodel.getCommunityModel_LikeList().size() ; count ++){
-            if(CurrentUid.equals(Communitymodel.getCommunityModel_LikeList().get(count))){
+            if(currentUser_Uid.equals(Communitymodel.getCommunityModel_LikeList().get(count))){
                 Glide.with(getApplicationContext()).load(R.drawable.heart).into(Like_ImageButton);
                 Check_Like = 1;
             }
@@ -297,7 +297,7 @@ public class CommunityActivity extends BasicActivity {              // 1. 클래
                     int Check_Like = 0;
                    // for문  : 좋아요를 누른적이 있다면 Check_Like = 1 / 좋아요를 누른적이 없다면 Check_Like = 0
                     for (int count = 0; count < Communitymodel.getCommunityModel_LikeList().size(); count++) {
-                        if (CurrentUid.equals(Communitymodel.getCommunityModel_LikeList().get(count))) {
+                        if (currentUser_Uid.equals(Communitymodel.getCommunityModel_LikeList().get(count))) {
                            Check_Like++;
                         }
                     }
@@ -310,7 +310,7 @@ public class CommunityActivity extends BasicActivity {              // 1. 클래
                         LikeList = Communitymodel.getCommunityModel_LikeList();
 
                        // LikeList에 본인 Uid를 추가
-                        LikeList.add(CurrentUid);
+                        LikeList.add(currentUser_Uid);
 
                        // 핫게시물의 상태를 설정
                         if (LikeList.size() > 0) {
@@ -341,7 +341,7 @@ public class CommunityActivity extends BasicActivity {              // 1. 클래
                         final DocumentReference documentReference = firebaseFirestore.collection("COMMUNITY").document(Communitymodel.getCommunityModel_Community_Uid());
                         LikeList = Communitymodel.getCommunityModel_LikeList();
                        // LikeList에 본인 Uid를 제거
-                        LikeList.remove(CurrentUid);
+                        LikeList.remove(currentUser_Uid);
                        // 핫게시물의 상태를 설정
                         if (LikeList.size() > 0) {
                             Communitymodel.setCommunityModel_HotCommunity("O");
@@ -423,7 +423,7 @@ public class CommunityActivity extends BasicActivity {              // 1. 클래
 
         Date DateOfManufacture = new Date();
         final Community_CommentModel Community_Commentmodel;
-        Community_Commentmodel = new Community_CommentModel(CurrentUid, Comment,  DateOfManufacture, Host_Name, Comment_Uid, Communitymodel.getCommunityModel_Community_Uid(),Comment_Host_Image);
+        Community_Commentmodel = new Community_CommentModel(currentUser_Uid, Comment,  DateOfManufacture, Host_Name, Comment_Uid, Communitymodel.getCommunityModel_Community_Uid(),Comment_Host_Image);
 
         final DocumentReference docRef_COMMUNITY_CommunityUid = FirebaseFirestore.getInstance().collection("COMMUNITY").document(Communitymodel.getCommunityModel_Community_Uid());
         final String CommentID = Comment_Uid;

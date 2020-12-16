@@ -33,7 +33,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class CommunityFragment extends Fragment {
+//커뮤니티 페이지 바텀바 프레그먼트
+public class Community_BottombarFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     private FirebaseFirestore firebaseFirestore;
     private CommunityAdapter CommunityAdapter;
@@ -46,7 +47,7 @@ public class CommunityFragment extends Fragment {
     private String HotCommunitybtn_State = "unSelected";
     private ImageView searchbtn;
 
-    public CommunityFragment() {                                                                                 // part22 : 프레그먼트로 내용 이전 (21'40")
+    public Community_BottombarFragment() {                                                                                 // part22 : 프레그먼트로 내용 이전 (21'40")
         // Required empty public constructor
     }
 
@@ -114,10 +115,6 @@ public class CommunityFragment extends Fragment {
                 int totalItemCount = layoutManager.getItemCount();
                 int firstVisibleItemPosition = ((LinearLayoutManager)layoutManager).findFirstVisibleItemPosition();
                 int lastVisibleItemPosition = ((LinearLayoutManager)layoutManager).findLastVisibleItemPosition();
-                Log.d("onScrolled","totalItemCount : "+totalItemCount);
-                Log.d("onScrolled","firstVisibleItemPosition : "+firstVisibleItemPosition);
-                Log.d("onScrolled","lastVisibleItemPosition : "+lastVisibleItemPosition);
-
                 if(totalItemCount - 8 <= lastVisibleItemPosition && !updating){                         // part21 : 아래에서 3번쩨 일때 && 로딩중일 때는 이벤트 작용 안하게 (35'10")
                     JudgeState(false);
                 }

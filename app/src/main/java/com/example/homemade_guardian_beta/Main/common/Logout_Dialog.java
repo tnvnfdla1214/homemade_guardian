@@ -1,10 +1,13 @@
-package com.example.homemade_guardian_beta.Main.activity;
+package com.example.homemade_guardian_beta.Main.common;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
 import android.view.Window;
 import android.widget.LinearLayout;
+
+import com.example.homemade_guardian_beta.Main.activity.LoginActivity;
+import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.R;
 import com.google.firebase.auth.FirebaseAuth;
 

@@ -44,10 +44,7 @@ public class FirebaseHelper {                                                   
     private Activity Activity;
     private OnPostListener Onpostlistener;
     private int SuccessCount;
-    private Market_CommentModel Market_CommentModel;
     int Java_MessageModel_ImageCount;                         //string형을 int로 형변환
-    ChatFragment chatFragment;
-    MainActivity mainActivity;
     UserModel userModel;
     ArrayList<String> Market_reservationList = new ArrayList<>();
     ArrayList<String> Market_dealList = new ArrayList<>();
@@ -201,42 +198,7 @@ public class FirebaseHelper {                                                   
                     });
         }
     }
-    public void ROOMS_Re_Entry(final String Current_My_user, final String To_User_Uid){
-        FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
-        Firebasefirestore = FirebaseFirestore.getInstance();
 
-        Firebasefirestore.collection("ROOMS").whereGreaterThanOrEqualTo("USERS."+ Current_My_user, 0).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (!task.isSuccessful()) {return;}
-
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Map<String, Long> users = (Map<String, Long>) document.get("USERS");
-                            if (users.size()==2 & users.get(To_User_Uid)!=null){
-                                String RoomUid = document.getId();
-
-                                FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-                                firestore = FirebaseFirestore.getInstance();
-                                firestore.collection("ROOMS").document(RoomUid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                        if (!task.isSuccessful()) {
-                                            Log.d("민규","방이 없습니다.");
-                                            return;
-                                        }
-                                        DocumentSnapshot document = task.getResult();
-                                        Map<String, Long> USERS_OUT = (Map<String, Long>) document.get("USERS_OUT");
-                                        USERS_OUT.put(Current_My_user, (long) 1);
-                                        document.getReference().update("USERS_OUT", USERS_OUT);
-                                    }
-                                });
-
-                            }
-                        }
-                    }
-                });
-    }
 
     //현재 사용자는 룸을 나간다. 룸의 USERS_OUT의 필드값에 해당 uid를 찾아 1 ->0으로 만들어 준다. 해당 유저들의 값이 전부 0일 경우 ROOMS_Storagedelete를 실행 시켜준다.
     public void ROOMS_USERS_OUT_CHECK(final String ChatRoomListModel_RoomUid , final String Current_My_user, final String To_User_Uid){

@@ -13,13 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.homemade_guardian_beta.Main.common.ReviewResultAdapter;
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.market.adapter.SearchResultAdapter;
-import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.model.user.ReviewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -64,10 +61,10 @@ public class To_Review_Writen_Fragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(ReviewResultAdapter);
-        MarketUpdate(true);
+        ReviewUpdate(true);
         return  view;
     }
-    private void MarketUpdate(final boolean clear) {
+    private void ReviewUpdate(final boolean clear) {
 
         Date date =  new Date();
         CollectionReference collectionReference = firebaseFirestore.collection("USERS").document(CurrentUid).collection("REVIEW");

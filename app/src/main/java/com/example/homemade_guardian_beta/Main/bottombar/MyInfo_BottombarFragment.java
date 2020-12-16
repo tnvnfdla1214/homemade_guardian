@@ -3,7 +3,6 @@ package com.example.homemade_guardian_beta.Main.bottombar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +19,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.example.homemade_guardian_beta.Main.activity.Loding_Dialog;
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.Main.activity.MyInfoPostActivity;
-import com.example.homemade_guardian_beta.Main.activity.ReviewActivity;
 import com.example.homemade_guardian_beta.Main.activity.UpdateInfoActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.user.UserModel;
@@ -35,7 +32,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class MyInfoFragment extends Fragment {
+public class MyInfo_BottombarFragment extends Fragment {
     ImageView Myinfo_profileImage;
     TextView Myinfo_profileNickName, Myinfo_profileUniversity;
     LinearLayout Proceeding_Post,Deal_Complete_Post,My_Writen_Post;

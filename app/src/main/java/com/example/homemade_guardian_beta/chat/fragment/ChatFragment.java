@@ -41,7 +41,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.example.homemade_guardian_beta.Main.activity.Loding_Dialog;
+import com.example.homemade_guardian_beta.Main.common.Loding_Dialog;
 import com.example.homemade_guardian_beta.chat.common.ChatUtil;
 import com.example.homemade_guardian_beta.Main.common.SendNotification;
 import com.example.homemade_guardian_beta.chat.common.photoview.ViewPagerActivity;
@@ -78,7 +78,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import com.example.homemade_guardian_beta.R;
-import com.example.homemade_guardian_beta.model.chat.ChatModel;
+import com.example.homemade_guardian_beta.model.chat.ChatimageModel;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 
@@ -407,7 +407,7 @@ public class ChatFragment extends Fragment {
 
 
     //메세지 보내기 함수
-    private void sendMessage(final String MessageModel_Message, final String Message_MessageType, final ChatModel.FileInfo fileinfo, final String MarketModel_Market_Uid, String RoomUid) {
+    private void sendMessage(final String MessageModel_Message, final String Message_MessageType, final ChatimageModel.FileInfo fileinfo, final String MarketModel_Market_Uid, String RoomUid) {
         Chat_Send_Button.setEnabled(false);
 
         //최초 룸 만들기
@@ -530,7 +530,7 @@ public class ChatFragment extends Fragment {
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         if (resultCode!= RESULT_OK) { return;}
         Uri fileUri = data.getData(); //해당 사진
-        final ChatModel.FileInfo fileinfo  = getFileDetailFromUri(getContext(), fileUri); //chatmodel.fileinfo에 넣기
+        final ChatimageModel.FileInfo fileinfo  = getFileDetailFromUri(getContext(), fileUri); //chatmodel.fileinfo에 넣기
 
         showProgressDialog("잠시만 기다려 주세요^^");
         Int_RoomModel_ImageCount = Int_RoomModel_ImageCount +1;
@@ -572,10 +572,10 @@ public class ChatFragment extends Fragment {
     }
 
     // Uri에서 파일 이름 및 크기 가져오기 함수
-    public static ChatModel.FileInfo getFileDetailFromUri(final Context context, final Uri uri) {
+    public static ChatimageModel.FileInfo getFileDetailFromUri(final Context context, final Uri uri) {
         if (uri == null) { return null; }
 
-        ChatModel.FileInfo fileDetail = new ChatModel.FileInfo();
+        ChatimageModel.FileInfo fileDetail = new ChatimageModel.FileInfo();
         // File Scheme.
         if (ContentResolver.SCHEME_FILE.equals(uri.getScheme())) {
             File file = new File(uri.getPath());

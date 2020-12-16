@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class MyInfo_WritenPostActivity extends AppCompatActivity {
     private My_Writen_Market_Fragment My_Writen_Market_Fragment;
     private My_Writen_Community_Fragment My_Writen_Community_Fragment;
-    private String CurrentUid;
+    private String currentUser_Uid;
     private FirebaseUser CurrentUser;
 
     @Override
@@ -25,13 +25,13 @@ public class MyInfo_WritenPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_myinfo_writenpost);
 
         CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-        CurrentUid =CurrentUser.getUid();
+        currentUser_Uid =CurrentUser.getUid();
 
         init();
     }
 
     private void init() {
-        My_Writen_Market_Fragment = My_Writen_Market_Fragment.getInstance(CurrentUid);
+        My_Writen_Market_Fragment = My_Writen_Market_Fragment.getInstance(currentUser_Uid);
         getSupportFragmentManager().beginTransaction().replace(R.id.container, My_Writen_Market_Fragment).commit();
         BottomNavigationView bottomNavigationView = findViewById(R.id.TopNavigationView);            // part22 : 바텀 네비게이션바  설정 (47'20")
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -39,11 +39,11 @@ public class MyInfo_WritenPostActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.Market:
-                        My_Writen_Market_Fragment = My_Writen_Market_Fragment.getInstance(CurrentUid);
+                        My_Writen_Market_Fragment = My_Writen_Market_Fragment.getInstance(currentUser_Uid);
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, My_Writen_Market_Fragment).commit();
                         return true;
                     case R.id.Community:
-                        My_Writen_Community_Fragment = My_Writen_Community_Fragment.getInstance(CurrentUid);
+                        My_Writen_Community_Fragment = My_Writen_Community_Fragment.getInstance(currentUser_Uid);
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, My_Writen_Community_Fragment).commit();
                         return true;
                 }

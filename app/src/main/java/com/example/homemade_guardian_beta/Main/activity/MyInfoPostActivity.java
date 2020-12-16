@@ -30,8 +30,8 @@ public class MyInfoPostActivity extends BasicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchresult);
-        String Info = getIntent().getStringExtra("Info");
-        String CurrentUid = getIntent().getStringExtra("CurrentUid");
+        String Info = getIntent().getStringExtra("Info");               //선택한 것의 넘버
+        String CurrentUid = getIntent().getStringExtra("CurrentUid");   //현재 자신의 UID
         userModel = (UserModel) getIntent().getSerializableExtra("userModel");
         Log.d("userModel", "userModel: " + userModel.getUserModel_NickName());
 

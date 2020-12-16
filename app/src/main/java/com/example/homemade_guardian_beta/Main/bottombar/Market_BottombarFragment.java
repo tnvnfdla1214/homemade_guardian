@@ -30,7 +30,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MarketFragment extends Fragment {          // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5. 기타 변수
+public class Market_BottombarFragment extends Fragment {          // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5. 기타 변수
                                                         // 2. 변수 및 배열
     private MarketAdapter Marketadapter;                    // MarketAdapter
     private ArrayList<MarketModel> Marketmodel;             // Marketmodel 선언
@@ -59,7 +59,7 @@ public class MarketFragment extends Fragment {          // 1. 클래스 2. 변�
     private boolean updating;                               // 정보를 받아오는 중인지 분별하는 boolean 변수
     private boolean topScrolled;                            // 상단으로 스크롤한 상태의 boolean 변수
 
-    public MarketFragment() {}
+    public Market_BottombarFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

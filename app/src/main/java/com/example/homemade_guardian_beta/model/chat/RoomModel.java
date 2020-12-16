@@ -5,17 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RoomModel {
-    private Date RoomModel_DateOfManufacture;
-    private String RoomModel_FileName;
-    private String RoomModel_FileSize;
-    private String RoomModel_ImageCount;
-    private String RoomModel_Message;
-    private String RoomModel_PostUid;
-    private String RoomModel_Title;
-    private String RoomModel_UserUid;
-    private String RoomModel_MessageType;
-    private Map<String, Integer> RoomModel_USERS;
-    private Map<String, Integer> RoomModel_USER_OUT;
+    private Date RoomModel_DateOfManufacture;           //룸모델 날짜
+    private String RoomModel_FileName;                  //룸 파일 이름
+    private String RoomModel_FileSize;                  //룸 파일 사이즈
+    private String RoomModel_ImageCount;                // 룸 이미지 개수
+    private String RoomModel_Message;                   // 룸 메세지 내용
+    private String RoomModel_PostUid;                   // 룸 포스트 uid
+    private String RoomModel_Title;                     // 룸 제목
+    private String RoomModel_UserUid;                   // 룸 마지막에 보낸 유저의 uid
+    private String RoomModel_MessageType;               // 룸 메세지 타입(0일경우 글,1일경우 사진)
+    private Map<String, Integer> RoomModel_USERS;       // 룸에 들어와 있는 유저(읽었는지 확인)
+    private Map<String, Integer> RoomModel_USER_OUT;    // 룸에 들어와 있는 유저가 나갔는지 안나갔는지 확인하는 모델
 
     public RoomModel(){}
 

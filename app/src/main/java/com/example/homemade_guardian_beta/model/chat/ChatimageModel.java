@@ -4,10 +4,9 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-//이 모델은 파일만 사용하는건가?
-public class ChatModel implements Serializable {
+//사진
+public class ChatimageModel implements Serializable {
     public Map<String, String> users = new HashMap<>() ; //이거 뭘 뜻하는지 모륵겠음
-    public Map<String, String> messages = new HashMap<>() ; //이거 사용안하는건가?
 
     public static class FileInfo {
         public String FileName;

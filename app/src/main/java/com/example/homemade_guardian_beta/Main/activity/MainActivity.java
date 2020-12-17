@@ -14,6 +14,7 @@ import com.example.homemade_guardian_beta.Main.bottombar.ChatroomList_BottombarF
 import com.example.homemade_guardian_beta.Main.bottombar.Community_BottombarFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.Market_BottombarFragment;
 import com.example.homemade_guardian_beta.Main.bottombar.MyInfo_BottombarFragment;
+import com.example.homemade_guardian_beta.Main.bottombar.WriteMarket_BottombarFragment;
 import com.example.homemade_guardian_beta.Main.common.Logout_Dialog;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.activity.ChatActivity;

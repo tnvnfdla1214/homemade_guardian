@@ -72,8 +72,28 @@ public class ChatroomList_BottombarFragment extends Fragment {
     private FirebaseHelper Firebasehelper;          //FirebaseHelper 참조 선언
     String RoomUid;                                 //해당 포지션에 따른 룸 uid
     String ToUserUid;                               // 해당 포지션에 따른 상대방 uid
+    private ListenerRegistration listenerUsers;
+    private FirebaseFirestore Firestore= FirebaseFirestore.getInstance();
+    private Map<String, UserModel> UserList = new HashMap<>();
 
     public ChatroomList_BottombarFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        listenerUsers = Firestore.collection("USERS")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {return;}
+                        for (QueryDocumentSnapshot doc : value) {
+                            UserList.put(doc.getId(), doc.toObject(UserModel.class));
+                        }
+                    }
+                });
     }
 
     @Nullable
@@ -113,12 +133,10 @@ public class ChatroomList_BottombarFragment extends Fragment {
     public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements ItemTouchHelperListener {
         final private RequestOptions requestOptions = new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(90));
         private List<ChatRoomListModel> RoomList = new ArrayList<>();
-        private Map<String, UserModel> UserList = new HashMap<>();
         private String My_User_Uid;
         private StorageReference StorageReference;
         private FirebaseFirestore Firestore;
         private ListenerRegistration listenerRegistration;
-        private ListenerRegistration listenerUsers;
         Integer unreadTotal = 0;
 
         RecyclerViewAdapter() {
@@ -126,19 +144,8 @@ public class ChatroomList_BottombarFragment extends Fragment {
             StorageReference = FirebaseStorage.getInstance().getReference();
             My_User_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-            // all users information
-            listenerUsers = Firestore.collection("USERS")
-                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable QuerySnapshot value,
-                                            @Nullable FirebaseFirestoreException e) {
-                            if (e != null) {return;}
-                            for (QueryDocumentSnapshot doc : value) {
-                                UserList.put(doc.getId(), doc.toObject(UserModel.class));
-                            }
-                            getRoomInfo();
-                        }
-                    });
+            getRoomInfo();
+
         }
 
         public void getRoomInfo() {

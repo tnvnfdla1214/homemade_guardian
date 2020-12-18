@@ -56,7 +56,7 @@ public class FirebaseHelper {                                                   
     public void setOnpostlistener(OnPostListener Onpostlistener){ this.Onpostlistener = Onpostlistener; }
 
     //게시물의 경우에는 이미지가 파이어스토리지에 있기 때문에 파이어스토리지 또한 삭제해주어야한다.
-    public void Market_Storagedelete(final MarketModel marketModel){                                                 // part16: 스토리지의 삭제 (13')
+    public void Market_Storagedelete(final MarketModel marketModel,final String Info){                                                 // part16: 스토리지의 삭제 (13')
         FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();                                        // part17 : 스토리지 삭제 (문서) (19'50")
         StorageReference Storagereference = Firebasestorage.getReference();
         final String Market_Uid = marketModel.getMarketModel_Market_Uid();
@@ -71,7 +71,9 @@ public class FirebaseHelper {                                                   
                         @Override
                         public void onSuccess(Void aVoid) {
                             SuccessCount--;
-                            Market_Storedelete(Market_Uid, marketModel);
+                            if(Info.equals("delete")){
+                                Market_Storedelete(Market_Uid, marketModel);
+                            }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -82,7 +84,6 @@ public class FirebaseHelper {                                                   
                 }
             }
         }
-        Market_Storedelete(Market_Uid, marketModel);
     }
 
     //파이어스토리지에서의 삭제가 끝난 후 파이어스토어에 있는 게시물의 데이터를 삭제한다., 댓글은 하위 컬렉션이기 때문에 미리삭제하고 게시물 삭제로 이동한다.
@@ -349,7 +350,7 @@ public class FirebaseHelper {                                                   
     }
 
 
-    public void Community_Storagedelete(final CommunityModel communityModel){                                                 // part16: 스토리지의 삭제 (13')
+    public void Community_Storagedelete(final CommunityModel communityModel,final String Info){                                                 // part16: 스토리지의 삭제 (13')
         FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();                                        // part17 : 스토리지 삭제 (문서) (19'50")
         StorageReference Storagereference = Firebasestorage.getReference();
         final String Community_Uid = communityModel.getCommunityModel_Community_Uid();
@@ -364,7 +365,9 @@ public class FirebaseHelper {                                                   
                         @Override
                         public void onSuccess(Void aVoid) {
                             SuccessCount--;
-                            Community_Storedelete(Community_Uid, communityModel);
+                            if(Info.equals("delete")){
+                                Community_Storedelete(Community_Uid, communityModel);
+                            }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -375,7 +378,6 @@ public class FirebaseHelper {                                                   
                 }
             }
         }
-        Community_Storedelete(Community_Uid, communityModel);
     }
 
     //파이어스토리지에서의 삭제가 끝난 후 파이어스토어에 있는 게시물의 데이터를 삭제한다., 댓글은 하위 컬렉션이기 때문에 미리삭제하고 게시물 삭제로 이동한다.

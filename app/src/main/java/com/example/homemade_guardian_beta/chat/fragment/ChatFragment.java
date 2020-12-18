@@ -42,6 +42,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.homemade_guardian_beta.Main.common.Loding_Dialog;
+import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.chat.common.ChatUtil;
 import com.example.homemade_guardian_beta.Main.common.SendNotification;
 import com.example.homemade_guardian_beta.chat.common.photoview.ViewPagerActivity;
@@ -121,8 +122,9 @@ public class ChatFragment extends Fragment {
 
     private RoomUidSetListener roomUidSetListener;
 
-    public Loding_Dialog dialog =null;                 // 로딩 액티비티
+    //public Loding_Dialog dialog =null;                 // 로딩 액티비티
 
+    private Loding_Dialog dialog;                 // 로딩 액티비티
 
     public ChatFragment() {
     }
@@ -137,6 +139,7 @@ public class ChatFragment extends Fragment {
         chatFragment.setArguments(bundle);
         return chatFragment;
     }
+
 
     @Nullable
     @Override
@@ -160,6 +163,8 @@ public class ChatFragment extends Fragment {
                 }
             }
         });
+
+        dialog = new Loding_Dialog((ChatFragment.this).getContext());
 
         Chat_Message_Input_EditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -525,14 +530,15 @@ public class ChatFragment extends Fragment {
         }
     }
 
+
     // 이미지나 파일을 로딩하는 결과 함수 (대략 10초가 넘게 걸림 , 스토리지에 넣는것 9초 사진 띄우기 1초)
     @Override
     public void onActivityResult(final int requestCode, int resultCode, Intent data) {
         if (resultCode!= RESULT_OK) { return;}
         Uri fileUri = data.getData(); //해당 사진
         final ChatimageModel.FileInfo fileinfo  = getFileDetailFromUri(getContext(), fileUri); //chatmodel.fileinfo에 넣기
-
-        showProgressDialog("잠시만 기다려 주세요^^");
+        dialog.callDialog();
+        //showProgressDialog("잠시만 기다려 주세요^^");
         Int_RoomModel_ImageCount = Int_RoomModel_ImageCount +1;
         String_RoomModel_ImageCount =String.valueOf(Int_RoomModel_ImageCount);
         StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_RoomModel_ImageCount).putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -540,11 +546,13 @@ public class ChatFragment extends Fragment {
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                 //추가 ()
                 DocumentReference docRefe_ROOMS_CurrentUid = FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid);
-                docRefe_ROOMS_CurrentUid.update("RoomModel_ImageCount", String_RoomModel_ImageCount).addOnSuccessListener(new OnSuccessListener<Void>() {
+                docRefe_ROOMS_CurrentUid.update("RoomModel_ImageCount", String_RoomModel_ImageCount)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         sendMessage(String_RoomModel_ImageCount, Integer.toString(requestCode), fileinfo, MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
-                        hideProgressDialog();
+                        dialog.calldismiss();
+                        //hideProgressDialog();
                     }
                 })
                         .addOnFailureListener(new OnFailureListener() {

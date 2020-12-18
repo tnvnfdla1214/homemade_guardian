@@ -1,12 +1,24 @@
 package com.example.homemade_guardian_beta.Main.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.model.user.UserModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -16,43 +28,118 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class HostModelActivity extends BasicActivity {
 
+    ImageView Myinfo_profileImage;
+    TextView Myinfo_profileNickName, Myinfo_profileUniversity, Hosts_Review;
+    LinearLayout Proceeding_Post,Deal_Complete_Post,My_Writen_Post;
+    TextView Kind_Count,Complete_Count,Correct_Count,Bad_Count;
+    LinearLayout To_Reviews_written;
+    UserModel userModel = new UserModel();
+    private String WriterUid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_host_info);
-        setToolbarTitle("작성자 회원정보");
+
 
        // 게시물 작성자의 Uid를 받아옴
-        String CurrentUid = getIntent().getStringExtra("toUid");
+        WriterUid = getIntent().getStringExtra("toUid");
 
-       // CurrentUid로 현재 사용자의 정보를 가져온다.
-        Get_USERS_Info(CurrentUid);
+        Myinfo_profileImage = findViewById(R.id.Users_Profile_ImageView);
+        Myinfo_profileNickName = findViewById(R.id.Users_Usernm);
+        Myinfo_profileUniversity = findViewById(R.id.Myinfo_profileUniversity);
+        Hosts_Review = findViewById(R.id.Hosts_Review);
+
+        Proceeding_Post = findViewById(R.id.Proceeding_Post);
+        Proceeding_Post.setOnClickListener(onClickListener);
+        Deal_Complete_Post = findViewById(R.id.Deal_Complete_Post);
+        Deal_Complete_Post.setOnClickListener(onClickListener);
+        My_Writen_Post = findViewById(R.id.My_Writen_Post);
+        My_Writen_Post.setOnClickListener(onClickListener);
+
+        Kind_Count = findViewById(R.id.Kind_Count);
+        Complete_Count = findViewById(R.id.Complete_Count);
+        Correct_Count = findViewById(R.id.Correct_Count);
+        Bad_Count = findViewById(R.id.Bad_Count);
+
+        To_Reviews_written = findViewById(R.id.To_Reviews_written);
+        To_Reviews_written.setOnClickListener(onClickListener);
+
+
+        getUserModel(WriterUid);
+
     }
 
    // CurrentUid로 현재 사용자의 정보를 가져온다.
-    public void Get_USERS_Info(String CurrentUid){
-
-        final TextView USERS_University_TextView = (TextView)findViewById(R.id.Users_Address);
-        final TextView USERS_BirthDay_TextView = (TextView)findViewById(R.id.Users_BirthDay);
-        final TextView USERS_Name_TextView = (TextView)findViewById(R.id.Users_Name);
-        final TextView USERS_Usernm_TextView = (TextView)findViewById(R.id.Users_Usernm);
-        final ImageView USERS_Profile_ImageView = (ImageView) findViewById(R.id.Users_Profile_ImageView);
-
-        FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
-        DocumentReference docRef_USERS_CurrentUid = Firebasefirestore.collection("USERS").document(CurrentUid);
-        docRef_USERS_CurrentUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    public void getUserModel(String WriterUid){
+        final DocumentReference documentReference = FirebaseFirestore.getInstance().collection("USERS").document(WriterUid);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                UserModel Usermodel = documentSnapshot.toObject(UserModel.class);
-//                if (Usermodel.getUserModel_University() != 0) {
-//                    USERS_University_TextView.setText(Usermodel.getUserModel_University());
-//                }
-                USERS_BirthDay_TextView.setText(Usermodel.getUserModel_BirthDay());
-                USERS_Name_TextView.setText(Usermodel.getUserModel_NickName());
-                USERS_Usernm_TextView.setText(Usermodel.getUserModel_NickName());
-                if(Usermodel.getUserModel_ProfileImage() != null){ Glide.with(HostModelActivity.this).load(Usermodel.getUserModel_ProfileImage()).centerCrop().override(500).into(USERS_Profile_ImageView); }
-                else{ Glide.with(getApplicationContext()).load(R.drawable.none_profile_user).into(USERS_Profile_ImageView); }
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document != null) {
+                        if (document.exists()) {  //데이터의 존재여부
+                            userModel = document.toObject(UserModel.class);
+                            Profile_Info(userModel);
+                        }
+                    }
+                }
             }
         });
+        return;
+    }
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.Proceeding_Post:
+                    myStartActivity(MyInfoPostActivity.class,"0");
+                    break;
+                case R.id.Deal_Complete_Post:
+                    myStartActivity(MyInfoPostActivity.class,"1");
+                    break;
+                case R.id.My_Writen_Post:
+                    myStartActivity(MyInfoPostActivity.class,"2");
+                    break;
+                case R.id.To_Reviews_written:
+                    myStartActivity(MyInfoPostActivity.class,"3");
+                    break;
+            }
+        }
+    };
+
+    public void Profile_Info(UserModel Usermodel){
+        setToolbarTitle(userModel.getUserModel_NickName()+"님의 회원정보");
+        Myinfo_profileNickName.setText(Usermodel.getUserModel_NickName());
+        if(Usermodel.getUserModel_University() == 0){
+            Myinfo_profileUniversity.setText("홍익대학교");
+        }
+        else {
+            Myinfo_profileUniversity.setText("고려대학교");
+        }
+        //post의 이미지 섬네일 띄우기
+        if(Usermodel.getUserModel_ProfileImage() != null){
+            Glide.with(this).load(Usermodel.getUserModel_ProfileImage()).centerCrop().into(Myinfo_profileImage);
+        }
+        else{
+            //런타임 에러에 걸리는 곳
+            Glide.with(this).load(R.drawable.none_profile_user).centerCrop().into(Myinfo_profileImage);
+        }
+        Hosts_Review.setText(userModel.getUserModel_NickName()+"님의 리뷰..!");
+        Kind_Count.setText("X"+Usermodel.getUserModel_kindReviewList().size());
+        Complete_Count.setText("X"+Usermodel.getUserModel_completeReviewList().size());
+        Correct_Count.setText("X"+Usermodel.getUserModel_correctReviewList().size());
+        Bad_Count.setText("X"+Usermodel.getUserModel_badReviewList().size());
+
+    }
+
+    private void myStartActivity(Class c,String Info) {
+        Intent intent = new Intent(HostModelActivity.this, c);
+        intent.putExtra("Info",Info);
+        intent.putExtra("CurrentUid",WriterUid);
+        intent.putExtra("userModel",userModel);
+        startActivityForResult(intent, 0);
     }
 }

@@ -20,6 +20,7 @@ public class MyInfoPostActivity extends BasicActivity {
     private Proceeding_Post_Fragment Proceeding_Post_Fragment;
     private To_Review_Writen_Fragment To_Review_Writen_Fragment;
     UserModel userModel = new UserModel();
+    private String CurrentUid;
 
     /*
     private String CurrentUid;
@@ -31,7 +32,7 @@ public class MyInfoPostActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchresult);
         String Info = getIntent().getStringExtra("Info");               //선택한 것의 넘버
-        String CurrentUid = getIntent().getStringExtra("CurrentUid");   //현재 자신의 UID
+        CurrentUid = getIntent().getStringExtra("CurrentUid");   //현재 자신의 UID
         userModel = (UserModel) getIntent().getSerializableExtra("userModel");
         Log.d("userModel", "userModel: " + userModel.getUserModel_NickName());
 
@@ -81,6 +82,7 @@ public class MyInfoPostActivity extends BasicActivity {
     }
     private void myStartFinishActivity(Class c) {                                                             // part22 : c에다가 이동하려는 클래스를 받고 requestcode는 둘다 1로 준다.
         Intent intent = new Intent(this, c);
+        intent.putExtra("CurrentUid",CurrentUid);
         startActivityForResult(intent, 1);
         finish();
     }

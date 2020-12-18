@@ -21,7 +21,12 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.homemade_guardian_beta.Main.activity.BasicActivity;
+import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.Main.common.Loding_Dialog;
+import com.example.homemade_guardian_beta.Main.common.listener.OnPostListener;
+import com.example.homemade_guardian_beta.model.community.CommunityModel;
+import com.example.homemade_guardian_beta.model.community.Community_CommentModel;
+import com.example.homemade_guardian_beta.model.market.Market_CommentModel;
 import com.example.homemade_guardian_beta.photo.PhotoUtil;
 import com.example.homemade_guardian_beta.photo.activity.PhotoPickerActivity;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
@@ -48,13 +53,13 @@ import java.util.List;
 //      Ex) 게시물에서 수정을 눌렀을 때 실행되는 액티비티이다.
 
 public class ModifyMarketActivity extends BasicActivity {                       // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5.기타 변수
-    private Loding_Dialog dialog = new Loding_Dialog(this);                 // 로딩 액티비티
+    Loding_Dialog dialog = new Loding_Dialog(this);                 // 로딩 액티비티
                                                                                 // 2. 변수 및 배열
     private MarketModel Marketmodel;                                                // Marketmodel 선언
     public  ArrayList<String> ArrayList_SelectedPhoto = new ArrayList<>();          // 선택한 이미지들이 담기는 리스트
-    private ArrayList<String> ImageList;                                            // 수정하려는 게시물의 이미지 리스트
     private int PathCount;                                                          // ArrayList_SelectedPhoto의 count 변수
     private String Category;                                                        // 게시물의 카테고리
+    private String ChangeState;                                                     // 앨범에 들어간 적이 있는지
                                                                                 // 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등)
     private RelativeLayout LoaderLayout;                                            // 로딩중을 나타내는 layout 선언
     private ImageView FoodCategory_ImageView;                                       // '음식교환' 카테고리
@@ -69,6 +74,7 @@ public class ModifyMarketActivity extends BasicActivity {                       
                                                                                 // 4. 파이어베이스 관련 선언
     private FirebaseUser CurrentUser;                                               // 현재 사용자
     private StorageReference Storagereference;                                      // 파이어스토리지에 접근하기 위한 선언
+    private FirebaseHelper Firebasehelper;                                          // FirebaseHelper 선언
                                                                                 // 5.기타 변수
     public final static int REQUEST_CODE = 1;                                       // REQUEST_CODE 초기화
 
@@ -121,6 +127,9 @@ public class ModifyMarketActivity extends BasicActivity {                       
        // 현재 게시물의  Marketmodel getIntent
         Marketmodel = (MarketModel) getIntent().getSerializableExtra("marketInfo");
 
+        Firebasehelper = new FirebaseHelper(this);
+        Firebasehelper.setOnpostlistener(onPostListener);
+
        // 수정하려는 게시물의 내용 구성
         MarketInit();
     }
@@ -141,6 +150,8 @@ public class ModifyMarketActivity extends BasicActivity {                       
             PhotoList2.setImageResource(0);
             PhotoList3.setImageResource(0);
             PhotoList4.setImageResource(0);
+            ArrayList_SelectedPhoto = new ArrayList<>();
+            ChangeState = "앨범O";
 
            // PhotoPickerActivity에서 받은 data를 photos에 넣겠다.
             if (data != null) {
@@ -148,26 +159,30 @@ public class ModifyMarketActivity extends BasicActivity {                       
             }
             if (photos != null || ArrayList_SelectedPhoto !=null) {
                 ArrayList_SelectedPhoto.addAll(photos);
-                for(int i=0;i<photos.size();i++){
-                    switch (i){
-                        case 0 :
+                for(int i=0;i<photos.size();i++) {
+                    switch (i) {
+                        case 0:
                             Glide.with(this).load(photos.get(0)).apply(requestOptions).into(PhotoList0);
                             break;
-                        case 1 :
+                        case 1:
                             Glide.with(this).load(photos.get(1)).apply(requestOptions).into(PhotoList1);
                             break;
-                        case 2 :
+                        case 2:
                             Glide.with(this).load(photos.get(2)).apply(requestOptions).into(PhotoList2);
                             break;
-                        case 3 :
+                        case 3:
                             Glide.with(this).load(photos.get(3)).apply(requestOptions).into(PhotoList3);
                             break;
-                        case 4 :
+                        case 4:
                             Glide.with(this).load(photos.get(4)).apply(requestOptions).into(PhotoList4);
                             break;
                     }
                 }
                // 선택된 이미지의 개수를 size로 count
+                Image_Count_TextView.setText(photos.size()+"/5");
+            }
+            if(photos.size() == 0){
+                ArrayList_SelectedPhoto = null;
                 Image_Count_TextView.setText(photos.size()+"/5");
             }
         }
@@ -178,41 +193,40 @@ public class ModifyMarketActivity extends BasicActivity {                       
 
        // Marketmodel이 null이 아니어야 함
         if (Marketmodel != null) {
-
+            ChangeState = "앨범X";
            // 게시물의 제목, 내용 set
             Title_EditText.setText(Marketmodel.getMarketModel_Title());
             TextContents_EditText.setText(Marketmodel.getMarketModel_Text());
 
            // 게시물에 등록 되어 있던 이미지 set
-            ImageList = Marketmodel.getMarketModel_ImageList();
+            ArrayList_SelectedPhoto = Marketmodel.getMarketModel_ImageList();
             RequestOptions requestOptions = new RequestOptions();
             requestOptions.circleCropTransform();
             requestOptions.transforms( new CenterCrop(),new RoundedCorners(25));
 
             GradientDrawable drawable= (GradientDrawable) ContextCompat.getDrawable(getApplicationContext(), R.drawable.round);
-            if (ImageList != null) {
-                ArrayList_SelectedPhoto.addAll(ImageList);
-                for(int i=0;i<ImageList.size();i++){
+            if (ArrayList_SelectedPhoto != null) {
+                for(int i=0;i<ArrayList_SelectedPhoto.size();i++){
                     switch (i){
                         case 0 :
-                            Glide.with(this).load(ImageList.get(0)).apply(requestOptions).into(PhotoList0);
+                            Glide.with(this).load(ArrayList_SelectedPhoto.get(0)).apply(requestOptions).into(PhotoList0);
                             break;
                         case 1 :
-                            Glide.with(this).load(ImageList.get(1)).apply(requestOptions).into(PhotoList1);
+                            Glide.with(this).load(ArrayList_SelectedPhoto.get(1)).apply(requestOptions).into(PhotoList1);
                             break;
                         case 2 :
-                            Glide.with(this).load(ImageList.get(2)).apply(requestOptions).into(PhotoList2);
+                            Glide.with(this).load(ArrayList_SelectedPhoto.get(2)).apply(requestOptions).into(PhotoList2);
                             break;
                         case 3 :
-                            Glide.with(this).load(ImageList.get(3)).apply(requestOptions).into(PhotoList3);
+                            Glide.with(this).load(ArrayList_SelectedPhoto.get(3)).apply(requestOptions).into(PhotoList3);
                             break;
                         case 4 :
-                            Glide.with(this).load(ImageList.get(4)).apply(requestOptions).into(PhotoList4);
+                            Glide.with(this).load(ArrayList_SelectedPhoto.get(4)).apply(requestOptions).into(PhotoList4);
                             break;
                     }
                 }
                // 현재 이미지의 개수 set
-                Image_Count_TextView.setText(ImageList.size()+"/5");
+                Image_Count_TextView.setText(ArrayList_SelectedPhoto.size()+"/5");
             }
 
             // 게시물의 카테고리를 가져와 해당 카테고리 이미지와 텍스트에 setcolorfilter
@@ -298,7 +312,7 @@ public class ModifyMarketActivity extends BasicActivity {                       
 
                // 앨범으로 이동
                 case R.id.camera_Button_Layout:
-                    ArrayList_SelectedPhoto = new ArrayList<>();
+
                     PhotoUtil intent2 = new PhotoUtil(getApplicationContext());
                     intent2.setMaxSelectCount(5);
                     intent2.setShowCamera(true);
@@ -331,8 +345,8 @@ public class ModifyMarketActivity extends BasicActivity {                       
        // if : 제목이 작성되었다면, 진행
         if (Title.length() > 0) {
 
-           // 진행되는 동안 LoaderLayout으로 진행중임을 알림
-            LoaderLayout.setVisibility(View.VISIBLE);
+            // 등록이 시작되면 다른 이벤트를 방지하기 위해서 Dialog를 활성화한다.
+            dialog.callDialog();
 
            // 파이어베이스 관련
             FirebaseStorage Firebasestorage = FirebaseStorage.getInstance();
@@ -347,41 +361,42 @@ public class ModifyMarketActivity extends BasicActivity {                       
             final DocumentReference docRef_MARKETS_MarketUid = Firebasefirestore.collection("MARKETS").document(Market_Uid);
             final Date DateOfManufacture = Marketmodel.getMarketModel_DateOfManufacture();
             final int commentcount = Marketmodel.getMarketModel_CommentCount();
-
            // 이미지의 수정사항이 있을 수 있으므로 이미지 리스트를 초기화한다.
             final ArrayList<String> Modify_Image_List = new ArrayList<>();
 
-           // if : 기존의 이미지가 없거나 있었지만 수정된 것이 없다.
-           // else -> if : 기존에 이미지가 있었지만, 이미지를 새로 선택하였다. -----> 스토리지 초기화 만들어야함
-           // else -> else : 기존에 이미지가 있었지만, 이미지가 사라졌다.
-            if (ImageList != null){
-                Marketmodel.setMarketModel_Title(Title);
-                Marketmodel.setMarketModel_Text(TextContents);
-
-               // 스토리지에 대한 추가를 할 필요가 없으므로 스토어 추가로 이동한다.
-                Modify_Store_Upload(docRef_MARKETS_MarketUid, Marketmodel);
-            }else{
-               // else -> if : 기존에 이미지가 있었지만, 이미지를 새로 선택하였다. -----> 스토리지 초기화 만들어야함
-               // else -> else : 기존에 이미지가 있었지만, 이미지가 사라졌다.
-                if (ArrayList_SelectedPhoto != null){
+            // if : 이미지가 있다. / else : 이미지가 없다.
+            //1. 원래 사진 O, 앨범 들어간 적 O, [[사진 O]] +뒤로가기 or 완료
+            //2. 원래 사진 O, 앨범 들어간 적 X, [[사진 O]]
+            //3. 원래 사진 X, 앨범 들어간 적 O, [[사진 O]]
+            if (ArrayList_SelectedPhoto != null) {
+                //2. 원래 사진 O, 앨범 들어간 적 X, [[사진 O]]
+                if(ChangeState.equals("앨범X")){
+                    MarketModel marketModel = new MarketModel(Title, TextContents,ArrayList_SelectedPhoto, DateOfManufacture, CurrentUser.getUid(), Market_Uid, Category, LikeList, HotMarket, MarketModel_reservation, MarketModel_deal, commentcount);
+                    marketModel.setMarketModel_Title(Title);
+                    marketModel.setMarketModel_Text(TextContents);
+                    marketModel.setMarketModel_Category(Category);
+                    Modify_Store_Upload(docRef_MARKETS_MarketUid, marketModel);
+                }
+                //1. 원래 사진 O, 앨범 들어간 적 O, [[사진 O]] +뒤로가기
+                //3. 원래 사진 X, 앨범 들어간 적 O, [[사진 O]]
+                else{
                     for (int i = 0; i < ArrayList_SelectedPhoto.size(); i++) {
-
-                       // 스토리지의 경로 설정
+                        // 스토리지의 경로 설정
                         String path = ArrayList_SelectedPhoto.get(PathCount);
                         Modify_Image_List.add(path);
                         String[] pathArray = path.split("\\.");
                         final StorageReference ImagesRef_MARKETS_Uid_PathCount = Storagereference.child("MARKETS/" + docRef_MARKETS_MarketUid.getId() + "/" + PathCount + "." + pathArray[pathArray.length - 1]);
                         try {
-                           // 스토리지에 등록
+                            // 스토리지에 등록
                             InputStream Stream = new FileInputStream(new File(ArrayList_SelectedPhoto.get(PathCount)));
                             StorageMetadata Metadata = new StorageMetadata.Builder().setCustomMetadata("index", "" + (Modify_Image_List.size() - 1)).build();
                             UploadTask Uploadtask = ImagesRef_MARKETS_Uid_PathCount.putStream(Stream, Metadata);
 
-                           // Market의 기존 Uid 받아오고, ImageList 초기화
+                            // Market의 기존 Uid 받아오고, ImageList 초기화
                             final String Get_MarketUid = Market_Uid;
                             Marketmodel.setMarketModel_ImageList(new ArrayList<String>());
 
-                           // 몇번째 이미지까지 등록되었나 지표 / 등록이 다 되었다면 스토어 추가로 이동된다.
+                            // 몇번째 이미지까지 등록되었나 지표 / 등록이 다 되었다면 스토어 추가로 이동된다.
                             final int finalI = i;
                             Uploadtask.addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -395,12 +410,12 @@ public class ModifyMarketActivity extends BasicActivity {                       
                                         @Override
                                         public void onSuccess(Uri uri) {
 
-                                           // 새로운 Image 및 marketModel 구성 후 스토어 추가로 이동한다.
+                                            // 새로운 Image 및 marketModel 구성 후 스토어 추가로 이동한다.
                                             Modify_Image_List.set(index, uri.toString());
-                                            MarketModel marketModel = new MarketModel(Title, TextContents, Modify_Image_List,  DateOfManufacture,
-                                                    CurrentUser.getUid(), Get_MarketUid, Category, LikeList, HotMarket,MarketModel_reservation,MarketModel_deal, commentcount);
+                                            MarketModel marketModel = new MarketModel(Title, TextContents, Modify_Image_List, DateOfManufacture,
+                                                    CurrentUser.getUid(), Get_MarketUid, Category, LikeList, HotMarket, MarketModel_reservation, MarketModel_deal, commentcount);
                                             marketModel.setMarketModel_Market_Uid(Get_MarketUid);
-                                            if(finalI == ArrayList_SelectedPhoto.size()-1){
+                                            if (finalI == ArrayList_SelectedPhoto.size() - 1) {
                                                 Modify_Store_Upload(docRef_MARKETS_MarketUid, marketModel);
                                             }
                                         }
@@ -410,17 +425,19 @@ public class ModifyMarketActivity extends BasicActivity {                       
                         } catch (FileNotFoundException e) {
                             Log.e("로그", "에러: " + e.toString());
                         }
-                       // 다음 이미지로 넘어가기 위한 PathCount 증가
+                        // 다음 이미지로 넘어가기 위한 PathCount 증가
                         PathCount++;
                     }
                 }
-               // else -> else : 기존에 이미지가 있었지만, 이미지가 사라졌다.
-                else{
-                    MarketModel marketModel = new MarketModel(Title,TextContents, DateOfManufacture, CurrentUser.getUid(), Market_Uid, Category, LikeList,
-                            HotMarket,MarketModel_reservation,MarketModel_deal, commentcount);
-                    marketModel.setMarketModel_Market_Uid(Market_Uid);
-                    Modify_Store_Upload(docRef_MARKETS_MarketUid, marketModel);
-                }
+            }
+            //1. 원래 사진 O, 앨범 들어간 적 O, [[사진 X]]
+            //2. 원래 사진 X, 앨범 들어간 적 O, [[사진 X]] +뒤로가기 or 완료
+            //3. 원래 사진 X, 앨범 들어간 적 X, [[사진 X]]
+            else {
+                MarketModel marketModel = new MarketModel(Title, TextContents,null, DateOfManufacture, CurrentUser.getUid(), Market_Uid, Category, LikeList, HotMarket, MarketModel_reservation, MarketModel_deal, commentcount);
+                marketModel.setMarketModel_Market_Uid(Market_Uid);
+                Firebasehelper.Market_Storagedelete(Marketmodel,"modify");
+                Modify_Store_Upload(docRef_MARKETS_MarketUid, marketModel);
             }
         } else {
            // 제목이 없을 경우
@@ -437,20 +454,39 @@ public class ModifyMarketActivity extends BasicActivity {                       
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        LoaderLayout.setVisibility(View.GONE);
+//                        LoaderLayout.setVisibility(View.GONE);
                         Intent Resultintent = new Intent();
                         Resultintent.putExtra("marketInfo", marketmodel);
                         setResult(Activity.RESULT_OK, Resultintent);
+                        dialog.calldismiss();
                         finish();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        LoaderLayout.setVisibility(View.GONE);
+                        dialog.calldismiss();
                     }
                 });
     }
+
+    // 파이어베이스 헬퍼의 listener
+    OnPostListener onPostListener = new OnPostListener() {
+        @Override
+        public void onDelete(MarketModel marketModel) {
+            Log.e("로그 ","삭제 성공");
+        }
+        @Override
+        public void oncommentDelete(Market_CommentModel market_commentModel) { Log.e("로그 ","댓글 삭제 성공"); }
+        @Override
+        public void oncommunityDelete(CommunityModel communityModel) { }
+        @Override
+        public void oncommnitycommentDelete(Community_CommentModel community_commentModel) { }
+        @Override
+        public void onModify() {
+            Log.e("로그 ","수정 성공");
+        }
+    };
 
     private void myStartActivity(Class c, MarketModel marketModel) {
         Intent Intent_Market_Data = new Intent(this, c);

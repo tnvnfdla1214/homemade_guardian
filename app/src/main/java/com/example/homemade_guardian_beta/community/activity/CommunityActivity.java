@@ -392,7 +392,7 @@ public class CommunityActivity extends BasicActivity {              // 1. 클래
 
                    // 유저가 작성자일 때
                     case R.id.Post_Delete_Button:
-                        Firebasehelper.Community_Storagedelete(Communitymodel);
+                        Firebasehelper.Community_Storagedelete(Communitymodel,"delete");
                         finish();
                         return true;
                     case R.id.Post_Modify_Button:

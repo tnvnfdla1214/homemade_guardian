@@ -132,11 +132,6 @@ public class MyInfo_BottombarFragment extends Fragment {
         }
     };
 
-    public void setUsermodel(Intent data){
-        userModel = new UserModel();
-        userModel = (UserModel) data.getExtras().getSerializable("userModel");
-        Profile_Info(userModel);
-    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

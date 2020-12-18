@@ -471,7 +471,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
 
                  // 유저가 작성자일 때
                     case R.id.Post_Delete_Button:
-                        Firebasehelper.Market_Storagedelete(Marketmodel);
+                        Firebasehelper.Market_Storagedelete(Marketmodel,"delete");
                         finish();
                         return true;
                     case R.id.Post_Modify_Button:
@@ -659,6 +659,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
         Intent Intent_Market_Data = new Intent(this, c);
         Intent_Market_Data.putExtra("marketInfo", marketModel);
         startActivityForResult(Intent_Market_Data, 0);
+        //startActivity(Intent_Market_Data);
         finish();
     }
 

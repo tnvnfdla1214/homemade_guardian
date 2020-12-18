@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.homemade_guardian_beta.Main.Fragment.Deal_Complete_Post_Fragment;
 import com.example.homemade_guardian_beta.Main.Fragment.My_Writen_Community_Fragment;
 import com.example.homemade_guardian_beta.Main.Fragment.My_Writen_Market_Fragment;
 import com.example.homemade_guardian_beta.R;
@@ -17,15 +18,14 @@ public class MyInfo_WritenPostActivity extends AppCompatActivity {
     private My_Writen_Market_Fragment My_Writen_Market_Fragment;
     private My_Writen_Community_Fragment My_Writen_Community_Fragment;
     private String currentUser_Uid;
-    private FirebaseUser CurrentUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myinfo_writenpost);
 
-        CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
-        currentUser_Uid =CurrentUser.getUid();
+        currentUser_Uid = getIntent().getStringExtra("CurrentUid");
 
         init();
     }

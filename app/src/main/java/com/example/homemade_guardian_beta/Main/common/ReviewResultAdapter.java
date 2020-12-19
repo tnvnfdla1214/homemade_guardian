@@ -22,6 +22,7 @@ import com.example.homemade_guardian_beta.model.market.MarketModel;
 import com.example.homemade_guardian_beta.model.user.ReviewModel;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -36,6 +37,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import static com.example.homemade_guardian_beta.Main.common.Util.showCommunityToast;
 
 //SearchResultFragment와 연결된 어댑터이다. onBindViewHolder로 카드뷰에 검색된 게시물의 정보들을 담는 역할을 한다. !검색된 결과의 게시물 나열!
 //      Ex) MORE_INDEX를 readContentsView에서 MORE_INDEX 보다 작은 수의 사진만 SearchResultFragment에서 나타낸다.
@@ -78,13 +81,16 @@ public class ReviewResultAdapter extends RecyclerView.Adapter<ReviewResultAdapte
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         marketModel = documentSnapshot.toObject(MarketModel.class);
-                        ArrayList_UserModel = new ArrayList<>();
-                        Intent Intent_MarketActivity = new Intent(Activity, MarketActivity.class);
-                        ArrayList_MarketModel.add(marketModel);
+                        Log.d("석ㄱ","marketModel : "+marketModel);
+                        if(marketModel != null){
+                            ArrayList_UserModel = new ArrayList<>();
+                            Intent Intent_MarketActivity = new Intent(Activity, MarketActivity.class);
+                            ArrayList_MarketModel.add(marketModel);
                             Intent_MarketActivity.putExtra("marketInfo",marketModel);
                             Activity.startActivity(Intent_MarketActivity);
-
-
+                        }else{
+                            showCommunityToast(Activity, "삭제된 게시물입니다.");
+                        }
                     }
                 });
             }

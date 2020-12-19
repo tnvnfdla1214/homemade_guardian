@@ -83,6 +83,10 @@ public class FirebaseHelper {                                                   
                     });
                 }
             }
+        }else{
+            if(Info.equals("delete")){
+                Market_Storedelete(Market_Uid, marketModel);
+            }
         }
     }
 
@@ -376,6 +380,10 @@ public class FirebaseHelper {                                                   
                         }
                     });
                 }
+            }
+        }else{
+            if(Info.equals("delete")){
+                Community_Storedelete(Community_Uid, communityModel);
             }
         }
     }

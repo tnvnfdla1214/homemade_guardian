@@ -1,6 +1,7 @@
 package com.example.homemade_guardian_beta.chat.fragment;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -9,6 +10,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,6 +43,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.homemade_guardian_beta.Main.common.Loding_Dialog;
@@ -123,8 +128,8 @@ public class ChatFragment extends Fragment {
     private RoomUidSetListener roomUidSetListener;
 
     //public Loding_Dialog dialog =null;                 // 로딩 액티비티
-
-    private Loding_Dialog dialog;                 // 로딩 액티비티
+    Dialog dialog = null;
+    ////Loding_Dialog dialog;                 // 로딩 액티비티
 
     public ChatFragment() {
     }
@@ -164,7 +169,8 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        dialog = new Loding_Dialog((ChatFragment.this).getContext());
+        //dialog = new Dialog(getContext());
+        ////dialog = new Loding_Dialog((ChatFragment.this).getContext());
 
         Chat_Message_Input_EditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -474,6 +480,7 @@ public class ChatFragment extends Fragment {
                             if (task.isSuccessful()) {
                                 sendGson(MessageModel_Message);
                                 Chat_Send_Button.setEnabled(true);
+                                dialog.dismiss();
                             }
                         }
                     });
@@ -521,6 +528,7 @@ public class ChatFragment extends Fragment {
                                 //sendGCM();
                                 sendGson(MessageModel_Message);
                                 Chat_Send_Button.setEnabled(true);
+                                dialog.dismiss();
                             }
                         }
                     });
@@ -537,7 +545,8 @@ public class ChatFragment extends Fragment {
         if (resultCode!= RESULT_OK) { return;}
         Uri fileUri = data.getData(); //해당 사진
         final ChatimageModel.FileInfo fileinfo  = getFileDetailFromUri(getContext(), fileUri); //chatmodel.fileinfo에 넣기
-        dialog.callDialog();
+        ////dialog.callDialog();
+        callDialog();
         //showProgressDialog("잠시만 기다려 주세요^^");
         Int_RoomModel_ImageCount = Int_RoomModel_ImageCount +1;
         String_RoomModel_ImageCount =String.valueOf(Int_RoomModel_ImageCount);
@@ -551,7 +560,7 @@ public class ChatFragment extends Fragment {
                     @Override
                     public void onSuccess(Void aVoid) {
                         sendMessage(String_RoomModel_ImageCount, Integer.toString(requestCode), fileinfo, MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
-                        dialog.calldismiss();
+                        ////dialog.calldismiss();
                         //hideProgressDialog();
                     }
                 })
@@ -577,6 +586,7 @@ public class ChatFragment extends Fragment {
                         StorageReference.child("ROOMS/"+ChatRoomListModel_RoomUid + "/" + String_RoomModel_ImageCount).putBytes(data);
                     }
                 });
+        //dialog.dismiss();
     }
 
     // Uri에서 파일 이름 및 크기 가져오기 함수
@@ -784,7 +794,7 @@ public class ChatFragment extends Fragment {
                 if (userModel.getUserModel_ProfileImage() != null) {
                     Glide.with(getContext()).load(userModel.getUserModel_ProfileImage()).centerCrop().override(500).into(messageViewHolder.User_Profile_Imalge);
                 } else{
-                    Glide.with(getContext()).load(R.drawable.user).into(messageViewHolder.User_Profile_Imalge);
+                    Glide.with(getContext()).load(R.drawable.none_profile_user).into(messageViewHolder.User_Profile_Imalge);
                 }
             }
 
@@ -982,7 +992,16 @@ public class ChatFragment extends Fragment {
                 sendMessage(msg, "0", null, Market_Uid,Room_uid);
             }
         });
-
     }
 
+    public void callDialog(){
+        dialog = new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(R.layout.dialog_loading);
+        ImageView Loding_charactor = (ImageView) dialog.findViewById(R.id.Loding_charactor);
+        Glide.with(Loding_charactor.getContext()).load(R.drawable.loading).into(new DrawableImageViewTarget(Loding_charactor));
+        dialog.show();
+    }
 }

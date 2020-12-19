@@ -3,16 +3,22 @@ package com.example.homemade_guardian_beta.Main.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 
 import com.bumptech.glide.Glide;
 import com.example.homemade_guardian_beta.R;
+import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
+import com.example.homemade_guardian_beta.market.activity.MarketActivity;
+import com.example.homemade_guardian_beta.market.activity.ModifyMarketActivity;
 import com.example.homemade_guardian_beta.model.user.UserModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,13 +34,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class HostModelActivity extends BasicActivity {
 
-    ImageView Myinfo_profileImage;
+    ImageView Myinfo_profileImage,Menu;
     TextView Myinfo_profileNickName, Myinfo_profileUniversity, Hosts_Review;
     LinearLayout Proceeding_Post,Deal_Complete_Post,My_Writen_Post;
     TextView Kind_Count,Complete_Count,Correct_Count,Bad_Count;
     LinearLayout To_Reviews_written;
     UserModel userModel = new UserModel();
     private String WriterUid;
+    private String CurrentUid;                                  // 현재 사용자의 Uid
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +73,15 @@ public class HostModelActivity extends BasicActivity {
         To_Reviews_written.setOnClickListener(onClickListener);
 
 
+        // 현재 사용자 설정
+        CurrentUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        // 메뉴 버튼 활성화
+        Menu = findViewById(R.id.menu);
+        Menu.setOnClickListener(onClickListener);
+        if(CurrentUid.equals(WriterUid)){
+            Menu.setVisibility(View.GONE);
+        }
         getUserModel(WriterUid);
 
     }
@@ -106,10 +122,35 @@ public class HostModelActivity extends BasicActivity {
                 case R.id.To_Reviews_written:
                     myStartActivity(MyInfoPostActivity.class,"3");
                     break;
+                // 메뉴 버튼
+                case R.id.menu:
+                    showPopup(v);
+                    break;
             }
         }
     };
 
+    private void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(HostModelActivity.this, v);
+        getMenuInflater().inflate(R.menu.writer_menu, popup.getMenu());
+
+        // 메뉴에서의 MenuItem이 클릭 되었을 때의 Listener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+
+                    case R.id.Post_Report_Button:
+                        Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+        });
+        popup.show();
+    }
     public void Profile_Info(UserModel Usermodel){
         setToolbarTitle(userModel.getUserModel_NickName()+"님의 회원정보");
         Myinfo_profileNickName.setText(Usermodel.getUserModel_NickName());

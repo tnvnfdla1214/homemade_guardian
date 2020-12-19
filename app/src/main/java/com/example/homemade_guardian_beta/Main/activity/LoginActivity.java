@@ -142,7 +142,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onSuccess(MeV2Response result) {
+                    Log.d("석ㄱ","000");
                     FirebaseAuthkakaologin(result.getKakaoAccount().getEmail(), KakaoPassword);
+                    Log.d("석ㄱ","000");
                 }
             });
         }
@@ -156,13 +158,17 @@ public class LoginActivity extends AppCompatActivity {
 
     //카카오 로그인
     public void FirebaseAuthkakaologin(final String email, String password) {
+        Log.d("석ㄱ","0");
         Firebaseauth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            Log.d("석ㄱ","1");
                             currentUser = Firebaseauth.getCurrentUser();
+                            Log.d("석ㄱ","2");
                             updateUI(currentUser);
+                            Log.d("석ㄱ","3");
                         } else {
                             String Email = email;
                             FirebaseAuthkakaosignup(Email, KakaoPassword);
@@ -281,6 +287,7 @@ public class LoginActivity extends AppCompatActivity {
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
+
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {

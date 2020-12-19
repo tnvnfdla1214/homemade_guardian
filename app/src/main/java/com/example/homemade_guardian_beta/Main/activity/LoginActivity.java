@@ -108,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
         sessionCallback = new SessionCallback(); //세션콜백 초기화
         Session.getCurrentSession().addCallback(sessionCallback);  //현재 세션에 콜백 붙임
         Session.getCurrentSession().open(AuthType.KAKAO_LOGIN_ALL,this);
-        Session.getCurrentSession().checkAndImplicitOpen();  //자동 로그인
+        /////////////Session.getCurrentSession().checkAndImplicitOpen();  //자동 로그인
     }
 
     //카카오 로그인

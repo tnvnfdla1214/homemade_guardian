@@ -480,7 +480,7 @@ public class ChatFragment extends Fragment {
                             if (task.isSuccessful()) {
                                 sendGson(MessageModel_Message);
                                 Chat_Send_Button.setEnabled(true);
-                                dialog.dismiss();
+                                //dialog.dismiss();
                             }
                         }
                     });
@@ -528,7 +528,7 @@ public class ChatFragment extends Fragment {
                                 //sendGCM();
                                 sendGson(MessageModel_Message);
                                 Chat_Send_Button.setEnabled(true);
-                                dialog.dismiss();
+                                //dialog.dismiss();
                             }
                         }
                     });
@@ -557,13 +557,14 @@ public class ChatFragment extends Fragment {
                 DocumentReference docRefe_ROOMS_CurrentUid = FirebaseFirestore.getInstance().collection("ROOMS").document(ChatRoomListModel_RoomUid);
                 docRefe_ROOMS_CurrentUid.update("RoomModel_ImageCount", String_RoomModel_ImageCount)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        sendMessage(String_RoomModel_ImageCount, Integer.toString(requestCode), fileinfo, MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
-                        ////dialog.calldismiss();
-                        //hideProgressDialog();
-                    }
-                })
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                sendMessage(String_RoomModel_ImageCount, Integer.toString(requestCode), fileinfo, MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
+                                ////dialog.calldismiss();
+                                //hideProgressDialog();
+                                dialog.dismiss();
+                            }
+                        })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {

@@ -97,7 +97,7 @@ public class Market_Thing_Fragment extends Fragment {           // 1. 클래스 
         FirebaseFirestore Firebasefirestore = FirebaseFirestore.getInstance();
         Date date = Marketmodel.size() == 0 || clear ? new Date() : Marketmodel.get(Marketmodel.size() - 1).getMarketModel_DateOfManufacture();
         CollectionReference collectionReference = Firebasefirestore.collection("MARKETS");
-        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","생필품").limit(10).get()
+        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","물건교환").limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

@@ -112,7 +112,7 @@ public class SearchActivity extends BasicActivity {                             
         Date date =  new Date();
         CollectionReference FoodReference = Firebasefirestore.collection("MARKETS");
        // limit(1)로 날짜 순으로 한개만 받는다.
-        FoodReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","음식").limit(1).get()
+        FoodReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","음식교환").limit(1).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -127,7 +127,7 @@ public class SearchActivity extends BasicActivity {                             
 
         CollectionReference ThingReference = Firebasefirestore.collection("MARKETS");
        // limit(1)로 날짜 순으로 한개만 받는다.
-        ThingReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","생필품").limit(1).get()
+        ThingReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","물건교환").limit(1).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -142,7 +142,7 @@ public class SearchActivity extends BasicActivity {                             
 
         CollectionReference BorrowReference = Firebasefirestore.collection("MARKETS");
        // limit(1)로 날짜 순으로 한개만 받는다.
-        BorrowReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","대여").limit(1).get()
+        BorrowReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","대여하기").limit(1).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -157,7 +157,7 @@ public class SearchActivity extends BasicActivity {                             
 
         CollectionReference QuestReference = Firebasefirestore.collection("MARKETS");
        // limit(1)로 날짜 순으로 한개만 받는다.
-        QuestReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","용역").limit(1).get()
+        QuestReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","퀘스트").limit(1).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

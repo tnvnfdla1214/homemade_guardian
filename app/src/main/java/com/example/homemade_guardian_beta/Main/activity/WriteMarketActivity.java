@@ -222,7 +222,7 @@ public class WriteMarketActivity extends BasicActivity {                        
                     Thing_TextView.setTextColor(Color.parseColor("#000000"));
                     Borrow_TextView.setTextColor(Color.parseColor("#000000"));
                     Quest_TextView.setTextColor(Color.parseColor("#000000"));
-                    Category = "음식";
+                    Category = "음식교환";
                     break;
 
                // 클릭시 : 클릭한 카테고리 ImageView, Text ColorFilter 설정 다른 카테고리는 초기화 / Category = 현재 카테고리로
@@ -235,7 +235,7 @@ public class WriteMarketActivity extends BasicActivity {                        
                     Thing_TextView.setTextColor(Color.parseColor("#2fd8df"));
                     Borrow_TextView.setTextColor(Color.parseColor("#000000"));
                     Quest_TextView.setTextColor(Color.parseColor("#000000"));
-                    Category = "생필품";
+                    Category = "물건교환";
                     break;
 
                 // 클릭시 : 클릭한 카테고리 ImageView, Text ColorFilter 설정 다른 카테고리는 초기화 / Category = 현재 카테고리로
@@ -248,7 +248,7 @@ public class WriteMarketActivity extends BasicActivity {                        
                     Thing_TextView.setTextColor(Color.parseColor("#000000"));
                     Borrow_TextView.setTextColor(Color.parseColor("#2fd8df"));
                     Quest_TextView.setTextColor(Color.parseColor("#000000"));
-                    Category = "대여";
+                    Category = "대여하기";
                     break;
 
                // 클릭시 : 클릭한 카테고리 ImageView, Text ColorFilter 설정 다른 카테고리는 초기화 / Category = 현재 카테고리로
@@ -261,7 +261,7 @@ public class WriteMarketActivity extends BasicActivity {                        
                     Thing_TextView.setTextColor(Color.parseColor("#000000"));
                     Borrow_TextView.setTextColor(Color.parseColor("#000000"));
                     Quest_TextView.setTextColor(Color.parseColor("#2fd8df"));
-                    Category = "용역";
+                    Category = "퀘스트";
                     break;
 
                // 뒤로가기 누르면 게시물 화면으로 이동

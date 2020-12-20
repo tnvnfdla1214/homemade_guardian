@@ -165,13 +165,13 @@ public class Market_BottombarFragment extends Fragment {          // 1. 클래�
 
         }else if(State == "핫게시판"){
             Hot_MarketUpdate(clear);
-        }else if(State == "음식"){
+        }else if(State == "음식교환"){
             Food_MarketUpdate(clear);
-        }else if(State == "생필품"){
+        }else if(State == "물건교환"){
             Thing_MarketUpdate(clear);
-        }else if(State == "대여"){
+        }else if(State == "대여하기"){
             Borrow_MarketUpdate(clear);
-        }else if(State == "용역"){
+        }else if(State == "퀘스트"){
             Work_MarketUpdate(clear);
         }
     }
@@ -231,7 +231,7 @@ public class Market_BottombarFragment extends Fragment {          // 1. 클래�
                         Hot_TextView.setTextColor(Color.parseColor("#000000"));
                         Marketmodel.clear();
                         Food_MarketUpdate(true);
-                        State = "음식";
+                        State = "음식교환";
                         FoodMarketbtn_State = "Selected";
                     }else if(FoodMarketbtn_State.equals("Selected")){
                         FoodMarket_ImageView.setColorFilter(null);
@@ -265,7 +265,7 @@ public class Market_BottombarFragment extends Fragment {          // 1. 클래�
                     Hot_TextView.setTextColor(Color.parseColor("#000000"));
                     Marketmodel.clear();
                     Thing_MarketUpdate(true);
-                    State = "생필품";
+                    State = "물건교환";
                     ThingMarketbtn_State = "Selected";
                     } else if(ThingMarketbtn_State.equals("Selected")){
                         FoodMarket_ImageView.setColorFilter(null);
@@ -298,7 +298,7 @@ public class Market_BottombarFragment extends Fragment {          // 1. 클래�
                     Hot_TextView.setTextColor(Color.parseColor("#000000"));
                     Marketmodel.clear();
                     Borrow_MarketUpdate(true);
-                    State = "대여";
+                    State = "대여하기";
                     BorrowMarketbtn_State = "Selected";
                     } else if(BorrowMarketbtn_State.equals("Selected")){
                         FoodMarket_ImageView.setColorFilter(null);
@@ -331,7 +331,7 @@ public class Market_BottombarFragment extends Fragment {          // 1. 클래�
                     Hot_TextView.setTextColor(Color.parseColor("#000000"));
                     Marketmodel.clear();
                     Work_MarketUpdate(true);
-                    State = "용역";
+                    State = "퀘스트";
                     QuestMarketbtn_State = "Selected";
                     } else if(QuestMarketbtn_State.equals("Selected")){
                         FoodMarket_ImageView.setColorFilter(null);
@@ -441,7 +441,7 @@ public class Market_BottombarFragment extends Fragment {          // 1. 클래�
 
         Date date = Marketmodel.size() == 0 || clear ? new Date() : Marketmodel.get(Marketmodel.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = Firebasefirestore.collection("MARKETS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","음식").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","음식교환").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -481,7 +481,7 @@ public class Market_BottombarFragment extends Fragment {          // 1. 클래�
 
         Date date = Marketmodel.size() == 0 || clear ? new Date() : Marketmodel.get(Marketmodel.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = Firebasefirestore.collection("MARKETS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","생필품").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","물건교환").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -521,7 +521,7 @@ public class Market_BottombarFragment extends Fragment {          // 1. 클래�
 
         Date date = Marketmodel.size() == 0 || clear ? new Date() : Marketmodel.get(Marketmodel.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = Firebasefirestore.collection("MARKETS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","대여").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","대여하기").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -561,7 +561,7 @@ public class Market_BottombarFragment extends Fragment {          // 1. 클래�
 
         Date date = Marketmodel.size() == 0 || clear ? new Date() : Marketmodel.get(Marketmodel.size() - 1).getMarketModel_DateOfManufacture();  //part21 : 사이즈가 없으면 현재 날짜 아니면 최근 말짜의 getCreatedAt로 지정 (27'40")
         CollectionReference collectionReference = Firebasefirestore.collection("MARKETS");                // 파이어베이스의 posts에서
-        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","용역").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
+        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","퀘스트").limit(10).get()  // post14: 게시물을 날짜 기준으로 순서대로 나열 (23'40") // part21 : 날짜기준으로 10개  collectionReference.whereGreaterThanOrEqualTo("title",  search).limit(10).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

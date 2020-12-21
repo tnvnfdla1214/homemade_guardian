@@ -57,6 +57,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
@@ -179,11 +180,13 @@ public class ChatroomList_BottombarFragment extends Fragment {
                                 for( String key : users.keySet() ){
                                     if (My_User_Uid.equals(key)) {
                                         Integer  unread = (int) (long) users.get(key);
-                                        unreadTotal += unread;
-                                        chatRoomListModel.setChatRoomListModel_UnreadCheck(unreadTotal);
+                                        Log.d("랄라라","unread : " + unread);
+                                        chatRoomListModel.setChatRoomListModel_UnreadCheck(unread);
                                         break;
                                     }
                                 }
+
+
                                 if (users.size()==2) {
                                     for( String key : users.keySet() ){
                                         if (My_User_Uid.equals(key)) continue;

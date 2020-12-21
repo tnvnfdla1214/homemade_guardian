@@ -69,7 +69,8 @@ import me.relex.circleindicator.CircleIndicator;
 public class MarketActivity extends BasicActivity {         // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5. 기타 변수
     // 2. 변수 및 배열
     private MarketModel Marketmodel;                            // MarketModel 선언
-    private UserModel Usermodel;                                // UserModel 선언
+    private UserModel Current_Usermodel;                                // UserModel 선언
+    private UserModel To_Usermodel;                                // UserModel 선언
     private String CurrentUid;                                  // 현재 사용자의 Uid
     private String Current_NickName = null;                     // 현재 사용자의 닉네임
     private String Comment_Host_Image;                          // 댓글 작성자의 이미지
@@ -209,9 +210,9 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
         docRefe_USERS_CurrentUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Usermodel = documentSnapshot.toObject(UserModel.class);
-                Current_NickName = Usermodel.getUserModel_NickName();
-                Comment_Host_Image = Usermodel.getUserModel_ProfileImage();
+                Current_Usermodel = documentSnapshot.toObject(UserModel.class);
+                Current_NickName = Current_Usermodel.getUserModel_NickName();
+                Comment_Host_Image = Current_Usermodel.getUserModel_ProfileImage();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -265,16 +266,16 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
         docRef_USERS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Usermodel = documentSnapshot.toObject(UserModel.class);
+                To_Usermodel = documentSnapshot.toObject(UserModel.class);
                 TextView Market_Host_Name_TextView;
                 Market_Host_Name_TextView = findViewById(R.id.Post_Host_Name);
-                if(Usermodel.getUserModel_ProfileImage() != null){
-                    Glide.with(MarketActivity.this).load(Usermodel.getUserModel_ProfileImage()).centerInside().override(500).into(Host_UserPage_ImageView);
-                    Market_Host_Name_TextView.setText(Usermodel.getUserModel_NickName());
+                if(To_Usermodel.getUserModel_ProfileImage() != null){
+                    Glide.with(MarketActivity.this).load(To_Usermodel.getUserModel_ProfileImage()).centerInside().override(500).into(Host_UserPage_ImageView);
+                    Market_Host_Name_TextView.setText(To_Usermodel.getUserModel_NickName());
                 }
                 else{
                     Glide.with(getApplicationContext()).load(R.drawable.none_profile_user).into(Host_UserPage_ImageView);
-                    Market_Host_Name_TextView.setText(Usermodel.getUserModel_NickName());
+                    Market_Host_Name_TextView.setText(To_Usermodel.getUserModel_NickName());
                 }
             }
         });
@@ -298,6 +299,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                     Intent_ChatActivity.putExtra("To_User_Uid", Marketmodel.getMarketModel_Host_Uid());
                     Intent_ChatActivity.putExtra("MarketModel_Market_Uid", Marketmodel.getMarketModel_Market_Uid());
+                    Intent_ChatActivity.putExtra("To_Usermodel_NickName", To_Usermodel.getUserModel_NickName());
                     startActivity(Intent_ChatActivity);
                     break;
 

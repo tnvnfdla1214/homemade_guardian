@@ -42,6 +42,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
     private Nonepost_chat_MarketInfoFragment nonepost_chat_marketInfoFragment; //포스트의 정보가 없는 마켓정보 프레그먼트
     private String currentUser_Uid =null;
     String To_User_Uid =null;  //상대방 uid
+    String To_Usermodel_NickName =null;  //상대방 uid
     String ChatRoomListModel_RoomUid =null; //채팅방 uid
     String ChatRoomListModel_Title =null;  //채팅방 이름 (상대방 닉네임)
     String MarketModel_Market_Uid =null; //마켓 uid
@@ -70,8 +71,8 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
                 finish();
             }
         });
-
-
+        To_Usermodel_NickName = getIntent().getStringExtra("To_Usermodel_NickName");
+        Log.d("likppi","To_Usermodel_NickName : " + To_Usermodel_NickName);
         To_User_Uid = getIntent().getStringExtra("To_User_Uid");
         ChatRoomListModel_RoomUid = getIntent().getStringExtra("RoomUid"); //마켓액티비티는 없음
         ChatRoomListModel_Title = getIntent().getStringExtra("ChatRoomListModel_Title");
@@ -80,6 +81,8 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
 
         if (ChatRoomListModel_Title!=null) {
             RoomTitle.setText(ChatRoomListModel_Title);
+        }else{
+            RoomTitle.setText(To_Usermodel_NickName);
         }
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 

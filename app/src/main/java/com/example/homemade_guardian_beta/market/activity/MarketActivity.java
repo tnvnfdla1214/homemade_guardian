@@ -67,14 +67,14 @@ import me.relex.circleindicator.CircleIndicator;
 // Ex) 마켓 프레그먼트에서 게시물을 클릭하였을 때 모두 이 액티비티가 발생한다.
 
 public class MarketActivity extends BasicActivity {         // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5. 기타 변수
-                                                            // 2. 변수 및 배열
+    // 2. 변수 및 배열
     private MarketModel Marketmodel;                            // MarketModel 선언
     private UserModel Usermodel;                                // UserModel 선언
     private String CurrentUid;                                  // 현재 사용자의 Uid
     private String Current_NickName = null;                     // 현재 사용자의 닉네임
     private String Comment_Host_Image;                          // 댓글 작성자의 이미지
     private ArrayList<String> ImageList = new ArrayList<>();    // 게시물의 이미지 리스트
-                                                            // 3. xml 데이터
+    // 3. xml 데이터
     private ConstraintLayout ViewPagerLayout;                   // 뷰페이져가 존재하는 layout 영역
     private ViewPager Viewpager;                                // ImageList를 보여주기 위한 ViewPager
     private ImageView Host_UserPage_ImageView;                  // 게시물 작성자의 프로필 ImageView
@@ -86,7 +86,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
     private TextView DateOfManufacture_TextView;                // 게시물의 작성일 TextView
     private TextView Like_TextView;                             // 게시물의 좋아요 개수 TextView
     private BackPressEditText Comment_Input_EditText;           // 댓글 내용 EditText
-                                                            // 4. 파이어베이스 관련 선언
+    // 4. 파이어베이스 관련 선언
     private FirebaseUser CurrentUser;                           // 현재 사용자
     private FirebaseHelper Firebasehelper;                      // FirebaseHelper 선언
     private FirestoreAdapter Comment_Firestoreadapter;          // FirestoreAdapter 선언
@@ -112,54 +112,54 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market);
 
-       // 레이아웃 find, setOnClickListener
+        // 레이아웃 find, setOnClickListener
         LinearLayout Scrollview;
         Scrollview = (LinearLayout) findViewById(R.id.Scrollbar);
         Scrollview.setOnClickListener(onClickListener);
 
-       // 게시물의 작성일, 제목, 내용, 좋아요 개수 find
+        // 게시물의 작성일, 제목, 내용, 좋아요 개수 find
         DateOfManufacture_TextView = findViewById(R.id.Post_DateOfManufacture);
         Title_TextView = findViewById(R.id.Post_Title);
         TextContents_TextView = findViewById(R.id.Post_TextContents);
         Like_TextView = findViewById(R.id.Like_TextView);
 
-       // 채팅하기, 작성자 프로필, 좋아요, 댓글 작성, 댓글 작성 버튼 find
+        // 채팅하기, 작성자 프로필, 좋아요, 댓글 작성, 댓글 작성 버튼 find
         Chat_With_MarketHost_Button = (Button) findViewById(R.id.Chat_With_PostHost_Button);
         Host_UserPage_ImageView = (ImageView) findViewById(R.id.Host_UserPage_ImageButton);
         Like_ImageButton = (ImageButton) findViewById(R.id.Like_ImageButton);
         Comment_Write_Button = findViewById(R.id.Comment_Write_Button);
         Comment_Input_EditText = (BackPressEditText) findViewById(R.id.Comment_Input_EditText);
 
-       // 채팅하기, 작성자 프로필, 좋아요, 댓글 작성, 댓글 작성 버튼 setOnClickListener
+        // 채팅하기, 작성자 프로필, 좋아요, 댓글 작성, 댓글 작성 버튼 setOnClickListener
         Chat_With_MarketHost_Button.setOnClickListener(onClickListener);
         Host_UserPage_ImageView.setOnClickListener(onClickListener);
         Like_ImageButton.setOnClickListener(onClickListener);
         Comment_Write_Button.setOnClickListener(onClickListener);
-       // setOnBackPressListener : 뒤로가기 감지 listener
+        // setOnBackPressListener : 뒤로가기 감지 listener
         Comment_Input_EditText.setOnBackPressListener(onBackPressListener);
         Comment_Input_EditText.setOnClickListener(onClickListener);
 
-       // 메뉴 버튼 활성화
+        // 메뉴 버튼 활성화
         findViewById(R.id.menu).setOnClickListener(onClickListener);
 
-       // Marketmodel getIntent()
+        // Marketmodel getIntent()
         Marketmodel = (MarketModel) getIntent().getSerializableExtra("marketInfo");
 
-       // 현재 사용자 설정
+        // 현재 사용자 설정
         CurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         CurrentUid = CurrentUser.getUid();
 
-       // Firebasehelper setting
+        // Firebasehelper setting
         Firebasehelper = new FirebaseHelper(this);
         Firebasehelper.setOnpostlistener(onPostListener);
 
-       // 현재 유저의 정보를 받는 함수
+        // 현재 유저의 정보를 받는 함수
         Get_CurrentUser_Info();
 
-       // 게시물 정보, 게시물 이미지 유무 설정, 좋아요 버튼 활성화 설정, 채팅 버튼 활성화 설정, 작성자 정보 설정 함수
+        // 게시물 정보, 게시물 이미지 유무 설정, 좋아요 버튼 활성화 설정, 채팅 버튼 활성화 설정, 작성자 정보 설정 함수
         Setting_Market();
 
-       //댓글 목록 구성 recyclerView
+        //댓글 목록 구성 recyclerView
         Comment_Firestoreadapter = new RecyclerViewAdapter(FirebaseFirestore.getInstance().collection("MARKETS").
                 document(Marketmodel.getMarketModel_Market_Uid()).collection("COMMENT").orderBy("market_CommentModel_DateOfManufacture"));
         final RecyclerView recyclerView = findViewById(R.id.recyclerView);
@@ -167,7 +167,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
         recyclerView.setAdapter(Comment_Firestoreadapter);
     }
 
-   // 댓글 쓰는 키보드를 뒤로가기로 사라지게 했을 때 이벤트
+    // 댓글 쓰는 키보드를 뒤로가기로 사라지게 했을 때 이벤트
     private BackPressEditText.OnBackPressListener onBackPressListener = new BackPressEditText.OnBackPressListener()
     {
         @Override
@@ -203,7 +203,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
         }
     }
 
-   // 댓글을 쓰는 사람 (현재 이용자) 의 정보를 미리 받는다.
+    // 댓글을 쓰는 사람 (현재 이용자) 의 정보를 미리 받는다.
     public void Get_CurrentUser_Info(){
         DocumentReference docRefe_USERS_CurrentUid = FirebaseFirestore.getInstance().collection("USERS").document(CurrentUid);
         docRefe_USERS_CurrentUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -221,16 +221,16 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
         });
     }
 
-   // 게시물 정보, 게시물 이미지 유무 설정, 좋아요 버튼 활성화 설정, 채팅 버튼 활성화 설정, 작성자 정보 설정
+    // 게시물 정보, 게시물 이미지 유무 설정, 좋아요 버튼 활성화 설정, 채팅 버튼 활성화 설정, 작성자 정보 설정
     public void Setting_Market(){
 
-       // 게시물 작성일, 제목, 내용 setText 설정
+        // 게시물 작성일, 제목, 내용 setText 설정
         DateOfManufacture_TextView.setText(new SimpleDateFormat("yyyy-MM-dd",
                 Locale.getDefault()).format(Marketmodel.getMarketModel_DateOfManufacture()));
         Title_TextView.setText(Marketmodel.getMarketModel_Title());
         TextContents_TextView.setText(Marketmodel.getMarketModel_Text());
 
-       // 게시물의 이미지가 있다면 ViewPager 설정
+        // 게시물의 이미지가 있다면 ViewPager 설정
         ImageList = Marketmodel.getMarketModel_ImageList();
         if(ImageList != null) {
             Viewpager = findViewById(R.id.ViewPager);
@@ -242,7 +242,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
             ViewPagerLayout.setVisibility(View.GONE);
         }
 
-       // 좋아요 버튼의 활성화 상태 성정
+        // 좋아요 버튼의 활성화 상태 성정
         Like_TextView.setText(String.valueOf(Marketmodel.getMarketModel_LikeList().size()));
         int Check_Like = 0;
         for(int count = 0; count < Marketmodel.getMarketModel_LikeList().size() ; count ++){
@@ -255,12 +255,12 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
             Glide.with(getApplicationContext()).load(R.drawable.empty_heart).into(Like_ImageButton);
         }
 
-       // 현재 유저가 작성자라면 채팅버튼 비활성화
+        // 현재 유저가 작성자라면 채팅버튼 비활성화
         if(CurrentUid.equals(Marketmodel.getMarketModel_Host_Uid())){
             Chat_With_MarketHost_Button.setVisibility(View.GONE);
         }
 
-       // 작성자의 닉네임, 프로필 성정
+        // 작성자의 닉네임, 프로필 성정
         DocumentReference docRef_USERS_HostUid = FirebaseFirestore.getInstance().collection("USERS").document(Marketmodel.getMarketModel_Host_Uid());
         docRef_USERS_HostUid.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -280,20 +280,20 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
         });
     }
 
-   // 작성자의 프로필 이미지, 채팅 버튼, 댓글 작성 버튼, 댓글 작성 텍스트, 댓글 작성하는 곳의 상단 영역, 좋아요, 메뉴의 ClickListener
+    // 작성자의 프로필 이미지, 채팅 버튼, 댓글 작성 버튼, 댓글 작성 텍스트, 댓글 작성하는 곳의 상단 영역, 좋아요, 메뉴의 ClickListener
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
 
-               // 작성자의 프로필 이미지 : 클릭시 HostModelActivity로 이동한다.
+                // 작성자의 프로필 이미지 : 클릭시 HostModelActivity로 이동한다.
                 case R.id.Host_UserPage_ImageButton:
                     Intent Intent_HostModelActivity = new Intent(getApplicationContext(), HostModelActivity.class);
                     Intent_HostModelActivity.putExtra("toUid", Marketmodel.getMarketModel_Host_Uid());
                     startActivity(Intent_HostModelActivity);
                     break;
 
-               // 채팅 버튼 : 작성자와 채팅 할 수 있는 버튼  [상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.]
+                // 채팅 버튼 : 작성자와 채팅 할 수 있는 버튼  [상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.]
                 case R.id.Chat_With_PostHost_Button:
                     Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
                     Intent_ChatActivity.putExtra("To_User_Uid", Marketmodel.getMarketModel_Host_Uid());
@@ -301,7 +301,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                     startActivity(Intent_ChatActivity);
                     break;
 
-               // 댓글 작성 버튼 : 댓글 작성 텍스트에서 받아온 값으로 댓글을 작성한다.
+                // 댓글 작성 버튼 : 댓글 작성 텍스트에서 받아온 값으로 댓글을 작성한다.
                 case R.id.Comment_Write_Button:
                     String Comment = MarketActivity.this.Comment_Input_EditText.getText().toString();
                     if(Comment.equals("")){
@@ -318,7 +318,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                     }
                     break;
 
-               // 댓글 작성 텍스트 : 댓글을 작성 받는 EditText [클릭하면 채팅하기 버튼이 사라진다]
+                // 댓글 작성 텍스트 : 댓글을 작성 받는 EditText [클릭하면 채팅하기 버튼이 사라진다]
                 case R.id.Comment_Input_EditText:
                     Chat_With_MarketHost_Button.setVisibility(View.GONE);
                     Comment_Input_EditText.setFocusableInTouchMode(true);
@@ -327,7 +327,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                     break;
 
-               // 댓글 작성 곳의 상단 영역 : 댓글 입력 도중에 키보드 윗 부분을 클릭하면 키보드를 숨기고, 작성자가 아니라면 채팅버튼을 활성화 한다.
+                // 댓글 작성 곳의 상단 영역 : 댓글 입력 도중에 키보드 윗 부분을 클릭하면 키보드를 숨기고, 작성자가 아니라면 채팅버튼을 활성화 한다.
                 case R.id.Scrollbar:
                     InputMethodManager immHide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     immHide.hideSoftInputFromWindow(Comment_Input_EditText.getWindowToken(), 0);
@@ -336,17 +336,17 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                     }
                     break;
 
-               // 좋아요 버튼
+                // 좋아요 버튼
                 case R.id.Like_ImageButton:
-                   // 처음  : Check_Like = 0
+                    // 처음  : Check_Like = 0
                     int Check_Like = 0;
-                   // for문  : 좋아요를 누른적이 있다면 Check_Like = 1 / 좋아요를 누른적이 없다면 Check_Like = 0
+                    // for문  : 좋아요를 누른적이 있다면 Check_Like = 1 / 좋아요를 누른적이 없다면 Check_Like = 0
                     for (int count = 0; count < Marketmodel.getMarketModel_LikeList().size(); count++) {
                         if (CurrentUid.equals(Marketmodel.getMarketModel_LikeList().get(count))) {
                             Check_Like++;
                         }
                     }
-                   // if문 : 좋아요를 누른적이 없다면
+                    // if문 : 좋아요를 누른적이 없다면
                     if (Check_Like == 0) {
                         Glide.with(getApplicationContext()).load(R.drawable.heart).into(Like_ImageButton);
                         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -354,7 +354,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                         final DocumentReference documentReference = firebaseFirestore.collection("MARKETS").document(Marketmodel.getMarketModel_Market_Uid());
                         LikeList = Marketmodel.getMarketModel_LikeList();
 
-                       // LikeList에 본인 Uid를 추가
+                        // LikeList에 본인 Uid를 추가
                         LikeList.add(CurrentUid);
 
                         // 핫게시물의 상태를 설정
@@ -377,7 +377,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                                 });
                         Like_TextView.setText(String.valueOf(Marketmodel.getMarketModel_LikeList().size()));
                     }
-                   // if문 : 좋아요를 눌렀다면
+                    // if문 : 좋아요를 눌렀다면
                     if(Check_Like == 1){
                         Glide.with(getApplicationContext()).load(R.drawable.empty_heart).into(Like_ImageButton);
                         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -409,7 +409,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                     }
                     break;
 
-               // 메뉴 버튼
+                // 메뉴 버튼
                 case R.id.menu:
                     showPopup(v);
                     break;
@@ -456,20 +456,20 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
     private void showPopup(View v) {
         PopupMenu popup = new PopupMenu(MarketActivity.this, v);
 
-       // 작성자의 메뉴와 작성자가 아닌 유저의 메뉴가 다르다.
+        // 작성자의 메뉴와 작성자가 아닌 유저의 메뉴가 다르다.
         if(CurrentUser.getUid().equals(Marketmodel.getMarketModel_Host_Uid())){
             getMenuInflater().inflate(R.menu.post_host, popup.getMenu());
         }
         else{
             getMenuInflater().inflate(R.menu.post_guest, popup.getMenu());
         }
-       // 메뉴에서의 MenuItem이 클릭 되었을 때의 Listener
+        // 메뉴에서의 MenuItem이 클릭 되었을 때의 Listener
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
 
-                 // 유저가 작성자일 때
+                    // 유저가 작성자일 때
                     case R.id.Post_Delete_Button:
                         Firebasehelper.Market_Storagedelete(Marketmodel,"delete");
                         finish();
@@ -478,16 +478,17 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                         myStartActivity(ModifyMarketActivity.class, Marketmodel);
                         return true;
 
-                 // 유저가 작성자가 아닐 때
+                    // 유저가 작성자가 아닐 때
                     case R.id.Post_Report_Button:
                         Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.Chat_With_PostHost_Button:
-                       //버튼 눌러짐
+                        //버튼 눌러짐
                         Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
-                       //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
+                        //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
                         Intent_ChatActivity.putExtra("To_User_Uid", Marketmodel.getMarketModel_Host_Uid());
                         Intent_ChatActivity.putExtra("MarketModel_Market_Uid", Marketmodel.getMarketModel_Market_Uid());
+                        //여기서도 닉네임 못넘김
                         startActivity(Intent_ChatActivity);
                         return true;
                     default:
@@ -498,14 +499,14 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
         popup.show();
     }
 
-   // 댓글을 작성하는 함수
+    // 댓글을 작성하는 함수
     private void Write_Comment(final String Comment, final String Host_Name, final String Comment_Host_Image) {
 
-       // 댓글이 등록되어 지는 동안에는 댓글 작성 버튼을 비활성화 시킨다.
+        // 댓글이 등록되어 지는 동안에는 댓글 작성 버튼을 비활성화 시킨다.
         Comment_Write_Button.setEnabled(false);
         String Comment_Uid = null;
 
-       // 댓글을 넣을 COMMENT의 Uid를 미리 생성
+        // 댓글을 넣을 COMMENT의 Uid를 미리 생성
         Comment_Uid = FirebaseFirestore.getInstance().collection("MARKETS").document(Marketmodel.getMarketModel_Market_Uid()).collection("COMMENT").document().getId();
 
         Date DateOfManufacture = new Date();
@@ -518,17 +519,17 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 WriteBatch Batch_COMMENT_CommentUid = FirebaseFirestore.getInstance().batch();
-               // 생성해 놓은 Uid에 댓글을 set
+                // 생성해 놓은 Uid에 댓글을 set
                 Batch_COMMENT_CommentUid.set(docRef_MARKETS_MarketUid.collection("COMMENT").document(CommentID), Market_Commentmodel);
                 Batch_COMMENT_CommentUid.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             //sendGCM();
-                           // 댓글이 작성된 것이 확인 되면 다시 댓글 작성버튼을 활성화 시킨다.
+                            // 댓글이 작성된 것이 확인 되면 다시 댓글 작성버튼을 활성화 시킨다.
                             Comment_Write_Button.setEnabled(true);
 
-                           // 게시물의 댓글의 개수+1
+                            // 게시물의 댓글의 개수+1
                             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
                             int commentcount;
                             final DocumentReference documentReference = firebaseFirestore.collection("MARKETS").document(Marketmodel.getMarketModel_Market_Uid());
@@ -554,7 +555,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
         });
     }
 
-   //댓글을 화면에 생성해주는 RecyclerView
+    //댓글을 화면에 생성해주는 RecyclerView
     class RecyclerViewAdapter extends FirestoreAdapter<CustomViewHolder> {
         final private RequestOptions Requestoptions = new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(90));
         private StorageReference Storagereference;
@@ -585,43 +586,43 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
             }
 
             viewHolder.Comment_Menu_CardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    PopupMenu Menu_Popup = new PopupMenu(MarketActivity.this, view);
-                    Menu_Popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem menuItem) {
-                            switch (menuItem.getItemId()) {
+                                                                    @Override
+                                                                    public void onClick(View view) {
+                                                                        PopupMenu Menu_Popup = new PopupMenu(MarketActivity.this, view);
+                                                                        Menu_Popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                                                            @Override
+                                                                            public boolean onMenuItemClick(MenuItem menuItem) {
+                                                                                switch (menuItem.getItemId()) {
 
-                               // 댓글 작성자라면 삭제하기 버튼만 있음
-                                case R.id.Comment_Delete_Button:
-                                    Firebasehelper.Market_Comment_Storedelete(market_commentModel, Marketmodel);
-                                    return true;
+                                                                                    // 댓글 작성자라면 삭제하기 버튼만 있음
+                                                                                    case R.id.Comment_Delete_Button:
+                                                                                        Firebasehelper.Market_Comment_Storedelete(market_commentModel, Marketmodel);
+                                                                                        return true;
 
-                               // 댓글 작성자가 아니면 신고하기 버튼만 있음
-                                case R.id.Comment_Report_Button:
-                                    Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
-                                    return true;
-                                default:
-                                    return false;
-                            }
-                        }
-                    });
+                                                                                    // 댓글 작성자가 아니면 신고하기 버튼만 있음
+                                                                                    case R.id.Comment_Report_Button:
+                                                                                        Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
+                                                                                        return true;
+                                                                                    default:
+                                                                                        return false;
+                                                                                }
+                                                                            }
+                                                                        });
 
-                    MenuInflater Menu_Inflater = Menu_Popup.getMenuInflater();
-                    if(CurrentUser.getUid().equals(market_commentModel.getMarket_CommentModel_Host_Uid())){
-                        Menu_Inflater.inflate(R.menu.comment_host, Menu_Popup.getMenu());
-                    }
-                    else{
-                        Menu_Inflater.inflate(R.menu.comment_guest, Menu_Popup.getMenu());
-                    }
-                    Menu_Popup.show();}
-                }
+                                                                        MenuInflater Menu_Inflater = Menu_Popup.getMenuInflater();
+                                                                        if(CurrentUser.getUid().equals(market_commentModel.getMarket_CommentModel_Host_Uid())){
+                                                                            Menu_Inflater.inflate(R.menu.comment_host, Menu_Popup.getMenu());
+                                                                        }
+                                                                        else{
+                                                                            Menu_Inflater.inflate(R.menu.comment_guest, Menu_Popup.getMenu());
+                                                                        }
+                                                                        Menu_Popup.show();}
+                                                                }
             );
         }
     }
 
-   // 댓글의 Data
+    // 댓글의 Data
     private class CustomViewHolder extends RecyclerView.ViewHolder {
         public ImageView Comment_UserProfile_ImageView;
         public TextView Comment_UserName_TextView;
@@ -659,7 +660,6 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
         Intent Intent_Market_Data = new Intent(this, c);
         Intent_Market_Data.putExtra("marketInfo", marketModel);
         startActivityForResult(Intent_Market_Data, 0);
-        //startActivity(Intent_Market_Data);
         finish();
     }
 

@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -35,6 +37,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import static com.example.homemade_guardian_beta.Main.common.Util.INTENT_PATH;
 import static com.example.homemade_guardian_beta.Main.common.Util.showToast;
 
@@ -50,6 +55,7 @@ public class UpdateInfoActivity extends BasicActivity {     // 1. 클래스 2. �
     private RelativeLayout LoaderLayout;                        // 로딩중을 나타내는 layout 선언
     private ImageView Myinfo_Profile_ImageView;                 // 프로필 이미지가 담기는 ImageView
     private EditText Myinfo_Profile_NickName_EditText;          // 닉네임이 담기는 EditTextView
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +131,7 @@ public class UpdateInfoActivity extends BasicActivity {     // 1. 클래스 2. �
 
    // 현재 유저 정보를 보여주는 함수
     public void ShowInfo(){
-
+        TextView Myinfo_profileID, Myinfo_profileManufacture;
        // 사용자 닉네임 set
         Myinfo_Profile_NickName_EditText.setText(Usermodel.getUserModel_NickName());
 
@@ -170,6 +176,13 @@ public class UpdateInfoActivity extends BasicActivity {     // 1. 클래스 2. �
         }else{
             Glide.with(this).load(R.drawable.none_profile_user).centerCrop().into(Myinfo_Profile_ImageView);
         }
+
+        Myinfo_profileID = findViewById(R.id.Myinfo_profileID);
+        Myinfo_profileID.setText(Usermodel.getUserModel_ID());
+        Myinfo_profileManufacture = findViewById(R.id.Myinfo_profileManufacture);
+        Myinfo_profileManufacture.setText(new SimpleDateFormat("yyyy-MM-dd / hh:mm:ss", Locale.getDefault()).format(Usermodel.getUserModel_DateOfManufacture()));
+
+
     }
 
    // 변경사항을 파이어스토리지에 등록하는 함수

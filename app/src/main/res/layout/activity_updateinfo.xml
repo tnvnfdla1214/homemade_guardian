@@ -17,77 +17,89 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_below="@+id/view_toolbar">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="17dp"
+                    android:text="회원 정보"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginVertical="15dp"
+                    android:id="@+id/Myinfo_profileImage_layout"
+                    android:layout_gravity="center">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/Myinfo_profileImage"
+                        android:layout_width="130dp"
+                        android:layout_height="130dp"
+                        android:src="@drawable/none_profile_user"
+                        app:civ_border_color="#FF000000"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:civ_border_width="0.5dp"/>
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:srcCompat="@drawable/edit_profile"
+                        tools:ignore="MissingConstraints" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginHorizontal="15dp"
-                        android:layout_marginVertical="15dp"
-                        android:id="@+id/Myinfo_profileImage_layout">
-
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/Myinfo_profileImage"
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/none_profile_user"
-                            app:civ_border_color="#FF000000"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:civ_border_width="0.5dp"/>
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:srcCompat="@drawable/edit_profile"
-                            tools:ignore="MissingConstraints" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                    <LinearLayout
+                        android:textSize="17dp"
+                        android:text="닉네임"
+                        android:textStyle="bold"
+                        />
+                    <EditText
+                         android:id="@+id/Myinfo_profileNickName"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center_vertical"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="55dp"
-                        >
-                        <EditText
-                            android:id="@+id/Myinfo_profileNickName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="닉네임"
-                            android:textSize="18dp"
-                            android:textStyle="bold"
-                            android:ems="8"
-                            android:maxLines="1"
-                            android:ellipsize="end"
-                            android:textColor="@color/black"
-                            />
+                        android:layout_height="wrap_content"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:ems="8"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textColor="@color/black"/>
 
-                    </LinearLayout>
-
-                </LinearLayout>
+            </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:paddingTop="4dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     >
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:layout_marginLeft="20dp">
+                        >
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -109,6 +121,8 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:paddingTop="4dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     >
 
                     <TextView
@@ -116,16 +130,70 @@
                         android:layout_height="wrap_content"
                         android:textSize="17dp"
                         android:text="학교"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="20dp"/>
+                        android:textStyle="bold"/>
 
                     <Spinner
                         android:id="@+id/Myinfo_profileUniversity"
                         android:layout_centerHorizontal="true"
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="340dp"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/color_ededee"
+                    android:layout_gravity="center_horizontal"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="계정 정보"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="5dp"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"/>
+                        android:textSize="15dp"
+                        android:text="ID"
+                        android:textStyle="bold"
+                        />
+                    <TextView
+                        android:id="@+id/Myinfo_profileID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="13dp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="5dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15dp"
+                        android:text="생성일자"
+                        android:textStyle="bold"
+                        android:layout_marginTop="5dp"
+                        />
+                    <TextView
+                        android:id="@+id/Myinfo_profileManufacture"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="13dp"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="5dp"/>
+
                 </LinearLayout>
             </LinearLayout>
     <include

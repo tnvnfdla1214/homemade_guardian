@@ -73,7 +73,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
 
 
         To_User_Uid = getIntent().getStringExtra("To_User_Uid");
-        ChatRoomListModel_RoomUid = getIntent().getStringExtra("RoomUid");
+        ChatRoomListModel_RoomUid = getIntent().getStringExtra("RoomUid"); //마켓액티비티는 없음
         ChatRoomListModel_Title = getIntent().getStringExtra("ChatRoomListModel_Title");
         MarketModel_Market_Uid = getIntent().getStringExtra("MarketModel_Market_Uid");
         currentUser_Uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -81,7 +81,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         if (ChatRoomListModel_Title!=null) {
             RoomTitle.setText(ChatRoomListModel_Title);
         }
-         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         Log.d("임민규","ChatRoomListModel_Title : " + ChatRoomListModel_Title);
         // 채팅 프레그먼트

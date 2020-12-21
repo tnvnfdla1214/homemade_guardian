@@ -17,9 +17,12 @@ public class RoomModel {
     private Map<String, Integer> RoomModel_USERS;       // 룸에 들어와 있는 유저(읽었는지 확인)
     private Map<String, Integer> RoomModel_USER_OUT;    // 룸에 들어와 있는 유저가 나갔는지 안나갔는지 확인하는 모델
 
+    //추가
+    private String RoomModel_GuestUser;               // 룸의 게스트 uid
+
     public RoomModel(){}
 
-    public RoomModel(Date RoomModel_DateOfManufacture, String RoomModel_FileName, String RoomModel_FileSize, String RoomModel_ImageCount, String RoomModel_Message, String RoomModel_PostUid, String RoomModel_Title, String RoomModel_UserUid, String RoomModel_MessageType, Map<String, Integer> RoomModel_USERS, Map<String, Integer> RoomModel_USER_OUT){
+    public RoomModel(Date RoomModel_DateOfManufacture, String RoomModel_FileName, String RoomModel_FileSize, String RoomModel_ImageCount, String RoomModel_Message, String RoomModel_PostUid, String RoomModel_Title, String RoomModel_UserUid, String RoomModel_MessageType, Map<String, Integer> RoomModel_USERS, Map<String, Integer> RoomModel_USER_OUT,String RoomModel_GuestUser){
         this.RoomModel_DateOfManufacture = RoomModel_DateOfManufacture;
         this.RoomModel_FileName = RoomModel_FileName;
         this.RoomModel_FileSize = RoomModel_FileSize;
@@ -31,6 +34,7 @@ public class RoomModel {
         this.RoomModel_MessageType = RoomModel_MessageType;
         this.RoomModel_USERS = RoomModel_USERS;
         this.RoomModel_USER_OUT = RoomModel_USER_OUT;
+        this.RoomModel_GuestUser = RoomModel_GuestUser;
     }
 
     public Map<String, Object> getRoomInfo(){
@@ -46,6 +50,7 @@ public class RoomModel {
         docData.put("RoomModel_MessageType", RoomModel_MessageType);
         docData.put("RoomModel_USERS", RoomModel_USERS);
         docData.put("RoomModel_USER_OUT", RoomModel_USER_OUT);
+        docData.put("RoomModel_GuestUser", RoomModel_GuestUser);
         return  docData;
     }
     public Date getRoomModel_DateOfManufacture() {
@@ -134,5 +139,13 @@ public class RoomModel {
 
     public void setRoomModel_USER_OUT(Map<String, Integer> roomModel_USER_OUT) {
         this.RoomModel_USER_OUT = roomModel_USER_OUT;
+    }
+
+    public String getRoomModel_GuestUser() {
+        return RoomModel_GuestUser;
+    }
+
+    public void setRoomModel_GuestUser(String RoomModel_GuestUser) {
+        this.RoomModel_GuestUser = RoomModel_GuestUser;
     }
 }

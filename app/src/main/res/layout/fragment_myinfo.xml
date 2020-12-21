@@ -349,6 +349,17 @@
                                 android:layout_marginLeft="10dp"
                                 android:gravity="center_vertical"
                                 android:text="나에게 작성된 리뷰" />
+                            <RelativeLayout
+                                android:layout_width="0dp"
+                                android:layout_height="32dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_weight="1"/>
+                            <ImageView
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/side_point"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginRight="20dp"/>
                         </LinearLayout>
                     </LinearLayout>
                 </ScrollView>
@@ -380,6 +391,17 @@
                         android:layout_marginLeft="10dp"
                         android:gravity="center_vertical"
                         android:text="공지사항" />
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"/>
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/side_point"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="20dp"/>
                 </LinearLayout>
 
                 <RelativeLayout
@@ -408,6 +430,17 @@
                         android:layout_marginLeft="10dp"
                         android:gravity="center_vertical"
                         android:text="자주 묻는 질문" />
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"/>
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/side_point"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="20dp"/>
                 </LinearLayout>
                 <RelativeLayout
                     android:layout_width="340dp"
@@ -435,6 +468,17 @@
                         android:layout_marginLeft="10dp"
                         android:gravity="center_vertical"
                         android:text="앱 설정" />
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"/>
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/side_point"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="20dp"/>
                 </LinearLayout>
                 <RelativeLayout
                     android:layout_width="340dp"
@@ -462,6 +506,17 @@
                         android:layout_marginLeft="10dp"
                         android:gravity="center_vertical"
                         android:text="로그아웃 하기" />
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_weight="1"/>
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/side_point"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="20dp"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

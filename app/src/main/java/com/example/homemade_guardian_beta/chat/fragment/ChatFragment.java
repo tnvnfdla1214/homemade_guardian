@@ -236,14 +236,18 @@ public class ChatFragment extends Fragment {
             ChatRoomListModel_RoomUid = getArguments().getString("RoomUid");
             To_User_Uid = getArguments().getString("To_User_Uid");
             MarketModel_Market_Uid = getArguments().getString("MarketModel_Market_Uid");
+            currentUser_Uid = getArguments().getString("currentUser_Uid");
         }
 
+        //마켓에서 넘어왔다면 여기로 들어옴
         if (ChatRoomListModel_RoomUid ==null) {                                         // new room for two user
             currentUser_Uid = getArguments().getString("currentUser_Uid");
             To_User_Uid = getArguments().getString("To_User_Uid");
+            MarketModel_Market_Uid = getArguments().getString("MarketModel_Market_Uid");
             getUserInfoFromServer(currentUser_Uid);
             getUserInfoFromServer(To_User_Uid);
             NumberOfUser = 2;
+            findChatRoom2(currentUser_Uid,To_User_Uid,MarketModel_Market_Uid);
         }
 
         if (!"".equals(To_User_Uid) && To_User_Uid !=null && !"".equals(MarketModel_Market_Uid) && MarketModel_Market_Uid !=null) {
@@ -279,6 +283,26 @@ public class ChatFragment extends Fragment {
             }
         });
     }
+
+    // Room에서 MessageModel_PostUid로 찾는다.
+    void findChatRoom2(final String currentUser_Uid,final String toUid,final String MarketModel_Market_Uid){
+        Firestore = FirebaseFirestore.getInstance();
+        Firestore.collection("ROOMS").whereEqualTo("RoomModel_PostUid",MarketModel_Market_Uid).whereEqualTo("RoomModel_GuestUser", currentUser_Uid).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (!task.isSuccessful()) {return;}
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Map<String, Long> users = (Map<String, Long>) document.get("RoomModel_USERS");
+                            if (users.size()==2 & users.get(toUid)!=null){
+                                setChatRoom(document.getId());
+                                break;
+                            }
+                        }
+                    }
+                });
+    }
+
 
     // Room에서 MessageModel_PostUid로 찾는다.
     void findChatRoom(final String currentUser_Uid,final String toUid,final String MarketModel_Market_Uid){
@@ -401,6 +425,7 @@ public class ChatFragment extends Fragment {
         roomModel.setRoomModel_USER_OUT(USERS_OUT);
         roomModel.setRoomModel_ImageCount("0");
         roomModel.setRoomModel_PostUid(MarketModel_Market_Uid);
+        roomModel.setRoomModel_GuestUser(currentUser_Uid);
 
         room.set(roomModel.getRoomInfo()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

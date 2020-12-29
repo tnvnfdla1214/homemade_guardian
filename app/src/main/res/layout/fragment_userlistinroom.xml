@@ -4,6 +4,7 @@
     tools:context=".chat.fragment.GroupUserFragment"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/pager_bg"
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView

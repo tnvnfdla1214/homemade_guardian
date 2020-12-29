@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:background="@color/pager_bg"
     >
 
 
@@ -162,7 +163,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/color_00000000">
         <com.example.homemade_guardian_beta.Main.common.BackPressEditText
             android:id="@+id/Comment_Input_EditText"
             android:layout_width="wrap_content"

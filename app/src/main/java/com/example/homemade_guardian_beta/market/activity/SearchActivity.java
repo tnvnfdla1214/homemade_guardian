@@ -37,26 +37,21 @@ public class SearchActivity extends BasicActivity {                             
     private ArrayList<MarketModel> Marketmodel;                                                     // 핫게시물의 정보를 담고 있는 Marketmodel
                                                                                                 // 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등)
     private EditText Search_Market_EditText;                                                        // 검색하고자 하는 단어 입력 받는 EditText
-    private TextView First_Food_Title_TextView, First_Thing_Title_TextView,                         // 각 카테고리의 첫 게시물의 제목
-            First_Borrow_Title_TextView, First_Quest_Title_TextView;
+
                                                                                                 // 4. 파이어베이스 관련 선언
     private FirebaseFirestore Firebasefirestore;                                                    // 파이어스토어
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        setToolbarTitle("검색");
 
        // 검색창 EditText, 검색 ImageView find
         Search_Market_EditText = findViewById(R.id.Search_PostTitle);
         ImageView Search_ImageView;
         Search_ImageView = findViewById(R.id.searchbtn);
+        ImageView Back_ImageView;
+        Back_ImageView = findViewById(R.id.backbtn);
 
-       // 카테고리 별 게시물 영역 Layout, 카테고리 별 제목 TextView find
-        First_Food_Title_TextView = findViewById(R.id.firstfood);
-        First_Thing_Title_TextView = findViewById(R.id.firstthing);
-        First_Borrow_Title_TextView = findViewById(R.id.firstborrow);
-        First_Quest_Title_TextView = findViewById(R.id.firstquest);
 
         LinearLayout Food_Layout, Thing_Layout, Borrow_Layout, Quest_Layout;
         Food_Layout = findViewById(R.id.food_layout);
@@ -66,6 +61,7 @@ public class SearchActivity extends BasicActivity {                             
 
        // 검색 ImageView, 카테고리 별 게시물 영역 Layout setOnClickListener
         Search_ImageView.setOnClickListener(onClickListener);
+        Back_ImageView.setOnClickListener(onClickListener);
         Food_Layout.setOnClickListener(onClickListener);
         Thing_Layout.setOnClickListener(onClickListener);
         Borrow_Layout.setOnClickListener(onClickListener);
@@ -101,82 +97,19 @@ public class SearchActivity extends BasicActivity {                             
         });
 
        // 카테고리 별 첫 게시물 제목을 받는 함수
-        CategoryMarket();
+        //CategoryMarket();
 
-       // 최근 핫게시물 2개를 받는 함수
+       // 최근 핫게시물 3개를 받는 함수
         HotMarket(true);
     }
 
-   // 카테고리 별 첫 게시물 제목을 받는 함수
-    private void CategoryMarket(){
-        Date date =  new Date();
-        CollectionReference FoodReference = Firebasefirestore.collection("MARKETS");
-       // limit(1)로 날짜 순으로 한개만 받는다.
-        FoodReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","음식교환").limit(1).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                First_Food_Title_TextView.setText(document.getData().get("MarketModel_Title").toString());
-
-                            }
-                        }
-                    }
-                });
-
-        CollectionReference ThingReference = Firebasefirestore.collection("MARKETS");
-       // limit(1)로 날짜 순으로 한개만 받는다.
-        ThingReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","물건교환").limit(1).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                First_Thing_Title_TextView.setText(document.getData().get("MarketModel_Title").toString());
-
-                            }
-                        }
-                    }
-                });
-
-        CollectionReference BorrowReference = Firebasefirestore.collection("MARKETS");
-       // limit(1)로 날짜 순으로 한개만 받는다.
-        BorrowReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","대여하기").limit(1).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                First_Borrow_Title_TextView.setText(document.getData().get("MarketModel_Title").toString());
-
-                            }
-                        }
-                    }
-                });
-
-        CollectionReference QuestReference = Firebasefirestore.collection("MARKETS");
-       // limit(1)로 날짜 순으로 한개만 받는다.
-        QuestReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_Category","퀘스트").limit(1).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                First_Quest_Title_TextView.setText(document.getData().get("MarketModel_Title").toString());
-
-                            }
-                        }
-                    }
-                });
-    }
 
    // 최근 핫게시물 2개를 받는 함수
     private void HotMarket(final boolean clear) {
         Date date = new Date() ;
         CollectionReference collectionReference = Firebasefirestore.collection("MARKETS");
        // limit(2)로 날짜 순으로 두개만 받는다.
-        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_HotMarket","O").limit(2).get()
+        collectionReference.orderBy("MarketModel_DateOfManufacture", Query.Direction.DESCENDING).whereLessThan("MarketModel_DateOfManufacture", date).whereEqualTo("MarketModel_HotMarket","O").limit(3).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -214,6 +147,9 @@ public class SearchActivity extends BasicActivity {                             
                 case R.id.searchbtn:
                     String Search = Search_Market_EditText.getText().toString();
                     myStartActivity(SearchResultActivity.class,Search,"0");
+                    break;
+                case R.id.backbtn:
+                    finish();
                     break;
                 case R.id.food_layout:
                     myStartActivity(SearchResultActivity.class,null,"1");

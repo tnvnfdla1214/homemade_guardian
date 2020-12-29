@@ -4,11 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/pager_bg"
     android:orientation="vertical">
-    <include
-        layout="@layout/view_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,8 +13,33 @@
         android:orientation="horizontal"
         android:layout_below="@+id/toolbar"
         android:id="@+id/Linearlayout"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginTop="10dp">
+        <ImageView
+            android:id="@+id/backbtn"
+            android:layout_width="20dp"
+            android:layout_height="25dp"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            android:layout_marginLeft="10dp"/>
+        <ImageView
+            android:id="@+id/searchbtn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            android:layout_marginLeft="40dp"/>
 
         <EditText
             android:id="@+id/Search_PostTitle"
@@ -25,135 +47,130 @@
             android:layout_height="match_parent"
             android:layout_weight="9"
             android:ems="10"
-            android:hint=" 검색 할 단어를 입력하세요"
+            android:hint="      검색 할 단어를 입력하세요"
             android:imeOptions="actionSearch"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="40dp"
             android:layout_marginRight="15dp"/>
-
-        <ImageView
-            android:id="@+id/searchbtn"
-            android:layout_width="30dp"
-            android:layout_height="32dp"
-            android:layout_gravity="right"
-            android:layout_weight="1"
-            android:src="@drawable/search"
-            app:layout_constraintEnd_toEndOf="@+id/Search_PostTitle"
-            tools:ignore="MissingConstraints"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:background="?attr/selectableItemBackground"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="50dp"
-        android:layout_margin="5dp"
-        android:background="@drawable/border_search">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:layout_marginLeft="6dp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="카테고리별 게시판"
-                android:layout_marginTop="6dp"
-                android:layout_marginBottom="6dp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="15dp"/>
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"/>
-        </LinearLayout>
+        android:orientation="horizontal"
+        android:layout_below="@+id/Linearlayout"
+        android:id="@+id/Categorylayout"
+        android:paddingTop="5dp">
+
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="6dp"
+            android:orientation="vertical"
             android:id="@+id/food_layout"
             android:background="?attr/selectableItemBackground">
+            <ImageView
+                android:id="@+id/FoodPostbtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/category_food"
+                android:background="@drawable/category_border"
+                android:layout_gravity="center_horizontal"/>
             <TextView
+                android:id="@+id/FoodPostText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="음식교환"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:id="@+id/firstfood"/>
+                android:text="음식교환" />
         </LinearLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"/>
+
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="6dp"
+            android:orientation="vertical"
             android:id="@+id/thing_layout"
             android:background="?attr/selectableItemBackground">
+            <ImageView
+                android:id="@+id/LifePostbtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/category_daily"
+                android:background="@drawable/category_border"
+                android:layout_gravity="center_horizontal"/>
             <TextView
+                android:id="@+id/LifePostText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="물건교환"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:id="@+id/firstthing"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="6dp"
-            android:id="@+id/borrow_layout"
-            android:background="?attr/selectableItemBackground">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="대여하기"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:id="@+id/firstborrow"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="6dp"
-            android:id="@+id/quest_layout"
-            android:background="?attr/selectableItemBackground">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="퀘스트   "
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:id="@+id/firstquest"/>
+                android:text="물건교환"/>
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/borrow_layout"
+            android:background="?attr/selectableItemBackground">
+            <ImageView
+                android:id="@+id/BorrowPostbtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/category_borrow"
+                android:background="@drawable/category_border"
+                android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:id="@+id/BorrowPostText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="대여하기"/>
+        </LinearLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/quest_layout"
+            android:background="?attr/selectableItemBackground">
+            <ImageView
+                android:id="@+id/WorkPostbtn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/category_work"
+                android:background="@drawable/category_border"
+                android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:id="@+id/WorkPostText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="퀘스트"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"/>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

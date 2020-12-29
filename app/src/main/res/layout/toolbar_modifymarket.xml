@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/color_505050"
+    android:background="@color/pager_bg"
     android:minHeight="?attr/actionBarSize"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -16,7 +16,7 @@
         android:id="@+id/back_Button"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        app:srcCompat="@drawable/back_button_white"
+        app:srcCompat="@drawable/back"
         />
 
     <LinearLayout
@@ -35,7 +35,7 @@
             android:id="@+id/camera_Select_Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#ffffff"
+            android:textColor="#000000"
             android:text="0/5"
             android:layout_gravity="center"/>
 
@@ -48,7 +48,7 @@
         android:layout_gravity="center"
         android:id="@+id/toolbar_titles"
         android:textSize="20sp"
-        android:textColor="@color/color_ffffff"
+        android:textColor="#000000"
         />
 
     <Button
@@ -57,8 +57,8 @@
         android:layout_height="wrap_content"
         android:text="등록"
         android:layout_gravity="right"
-        android:background="@color/color_505050"
-        android:textColor="#ffffff"
+        android:background="@color/pager_bg"
+        android:textColor="#000000"
         android:shadowRadius="?attr/colorPrimary"
         style="@style/Widget.AppCompat.Button.Borderless"/>
 

@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <include
-        layout="@layout/view_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    android:orientation="vertical"
+    android:background="@color/pager_bg"
+    >
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,6 +16,32 @@
         android:layout_below="@+id/toolbar"
         android:id="@+id/Linearlayout"
         android:layout_marginTop="10dp">
+        <ImageView
+            android:id="@+id/backbtn"
+            android:layout_width="20dp"
+            android:layout_height="25dp"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            android:layout_marginLeft="10dp"/>
+        <ImageView
+            android:id="@+id/searchbtn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="right"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"
+            android:layout_marginLeft="40dp"/>
 
         <EditText
             android:id="@+id/Search_PostTitle"
@@ -24,26 +49,13 @@
             android:layout_height="match_parent"
             android:layout_weight="9"
             android:ems="10"
-            android:hint=" 검색 할 단어를 입력하세요"
+            android:hint="      검색 할 단어를 입력하세요"
             android:imeOptions="actionSearch"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="40dp"
             android:layout_marginRight="15dp"/>
-
-        <ImageView
-            android:id="@+id/searchbtn"
-            android:layout_width="30dp"
-            android:layout_height="32dp"
-            android:layout_gravity="right"
-            android:layout_weight="1"
-            android:src="@drawable/search"
-            app:layout_constraintEnd_toEndOf="@+id/Search_PostTitle"
-            tools:ignore="MissingConstraints"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout
         android:layout_width="match_parent"

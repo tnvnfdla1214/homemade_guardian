@@ -42,9 +42,10 @@ public class SearchCommunityActivity extends BasicActivity {            // 1. �
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_search);
-        setToolbarTitle("검색");
 
         ImageView Search_ImageView;
+        ImageView Back_ImageView;
+        Back_ImageView = findViewById(R.id.backbtn);
 
        // 검색창 EditText, 검색 ImageView find
         Search_Community_EditText = findViewById(R.id.Search_PostTitle);
@@ -52,6 +53,7 @@ public class SearchCommunityActivity extends BasicActivity {            // 1. �
 
        // 검색 ImageView setOnClickListener
         Search_ImageView.setOnClickListener(onClickListener);
+        Back_ImageView.setOnClickListener(onClickListener);
 
        // 파이어스토어 getInstance
         Firebasefirestore = FirebaseFirestore.getInstance();
@@ -125,6 +127,9 @@ public class SearchCommunityActivity extends BasicActivity {            // 1. �
                 case R.id.searchbtn:
                     String Search = Search_Community_EditText.getText().toString();
                     myStartActivity(SearchCommunityResultActivity.class,Search);
+                    break;
+                case R.id.backbtn:
+                    finish();
                     break;
             }
         }

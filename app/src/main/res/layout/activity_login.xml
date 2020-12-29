@@ -15,6 +15,7 @@
         android:layout_height="350dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+
         />
 
     <LinearLayout
@@ -22,9 +23,10 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_below="@+id/charactor"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:paddingTop="50dp"
-
-        >
+        android:gravity="center_horizontal">
 
         <ImageView
             android:layout_width="wrap_content"

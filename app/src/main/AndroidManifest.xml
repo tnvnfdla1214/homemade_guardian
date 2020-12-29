@@ -15,7 +15,7 @@
     <application
         android:name="com.example.homemade_guardian_beta.Main.common.GlobalApplication"
         android:allowBackup="true"
-        android:icon="@drawable/complete"
+        android:icon="@mipmap/application_logo_round"
         android:label="자취방 수호대"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"

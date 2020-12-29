@@ -159,7 +159,7 @@ public class FirebaseHelper {                                                   
                             });
                 }
             });
-/////////////////////////////////
+
             FirebaseFirestore.getInstance().collection("MARKETS").document(marketModel.getMarketModel_Market_Uid()).collection("COMMENT")
                     .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
@@ -216,13 +216,13 @@ public class FirebaseHelper {                                                   
                     return;
                 }
                 DocumentSnapshot document = task.getResult();
-                Map<String, Long> USERS_OUT = (Map<String, Long>) document.get("USERS_OUT");
+                Map<String, Long> USERS_OUT = (Map<String, Long>) document.get("RoomModel_USER_OUT");
                 if (USERS_OUT.get(To_User_Uid)==0){
                     ROOMS_Storagedelete(ChatRoomListModel_RoomUid);
                 }
                 else{
                     USERS_OUT.put(Current_My_user, (long) 0);
-                    document.getReference().update("USERS_OUT", USERS_OUT);
+                    document.getReference().update("RoomModel_USER_OUT", USERS_OUT);
                     ((ChatActivity)ChatActivity.mcontext).ChatFragment_User_GoOut(ChatRoomListModel_RoomUid);
                 }
             }
@@ -262,7 +262,7 @@ public class FirebaseHelper {                                                   
                 ROOMS_Storedelete(ChatRoomListModel_RoomUid);
             }
         });
-        ((ChatActivity)ChatActivity.mcontext).ChatFragment_User_GoOut(ChatRoomListModel_RoomUid);
+        //((ChatActivity)ChatActivity.mcontext).ChatFragment_User_GoOut(ChatRoomListModel_RoomUid);
     }
 
 

@@ -198,7 +198,12 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
 
     //챗프레그먼트 나가기 함수
     public void ChatFragment_User_GoOut(String Roomuid){
+        Log.d("민규","123");
         chatFragment.User_GoOut(currentUser_Uid,MarketModel_Market_Uid,Roomuid);
+    }
+
+    public void chatActivity_finish(){
+        finish();
     }
 
 }

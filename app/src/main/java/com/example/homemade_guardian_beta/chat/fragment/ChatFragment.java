@@ -46,6 +46,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.chat.common.ChatUtil;
 import com.example.homemade_guardian_beta.Main.common.SendNotification;
 import com.example.homemade_guardian_beta.model.chat.RoomModel;

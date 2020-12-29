@@ -7,29 +7,40 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 
+import com.bumptech.glide.Glide;
+import com.example.homemade_guardian_beta.Main.activity.HostModelActivity;
 import com.example.homemade_guardian_beta.Main.activity.MainActivity;
 import com.example.homemade_guardian_beta.R;
 import com.example.homemade_guardian_beta.chat.fragment.ChatFragment;
 import com.example.homemade_guardian_beta.chat.fragment.Guest_Chat_MarketInfoFragment;
 import com.example.homemade_guardian_beta.chat.fragment.Host_Chat_MarketInfoFragment;
 import com.example.homemade_guardian_beta.chat.fragment.Nonepost_chat_MarketInfoFragment;
+import com.example.homemade_guardian_beta.market.activity.MarketActivity;
+import com.example.homemade_guardian_beta.market.activity.ModifyMarketActivity;
 import com.example.homemade_guardian_beta.model.chat.MessageModel;
 import com.example.homemade_guardian_beta.Main.common.FirebaseHelper;
 import com.example.homemade_guardian_beta.model.market.MarketModel;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 
 
 //채팅방안 액티비티 - 마켓의 정보(호스트용,게스트용,정보가 없을 때),채팅 기능
@@ -63,6 +74,7 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         actionBar.setTitle("");
 
         final TextView RoomTitle = findViewById(R.id.RoomTitle);
+        findViewById(R.id.menu).setOnClickListener(onClickListener);
 
         ImageView back_Button = findViewById(R.id.back_Button);
         back_Button.setOnClickListener(new View.OnClickListener() {
@@ -131,35 +143,50 @@ public class ChatActivity extends AppCompatActivity implements ChatFragment.Room
         });
     }
 
-
     @Override
     public void onBackPressed() {
         chatFragment.backPressed();
         finish();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {                                                         // part19 : 게시물 안에서의 수정 삭제 (58')
-        getMenuInflater().inflate(R.menu.chat_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    //메뉴 안에 있는 버튼들의 이벤트
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.Chat_Delete_Button:
-                RoomUidSet(ChatRoomListModel_RoomUid,To_User_Uid);
-                chatFragment.User_GoOut(currentUser_Uid,MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
-                Firebasehelper.ROOMS_USERS_OUT_CHECK(ChatRoomListModel_RoomUid,currentUser_Uid,To_User_Uid);
-                Intent Intent_MainActivity = new Intent(ChatActivity.this, MainActivity.class);
-                startActivity(Intent_MainActivity);
-                finish();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                // 메뉴 버튼
+                case R.id.menu:
+                    showPopup(v);
+                    break;
+            }
         }
+    };
+
+    // 채팅방 우측에 있는 점 3개의 메뉴 버튼
+    private void showPopup(View v) {
+        PopupMenu popup = new PopupMenu(ChatActivity.this, v);
+
+        getMenuInflater().inflate(R.menu.chat_menu, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+
+                    case R.id.Chat_Delete_Button:
+
+                        RoomUidSet(ChatRoomListModel_RoomUid,To_User_Uid);
+                        chatFragment.User_GoOut(currentUser_Uid,MarketModel_Market_Uid,ChatRoomListModel_RoomUid);
+                        Firebasehelper.ROOMS_USERS_OUT_CHECK(ChatRoomListModel_RoomUid,currentUser_Uid,To_User_Uid);
+                        Intent Intent_MainActivity = new Intent(ChatActivity.this, MainActivity.class);
+                        startActivity(Intent_MainActivity);
+                        finish();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popup.show();
     }
 
     //챗프레그먼트 연결 함수

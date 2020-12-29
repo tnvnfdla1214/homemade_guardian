@@ -46,11 +46,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.DrawableImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.example.homemade_guardian_beta.Main.common.Loding_Dialog;
-import com.example.homemade_guardian_beta.chat.activity.ChatActivity;
 import com.example.homemade_guardian_beta.chat.common.ChatUtil;
 import com.example.homemade_guardian_beta.Main.common.SendNotification;
-import com.example.homemade_guardian_beta.chat.common.photoview.ViewPagerActivity;
 import com.example.homemade_guardian_beta.model.chat.RoomModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -970,15 +967,7 @@ public class ChatFragment extends Fragment {
                 startActivity(Intent.createChooser(intent, "Your title"));
             }
         };
-        // photo view
-        Button.OnClickListener imageClickListener = new View.OnClickListener() {
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), ViewPagerActivity.class);
-                intent.putExtra("RoomUid", ChatRoomListModel_RoomUid);
-                intent.putExtra("realname", realname); //<- 이게 뭔지 정확히 모르겠음
-                startActivity(intent);
-            }
-        };
+
     }
 
     public void backPressed() {

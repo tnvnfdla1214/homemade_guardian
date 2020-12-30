@@ -22,6 +22,8 @@
             android:layout_width="102dp"
             android:layout_height="102dp"
             android:layout_gravity="center_vertical"/>
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,17 +48,31 @@
                     android:textSize="18sp"
                     android:textStyle="bold"
                     tools:text="타이블"
-                    android:maxLines="1"/>
+                    android:maxLength="10"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="10dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/Post_Category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="11sp"
+                    tools:text="카테고리"
+                    android:textColor="#33CDAF"/>
             </LinearLayout>
 
-<!--
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="#DDDDDD" />
-                -->
+            <!--
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="#DDDDDD" />
+                            -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -67,7 +83,7 @@
                 <TextView
                     android:id="@+id/Post_Contents_TextView"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="34dp"
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:maxLines="2"
@@ -75,14 +91,14 @@
                     android:textSize="15sp"
                     tools:text="내용" />
             </LinearLayout>
-<!--
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="#DDDDDD" />
-            -->
+            <!--
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="#DDDDDD" />
+                        -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -90,13 +106,6 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/Post_Category"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="13sp"
-                    tools:text="카테고리"
-                    android:textColor="#33CDAF"/>
                 <androidx.cardview.widget.CardView
                     android:layout_width="32dp"
                     android:layout_height="16dp"
@@ -161,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:textSize="13sp"
-                    tools:text="2019-04-25" />
+                    tools:text="04-25 13:45" />
 
             </LinearLayout>
         </LinearLayout>

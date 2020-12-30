@@ -20,7 +20,7 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback  {
     private ItemTouchHelperListener listener;
     private boolean swipeBack = false;
     private ButtonsState buttonsShowedState = ButtonsState.GONE;
-    private static final float buttonWidth = 115;
+    private static final float buttonWidth = 280;
     private RectF buttonInstance = null;
     private RecyclerView.ViewHolder currenrtItemViewHolder = null;
     public ItemTouchHelperCallback(ItemTouchHelperListener listener) {
@@ -72,13 +72,13 @@ public class ItemTouchHelperCallback extends ItemTouchHelper.Callback  {
             RectF rightButton = new RectF(itemView.getRight() - buttonWidthWithOutPadding, itemView.getTop() + 10, itemView.getRight() -10, itemView.getBottom() - 10);
             p.setColor(Color.RED);
             c.drawRoundRect(rightButton, corners, corners, p);
-            drawText("삭제", c, rightButton, p);
+            drawText("삭제하기", c, rightButton, p);
             buttonInstance = rightButton;
         }
     }
     //버튼의 텍스트
     private void drawText(String text, Canvas c, RectF button, Paint p){
-        float textSize = 25; p.setColor(Color.WHITE);
+        float textSize = 43; p.setColor(Color.WHITE);
         p.setAntiAlias(true); p.setTextSize(textSize);
         float textWidth = p.measureText(text);
         c.drawText(text, button.centerX() - (textWidth/2), button.centerY() + (textSize/2), p);

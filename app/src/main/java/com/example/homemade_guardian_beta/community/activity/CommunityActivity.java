@@ -313,10 +313,10 @@ public class CommunityActivity extends BasicActivity {              // 1. 클래
                         LikeList.add(currentUser_Uid);
 
                        // 핫게시물의 상태를 설정
-                        if (LikeList.size() > 0) {
+                        if (LikeList.size() >= 10) {
                             Communitymodel.setCommunityModel_HotCommunity("O");
                         }
-                        if (LikeList.size() <= 0) {
+                        if (LikeList.size() < 10) {
                             Communitymodel.setCommunityModel_HotCommunity("X");
                         }
                         Communitymodel.setCommunityModel_LikeList(LikeList);

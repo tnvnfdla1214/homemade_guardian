@@ -360,9 +360,9 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                         LikeList.add(CurrentUid);
 
                         // 핫게시물의 상태를 설정
-                        if (LikeList.size() > 0) {
+                        if (LikeList.size() >= 10) {
                             Marketmodel.setMarketModel_HotMarket("O");
-                        }if (LikeList.size() <= 0) {
+                        }if (LikeList.size() < 10) {
                             Marketmodel.setMarketModel_HotMarket("X");
                         }
                         Marketmodel.setMarketModel_LikeList(LikeList);

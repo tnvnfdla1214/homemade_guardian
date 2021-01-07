@@ -486,12 +486,10 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                         Toast.makeText(getApplicationContext(), "신고 되었습니다.", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.Chat_With_PostHost_Button:
-                        //버튼 눌러짐
                         Intent Intent_ChatActivity = new Intent(getApplicationContext(), ChatActivity.class);
-                        //상대방 uid, 현재 포스트 uid 정보를 chatActivity로 넘겨준다.
                         Intent_ChatActivity.putExtra("To_User_Uid", Marketmodel.getMarketModel_Host_Uid());
                         Intent_ChatActivity.putExtra("MarketModel_Market_Uid", Marketmodel.getMarketModel_Market_Uid());
-                        //여기서도 닉네임 못넘김
+                        Intent_ChatActivity.putExtra("To_Usermodel_NickName", To_Usermodel.getUserModel_NickName());
                         startActivity(Intent_ChatActivity);
                         return true;
                     default:

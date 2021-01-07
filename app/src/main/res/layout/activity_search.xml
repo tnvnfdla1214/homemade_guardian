@@ -29,8 +29,8 @@
             android:layout_marginLeft="10dp"/>
         <ImageView
             android:id="@+id/searchbtn"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="right"
             android:layout_weight="1"
             android:background="?attr/selectableItemBackground"

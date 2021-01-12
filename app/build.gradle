@@ -8,8 +8,8 @@ android {
         applicationId "bias.zochiwon_suhodae.homemade_guardian_beta"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 7
-        versionName "1.5"
+        versionCode 9
+        versionName "1.7"
         multiDexEnabled true
 
         vectorDrawables.useSupportLibrary = true

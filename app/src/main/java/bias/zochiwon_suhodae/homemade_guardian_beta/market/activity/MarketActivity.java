@@ -442,7 +442,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                                             if (document != null) {
                                                 if (document.exists()) {  //데이터의 존재여부
                                                     UserModel TouserModel = document.toObject(UserModel.class);
-                                                    SendNotification.sendCommentNotification(TouserModel.getUserModel_Token(), userModel.getUserModel_NickName(), "댓글이 달렸습니다!", Marketmodel.getMarketModel_Market_Uid());
+                                                    SendNotification.sendCommentNotification(TouserModel.getUserModel_Token(), userModel.getUserModel_NickName(), "물물교환 게시물의 댓글이 달렸습니다!", Marketmodel.getMarketModel_Market_Uid());
                                                 }
                                             }
                                         }

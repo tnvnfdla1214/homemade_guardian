@@ -492,6 +492,9 @@ public class CommunityActivity extends BasicActivity {              // 1. 클래
             final Community_CommentModel community_commentModel = DocumentSnapshot.toObject(Community_CommentModel.class);
             viewHolder.Comment_UserName_TextView.setText(community_commentModel.getCommunity_CommentModel_Host_Name());
             viewHolder.Comment_UserComment_TextView.setText(community_commentModel.getCommunity_CommentModel_Comment());
+            viewHolder.Comment_DateOfManufacture.setText(
+                    new SimpleDateFormat("MM/dd hh:mm",
+                            Locale.getDefault()).format(community_commentModel.getCommunity_CommentModel_DateOfManufacture()));
 
             if (community_commentModel.getCommunity_CommentModel_Host_Image()!=null) {
                 Glide.with(CommunityActivity.this).load(community_commentModel.getCommunity_CommentModel_Host_Image()).centerInside().override(500).into(viewHolder.Comment_UserProfile_ImageView);
@@ -543,6 +546,7 @@ public class CommunityActivity extends BasicActivity {              // 1. 클래
         public TextView Comment_UserName_TextView;
         public TextView Comment_UserComment_TextView;
         public CardView Comment_Menu_CardView;
+        public TextView Comment_DateOfManufacture;
 
         CustomViewHolder(View view) {
             super(view);
@@ -550,6 +554,7 @@ public class CommunityActivity extends BasicActivity {              // 1. 클래
             Comment_UserName_TextView = view.findViewById(R.id.Comment_UserName);
             Comment_UserComment_TextView = view.findViewById(R.id.Comment_UserComment);
             Comment_Menu_CardView = view.findViewById(R.id.Comment_Menu);
+            Comment_DateOfManufacture = view.findViewById(R.id.Comment_DateOfManufacture);
 
         }
     }

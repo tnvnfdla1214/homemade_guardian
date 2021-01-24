@@ -8,8 +8,8 @@ android {
         applicationId "bias.zochiwon_suhodae.homemade_guardian_beta"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 9
-        versionName "1.7"
+        versionCode 10
+        versionName "1.8"
         multiDexEnabled true
 
         vectorDrawables.useSupportLibrary = true
@@ -99,6 +99,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-analytics'
 
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
 }
 apply plugin: 'com.google.gms.google-services'

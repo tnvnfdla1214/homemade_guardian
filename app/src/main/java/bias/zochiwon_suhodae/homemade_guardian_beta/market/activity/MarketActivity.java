@@ -314,7 +314,9 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
                         MarketActivity.this.Comment_Input_EditText.setText("");
                         InputMethodManager immhide = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         immhide.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                        SendAlarm(Comment);
+                        if(!To_Usermodel.getUserModel_Uid().equals(CurrentUid)){
+                            SendAlarm(Comment);
+                        }
                     }
                     if (!CurrentUid.equals(Marketmodel.getMarketModel_Host_Uid())) {
                         Chat_With_MarketHost_Button.setVisibility(View.VISIBLE);
@@ -579,6 +581,10 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
             final Market_CommentModel market_commentModel = DocumentSnapshot.toObject(Market_CommentModel.class);
             viewHolder.Comment_UserName_TextView.setText(market_commentModel.getMarket_CommentModel_Host_Name());
             viewHolder.Comment_UserComment_TextView.setText(market_commentModel.getMarket_CommentModel_Comment());
+            viewHolder.Comment_DateOfManufacture.setText(
+                    new SimpleDateFormat("MM/dd hh:mm",
+                            Locale.getDefault()).format(market_commentModel.getMarket_CommentModel_DateOfManufacture()));
+
 
             if (market_commentModel.getMarket_CommentModel_Host_Image()!=null) {
                 Glide.with(MarketActivity.this).load(market_commentModel.getMarket_CommentModel_Host_Image()).centerInside().override(500).into(viewHolder.Comment_UserProfile_ImageView);
@@ -629,6 +635,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
         public TextView Comment_UserName_TextView;
         public TextView Comment_UserComment_TextView;
         public CardView Comment_Menu_CardView;
+        public TextView Comment_DateOfManufacture;
 
         CustomViewHolder(View view) {
             super(view);
@@ -636,6 +643,7 @@ public class MarketActivity extends BasicActivity {         // 1. 클래스 2. �
             Comment_UserName_TextView = view.findViewById(R.id.Comment_UserName);
             Comment_UserComment_TextView = view.findViewById(R.id.Comment_UserComment);
             Comment_Menu_CardView = view.findViewById(R.id.Comment_Menu);
+            Comment_DateOfManufacture = view.findViewById(R.id.Comment_DateOfManufacture);
         }
     }
 

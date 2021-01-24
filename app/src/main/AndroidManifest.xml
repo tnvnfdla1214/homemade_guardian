@@ -15,7 +15,7 @@
     <application
         android:name="bias.zochiwon_suhodae.homemade_guardian_beta.Main.common.GlobalApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/new_app_logos_round"
+        android:icon="@mipmap/app_logo03_round"
         android:label="자취방 수호대"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -28,7 +28,11 @@
             android:value="@string/kakao_app_key" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/complete" />
+            android:resource="@mipmap/app_logo03_round"/>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
         <activity android:name="bias.zochiwon_suhodae.homemade_guardian_beta.Main.activity.LoginActivity" android:screenOrientation="portrait">
         </activity>
 
@@ -37,7 +41,7 @@
         <service android:name="bias.zochiwon_suhodae.homemade_guardian_beta.Main.common.MyFirebaseMessagingService"
             android:enabled="true"
             android:exported="true"
-            android:stopWithTask="false">
+            android:stopWithTask="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
@@ -83,8 +87,6 @@
         </activity>
         <activity android:name="bias.zochiwon_suhodae.homemade_guardian_beta.photo.activity.PhotoPickerActivity" android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name="bias.zochiwon_suhodae.homemade_guardian_beta.market.activity.EnlargeImageActivity" android:screenOrientation="portrait">
-        </activity>
         <activity android:name="bias.zochiwon_suhodae.homemade_guardian_beta.Main.activity.WriteMarketActivity" android:screenOrientation="portrait">
         </activity>
         <activity android:name="bias.zochiwon_suhodae.homemade_guardian_beta.Main.activity.WriteCommunityActivity" android:screenOrientation="portrait">
@@ -105,7 +107,10 @@
         </activity>
         <activity android:name="bias.zochiwon_suhodae.homemade_guardian_beta.Main.activity.UpdateInfoActivity" android:screenOrientation="portrait">
         </activity>
+        <activity android:name="bias.zochiwon_suhodae.homemade_guardian_beta.market.activity.EnlargeImageActivity" android:screenOrientation="portrait">
+        </activity>
         <activity android:name="bias.zochiwon_suhodae.homemade_guardian_beta.Main.activity.MainActivity" android:screenOrientation="portrait">
+
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

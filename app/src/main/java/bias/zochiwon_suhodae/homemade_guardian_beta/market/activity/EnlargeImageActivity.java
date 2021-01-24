@@ -2,16 +2,14 @@ package bias.zochiwon_suhodae.homemade_guardian_beta.market.activity;
 
 import android.os.Bundle;
 import androidx.viewpager.widget.ViewPager;
-
 import bias.zochiwon_suhodae.homemade_guardian_beta.Main.activity.BasicActivity;
 import bias.zochiwon_suhodae.homemade_guardian_beta.R;
 import bias.zochiwon_suhodae.homemade_guardian_beta.market.adapter.ViewPagerAdapter;
-
 import java.util.ArrayList;
 
 import me.relex.circleindicator.CircleIndicator;
 
-// MarketActivity에서 이미지가 있다면 클릭하여 큰 Image의 뷰페이저 형식으로 볼 수 있음
+ //MarketActivity에서 이미지가 있다면 클릭하여 큰 Image의 뷰페이저 형식으로 볼 수 있음
 
 public class EnlargeImageActivity extends BasicActivity {           // 1. 클래스 2. 변수 및 배열 3. Xml데이터(레이아웃, 이미지, 버튼, 텍스트, 등등) 4. 파이어베이스 관련 선언 5. 기타 변수
                                                                     // 2. 변수 및 배열

@@ -11,8 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
+import com.github.chrisbanes.photoview.PhotoView;
+
 import bias.zochiwon_suhodae.homemade_guardian_beta.R;
 import bias.zochiwon_suhodae.homemade_guardian_beta.community.activity.EnlargeCommunityImageActivity;
+import bias.zochiwon_suhodae.homemade_guardian_beta.market.activity.EnlargeImageActivity;
 
 import java.util.ArrayList;
 
@@ -37,27 +40,29 @@ public class CommunityViewPagerAdapter extends PagerAdapter {           // 1. �
    // 로그를 찍어본다면 이미 이미지의 정보를 ArrayList_ImageList에 갖고 왔으므로 Glide로 생성만 해준다.
     @NonNull
     @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+    public Object instantiateItem(@NonNull ViewGroup container, final int position) {
         LayoutInflater Inflater = (LayoutInflater) Context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = Inflater.inflate(R.layout.post_silder, null);
+        View view;
+        if(ViewpagerState.equals("Enable")){
+            view = Inflater.inflate(R.layout.post_silder, null);
 
-       // 뷰페이저를 클릭한다면 EnlargeImageActivity로 이동시킨다.
-        view.setOnClickListener( new View.OnClickListener() {
-            public void onClick(View m) {
-                if(ViewpagerState.equals("Enable")){
+            // 뷰페이저를 클릭한다면 EnlargeImageActivity로 이동시킨다.
+            view.setOnClickListener( new View.OnClickListener() {
+                public void onClick(View m) {
                     Intent Intent_ViewPagerViewer = new Intent(Context, EnlargeCommunityImageActivity.class);
                     Intent_ViewPagerViewer.putExtra("communityImage",ArrayList_ImageList);
                     Context.startActivity(Intent_ViewPagerViewer);
                 }
-            }
-        });
-        ImageView Market_ImageView = view.findViewById(R.id.PostActivity_Post_ImageView);
-        if(uses.equals("Enlarge")){
-            Glide.with(view).load(ArrayList_ImageList.get(position)).override(1000).thumbnail(0.1f).into(Market_ImageView);
+            });
+            ImageView Community_ImageView = view.findViewById(R.id.PostActivity_Post_ImageView);
+            Glide.with(view).load(ArrayList_ImageList.get(position)).centerCrop().override(1000).thumbnail(0.1f).into(Community_ImageView);
+            container.addView(view);
         }else{
-            Glide.with(view).load(ArrayList_ImageList.get(position)).centerCrop().override(1000).thumbnail(0.1f).into(Market_ImageView);
+            view = Inflater.inflate(R.layout.post_slider_enlarge, null);
+            PhotoView Community_ImageView = view.findViewById(R.id.PostActivity_Post_EnlargeImageView);
+            Glide.with(view).load(ArrayList_ImageList.get(position)).override(1000).thumbnail(0.1f).into(Community_ImageView);
+            container.addView(view);
         }
-        container.addView(view);
         return view;
     }
 

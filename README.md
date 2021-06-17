@@ -24,28 +24,32 @@
 <img src="https://user-images.githubusercontent.com/48902047/122350881-93f8f380-cf88-11eb-8639-46ec51158392.jpg" width="25%"></img>
 #### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
 6) 호스트 정보 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122348901-9bb79880-cf86-11eb-9542-2b6d297e5fd8.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122353036-a1af7880-cf8a-11eb-9957-f0c3d4e7b89d.jpg" width="25%"></img>
 <img src="https://user-images.githubusercontent.com/48902047/122351223-e803d800-cf88-11eb-8205-ced76367b2d4.jpg" width="25%"></img>
 #### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
-7) 마켓리스트 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122349509-4a5bd900-cf87-11eb-9c38-48a2e6dc713b.jpg" width="25%"></img>
+7) 커뮤니티 리스트 화면</br>
+<img src="https://user-images.githubusercontent.com/48902047/122351748-6b252e00-cf89-11eb-8198-cc2e545ff515.jpg" width="25%"></img>
 #### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
 8) 커뮤니티 리스트 화면</br>
 <img src="https://user-images.githubusercontent.com/48902047/122351748-6b252e00-cf89-11eb-8198-cc2e545ff515.jpg" width="25%"></img>
 #### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
-9) 로그인 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122346906-6f028180-cf84-11eb-801f-b3b6af8c6925.jpg" width="25%"></img>
+9) 검색 창 화면</br>
+<img src="https://user-images.githubusercontent.com/48902047/122353330-e9ce9b00-cf8a-11eb-83a7-9affb88b25af.jpg" width="25%"></img>
 <img src="https://user-images.githubusercontent.com/48902047/122351943-9dcf2680-cf89-11eb-91e2-6a8c57492aac.jpg" width="25%"></img>
 <img src="https://user-images.githubusercontent.com/48902047/122352090-c35c3000-cf89-11eb-9ae0-15399d715aab.jpg" width="25%"></img>
 #### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
-10) 회원정보 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122348901-9bb79880-cf86-11eb-9542-2b6d297e5fd8.jpg" width="25%"></img>
-<img src="https://user-images.githubusercontent.com/48902047/122348988-b8ec6700-cf86-11eb-9ae0-a834e148f52b.jpg" width="25%"></img>
+10) 커뮤니티 게시물 화면</br>
+<img src="https://user-images.githubusercontent.com/48902047/122353614-2c907300-cf8b-11eb-9baa-02f887882714.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122353697-40d47000-cf8b-11eb-8b3b-00025124e246.jpg" width="25%"></img>
 #### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
 
-11) 커뮤니티 게시물 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122349509-4a5bd900-cf87-11eb-9c38-48a2e6dc713b.jpg" width="25%"></img>
+11) 게시물 작성 화면</br>
+<img src="https://user-images.githubusercontent.com/48902047/122353869-6bbec400-cf8b-11eb-9f32-5f0695af4377.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122354125-a9235180-cf8b-11eb-830f-eeb5af206d6d.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122354252-c6f0b680-cf8b-11eb-8a66-eab8275e6e36.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122354363-dff96780-cf8b-11eb-9c86-9ca8e49bd757.jpg" width="25%"></img>
 #### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
+
 4) 검색 창 화면</br>
 <img src="https://user-images.githubusercontent.com/48902047/122349509-4a5bd900-cf87-11eb-9c38-48a2e6dc713b.jpg" width="25%"></img>
 <img src="https://user-images.githubusercontent.com/48902047/122349752-81ca8580-cf87-11eb-9d93-d7aaf99b7aa8.jpg" width="25%"></img>

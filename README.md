@@ -458,23 +458,8 @@
  5. PhotoPickerFragment : PhotoPickerActivity와 연결된 Fragment로 앨범의 이미지들을 나열하는 기능</br>
  6. PhotoUtil : 형태는 조금 다르나 다른 package에서 쓰이는 Utill과 기능</br>
 
-  
-  
-## 3. KeyWord</br>
-### 1) NavigationBar</br>
-#### Main의 하단바 구성으로 사용하였다. </br>(Main.java : 67~83) </br>
-### 2) Fragment</br>
-#### Main에서 선언하고, List와 추가버튼등이 동적으로 추가되거나 하나의 독립된 채로 실행된다. </br>(Main.java : 60~63 / Fragment1.java, Fragment2.java) </br>
-### 3) AlarmReceiver</br>
-#### Main에서 diaryNotification 메서드로 소통하여, 시간의 비교로 팝업을 띄우는 역할을 한다.</br>(Main.java :85~108 / AlarmReceiver.java) </br>
-### 4) Room</br>
-#### 데이터베이스의 역할을 한다. </br> 기존의 Sql문을 쓰기 번거로웠던, 단점을 극복하고 간편하게 만들었으며, Sql을 직접 쓸 수 있는 등 강력한 기능을 지원하는 개념이다.</br>(MemoDatalist.java (테이블 구성) / MemoDataDataBase.java / MemoDao.java (Sql문) ) </br>
-### 5) Service</br>
-#### 여기다가 </br> 쓰면됨</br>(참고코드) </br>
-### 6) Handler</br>
-#### 여기다가 </br> 쓰면됨</br>(참고코드) </br>
-
-
+## 4. 세부 사항 </br>
+#### 세부내용은 해당 파일중 보고서 파일을 보기 바랍니다.
 
 ## 5. FeedBack </br>
 #### 피드백이나 기능의 개선사항에 대한 의견은 likppi100@naver.com 혹은 tnvnfdla12@gmail.com 으로 보내주시면 감사하겠습니다.</br>

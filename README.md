@@ -1,6 +1,7 @@
 # homemade_guardian_beta
 ## 1. App</br>
 #### 사용자 간 물물교환을 할 수 있고, 채팅 및 커뮤니티 기능을 제공하는 소셜 네트워크 서비스(SNS) 어플리케이션</br>
+#### Firebase - HomemadeGuardian Test (테스트) / Homemade Guardian Beta (Store)</br>
 
 ## 2. Inteface
 1) 로그인 화면</br>

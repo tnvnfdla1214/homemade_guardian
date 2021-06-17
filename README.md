@@ -2,9 +2,12 @@
 ## 1. App</br>
 #### 사용자 간 물물교환을 할 수 있고, 채팅 및 커뮤니티 기능을 제공하는 소셜 네트워크 서비스(SNS) 어플리케이션</br>
 
+## 2. 인터페이스
+###1. 메인화면
+![로그인 화면](https://user-images.githubusercontent.com/48902047/122346725-3f537980-cf84-11eb-899a-eae48bcf500a.jpg)
 
 
-## 2. Explanation</br>
+## 3. Explanation</br>
 ### Ⅰ chat(패키지)</br>
 #### 1. activity (패키지)
  1. ChatActivity : 여러 변수를 다른 액티비티에서 받아오고 여러 프레그먼트를 담고 있다. </br>

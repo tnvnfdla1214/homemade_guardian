@@ -4,8 +4,9 @@
 
 ## 2. 인터페이스
 ###1. 메인화면
-![로그인 화면](https://user-images.githubusercontent.com/48902047/122346725-3f537980-cf84-11eb-899a-eae48bcf500a.jpg)
-
+<img src="https://user-images.githubusercontent.com/48902047/122346906-6f028180-cf84-11eb-801f-b3b6af8c6925.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122347677-42029e80-cf85-11eb-8da6-7a44bd46dc83.png" width="25%"></img>
+#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
 
 ## 3. Explanation</br>
 ### Ⅰ chat(패키지)</br>

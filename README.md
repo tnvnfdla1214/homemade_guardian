@@ -4,77 +4,111 @@
 
 ## 2. 인터페이스
 1) 로그인 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122346906-6f028180-cf84-11eb-801f-b3b6af8c6925.jpg" width="25%"></img>
-<img src="https://user-images.githubusercontent.com/48902047/122347677-42029e80-cf85-11eb-8da6-7a44bd46dc83.png" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
+<img src="https://user-images.githubusercontent.com/48902047/122346906-6f028180-cf84-11eb-801f-b3b6af8c6925.jpg" width="20%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122347677-42029e80-cf85-11eb-8da6-7a44bd46dc83.png" width="20%"></img>
+#### 1. 구글 로그인/ 카카오 로그인 기능 </br>
+#### 2. 자동로그인 기능 </br>
 2) 회원정보 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122348901-9bb79880-cf86-11eb-9542-2b6d297e5fd8.jpg" width="25%"></img>
-<img src="https://user-images.githubusercontent.com/48902047/122348988-b8ec6700-cf86-11eb-9ae0-a834e148f52b.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
+<img src="https://user-images.githubusercontent.com/48902047/122348901-9bb79880-cf86-11eb-9542-2b6d297e5fd8.jpg" width="20%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122348988-b8ec6700-cf86-11eb-9ae0-a834e148f52b.jpg" width="20%"></img>
+#### 1. 회원정보의 입력은 사진과 닉네임과 생년월일과 학교를 받는 화면이다 </br>
+#### 2. 닉네임을 입력 받지 않을시 이메일의 앞부분으로 생성한다. </br>
+#### 3. 사진을 선택 시 선택한 사진이 미리보기로 보여진다. </br>
 3) 마켓리스트 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122349509-4a5bd900-cf87-11eb-9c38-48a2e6dc713b.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
+<img src="https://user-images.githubusercontent.com/48902047/122349509-4a5bd900-cf87-11eb-9c38-48a2e6dc713b.jpg" width="20%"></img>
+#### 유저들의 마켓에 올린 게시물이 실시간으로 보여진다. </br>
 4) 검색 창 화면& 카테고리 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122349509-4a5bd900-cf87-11eb-9c38-48a2e6dc713b.jpg" width="25%"></img>
-<img src="https://user-images.githubusercontent.com/48902047/122349752-81ca8580-cf87-11eb-9d93-d7aaf99b7aa8.jpg" width="25%"></img>
-<img src="https://user-images.githubusercontent.com/48902047/122349982-c1916d00-cf87-11eb-8af3-acab22e02f75.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
+<img src="https://user-images.githubusercontent.com/48902047/122349509-4a5bd900-cf87-11eb-9c38-48a2e6dc713b.jpg" width="20%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122349752-81ca8580-cf87-11eb-9d93-d7aaf99b7aa8.jpg" width="20%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122349982-c1916d00-cf87-11eb-8af3-acab22e02f75.jpg" width="20%"></img>
+#### 1. 상단 오른쪽 돋보기 버튼을 누르면 검색창으로 검색창으로 이동된다. </br>
+#### 2. 단어를 검색시 게시물의 제목의 글자를 찾아 검색결과의 리스트를 보여준다. </br>
+#### 3. 하단 카테고리버튼을 클릭시 해당 카테고리리스트를 보여준다. </br>
 5) 마켓 게시물 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122350743-72980780-cf88-11eb-84f8-c1ab0e283d8e.jpg" width="25%"></img>
-<img src="https://user-images.githubusercontent.com/48902047/122350881-93f8f380-cf88-11eb-8639-46ec51158392.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
+<img src="https://user-images.githubusercontent.com/48902047/122350743-72980780-cf88-11eb-84f8-c1ab0e283d8e.jpg" width="20%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122350881-93f8f380-cf88-11eb-8639-46ec51158392.jpg" width="20%"></img>
+#### 1. 유저가 올린 게시물을 클릭시 해당 게시물의 상세 정보를 보여준다. </br>
+#### 2. 게시물 창에는 게시물을 올린 유저의 사진을 5장까지 스와이핑까지 가능하다. </br>
+#### 3. 좋아요, 신고하기 기능도 있다. </br>
+#### 4. 게시물의 작성자와 채팅을 원할시 하단부에 있는 채팅하기를 누르면 채팅창으로 이동된다. </br>
 6) 호스트 정보 화면</br>
 <img src="https://user-images.githubusercontent.com/48902047/122353036-a1af7880-cf8a-11eb-9957-f0c3d4e7b89d.jpg" width="25%"></img>
 <img src="https://user-images.githubusercontent.com/48902047/122351223-e803d800-cf88-11eb-8205-ced76367b2d4.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
+#### 1. 게시자의 프로필사진을 클릭시 게시자의 회원정보 창이 나온다. </br>
+#### 2. 게시자 회원정보 창에는 게시자의 정수와 리뷰가 나온다. </br>
 7) 커뮤니티 리스트 화면</br>
 <img src="https://user-images.githubusercontent.com/48902047/122351748-6b252e00-cf89-11eb-8198-cc2e545ff515.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
-8) 커뮤니티 리스트 화면</br>
+#### 1. 회원들이 올린 커뮤니티 리스트가 올라온다. </br>
+8) 커뮤니티 검색 창 화면</br>
 <img src="https://user-images.githubusercontent.com/48902047/122351748-6b252e00-cf89-11eb-8198-cc2e545ff515.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
-9) 검색 창 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122353330-e9ce9b00-cf8a-11eb-83a7-9affb88b25af.jpg" width="25%"></img>
 <img src="https://user-images.githubusercontent.com/48902047/122351943-9dcf2680-cf89-11eb-91e2-6a8c57492aac.jpg" width="25%"></img>
 <img src="https://user-images.githubusercontent.com/48902047/122352090-c35c3000-cf89-11eb-9ae0-15399d715aab.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
-10) 커뮤니티 게시물 화면</br>
+#### 1. 상단 오른쪽 돋보기 버튼을 누르면 검색창으로 검색창으로 이동된다. </br>
+#### 2. 단어를 검색시 게시물의 제목의 글자를 찾아 검색결과의 리스트를 보여준다. </br>
+9) 커뮤니티 게시물 화면</br>
 <img src="https://user-images.githubusercontent.com/48902047/122353614-2c907300-cf8b-11eb-9baa-02f887882714.jpg" width="25%"></img>
 <img src="https://user-images.githubusercontent.com/48902047/122353697-40d47000-cf8b-11eb-8b3b-00025124e246.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
-
-11) 게시물 작성 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122353869-6bbec400-cf8b-11eb-9f32-5f0695af4377.jpg" width="25%"></img>
-<img src="https://user-images.githubusercontent.com/48902047/122354125-a9235180-cf8b-11eb-830f-eeb5af206d6d.jpg" width="25%"></img>
-<img src="https://user-images.githubusercontent.com/48902047/122354252-c6f0b680-cf8b-11eb-8a66-eab8275e6e36.jpg" width="25%"></img>
-<img src="https://user-images.githubusercontent.com/48902047/122354363-dff96780-cf8b-11eb-9c86-9ca8e49bd757.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
-
-4) 검색 창 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122349509-4a5bd900-cf87-11eb-9c38-48a2e6dc713b.jpg" width="25%"></img>
-<img src="https://user-images.githubusercontent.com/48902047/122349752-81ca8580-cf87-11eb-9d93-d7aaf99b7aa8.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
-3) 마켓리스트 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122349509-4a5bd900-cf87-11eb-9c38-48a2e6dc713b.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
-4) 검색 창 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122349509-4a5bd900-cf87-11eb-9c38-48a2e6dc713b.jpg" width="25%"></img>
-<img src="https://user-images.githubusercontent.com/48902047/122349752-81ca8580-cf87-11eb-9d93-d7aaf99b7aa8.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
-3) 마켓리스트 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122349509-4a5bd900-cf87-11eb-9c38-48a2e6dc713b.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
-4) 검색 창 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122349509-4a5bd900-cf87-11eb-9c38-48a2e6dc713b.jpg" width="25%"></img>
-<img src="https://user-images.githubusercontent.com/48902047/122349752-81ca8580-cf87-11eb-9d93-d7aaf99b7aa8.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
-3) 마켓리스트 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122349509-4a5bd900-cf87-11eb-9c38-48a2e6dc713b.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
-4) 검색 창 화면</br>
-<img src="https://user-images.githubusercontent.com/48902047/122349509-4a5bd900-cf87-11eb-9c38-48a2e6dc713b.jpg" width="25%"></img>
-<img src="https://user-images.githubusercontent.com/48902047/122349752-81ca8580-cf87-11eb-9d93-d7aaf99b7aa8.jpg" width="25%"></img>
-#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
+#### 1. 유저가 올린 게시물을 클릭시 해당 게시물의 상세 정보를 보여준다. </br>
+#### 2. 게시물 창에는 게시물을 올린 유저의 사진을 5장까지 스와이핑까지 가능하다. </br>
+#### 3. 좋아요, 신고하기 기능도 있다. </br>
+#### 4. 해당 게시물에 댓글을 달 수 있다. </br>
+10) 게시물 작성 화면</br>
+<img src="https://user-images.githubusercontent.com/48902047/122353869-6bbec400-cf8b-11eb-9f32-5f0695af4377.jpg" width="20%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122354125-a9235180-cf8b-11eb-830f-eeb5af206d6d.jpg" width="20%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122354252-c6f0b680-cf8b-11eb-8a66-eab8275e6e36.jpg" width="20%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122354363-dff96780-cf8b-11eb-9c86-9ca8e49bd757.jpg" width="20%"></img>
+#### 1. 마켓 버튼을 클릭시 마켓 리스트에 올릴 수 있는 글쓰기 창이 생성된다. </br>
+#### 2. 마켓에는 카테고리, 제목, 상세정보를 기입가능하며 사진은 5장까지 등록이 가능하다. 또한 선택된 사진의 미리보기가 가능하다. </br>
+<img src="https://user-images.githubusercontent.com/48902047/122353869-6bbec400-cf8b-11eb-9f32-5f0695af4377.jpg" width="20%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122354766-47171c00-cf8c-11eb-87fd-ef307ba0cb1f.jpg" width="20%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122354252-c6f0b680-cf8b-11eb-8a66-eab8275e6e36.jpg" width="20%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122354363-dff96780-cf8b-11eb-9c86-9ca8e49bd757.jpg" width="20%"></img>
+#### 1. 커뮤니티 버튼을 클릭시 커뮤니티 리스트에 올릴 수 있는 글쓰기 창이 생성된다. </br>
+#### 2. 커뮤니티글쓰기에는 카테고리, 제목, 상세정보를 기입가능하며 사진은 5장까지 등록이 가능하다. 또한 선택된 사진의 미리보기가 가능하다. </br>
+11) 채팅 화면</br>
+<img src="https://user-images.githubusercontent.com/48902047/122355914-43d06000-cf8d-11eb-9ba5-7935a6682b28.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122356029-5fd40180-cf8d-11eb-89d1-ccf5985b13bf.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122356118-737f6800-cf8d-11eb-8510-1a1536f00d05.jpg" width="25%"></img>
+#### 1. 채팅방 목록에는 현 유저가 지금까지 채팅한 채팅목록을 보여준다. 채팅한 상대가 채팅을 보냈을시 오른쪽에 개수가 표시된다. </br>
+#### 2. 채팅방목록리스트에 원하는 채팅을 누를시 채팅방으로 이동되며 채팅이 어떠한 마켓에서 생성되었는지 마켓의 정보가 상단에 표시된다. </br>
+#### 3. 해당 마켓의 정보는 유저가 마켓게시물을 올린 호스트인지 게스트인지에 따라 바뀐다. </br>
+12)채팅방 기능</br>
+<img src="https://user-images.githubusercontent.com/48902047/122356510-d7099580-cf8d-11eb-90c9-94b629e4c5dc.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122356647-f43e6400-cf8d-11eb-81f7-126d0673cf9c.jpg" width="25%"></img>
+#### 1. 호스트일시 해당 게시물의 거래시에는 거래중 거래완료라는 체크로 해당게시물이 자동적으로 상태를 알수 있게 한다. </br>
+#### 2. 거래완료시 자동적으로 호스트와 게스트는 상대방의 거래의 거래상태와 리뷰를 남길 수 있다. </br>
+<img src="https://user-images.githubusercontent.com/48902047/122356510-d7099580-cf8d-11eb-90c9-94b629e4c5dc.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122356909-32d41e80-cf8e-11eb-9d9e-1b8b2768ddc0.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122357024-4ed7c000-cf8e-11eb-8dd3-2cad95485fbd.jpg" width="25%"></img>
+#### 1. 채팅으로는 글과 사진을 보내기 가능하다. </br>
+#### 2. 하단부에 있는 사진 버튼을 클릭시 해당 디바이스에 있는 사진들을 불러와 사진을 선택시 보내지게 된다. </br>
+13)내정보 화면&수정</br>
+<img src="https://user-images.githubusercontent.com/48902047/122358778-edb0ec00-cf8f-11eb-9d55-60b9682ce21a.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122357408-b130c080-cf8e-11eb-8878-36d891054a41.jpg" width="25%"></img>
+#### 1. 내 정보에는 회원정보에는 해당 유저의 다양한 정보를 확인해 볼 수 있다. </br>
+#### 2. 회원정보 변경 버튼 클릭시 회원정보 변경 창으로 전환 되며 변경시 자동적으로 내 정보가 바뀌게 된다. </br>
+14) 진행중 게시물 화면</br>
+<img src="https://user-images.githubusercontent.com/48902047/122358778-edb0ec00-cf8f-11eb-9d55-60b9682ce21a.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122357820-05d43b80-cf8f-11eb-88d7-17e3f48b7a9c.jpg" width="25%"></img>
+#### 1. 진행중 버튼 클릭시 현재 내가 진행중인 게시물의 정보리스트가 보여지는 창이 나오게 된다. </br>
+15) 거래완료 창 화면</br>
+<img src="https://user-images.githubusercontent.com/48902047/122358778-edb0ec00-cf8f-11eb-9d55-60b9682ce21a.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122358106-4a5fd700-cf8f-11eb-83d8-7076f8ef6454.jpg" width="25%"></img>
+#### 1. 거래완료 버튼 클릭시 지금까지 거래되었던 게시물의 정보가 보여지게 된다. </br>
+16) 내가 작성한 게시물 화면</br>
+<img src="https://user-images.githubusercontent.com/48902047/122358778-edb0ec00-cf8f-11eb-9d55-60b9682ce21a.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122358294-79764880-cf8f-11eb-82d9-38de21b44855.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122358391-90b53600-cf8f-11eb-888c-81a52311300a.jpg" width="25%"></img>
+#### 1. 내가 작성한 게시물버튼을 클릭시 내가 지금까지 올렸던 게시물들의 정보가 마켓과 커뮤니티 카테고리로 분류되어 나타나게 된다. </br>
+17) 나에게 작성된 리뷰 화면</br>
+<img src="https://user-images.githubusercontent.com/48902047/122358778-edb0ec00-cf8f-11eb-9d55-60b9682ce21a.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122359206-5304dd00-cf90-11eb-8f82-dce52a4a5e85.jpg" width="25%"></img>
+#### 1. 나에게 작성한 리뷰버튼을 클릭시 지금까지 나에게 수기로 작성된 리부의 목록 리스트가 나타나게 된다.</br>
+18) 로그아웃 화면</br>
+<img src="https://user-images.githubusercontent.com/48902047/122358778-edb0ec00-cf8f-11eb-9d55-60b9682ce21a.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122359629-aecf6600-cf90-11eb-84b0-34a1542aa942.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122359717-bee74580-cf90-11eb-9a38-57d1104b6010.jpg" width="25%"></img>
+#### 1. 로그아웃 클릭시 로그아웃 경고 창이 나타나게 되며 로그아웃버튼을 한번더 클릭시 최초 로그인 화면으로 넘어가게 된다.</br>
 
 ## 3. Explanation</br>
 ### Ⅰ chat(패키지)</br>

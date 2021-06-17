@@ -3,7 +3,19 @@
 #### 사용자 간 물물교환을 할 수 있고, 채팅 및 커뮤니티 기능을 제공하는 소셜 네트워크 서비스(SNS) 어플리케이션</br>
 
 ## 2. 인터페이스
-###1. 메인화면
+###1. 메인화면</br>
+<img src="https://user-images.githubusercontent.com/48902047/122346906-6f028180-cf84-11eb-801f-b3b6af8c6925.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122347677-42029e80-cf85-11eb-8da6-7a44bd46dc83.png" width="25%"></img>
+#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
+###1. 메인화면</br>
+<img src="https://user-images.githubusercontent.com/48902047/122346906-6f028180-cf84-11eb-801f-b3b6af8c6925.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122347677-42029e80-cf85-11eb-8da6-7a44bd46dc83.png" width="25%"></img>
+#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
+###1. 메인화면</br>
+<img src="https://user-images.githubusercontent.com/48902047/122346906-6f028180-cf84-11eb-801f-b3b6af8c6925.jpg" width="25%"></img>
+<img src="https://user-images.githubusercontent.com/48902047/122347677-42029e80-cf85-11eb-8da6-7a44bd46dc83.png" width="25%"></img>
+#### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>
+###1. 메인화면</br>
 <img src="https://user-images.githubusercontent.com/48902047/122346906-6f028180-cf84-11eb-801f-b3b6af8c6925.jpg" width="25%"></img>
 <img src="https://user-images.githubusercontent.com/48902047/122347677-42029e80-cf85-11eb-8da6-7a44bd46dc83.png" width="25%"></img>
 #### BottombarNavigation으로 하단바를 구성하였고, 리스트는 RecyclerView로 구현하였다. </br>왼쪽 화면은 CheckList 화면, 오른쪽 화면은 관리화면이다. </br>

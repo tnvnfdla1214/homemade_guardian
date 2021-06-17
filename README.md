@@ -2,7 +2,7 @@
 ## 1. App</br>
 #### 사용자 간 물물교환을 할 수 있고, 채팅 및 커뮤니티 기능을 제공하는 소셜 네트워크 서비스(SNS) 어플리케이션</br>
 
-## 2. 인터페이스
+## 2. Inteface
 1) 로그인 화면</br>
 <img src="https://user-images.githubusercontent.com/48902047/122346906-6f028180-cf84-11eb-801f-b3b6af8c6925.jpg" width="20%"></img>
 <img src="https://user-images.githubusercontent.com/48902047/122347677-42029e80-cf85-11eb-8da6-7a44bd46dc83.png" width="20%"></img>
